@@ -78,10 +78,7 @@ void adaptiveScreenSizeDialog({
       builder: (BuildContext context) {
         return FullScreenDialog(
           title: title,
-          content: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: child,
-          ),
+          content: Padding(padding: const EdgeInsets.all(8.0), child: child),
           actionButtons: actionButtons ?? <Widget>[],
         );
       },

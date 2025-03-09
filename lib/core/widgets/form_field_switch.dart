@@ -8,15 +8,15 @@ class SwitchFormField extends FormField<bool> {
     required super.validator,
     required super.onSaved,
   }) : super(
-          key: UniqueKey(),
-          builder: (FormFieldState<bool> state) {
-            return Switch(
-              value: state.value!,
-              onChanged: (bool value) {
-                state.didChange(value);
-                onSaved?.call(value);
-              },
-            );
-          },
-        );
+         key: UniqueKey(),
+         builder: (FormFieldState<bool> state) {
+           return Switch(
+             value: state.value!,
+             onChanged: (bool value) {
+               state.didChange(value);
+               onSaved?.call(value);
+             },
+           );
+         },
+       );
 }

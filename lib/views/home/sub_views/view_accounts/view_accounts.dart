@@ -77,78 +77,84 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
 
     if (forSidePanelTransactions) {
       list.add(
-        buildJumpToButton(
-          <MenuEntry>[
-            MenuEntry(
-              icon: ViewId.viewTransactions.getIconData(),
-              title: 'Matching Transaction',
-              onPressed: () {
-                final Transaction? selectedInfoTransaction = getSidePanelLastSelectedTransaction();
+        buildJumpToButton(<MenuEntry>[
+          MenuEntry(
+            icon: ViewId.viewTransactions.getIconData(),
+            title: 'Matching Transaction',
+            onPressed: () {
+              final Transaction? selectedInfoTransaction =
+                  getSidePanelLastSelectedTransaction();
 
-                if (selectedInfoTransaction != null) {
-                  // Look for transaction matching -1 to +1 date from this transaction
-                  final DateRange approximationDates = DateRange(
-                    min: selectedInfoTransaction.fieldDateTime.value!.add(const Duration(days: -1)).startOfDay,
-                    max: selectedInfoTransaction.fieldDateTime.value!.add(const Duration(days: 1)).endOfDay,
-                  );
-                  // we are looking for the reverse transaction
-                  final double amountToFind = selectedInfoTransaction.fieldAmount.value.asDouble() * -1;
+              if (selectedInfoTransaction != null) {
+                // Look for transaction matching -1 to +1 date from this transaction
+                final DateRange approximationDates = DateRange(
+                  min:
+                      selectedInfoTransaction.fieldDateTime.value!
+                          .add(const Duration(days: -1))
+                          .startOfDay,
+                  max:
+                      selectedInfoTransaction.fieldDateTime.value!
+                          .add(const Duration(days: 1))
+                          .endOfDay,
+                );
+                // we are looking for the reverse transaction
+                final double amountToFind =
+                    selectedInfoTransaction.fieldAmount.value.asDouble() * -1;
 
-                  final Transaction? matchingTransaction = Data().transactions.findExistingTransaction(
-                        accountId: -1,
-                        dateRange: approximationDates,
-                        amount: amountToFind,
-                      );
-                  // Switch view
-                  if (matchingTransaction != null) {
-                    PreferenceController.to.jumpToView(
-                      viewId: ViewId.viewTransactions,
-                      selectedId: matchingTransaction.uniqueId,
-                      textFilter: '',
-                      columnFilters: null,
+                final Transaction? matchingTransaction = Data().transactions
+                    .findExistingTransaction(
+                      accountId: -1,
+                      dateRange: approximationDates,
+                      amount: amountToFind,
                     );
-                    return;
-                  }
+                // Switch view
+                if (matchingTransaction != null) {
+                  PreferenceController.to.jumpToView(
+                    viewId: ViewId.viewTransactions,
+                    selectedId: matchingTransaction.uniqueId,
+                    textFilter: '',
+                    columnFilters: null,
+                  );
+                  return;
                 }
-                SnackBarService.displayWarning(message: 'No matching transactions');
-              },
-            ),
-          ],
-        ),
+              }
+              SnackBarService.displayWarning(
+                message: 'No matching transactions',
+              );
+            },
+          ),
+        ]),
       );
     } else {
       // Place this in front off all the other actions button
       list.insert(
         0,
-        buildAddItemButton(
-          () {
-            // add a new Account
-            final Account newItem = Data().accounts.addNewAccount('New Bank Account');
-            updateListAndSelect(newItem.uniqueId);
-          },
-          'Add new account',
-        ),
+        buildAddItemButton(() {
+          // add a new Account
+          final Account newItem = Data().accounts.addNewAccount(
+            'New Bank Account',
+          );
+          updateListAndSelect(newItem.uniqueId);
+        }, 'Add new account'),
       );
 
       // this can go last
       final Account? account = getFirstSelectedItem() as Account?;
       if (account != null) {
         list.add(
-          buildJumpToButton(
-            <MenuEntry>[
-              MenuEntry.toTransactions(
-                transactionId: -1,
-                // Prepare the Transaction view Filter to show only the selected account
-                filters: FieldFilters(<FieldFilter>[
-                  FieldFilter(
-                    fieldName: Constants.viewTransactionFieldNameAccount,
-                    strings: <String>[account.fieldName.value],
-                  ),
-                ]),
-              ),
-              MenuEntry.toInvestments(accountName: account.fieldName.value),
-            ],
-          ),
+          buildJumpToButton(<MenuEntry>[
+            MenuEntry.toTransactions(
+              transactionId: -1,
+              // Prepare the Transaction view Filter to show only the selected account
+              filters: FieldFilters(<FieldFilter>[
+                FieldFilter(
+                  fieldName: Constants.viewTransactionFieldNameAccount,
+                  strings: <String>[account.fieldName.value],
+                ),
+              ]),
+            ),
+            MenuEntry.toInvestments(accountName: account.fieldName.value),
+          ]),
         );
       }
     }
@@ -175,11 +181,15 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     switch (subViewId) {
       case SidePanelSubViewEnum.chart: // Chart
       case SidePanelSubViewEnum.transactions: // Transactions
-        final Account? account = getFirstSelectedItemFromSelectedList(selectedItems) as Account?;
+        final Account? account =
+            getFirstSelectedItemFromSelectedList(selectedItems) as Account?;
         if (account != null) {
           if (account.fieldCurrency.value != Constants.defaultCurrency) {
             // only offer currency toggle if the account is not USD based
-            return <String>[account.fieldCurrency.value, Constants.defaultCurrency];
+            return <String>[
+              account.fieldCurrency.value,
+              Constants.defaultCurrency,
+            ];
           }
         }
 
@@ -205,12 +215,15 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     bool applyFilter = true,
   }) {
     List<Account> list = Data().accounts.activeAccount(
-          getSelectedAccountType(),
-          isActive: PreferenceController.to.includeClosedAccounts ? null : true,
-        );
+      getSelectedAccountType(),
+      isActive: PreferenceController.to.includeClosedAccounts ? null : true,
+    );
 
     if (applyFilter) {
-      list = list.where((final Account instance) => isMatchingFilters(instance)).toList();
+      list =
+          list
+              .where((final Account instance) => isMatchingFilters(instance))
+              .toList();
     } else {
       list = list.toList();
     }

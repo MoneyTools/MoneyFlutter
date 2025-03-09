@@ -35,9 +35,10 @@ class ShortcutController extends GetxController {
 
   void _handleKeyEvent(RawKeyEvent event) {
     if (event is RawKeyDownEvent) {
-      if ((event.isControlPressed || event.isMetaPressed)) {
+      if (event.isControlPressed || event.isMetaPressed) {
         // Zoom in  Ctrl +   Command +
-        if (event.logicalKey == LogicalKeyboardKey.add || event.logicalKey == LogicalKeyboardKey.equal) {
+        if (event.logicalKey == LogicalKeyboardKey.add ||
+            event.logicalKey == LogicalKeyboardKey.equal) {
           ThemeController.to.fontScaleIncrease();
         }
 

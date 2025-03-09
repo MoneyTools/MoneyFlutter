@@ -25,17 +25,27 @@ extension ViewPayeesSidePanel on ViewPayeesState {
     }
 
     final List<Transaction> flatTransactions = Transactions.flatTransactions(
-      Data().transactions.iterableList().where((Transaction t) => t.fieldPayee.value == selectedIds.first),
+      Data().transactions.iterableList().where(
+        (Transaction t) => t.fieldPayee.value == selectedIds.first,
+      ),
     );
 
     return TransactionTimelineChart(transactions: flatTransactions);
   }
 
   // Details Panel for Transactions Payees
-  Widget _getSubViewContentForTransactions({required final List<int> selectedIds, required bool showAsNativeCurrency}) {
-    final Payee? payee = getMoneyObjectFromFirstSelectedId<Payee>(selectedIds, list);
+  Widget _getSubViewContentForTransactions({
+    required final List<int> selectedIds,
+    required bool showAsNativeCurrency,
+  }) {
+    final Payee? payee = getMoneyObjectFromFirstSelectedId<Payee>(
+      selectedIds,
+      list,
+    );
     if (payee != null && payee.fieldId.value > -1) {
-      final SelectionController selectionController = Get.put(SelectionController());
+      final SelectionController selectionController = Get.put(
+        SelectionController(),
+      );
       return ListViewTransactions(
         key: Key(payee.uniqueId.toString()),
         listController: Get.find<ListControllerSidePanel>(),
@@ -46,10 +56,13 @@ extension ViewPayeesSidePanel on ViewPayeesState {
           Transaction.fields.getFieldByName(columnIdMemo),
           Transaction.fields.getFieldByName(columnIdAmount),
         ],
-        getList: () => getTransactions(
-          flattenSplits: true,
-          filter: (final Transaction transaction) => transaction.fieldPayee.value == payee.fieldId.value,
-        ),
+        getList:
+            () => getTransactions(
+              flattenSplits: true,
+              filter:
+                  (final Transaction transaction) =>
+                      transaction.fieldPayee.value == payee.fieldId.value,
+            ),
         selectionController: selectionController,
       );
     }

@@ -31,7 +31,10 @@ void main() {
 
     test('returns the default value if the provided value is null', () {
       final DateTime defaultDate = DateTime(2023, 6, 1);
-      expect(valueOrDefaultDate(null, defaultValueIfNull: defaultDate), defaultDate);
+      expect(
+        valueOrDefaultDate(null, defaultValueIfNull: defaultDate),
+        defaultDate,
+      );
     });
   });
 
@@ -76,7 +79,10 @@ void main() {
 
     test('returns the default value if the provided value is null', () {
       expect(valueOrDefaultString(null), '');
-      expect(valueOrDefaultString(null, defaultValueIfNull: 'unknown'), 'unknown');
+      expect(
+        valueOrDefaultString(null, defaultValueIfNull: 'unknown'),
+        'unknown',
+      );
     });
   });
 }

@@ -30,7 +30,7 @@ class FieldFilter {
   factory FieldFilter.fromJson(MyJson json) {
     return FieldFilter(
       fieldName: json['fieldName'] as String,
-      strings: List<String>.from(json['strings'] as List<String> ),
+      strings: List<String>.from(json['strings'] as List<String>),
       byDateRange: json['byDateRange'] as bool? ?? false,
     );
   }

@@ -19,10 +19,7 @@ Future<dynamic> showSplitAndActions({
 
 /// Dialog content
 class DialogMutateSplit extends StatefulWidget {
-  const DialogMutateSplit({
-    required this.split,
-    super.key,
-  });
+  const DialogMutateSplit({required this.split, super.key});
 
   final MoneySplit split;
 
@@ -53,13 +50,14 @@ class _DialogMutateSplitState extends State<DialogMutateSplit> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: _split.buildListOfNamesValuesWidgets(
-                  onEdit: isInEditingMode
-                      ? (bool wasModified) {
-                          setState(() {
-                            dataWasModified = wasModified || isDataModified();
-                          });
-                        }
-                      : null,
+                  onEdit:
+                      isInEditingMode
+                          ? (bool wasModified) {
+                            setState(() {
+                              dataWasModified = wasModified || isDataModified();
+                            });
+                          }
+                          : null,
                 ),
               ),
             ),

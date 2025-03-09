@@ -42,20 +42,8 @@ class ColorPalette extends StatelessWidget {
       children: <Widget>[
         const Divider(),
         const Text('Helper for debugging'),
-        _buildColorBar(
-          context,
-          Colors.white,
-          Colors.black,
-          'white',
-          'black',
-        ),
-        _buildColorBar(
-          context,
-          Colors.black,
-          Colors.white,
-          'black',
-          'white',
-        ),
+        _buildColorBar(context, Colors.white, Colors.black, 'white', 'black'),
+        _buildColorBar(context, Colors.black, Colors.white, 'black', 'white'),
         _buildColorBar(
           context,
           getColorTheme(context).onSurface,
@@ -150,22 +138,21 @@ class ColorPalette extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      Expanded(
-                        child: Container(
-                          height: 10,
-                          color: foreground,
-                        ),
-                      ),
+                      Expanded(child: Container(height: 10, color: foreground)),
                       gapSmall(),
                       Text(
                         colorNameForeground,
-                        style: getTextTheme(context).bodyMedium!.copyWith(color: foreground),
+                        style: getTextTheme(
+                          context,
+                        ).bodyMedium!.copyWith(color: foreground),
                       ),
                     ],
                   ),
                   Text(
                     colorNameBackground,
-                    style: getTextTheme(context).bodyMedium!.copyWith(color: foreground),
+                    style: getTextTheme(
+                      context,
+                    ).bodyMedium!.copyWith(color: foreground),
                   ),
                 ],
               ),

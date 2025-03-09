@@ -51,16 +51,15 @@ class BadgePendingChanges extends StatelessWidget {
   ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
-      child: Text(
-        prefix + getIntAsText(value),
-        style: textStyle,
-      ),
+      child: Text(prefix + getIntAsText(value), style: textStyle),
     );
   }
 
   Widget getChangeLabel(final BuildContext context) {
     final List<Widget> widgets = <Widget>[];
-    final TextStyle textStyle = Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 9, fontWeight: FontWeight.w900);
+    final TextStyle textStyle = Theme.of(
+      context,
+    ).textTheme.labelSmall!.copyWith(fontSize: 9, fontWeight: FontWeight.w900);
     if (DataController.to.trackMutations.added.value > 0) {
       widgets.add(
         buildCounter(
@@ -91,15 +90,14 @@ class BadgePendingChanges extends StatelessWidget {
       );
     }
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: widgets,
-    );
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: widgets);
   }
 
   /// Returns a tooltip text string that summarizes the pending changes, including the number of added, modified, and deleted items, as well as the last time the changes were edited.
   String getTooltipText() {
-    final String lastChangedOn = getElapsedTime(DataController.to.trackMutations.lastDateTimeChanged.value);
+    final String lastChangedOn = getElapsedTime(
+      DataController.to.trackMutations.lastDateTimeChanged.value,
+    );
     return 'Added: ${DataController.to.trackMutations.added}\nModified: ${DataController.to.trackMutations.changed}\nDeleted: ${DataController.to.trackMutations.deleted}\n\nEdited $lastChangedOn';
   }
 }

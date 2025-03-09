@@ -50,11 +50,14 @@ class AdaptiveListColumnsOrRowsSingleSelection extends StatefulWidget {
   final int selectedId;
 
   @override
-  State<AdaptiveListColumnsOrRowsSingleSelection> createState() => _AdaptiveListColumnsOrRowsSingleSelectionState();
+  State<AdaptiveListColumnsOrRowsSingleSelection> createState() =>
+      _AdaptiveListColumnsOrRowsSingleSelectionState();
 }
 
-class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListColumnsOrRowsSingleSelection> {
-  late final ValueNotifier<List<int>> selectionCollectionOfOnlyOneItem = ValueNotifier<List<int>>(<int>[widget.selectedId]);
+class _AdaptiveListColumnsOrRowsSingleSelectionState
+    extends State<AdaptiveListColumnsOrRowsSingleSelection> {
+  late final ValueNotifier<List<int>> selectionCollectionOfOnlyOneItem =
+      ValueNotifier<List<int>>(<int>[widget.selectedId]);
 
   final FooterAccumulators _footerAccumulators = FooterAccumulators();
 
@@ -72,7 +75,8 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
       isMultiSelectionOn: false,
       selectedItemsByUniqueId: selectionCollectionOfOnlyOneItem,
       onSelectionChanged: (final int selectedId) {
-        widget.listController.bookmark = widget.listController.scrollController.offset;
+        widget.listController.bookmark =
+            widget.listController.scrollController.offset;
         setState(() {
           selectionCollectionOfOnlyOneItem.value = <int>[selectedId];
           widget.onSelectionChanged?.call(selectedId);
@@ -96,30 +100,47 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
       for (final Field<dynamic> field in widget.fieldDefinitions) {
         switch (field.type) {
           case FieldType.text:
-            _footerAccumulators.accumulatorListOfText.cumulate(field, field.getValueForDisplay(item) as String);
+            _footerAccumulators.accumulatorListOfText.cumulate(
+              field,
+              field.getValueForDisplay(item) as String,
+            );
 
           case FieldType.date:
-            _footerAccumulators.accumulatorDateRange.cumulate(field, field.getValueForDisplay(item) as DateTime);
-            
+            _footerAccumulators.accumulatorDateRange.cumulate(
+              field,
+              field.getValueForDisplay(item) as DateTime,
+            );
+
           case FieldType.dateRange:
             if (field.value.min != null) {
-              _footerAccumulators.accumulatorDateRange.cumulate(field, field.value.min as DateTime);
+              _footerAccumulators.accumulatorDateRange.cumulate(
+                field,
+                field.value.min as DateTime,
+              );
             }
             if (field.value.max != null) {
-              _footerAccumulators.accumulatorDateRange.cumulate(field, field.value.max as DateTime);
+              _footerAccumulators.accumulatorDateRange.cumulate(
+                field,
+                field.value.max as DateTime,
+              );
             }
 
           case FieldType.amount:
             final double value = smartToDouble(field.getValueForDisplay(item));
             _footerAccumulators.accumulatorSumAmount.cumulate(field, value);
             if (field.footer == FooterType.average) {
-              _footerAccumulators.accumulatorForAverage.cumulate(field, value as num);
+              _footerAccumulators.accumulatorForAverage.cumulate(
+                field,
+                value as num,
+              );
             }
 
           case FieldType.widget:
             if (field.getValueForReading != null) {
-              _footerAccumulators.accumulatorListOfText
-                  .cumulate(field, field.getValueForReading?.call(item)!.toString() ?? '');
+              _footerAccumulators.accumulatorListOfText.cumulate(
+                field,
+                field.getValueForReading?.call(item)!.toString() ?? '',
+              );
             }
 
           case FieldType.numeric:
@@ -128,9 +149,15 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
           case FieldType.quantity:
             final dynamic value = field.getValueForDisplay(item);
             if (value is num) {
-              _footerAccumulators.accumulatorSumNumber.cumulate(field, value.toDouble());
+              _footerAccumulators.accumulatorSumNumber.cumulate(
+                field,
+                value.toDouble(),
+              );
               if (field.footer == FooterType.average) {
-                _footerAccumulators.accumulatorForAverage.cumulate(field, value);
+                _footerAccumulators.accumulatorForAverage.cumulate(
+                  field,
+                  value,
+                );
               }
             }
           default:

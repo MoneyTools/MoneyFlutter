@@ -88,48 +88,24 @@ void main() {
 
   group('String shortening:', () {
     test('Full name to initials', () {
-      expect(
-        getInitials('Bob Smith'),
-        'BS',
-      );
+      expect(getInitials('Bob Smith'), 'BS');
 
-      expect(
-        getInitials('John F. Kennedy'),
-        'JFK',
-      );
+      expect(getInitials('John F. Kennedy'), 'JFK');
 
-      expect(
-        getInitials('Jean-Pierre Duplessis'),
-        'JD',
-      );
+      expect(getInitials('Jean-Pierre Duplessis'), 'JD');
     });
 
     test('Smart Full name to initials', () {
       // make sure that above 5 letter still works
-      expect(
-        shortenLongText('Bob Smith'),
-        'B.S',
-      );
+      expect(shortenLongText('Bob Smith'), 'B.S');
 
-      expect(
-        shortenLongText('Test'),
-        'Test',
-      );
+      expect(shortenLongText('Test'), 'Test');
 
-      expect(
-        shortenLongText('J F K'),
-        'J F K',
-      );
+      expect(shortenLongText('J F K'), 'J F K');
 
-      expect(
-        shortenLongText('Jean-Pierre Joseph Duplessis'),
-        'J.J.D',
-      );
+      expect(shortenLongText('Jean-Pierre Joseph Duplessis'), 'J.J.D');
 
-      expect(
-        shortenLongText('A Job'),
-        'A Job',
-      );
+      expect(shortenLongText('A Job'), 'A Job');
     });
   });
 

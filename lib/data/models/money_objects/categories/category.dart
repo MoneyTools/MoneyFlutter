@@ -64,8 +64,12 @@ class Category extends MoneyObject {
   FieldMoney fieldBudget = FieldMoney(
     name: 'Budget',
     serializeName: 'Budget',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Category).fieldBudget.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).fieldBudget.value.asDouble(),
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Category).fieldBudget.value,
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            (instance as Category).fieldBudget.value.asDouble(),
     setValue: (final MoneyObject instance, final dynamic value) {
       (instance as Category).fieldBudget.value.setAmount(value);
     },
@@ -75,9 +79,12 @@ class Category extends MoneyObject {
   /// 7|Balance|money|0||0
   FieldMoney fieldBudgetBalance = FieldMoney(
     name: 'BudgetBalance',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Category).fieldBudgetBalance.value,
-    getValueForSerialization: (final MoneyObject instance) =>
-        (instance as Category).fieldBudgetBalance.value.asDouble(),
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Category).fieldBudgetBalance.value,
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            (instance as Category).fieldBudgetBalance.value.asDouble(),
   );
 
   /// Color
@@ -88,12 +95,17 @@ class Category extends MoneyObject {
     align: TextAlign.center,
     columnWidth: ColumnWidth.nano,
     defaultValue: '',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Category).getColorWidget(),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).fieldColor.value,
+    getValueForDisplay:
+        (final MoneyObject instance) => (instance as Category).getColorWidget(),
+    getValueForSerialization:
+        (final MoneyObject instance) => (instance as Category).fieldColor.value,
     setValue: (final MoneyObject instance, final dynamic value) {
       (instance as Category).fieldColor.value = value as String;
     },
-    getEditWidget: (final MoneyObject instance, void Function(bool wasModified) onEdited) {
+    getEditWidget: (
+      final MoneyObject instance,
+      void Function(bool wasModified) onEdited,
+    ) {
       return MutateFieldColor(
         colorAsHex: (instance as Category).fieldColor.value,
         onEdited: (String newValue) {
@@ -107,11 +119,13 @@ class Category extends MoneyObject {
         },
       );
     },
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
-      (a as Category).getColorOrAncestorsColor().computeLuminance(),
-      (b as Category).getColorOrAncestorsColor().computeLuminance(),
-      ascending,
-    ),
+    sort:
+        (final MoneyObject a, final MoneyObject b, final bool ascending) =>
+            sortByValue(
+              (a as Category).getColorOrAncestorsColor().computeLuminance(),
+              (b as Category).getColorOrAncestorsColor().computeLuminance(),
+              ascending,
+            ),
   );
 
   /// Description
@@ -120,22 +134,31 @@ class Category extends MoneyObject {
     columnWidth: ColumnWidth.large,
     name: 'Description',
     serializeName: 'Description',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Category).fieldDescription.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).fieldDescription.value,
-    setValue: (final MoneyObject instance, dynamic value) => (instance as Category).fieldDescription.value = value as String,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Category).fieldDescription.value,
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            (instance as Category).fieldDescription.value,
+    setValue:
+        (final MoneyObject instance, dynamic value) =>
+            (instance as Category).fieldDescription.value = value as String,
   );
 
   /// 8|Frequency|INT|0||0
   FieldInt fieldFrequency = FieldInt(
     serializeName: 'Frequency',
     useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).fieldFrequency.value,
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            (instance as Category).fieldFrequency.value,
   );
 
   /// Id
   /// 0|Id|INT|0||1
   FieldId fieldId = FieldId(
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).uniqueId,
+    getValueForSerialization:
+        (final MoneyObject instance) => (instance as Category).uniqueId,
   );
 
   //-----------------------------------
@@ -148,8 +171,10 @@ class Category extends MoneyObject {
     columnWidth: ColumnWidth.nano,
     type: FieldType.text,
     footer: FooterType.count,
-    getValueForDisplay: (final MoneyObject instance) =>
-        (countOccurrences((instance as Category).fieldName.value, ':') + 1).toString(),
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (countOccurrences((instance as Category).fieldName.value, ':') + 1)
+                .toString(),
   );
 
   /// Name
@@ -159,55 +184,75 @@ class Category extends MoneyObject {
     name: 'Name',
     serializeName: 'Name',
     type: FieldType.widget,
-    getValueForDisplay: (final MoneyObject instance) => TokenText((instance as Category).fieldName.value),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).fieldName.value,
-    setValue: (final MoneyObject instance, dynamic value) => (instance as Category).fieldName.value = value as String,
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
-      (a as Category).fieldName.value,
-      (b as Category).fieldName.value,
-      ascending,
-    ),
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            TokenText((instance as Category).fieldName.value),
+    getValueForSerialization:
+        (final MoneyObject instance) => (instance as Category).fieldName.value,
+    setValue:
+        (final MoneyObject instance, dynamic value) =>
+            (instance as Category).fieldName.value = value as String,
+    sort:
+        (final MoneyObject a, final MoneyObject b, final bool ascending) =>
+            sortByString(
+              (a as Category).fieldName.value,
+              (b as Category).fieldName.value,
+              ascending,
+            ),
   );
 
   /// 1|ParentId|INT|0||0
   FieldInt fieldParentId = FieldInt(
     name: 'ParentId',
     serializeName: 'ParentId',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Category).fieldParentId.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).fieldParentId.value,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Category).fieldParentId.value,
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            (instance as Category).fieldParentId.value,
   );
 
   /// Running Balance
   FieldMoney fieldSum = FieldMoney(
     name: 'Sum',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Category).fieldSum.value,
+    getValueForDisplay:
+        (final MoneyObject instance) => (instance as Category).fieldSum.value,
   );
 
   /// Running Balance
   FieldMoney fieldSumRollup = FieldMoney(
     name: 'Sum~',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Category).fieldSumRollup.value,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Category).fieldSumRollup.value,
   );
 
   /// 9|TaxRefNum|INT|0||0
   FieldInt fieldTaxRefNum = FieldInt(
     serializeName: 'TaxRefNum',
     useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).fieldTaxRefNum.value,
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            (instance as Category).fieldTaxRefNum.value,
   );
 
   /// Count
   FieldInt fieldTransactionCount = FieldInt(
     name: '#T',
     columnWidth: ColumnWidth.tiny,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Category).fieldTransactionCount.value,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Category).fieldTransactionCount.value,
   );
 
   /// Count
   FieldInt fieldTransactionCountRollup = FieldInt(
     name: '#T~',
     columnWidth: ColumnWidth.tiny,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Category).fieldTransactionCountRollup.value,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Category).fieldTransactionCountRollup.value,
   );
 
   /// Type
@@ -218,12 +263,19 @@ class Category extends MoneyObject {
     serializeName: 'Type',
     defaultValue: CategoryType.none,
     footer: FooterType.count,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Category).getTypeAsText(),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).fieldType.value.index,
+    getValueForDisplay:
+        (final MoneyObject instance) => (instance as Category).getTypeAsText(),
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            (instance as Category).fieldType.value.index,
     setValue: (final MoneyObject instance, final dynamic value) {
-      (instance as Category).fieldType.value = CategoryType.values[value as int];
+      (instance as Category).fieldType.value =
+          CategoryType.values[value as int];
     },
-    getEditWidget: (final MoneyObject instance,void  Function(bool wasModified) onEdited) {
+    getEditWidget: (
+      final MoneyObject instance,
+      void Function(bool wasModified) onEdited,
+    ) {
       final Category i = instance as Category;
       return pickerCategoryType(
         itemSelected: i.fieldType.value,
@@ -251,7 +303,10 @@ class Category extends MoneyObject {
     return MyListItemAsCard(
       leftTopAsString: top,
       leftBottomAsString: bottom,
-      rightTopAsWidget: MoneyWidget(amountModel: fieldSum.value, size: MoneyWidgetSize.title),
+      rightTopAsWidget: MoneyWidget(
+        amountModel: fieldSum.value,
+        size: MoneyWidgetSize.title,
+      ),
       rightBottomAsWidget: Row(
         children: <Widget>[
           Text(getTypeAsText()),
@@ -305,20 +360,19 @@ class Category extends MoneyObject {
 
   static Fields<Category> get fieldsForColumnView {
     final Category tmp = Category.fromJson(<String, dynamic>{});
-    return Fields<Category>()
-      ..setDefinitions(<Field<dynamic>>[
-        tmp.fieldLevel,
-        tmp.fieldColor,
-        tmp.fieldName,
-        tmp.fieldDescription,
-        tmp.fieldType,
-        tmp.fieldBudget,
-        tmp.fieldBudgetBalance,
-        tmp.fieldTransactionCount,
-        tmp.fieldSum,
-        tmp.fieldTransactionCountRollup,
-        tmp.fieldSumRollup,
-      ]);
+    return Fields<Category>()..setDefinitions(<Field<dynamic>>[
+      tmp.fieldLevel,
+      tmp.fieldColor,
+      tmp.fieldName,
+      tmp.fieldDescription,
+      tmp.fieldType,
+      tmp.fieldBudget,
+      tmp.fieldBudgetBalance,
+      tmp.fieldTransactionCount,
+      tmp.fieldSum,
+      tmp.fieldTransactionCountRollup,
+      tmp.fieldSumRollup,
+    ]);
   }
 
   void getAncestors(List<Category> list) {
@@ -381,9 +435,7 @@ class Category extends MoneyObject {
       children: <Widget>[
         getColorWidget(),
         gapMedium(),
-        Expanded(
-          child: getNameAsWidget(),
-        ),
+        Expanded(child: getNameAsWidget()),
       ],
     );
   }
@@ -395,20 +447,24 @@ class Category extends MoneyObject {
 
   Widget getColorWidget() {
     final Color fillColor = getColorOrAncestorsColor();
-    final Color textColor = fillColor.a == 0 ? Colors.grey : contrastColor(fillColor);
+    final Color textColor =
+        fillColor.a == 0 ? Colors.grey : contrastColor(fillColor);
 
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
         MyCircle(colorFill: fillColor, size: 12),
-        if (this.fieldColor.value.isNotEmpty && this.fieldLevel.getValueForDisplay(this) != '1')
+        if (this.fieldColor.value.isNotEmpty &&
+            this.fieldLevel.getValueForDisplay(this) != '1')
           Text('#', style: TextStyle(fontSize: 10, color: textColor)),
       ],
     );
   }
 
   void getDescendants(List<Category> list) {
-    final Iterable<Category> allCategories = Data().categories.iterableList(includeDeleted: true);
+    final Iterable<Category> allCategories = Data().categories.iterableList(
+      includeDeleted: true,
+    );
     for (final Category category in allCategories) {
       if (category.fieldParentId.value == this.uniqueId) {
         list.add(category);
@@ -418,7 +474,7 @@ class Category extends MoneyObject {
   }
 
   static String getName(final Category? instance) {
-    return instance == null ? '' : (instance).fieldName.value;
+    return instance == null ? '' : instance.fieldName.value;
   }
 
   Widget getNameAsWidget() {
@@ -464,9 +520,13 @@ class Category extends MoneyObject {
     return CategoryType.none;
   }
 
-  bool get isExpense => fieldType.value == CategoryType.expense || fieldType.value == CategoryType.recurringExpense;
+  bool get isExpense =>
+      fieldType.value == CategoryType.expense ||
+      fieldType.value == CategoryType.recurringExpense;
 
-  bool get isIncome => fieldType.value == CategoryType.income || fieldType.value == CategoryType.investment;
+  bool get isIncome =>
+      fieldType.value == CategoryType.income ||
+      fieldType.value == CategoryType.investment;
 
   bool get isRecurring => fieldType.value == CategoryType.recurringExpense;
 
@@ -522,7 +582,9 @@ class MutateFieldColor extends StatefulWidget {
 }
 
 class _MutateFieldColorState extends State<MutateFieldColor> {
-  late TextEditingController controllerForText = TextEditingController(text: widget.colorAsHex);
+  late TextEditingController controllerForText = TextEditingController(
+    text: widget.colorAsHex,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -542,18 +604,17 @@ class _MutateFieldColorState extends State<MutateFieldColor> {
           ),
         ),
         gapLarge(),
-        MyCircle(
-          colorFill: color,
-          colorBorder: Colors.grey,
-          size: 40,
-        ),
+        MyCircle(colorFill: color, colorBorder: Colors.grey, size: 40),
         gapLarge(),
         Expanded(
           child: ColorPicker(
             color: color,
             onColorChanged: (Color color) {
               setState(() {
-                controllerForText.text = colorToHexString(color, includeAlpha: false);
+                controllerForText.text = colorToHexString(
+                  color,
+                  includeAlpha: false,
+                );
                 widget.onEdited(controllerForText.text);
               });
             },

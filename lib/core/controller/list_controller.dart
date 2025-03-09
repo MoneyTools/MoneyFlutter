@@ -27,7 +27,8 @@ class ListController extends GetxController {
   }
 
   double getOffsetOfIndex(final int index, final int numberOfItems) {
-    final double itemHeight = scrollController.position.maxScrollExtent / numberOfItems;
+    final double itemHeight =
+        scrollController.position.maxScrollExtent / numberOfItems;
     return itemHeight * index;
   }
 

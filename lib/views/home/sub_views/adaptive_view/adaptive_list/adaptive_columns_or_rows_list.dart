@@ -58,25 +58,30 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
         // Header
         if (displayAsColumns)
           MyListItemHeader<MoneyObject>(
-            backgroundColor: backgroundColorForHeaderFooter ?? getColorTheme(context).surfaceContainerLow,
+            backgroundColor:
+                backgroundColorForHeaderFooter ??
+                getColorTheme(context).surfaceContainerLow,
             columns: fieldDefinitions,
             filterOn: filters,
             sortByColumn: sortByFieldIndex,
             sortAscending: sortAscending,
-            itemsAreAllSelected: list.length == selectedItemsByUniqueId.value.length,
-            onSelectAll: isMultiSelectionOn
-                ? (bool selectAllRequested) {
-                    selectedItemsByUniqueId.value.clear();
-                    if (selectAllRequested) {
-                      for (final MoneyObject item in list) {
-                        selectedItemsByUniqueId.value.add(item.uniqueId);
+            itemsAreAllSelected:
+                list.length == selectedItemsByUniqueId.value.length,
+            onSelectAll:
+                isMultiSelectionOn
+                    ? (bool selectAllRequested) {
+                      selectedItemsByUniqueId.value.clear();
+                      if (selectAllRequested) {
+                        for (final MoneyObject item in list) {
+                          selectedItemsByUniqueId.value.add(item.uniqueId);
+                        }
                       }
+                      onSelectionChanged?.call(-1);
                     }
-                    onSelectionChanged?.call(-1);
-                  }
-                : null,
+                    : null,
             onTap: (int index) => onColumnHeaderTap?.call(index),
-            onLongPress: (Field<dynamic> field) => onColumnHeaderLongPress?.call(field),
+            onLongPress:
+                (Field<dynamic> field) => onColumnHeaderLongPress?.call(field),
           ),
 
         // The actual List
@@ -98,7 +103,9 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
         // Footer
         if (displayAsColumns && getColumnFooterWidget != null)
           MyListItemFooter<MoneyObject>(
-            backgroundColor: backgroundColorForHeaderFooter ?? getColorTheme(context).surfaceContainerLow,
+            backgroundColor:
+                backgroundColorForHeaderFooter ??
+                getColorTheme(context).surfaceContainerLow,
             columns: fieldDefinitions,
             multiSelectionOn: isMultiSelectionOn,
             getColumnFooterWidget: getColumnFooterWidget!,
@@ -111,10 +118,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
     if (displayAsColumns && !context.isWidthLarge) {
       return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: SizedBox(
-          width: 1500,
-          child: theContent,
-        ),
+        child: SizedBox(width: 1500, child: theContent),
       );
     } else {
       return theContent;

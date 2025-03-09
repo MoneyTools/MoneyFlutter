@@ -21,7 +21,8 @@ class ListViewTransactionSplits extends StatefulWidget {
   final Transaction transaction;
 
   @override
-  State<ListViewTransactionSplits> createState() => _ListViewTransactionSplitsState();
+  State<ListViewTransactionSplits> createState() =>
+      _ListViewTransactionSplitsState();
 }
 
 class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
@@ -62,12 +63,10 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
             selectedItemIds: ValueNotifier<List<int>>(<int>[]),
             onSelectionChanged: (int _) {},
             onLongPress: (final BuildContext context2, final int uniqueId) {
-              final MoneySplit? instance = widget.transaction.splits.firstWhereOrNull((MoneySplit t) => t.uniqueId == uniqueId);
+              final MoneySplit? instance = widget.transaction.splits
+                  .firstWhereOrNull((MoneySplit t) => t.uniqueId == uniqueId);
               if (instance != null) {
-                showSplitAndActions(
-                  context: context2,
-                  split: instance,
-                );
+                showSplitAndActions(context: context2, split: instance);
               }
             },
             scrollController: ScrollController(),
@@ -105,7 +104,11 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
   bool get isTotalMatching => amountDelta == 0;
 
   double get sumOfSplits {
-    return widget.transaction.splits.fold(0.0, (double sum, MoneySplit split) => sum + split.fieldAmount.value.asDouble());
+    return widget.transaction.splits.fold(
+      0.0,
+      (double sum, MoneySplit split) =>
+          sum + split.fieldAmount.value.asDouble(),
+    );
   }
 
   Widget _buildTally() {

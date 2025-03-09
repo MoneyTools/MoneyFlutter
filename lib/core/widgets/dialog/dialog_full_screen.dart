@@ -23,14 +23,10 @@ class FullScreenDialogState extends State<FullScreenDialog> {
   Widget build(BuildContext context) {
     return myScaffold(
       context,
-      AppBar(
-        title: Text(widget.title),
-      ),
+      AppBar(title: Text(widget.title)),
       Column(
         children: <Widget>[
-          Expanded(
-            child: widget.content,
-          ),
+          Expanded(child: widget.content),
           if (widget.actionButtons.isNotEmpty)
             OverflowBar(
               alignment: MainAxisAlignment.end,
@@ -63,10 +59,16 @@ class AutoSizeDialog extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(8)),
         side: BorderSide(
           width: 2.0, // Adjust border width as needed
-          color: Theme.of(context).dividerColor, // Set your desired border color here
+          color:
+              Theme.of(
+                context,
+              ).dividerColor, // Set your desired border color here
         ),
       );
-      insetPadding = const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0);
+      insetPadding = const EdgeInsets.symmetric(
+        horizontal: 40.0,
+        vertical: 24.0,
+      );
     }
 
     return Dialog(
@@ -76,10 +78,7 @@ class AutoSizeDialog extends StatelessWidget {
       elevation: 0.0,
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 800),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: child,
-        ),
+        child: Padding(padding: const EdgeInsets.all(16.0), child: child),
       ),
     );
   }

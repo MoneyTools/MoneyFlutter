@@ -41,8 +41,12 @@ class ChartEvent {
   Color get colorToUse {
     if (this.color == null) {
       return colorBasedOnQuantity
-          ? (quantity == 0 ? Colors.grey : (isBuy ? Colors.orange : Colors.blue))
-          : (amount == 0 ? Colors.grey : (amount.isNegative ? Colors.orange : Colors.blue));
+          ? (quantity == 0
+              ? Colors.grey
+              : (isBuy ? Colors.orange : Colors.blue))
+          : (amount == 0
+              ? Colors.grey
+              : (amount.isNegative ? Colors.orange : Colors.blue));
     }
     return this.color!;
   }

@@ -101,12 +101,18 @@ class PickerPanelState extends State<PickerPanel> {
 
   void _applyFilters() {
     setState(() {
-      filteredList = widget.options.where((String option) {
-        final bool matchesStart = _filterStartWith.isEmpty || option.toUpperCase().startsWith(_filterStartWith);
-        final bool matchesAnywhere =
-            _filterByTextAnywhere.isEmpty || option.toLowerCase().contains(_filterByTextAnywhere.toLowerCase());
-        return matchesStart && matchesAnywhere;
-      }).toList();
+      filteredList =
+          widget.options.where((String option) {
+            final bool matchesStart =
+                _filterStartWith.isEmpty ||
+                option.toUpperCase().startsWith(_filterStartWith);
+            final bool matchesAnywhere =
+                _filterByTextAnywhere.isEmpty ||
+                option.toLowerCase().contains(
+                  _filterByTextAnywhere.toLowerCase(),
+                );
+            return matchesStart && matchesAnywhere;
+          }).toList();
     });
   }
 
@@ -182,23 +188,26 @@ class PickerPanelState extends State<PickerPanel> {
         height: widget.itemHeight,
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(
-          color: isSelected ? getColorTheme(context).primaryContainer : Colors.transparent,
-          border: index == filteredList.length - 1
-              ? null
-              : Border(
-                  bottom: BorderSide(
-                    color: getColorTheme(context).onSurfaceVariant.withValues(alpha: 0.2),
-                    width: 1,
+          color:
+              isSelected
+                  ? getColorTheme(context).primaryContainer
+                  : Colors.transparent,
+          border:
+              index == filteredList.length - 1
+                  ? null
+                  : Border(
+                    bottom: BorderSide(
+                      color: getColorTheme(
+                        context,
+                      ).onSurfaceVariant.withValues(alpha: 0.2),
+                      width: 1,
+                    ),
                   ),
-                ),
         ),
         child: SingleChildScrollView(
           reverse: widget.rightAligned,
           scrollDirection: Axis.horizontal,
-          child: TokenText(
-            label,
-            style: widget.tokenTextStyle,
-          ),
+          child: TokenText(label, style: widget.tokenTextStyle),
         ),
       ),
     );

@@ -90,7 +90,10 @@ void main() {
     test('handles quoted fields with commas', () {
       const String input = 'name,address\nJohn,"123 Main St, AnyTown, USA"';
       final List<Map<String, String>> expected = <Map<String, String>>[
-        <String, String>{'name': 'John', 'address': '123 Main St, AnyTown, USA'},
+        <String, String>{
+          'name': 'John',
+          'address': '123 Main St, AnyTown, USA',
+        },
       ];
       expect(convertFromRawCsvTextToListOfJSonObject(input), expected);
     });
@@ -99,7 +102,11 @@ void main() {
       const String input = 'name,age,email\nJohn,30,\nJane,25,jane@example.com';
       final List<Map<String, String>> expected = <Map<String, String>>[
         <String, String>{'name': 'John', 'age': '30', 'email': ''},
-        <String, String>{'name': 'Jane', 'age': '25', 'email': 'jane@example.com'},
+        <String, String>{
+          'name': 'Jane',
+          'age': '25',
+          'email': 'jane@example.com',
+        },
       ];
       expect(convertFromRawCsvTextToListOfJSonObject(input), expected);
     });
@@ -127,7 +134,12 @@ void main() {
       expect(caughtException, isNotNull);
 
       // Verify the exception message
-      expect(caughtException.toString(), contains('RangeError (length): Invalid value: Only valid value is 0: 1'));
+      expect(
+        caughtException.toString(),
+        contains(
+          'RangeError (length): Invalid value: Only valid value is 0: 1',
+        ),
+      );
     });
   });
 }

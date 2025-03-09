@@ -26,12 +26,17 @@ class Investments extends MoneyObjects<Investment> {
   void onAllDataLoaded() {
     for (final Investment investment in iterableList()) {
       // hydrate the transaction instance associated to the investments
-      final Transaction? transactionFound = Data().transactions.get(investment.uniqueId);
+      final Transaction? transactionFound = Data().transactions.get(
+        investment.uniqueId,
+      );
       investment.transactionInstance = transactionFound;
 
-      final Security? security = Data().securities.get(investment.fieldSecurity.value);
+      final Security? security = Data().securities.get(
+        investment.fieldSecurity.value,
+      );
       if (security != null) {
-        final List<StockSplit> splits = Data().stockSplits.getStockSplitsForSecurity(security);
+        final List<StockSplit> splits = Data().stockSplits
+            .getStockSplitsForSecurity(security);
         investment.applySplits(splits);
       }
     }
@@ -39,15 +44,21 @@ class Investments extends MoneyObjects<Investment> {
 
   @override
   String toCSV() {
-    return MoneyObjects.getCsvFromList(
-      getListSortedById(),
-    );
+    return MoneyObjects.getCsvFromList(getListSortedById());
   }
 
-  static double applyHoldingSharesAdjustedForSplits(List<Investment> investments) {
+  static double applyHoldingSharesAdjustedForSplits(
+    List<Investment> investments,
+  ) {
     // first sort by date, TradeType, Amount
-    final Field<dynamic> fieldToSortBy = Investment.fields.getFieldByName('Date');
-    MoneyObjects.sortListFallbackOnIdForTieBreaker(investments, fieldToSortBy.sort!, true);
+    final Field<dynamic> fieldToSortBy = Investment.fields.getFieldByName(
+      'Date',
+    );
+    MoneyObjects.sortListFallbackOnIdForTieBreaker(
+      investments,
+      fieldToSortBy.sort!,
+      true,
+    );
     double runningShares = 0;
 
     for (final Investment investment in investments) {
@@ -59,13 +70,17 @@ class Investments extends MoneyObjects<Investment> {
   }
 
   static List<Investment> getInvestmentsForThisSecurity(final int securityId) {
-    return Data().investments.iterableList().where((Investment item) => item.fieldSecurity.value == securityId).toList();
+    return Data().investments
+        .iterableList()
+        .where((Investment item) => item.fieldSecurity.value == securityId)
+        .toList();
   }
 
   static StockCumulative getSharesAndProfit(List<Investment> investments) {
     // StockCumulative sort by date, TradeType, Amount
     investments.sort(
-      (Investment a, Investment b) => Investment.sortByDateAndInvestmentType(a, b, true, true),
+      (Investment a, Investment b) =>
+          Investment.sortByDateAndInvestmentType(a, b, true, true),
     );
 
     final StockCumulative cumulative = StockCumulative();

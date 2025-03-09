@@ -49,9 +49,7 @@ class Categories extends MoneyObjects<Category> {
 
   @override
   String toCSV() {
-    return MoneyObjects.getCsvFromList(
-      getListSortedById(),
-    );
+    return MoneyObjects.getCsvFromList(getListSortedById());
   }
 
   static Widget categoryWidgetForSplit = DottedBorder(
@@ -81,10 +79,11 @@ class Categories extends MoneyObjects<Category> {
     }
 
     // find next available name
-    final String prefixName = parent == null ? name : '${parent.fieldName.value}:$name';
+    final String prefixName =
+        parent == null ? name : '${parent.fieldName.value}:$name';
     String nextAvailableName = prefixName;
     int next = 1;
-    while ((getByName(nextAvailableName) != null)) {
+    while (getByName(nextAvailableName) != null) {
       // already taken
       nextAvailableName = '$name $next';
       // the the next one
@@ -139,7 +138,10 @@ class Categories extends MoneyObjects<Category> {
     String cumulativeCategoryName = '';
 
     for (final String part in categoryNameParts) {
-      cumulativeCategoryName = cumulativeCategoryName.isEmpty ? part : '$cumulativeCategoryName:$part';
+      cumulativeCategoryName =
+          cumulativeCategoryName.isEmpty
+              ? part
+              : '$cumulativeCategoryName:$part';
 
       CategoryType typeToUse = CategoryType.none;
       if (overrideTypeOfParent == null) {
@@ -162,19 +164,28 @@ class Categories extends MoneyObjects<Category> {
   }
 
   List<Category> getAllExpenseCategories() {
-    return iterableList().where((Category category) => category.isExpense).toList();
+    return iterableList()
+        .where((Category category) => category.isExpense)
+        .toList();
   }
 
   List<Category> getAllIncomeCategories() {
-    return iterableList().where((Category category) => category.isIncome).toList();
+    return iterableList()
+        .where((Category category) => category.isIncome)
+        .toList();
   }
 
   Category? getByName(final String name) {
-    return iterableList().firstWhereOrNull((final Category category) => category.fieldName.value == name);
+    return iterableList().firstWhereOrNull(
+      (final Category category) => category.fieldName.value == name,
+    );
   }
 
   List<String> getCategoriesAsStrings() {
-    return this.getListSorted().map((Category element) => element.fieldName.value).toList();
+    return this
+        .getListSorted()
+        .map((Category element) => element.fieldName.value)
+        .toList();
   }
 
   List<Category> getCategoriesWithThisParent(final int parentId) {
@@ -201,7 +212,10 @@ class Categories extends MoneyObjects<Category> {
 
   List<Category> getListSorted() {
     final List<Category> list = iterableList().toList();
-    list.sort((Category a, Category b) => sortByString(a.fieldName.value, b.fieldName.value, true));
+    list.sort(
+      (Category a, Category b) =>
+          sortByString(a.fieldName.value, b.fieldName.value, true),
+    );
     return list;
   }
 
@@ -216,10 +230,7 @@ class Categories extends MoneyObjects<Category> {
     return Category.getName(get(id));
   }
 
-  Category getOrCreate(
-    final String name,
-    final CategoryType type,
-  ) {
+  Category getOrCreate(final String name, final CategoryType type) {
     Category? category = getByName(name);
 
     if (category == null) {
@@ -255,7 +266,9 @@ class Categories extends MoneyObjects<Category> {
   void getTreeIdsRecursive(final int categoryId, final List<int> list) {
     if (categoryId > 0) {
       list.add(categoryId);
-      final List<Category> descendants = getCategoriesWithThisParent(categoryId);
+      final List<Category> descendants = getCategoriesWithThisParent(
+        categoryId,
+      );
       for (final Category c in descendants) {
         getTreeIdsRecursive(c.fieldId.value, list);
       }
@@ -291,7 +304,10 @@ class Categories extends MoneyObjects<Category> {
   }
 
   Category get investmentLongTermCapitalGainsDistribution {
-    return getOrCreate('Investments:Long Term Capital Gains Distribution', CategoryType.income);
+    return getOrCreate(
+      'Investments:Long Term Capital Gains Distribution',
+      CategoryType.income,
+    );
   }
 
   Category get investmentMiscellaneous {
@@ -315,7 +331,10 @@ class Categories extends MoneyObjects<Category> {
   }
 
   Category get investmentShortTermCapitalGainsDistribution {
-    return getOrCreate('Investments:Short Term Capital Gains Distribution', CategoryType.income);
+    return getOrCreate(
+      'Investments:Short Term Capital Gains Distribution',
+      CategoryType.income,
+    );
   }
 
   Category get investmentStocks {
@@ -326,11 +345,16 @@ class Categories extends MoneyObjects<Category> {
     return getOrCreate('Investments:Transfer', CategoryType.none);
   }
 
-  bool isCategoryAnExpense(final int categoryId) => get(categoryId)?.isExpense ?? false;
+  bool isCategoryAnExpense(final int categoryId) =>
+      get(categoryId)?.isExpense ?? false;
 
-  bool isCategoryAnIncome(final int categoryId) => get(categoryId)?.isIncome ?? false;
+  bool isCategoryAnIncome(final int categoryId) =>
+      get(categoryId)?.isIncome ?? false;
 
-  void reparentCategory(final Category categoryToReparent, final Category newParentCategory) {
+  void reparentCategory(
+    final Category categoryToReparent,
+    final Category newParentCategory,
+  ) {
     categoryToReparent.stashValueBeforeEditing();
     categoryToReparent.fieldParentId.value = newParentCategory.uniqueId;
 

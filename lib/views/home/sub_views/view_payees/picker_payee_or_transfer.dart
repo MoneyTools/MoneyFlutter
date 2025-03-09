@@ -7,10 +7,7 @@ import 'package:money/views/home/sub_views/view_accounts/picker_account.dart';
 import 'package:money/views/home/sub_views/view_payees/merge_payees.dart';
 import 'package:money/views/home/sub_views/view_payees/picker_payee.dart';
 
-enum TransactionFlavor {
-  payee,
-  transfer,
-}
+enum TransactionFlavor { payee, transfer }
 
 class PickPayeeOrTransfer extends StatefulWidget {
   const PickPayeeOrTransfer({
@@ -25,7 +22,8 @@ class PickPayeeOrTransfer extends StatefulWidget {
   final Account? account;
   final double amount;
   final TransactionFlavor choice;
-  final void Function(TransactionFlavor choice, Payee? payee, Account? account) onSelected;
+  final void Function(TransactionFlavor choice, Payee? payee, Account? account)
+  onSelected;
   final Payee? payee;
 
   @override
@@ -50,9 +48,7 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
         gapMedium(),
         SizedBox(width: 250, child: buildChoice()),
         gapSmall(),
-        Expanded(
-          child: buildIInput(),
-        ),
+        Expanded(child: buildIInput()),
       ],
     );
   }
@@ -122,9 +118,7 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
       children: <Widget>[
         if (caption.isNotEmpty) SizedBox(width: 100, child: Text(caption)),
         gapMedium(),
-        Expanded(
-          child: widget,
-        ),
+        Expanded(child: widget),
       ],
     );
   }

@@ -1,7 +1,7 @@
 #!/bin/sh
 echo --- Analyze
-# dart format .
 dart fix --apply
+dart format .
 
 dart analyze 
 flutter analyze

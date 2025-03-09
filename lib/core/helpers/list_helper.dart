@@ -6,7 +6,7 @@ import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/data/models/money_objects/money_object.dart';
 
 // Exports
-export  'package:money/core/helpers/pairs.dart';
+export 'package:money/core/helpers/pairs.dart';
 
 /// Calculates a list of evenly spaced values between a start and end value.
 ///
@@ -94,7 +94,6 @@ List<Pair<T, U>> convertMapToListOfPair<T, U>(Map<dynamic, dynamic> map) {
   return list;
 }
 
-
 /// Converts a list of key-value pairs to a list of percentages.
 ///
 /// This function takes a list of [PairStringDouble] objects, which represent
@@ -112,18 +111,24 @@ List<Pair<T, U>> convertMapToListOfPair<T, U>(Map<dynamic, dynamic> map) {
 /// Returns:
 ///   A new list of [PairStringDouble] objects with the values converted to
 ///   percentages of the total.
-List<PairStringDouble> convertToPercentages(List<PairStringDouble> pairStringDouble) {
+List<PairStringDouble> convertToPercentages(
+  List<PairStringDouble> pairStringDouble,
+) {
   // Calculate total amount
-  final double totalAmount = pairStringDouble.fold(0, (double prev, PairStringDouble entry) => prev + (entry.value as num));
+  final double totalAmount = pairStringDouble.fold(
+    0,
+    (double prev, PairStringDouble entry) => prev + (entry.value as num),
+  );
 
   // Convert each amount to a percentage and retain key association
-  final List<PairStringDouble> percentages = pairStringDouble.map((PairStringDouble entry) {
-    final double percentage = ((entry.value as num) / (totalAmount)) * 100;
-    return PairStringDouble(
-      key: entry.key,
-      value: percentage.isNaN ? 0.0 : percentage,
-    ); // Handle division by zero
-  }).toList();
+  final List<PairStringDouble> percentages =
+      pairStringDouble.map((PairStringDouble entry) {
+        final double percentage = ((entry.value as num) / totalAmount) * 100;
+        return PairStringDouble(
+          key: entry.key,
+          value: percentage.isNaN ? 0.0 : percentage,
+        ); // Handle division by zero
+      }).toList();
 
   return percentages;
 }
@@ -160,7 +165,10 @@ T? getMoneyObjectFromFirstSelectedId<T>(
 ) {
   if (selectedIds.isNotEmpty) {
     final int id = selectedIds.first;
-    return listOfItems.firstWhereOrNull((final dynamic element) => (element as MoneyObject).uniqueId == id) as T?;
+    return listOfItems.firstWhereOrNull(
+          (final dynamic element) => (element as MoneyObject).uniqueId == id,
+        )
+        as T?;
   }
   return null;
 }
@@ -231,7 +239,6 @@ int sortByAmount(final MoneyModel a, final MoneyModel b, final bool ascending) {
     return b.asDouble().compareTo(a.asDouble());
   }
 }
-
 
 List<String> enumToStringList<T>(List<T> enumValues) {
   return enumValues.map((final T e) => e.toString().split('.').last).toList();

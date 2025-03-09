@@ -104,7 +104,9 @@ class _ColorPickerState extends State<ColorPicker> {
   }
 
   void fromInputColorToHueAndBrightness() {
-    final Pair<double, double> bothValues = getHueAndBrightnessFromColor(widget.color);
+    final Pair<double, double> bothValues = getHueAndBrightnessFromColor(
+      widget.color,
+    );
     hue = bothValues.first;
     brightness = bothValues.second;
   }

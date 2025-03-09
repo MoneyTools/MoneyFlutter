@@ -28,7 +28,11 @@ class InputValues extends StatelessWidget {
         Box(
           height: 200,
           width: 800,
-          header: buildHeaderTitleAndCounter(context, title, '${getIntAsText(lineCount)} lines'),
+          header: buildHeaderTitleAndCounter(
+            context,
+            title,
+            '${getIntAsText(lineCount)} lines',
+          ),
           child: TextField(
             key: const Key('key_input_text_field_value'),
             controller: controller,

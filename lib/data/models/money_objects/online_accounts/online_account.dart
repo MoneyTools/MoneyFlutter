@@ -87,13 +87,16 @@ class OnlineAccount extends MoneyObject {
 
   // 0
   FieldId fieldId = FieldId(
-    getValueForSerialization: (final MoneyObject instance) => (instance as OnlineAccount).uniqueId,
+    getValueForSerialization:
+        (final MoneyObject instance) => (instance as OnlineAccount).uniqueId,
   );
 
   // 1
   FieldString fieldName = FieldString(
     serializeName: 'Name',
-    getValueForSerialization: (final MoneyObject instance) => (instance as OnlineAccount).fieldName.value,
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            (instance as OnlineAccount).fieldName.value,
   );
 
   // 2
@@ -121,14 +124,11 @@ class OnlineAccount extends MoneyObject {
   @override
   FieldDefinitions get fieldDefinitions => fields.definitions;
 
-    static final Fields<OnlineAccount> _fields = Fields<OnlineAccount>();
+  static final Fields<OnlineAccount> _fields = Fields<OnlineAccount>();
   static Fields<OnlineAccount> get fields {
     if (_fields.isEmpty) {
       final OnlineAccount tmp = OnlineAccount.fromJson(<String, dynamic>{});
-      _fields.setDefinitions(<Field<dynamic>>[
-        tmp.fieldId,
-        tmp.fieldName,
-      ]);
+      _fields.setDefinitions(<Field<dynamic>>[tmp.fieldId, tmp.fieldName]);
     }
 
     return _fields;

@@ -22,10 +22,7 @@ class WelcomePage extends GetView<WelcomeController> {
   Widget build(BuildContext context) {
     return myScaffold(
       context,
-      AppBar(
-        title: const TextTitle('Welcome to MyMoney'),
-        centerTitle: true,
-      ),
+      AppBar(title: const TextTitle('Welcome to MyMoney'), centerTitle: true),
       const WelcomeScreen(),
     );
   }

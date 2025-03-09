@@ -43,7 +43,9 @@ class SankeyPanel extends StatelessWidget {
               leftEntries: sanKeyListOfIncomes,
               rightEntries: sanKeyListOfExpenses,
               compactView: context.isWidthSmall,
-              colors: SankeyColors(darkTheme: themeController.isDarkTheme.value),
+              colors: SankeyColors(
+                darkTheme: themeController.isDarkTheme.value,
+              ),
             ),
           ),
         );
@@ -52,14 +54,17 @@ class SankeyPanel extends StatelessWidget {
   }
 
   void transformData() {
-    final Iterable<Transaction> transactions = Data().transactions.transactionInYearRange(
+    final Iterable<Transaction> transactions = Data().transactions
+        .transactionInYearRange(
           minYear: minYear,
           maxYear: maxYear,
           incomesOrExpenses: null,
         );
 
     for (Transaction element in transactions) {
-      final Category? category = Data().categories.get(element.fieldCategoryId.value);
+      final Category? category = Data().categories.get(
+        element.fieldCategoryId.value,
+      );
       if (category != null) {
         switch (category.fieldType.value) {
           case CategoryType.income:
@@ -67,18 +72,24 @@ class SankeyPanel extends StatelessWidget {
           case CategoryType.investment:
             totalIncomes += element.fieldAmount.value.asDouble();
 
-            final Category topCategory = Data().categories.getTopAncestor(category);
+            final Category topCategory = Data().categories.getTopAncestor(
+              category,
+            );
             double? mapValue = mapOfIncomes[topCategory];
             mapValue ??= 0;
-            mapOfIncomes[topCategory] = mapValue + element.fieldAmount.value.asDouble();
+            mapOfIncomes[topCategory] =
+                mapValue + element.fieldAmount.value.asDouble();
             break;
           case CategoryType.expense:
           case CategoryType.recurringExpense:
             totalExpenses += element.fieldAmount.value.asDouble();
-            final Category topCategory = Data().categories.getTopAncestor(category);
+            final Category topCategory = Data().categories.getTopAncestor(
+              category,
+            );
             double? mapValue = mapOfExpenses[topCategory];
             mapValue ??= 0;
-            mapOfExpenses[topCategory] = mapValue + element.fieldAmount.value.asDouble();
+            mapOfExpenses[topCategory] =
+                mapValue + element.fieldAmount.value.asDouble();
             break;
           default:
             totalNones += element.fieldAmount.value.asDouble();
@@ -91,14 +102,12 @@ class SankeyPanel extends StatelessWidget {
     mapOfIncomes.removeWhere((final Category k, final double v) => v <= 0.00);
     // Sort Descending
     mapOfIncomes = Map<Category, double>.fromEntries(
-      mapOfIncomes.entries.toList()
-        ..sort(
-          (
-            final MapEntry<Category, double> e1,
-            final MapEntry<Category, double> e2,
-          ) =>
-              (e2.value - e1.value).toInt(),
-        ),
+      mapOfIncomes.entries.toList()..sort(
+        (
+          final MapEntry<Category, double> e1,
+          final MapEntry<Category, double> e2,
+        ) => (e2.value - e1.value).toInt(),
+      ),
     );
 
     mapOfIncomes.forEach((final Category key, final double value) {
@@ -114,14 +123,12 @@ class SankeyPanel extends StatelessWidget {
 
     // Sort Ascending, in the case of expenses that means the largest negative number to the least negative number
     mapOfExpenses = Map<Category, double>.fromEntries(
-      mapOfExpenses.entries.toList()
-        ..sort(
-          (
-            final MapEntry<Category, double> e1,
-            final MapEntry<Category, double> e2,
-          ) =>
-              (e1.value - e2.value).toInt(),
-        ),
+      mapOfExpenses.entries.toList()..sort(
+        (
+          final MapEntry<Category, double> e1,
+          final MapEntry<Category, double> e2,
+        ) => (e1.value - e2.value).toInt(),
+      ),
     );
 
     mapOfExpenses.forEach((final Category key, final double value) {
@@ -132,8 +139,15 @@ class SankeyPanel extends StatelessWidget {
       );
     });
 
-    final double heightNeededToRenderIncomes = getHeightNeededToRender(sanKeyListOfIncomes);
-    final double heightNeededToRenderExpenses = getHeightNeededToRender(sanKeyListOfExpenses);
-    totalHeight = max(heightNeededToRenderIncomes, heightNeededToRenderExpenses);
+    final double heightNeededToRenderIncomes = getHeightNeededToRender(
+      sanKeyListOfIncomes,
+    );
+    final double heightNeededToRenderExpenses = getHeightNeededToRender(
+      sanKeyListOfExpenses,
+    );
+    totalHeight = max(
+      heightNeededToRenderIncomes,
+      heightNeededToRenderExpenses,
+    );
   }
 }

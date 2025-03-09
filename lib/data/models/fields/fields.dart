@@ -55,7 +55,10 @@ class Fields<T> {
     }
 
     // Looking for Both freestyle text and column filtering, both condition needs to be met
-    return isMatchingFreeStyleText(objectInstance, filterBytFreeStyleLowerCaseText) &&
+    return isMatchingFreeStyleText(
+          objectInstance,
+          filterBytFreeStyleLowerCaseText,
+        ) &&
         isMatchingColumnFiltering(objectInstance, filterByFieldsValue);
   }
 
@@ -64,12 +67,17 @@ class Fields<T> {
   }
 
   /// Used in table view
-  static Widget getRowOfColumns(final FieldDefinitions definitions, final MoneyObject objectInstance) {
+  static Widget getRowOfColumns(
+    final FieldDefinitions definitions,
+    final MoneyObject objectInstance,
+  ) {
     final List<Widget> cells = <Widget>[];
 
     for (final Field<dynamic> fieldDefinition in definitions) {
       if (fieldDefinition.columnWidth != ColumnWidth.hidden) {
-        final dynamic value = fieldDefinition.getValueForDisplay(objectInstance);
+        final dynamic value = fieldDefinition.getValueForDisplay(
+          objectInstance,
+        );
         cells.add(
           Expanded(
             flex: fieldDefinition.columnWidth.index,
@@ -90,8 +98,13 @@ class Fields<T> {
     return Row(children: cells);
   }
 
-  String getStringValueUsingFieldName(final MoneyObject objectInstance, final String fieldName) {
-    final Field<dynamic>? fieldFound = definitions.firstWhereOrNull((Field<dynamic> f) => f.name == fieldName);
+  String getStringValueUsingFieldName(
+    final MoneyObject objectInstance,
+    final String fieldName,
+  ) {
+    final Field<dynamic>? fieldFound = definitions.firstWhereOrNull(
+      (Field<dynamic> f) => f.name == fieldName,
+    );
     if (fieldFound != null) {
       return _getFieldValueAsStringForFiltering(objectInstance, fieldFound);
     }
@@ -159,7 +172,9 @@ class Fields<T> {
     final MoneyObject objectInstance,
     final Field<dynamic> fieldDefinition,
   ) {
-    final dynamic fieldValue = fieldDefinition.getValueForDisplay(objectInstance);
+    final dynamic fieldValue = fieldDefinition.getValueForDisplay(
+      objectInstance,
+    );
     return fieldValue as DateTime;
   }
 
@@ -180,17 +195,24 @@ class Fields<T> {
     switch (fieldDefinition.type) {
       case FieldType.widget:
         if (fieldDefinition.getValueForReading == null) {
-          return fieldDefinition.getValueForSerialization(objectInstance).toString().toLowerCase();
+          return fieldDefinition
+              .getValueForSerialization(objectInstance)
+              .toString()
+              .toLowerCase();
         } else {
           return fieldDefinition.getValueForReading!(objectInstance) as String;
         }
 
       case FieldType.date:
-        final dynamic fieldValue = fieldDefinition.getValueForDisplay(objectInstance);
+        final dynamic fieldValue = fieldDefinition.getValueForDisplay(
+          objectInstance,
+        );
         return dateToString(fieldValue as DateTime?);
 
       case FieldType.quantity:
-        final dynamic fieldValue = fieldDefinition.getValueForDisplay(objectInstance);
+        final dynamic fieldValue = fieldDefinition.getValueForDisplay(
+          objectInstance,
+        );
         if (fieldValue is num) {
           return formatDoubleTrimZeros(fieldValue.toDouble());
         } else {
@@ -198,7 +220,9 @@ class Fields<T> {
         }
 
       default:
-        final dynamic fieldValue = fieldDefinition.getValueForDisplay(objectInstance);
+        final dynamic fieldValue = fieldDefinition.getValueForDisplay(
+          objectInstance,
+        );
         return fieldValue.toString().toLowerCase();
     }
   }

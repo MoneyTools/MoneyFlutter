@@ -19,12 +19,11 @@ export 'package:money/core/widgets/filter_input.dart';
 export 'package:money/core/widgets/three_part_label.dart';
 
 /// If the space for rendering the widget is too small this will scale the widget to fit
-Widget scaleDown(final Widget child, [AlignmentGeometry alignment = Alignment.center]) {
-  return FittedBox(
-    fit: BoxFit.scaleDown,
-    alignment: alignment,
-    child: child,
-  );
+Widget scaleDown(
+  final Widget child, [
+  AlignmentGeometry alignment = Alignment.center,
+]) {
+  return FittedBox(fit: BoxFit.scaleDown, alignment: alignment, child: child);
 }
 
 ///
@@ -42,9 +41,12 @@ Widget buildDashboardWidget(final Widget child) {
 }
 
 extension ViewExtension on BuildContext {
-  bool get isWidthSmall => (MediaQuery.of(this).size.width <= Constants.screenWithSmall);
-  bool get isWidthMedium => (MediaQuery.of(this).size.width <= Constants.screenWidthMedium);
-  bool get isWidthLarge => (MediaQuery.of(this).size.width > Constants.screenWidthMedium);
+  bool get isWidthSmall =>
+      MediaQuery.of(this).size.width <= Constants.screenWithSmall;
+  bool get isWidthMedium =>
+      MediaQuery.of(this).size.width <= Constants.screenWidthMedium;
+  bool get isWidthLarge =>
+      MediaQuery.of(this).size.width > Constants.screenWidthMedium;
 }
 
 Widget buildFieldWidgetForAmount({
@@ -58,9 +60,9 @@ Widget buildFieldWidgetForAmount({
       shorthand
           ? getAmountAsShorthandText(value as num)
           : Currency.getAmountAsStringUsingCurrency(
-              value,
-              iso4217code: currency,
-            ),
+            value,
+            iso4217code: currency,
+          ),
       textAlign: align,
       style: TextStyle(
         fontFamily: 'RobotoMono',
@@ -92,7 +94,9 @@ Widget buildFieldWidgetForNumber({
   return scaleDown(
     Text(
       shorthand
-          ? (value is double ? getAmountAsShorthandText(value) : getNumberShorthandText(value))
+          ? (value is double
+              ? getAmountAsShorthandText(value)
+              : getNumberShorthandText(value))
           : value.toString(),
       textAlign: align,
       style: const TextStyle(fontFamily: 'RobotoMono'),
@@ -101,9 +105,7 @@ Widget buildFieldWidgetForNumber({
   );
 }
 
-Widget buildFieldWidgetForPercentage({
-  final double value = 0,
-}) {
+Widget buildFieldWidgetForPercentage({final double value = 0}) {
   // 0.000 to 100.000%
   return Row(
     mainAxisAlignment: MainAxisAlignment.end,
@@ -113,17 +115,12 @@ Widget buildFieldWidgetForPercentage({
         child: Text(
           (value * 100).toStringAsFixed(3),
           textAlign: TextAlign.right,
-          style: const TextStyle(
-            fontFamily: 'RobotoMono',
-          ),
+          style: const TextStyle(fontFamily: 'RobotoMono'),
         ),
       ),
       const Opacity(
         opacity: 0.8,
-        child: Text(
-          ' %',
-          style: TextStyle(fontSize: 9),
-        ),
+        child: Text(' %', style: TextStyle(fontSize: 9)),
       ),
     ],
   );
@@ -179,15 +176,10 @@ Widget buildWidgetFromTypeAndValue({
       return Row(
         children: <Widget>[
           Expanded(
-            child: (value is num)
-                ? QuantityWidget(
-                    quantity: value.toDouble(),
-                    align: align,
-                  )
-                : Text(
-                    value.toString(),
-                    textAlign: align,
-                  ),
+            child:
+                (value is num)
+                    ? QuantityWidget(quantity: value.toDouble(), align: align)
+                    : Text(value.toString(), textAlign: align),
           ),
         ],
       );
@@ -231,7 +223,10 @@ Widget buildWidgetFromTypeAndValue({
         );
       }
       // Adapt to available space
-      return scaleDown(buildFieldWidgetForDate(date: value as DateTime?, align: align), Alignment.centerLeft);
+      return scaleDown(
+        buildFieldWidgetForDate(date: value as DateTime?, align: align),
+        Alignment.centerLeft,
+      );
 
     case FieldType.text:
     default:

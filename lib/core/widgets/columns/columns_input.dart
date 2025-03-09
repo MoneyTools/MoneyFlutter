@@ -34,15 +34,19 @@ class InputByColumnsOrFreeStyle extends StatefulWidget {
   final bool reverseAmountValue;
 
   @override
-  State<InputByColumnsOrFreeStyle> createState() => _InputByColumnsOrFreeStyleState();
+  State<InputByColumnsOrFreeStyle> createState() =>
+      _InputByColumnsOrFreeStyleState();
 }
 
 class _InputByColumnsOrFreeStyleState extends State<InputByColumnsOrFreeStyle> {
-  final TextEditingController _controllerColumn2 = TextEditingController(); // Description column
-  final TextEditingController _controllerColumn3 = TextEditingController(); // Amount column
+  final TextEditingController _controllerColumn2 =
+      TextEditingController(); // Description column
+  final TextEditingController _controllerColumn3 =
+      TextEditingController(); // Amount column
 
   // Controllers for the three-column format
-  final TextEditingController _controllerColumn1 = TextEditingController(); // Date column
+  final TextEditingController _controllerColumn1 =
+      TextEditingController(); // Date column
 
   // Controller for the single-column freestyle format
   final TextEditingController _controllerSingleColumn = TextEditingController();
@@ -104,7 +108,9 @@ class _InputByColumnsOrFreeStyleState extends State<InputByColumnsOrFreeStyle> {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: SizeForPadding.normal),
+              padding: const EdgeInsets.symmetric(
+                vertical: SizeForPadding.normal,
+              ),
               child: TabBarView(
                 children: <Widget>[
                   // Content for 3 columns
@@ -237,7 +243,9 @@ class _InputByColumnsOrFreeStyleState extends State<InputByColumnsOrFreeStyle> {
 
       // Update single column with combined content from three columns
       if (_freeStyleInput) {
-        _updateAllTextControllerContentFromRawText(_controllerSingleColumn.text);
+        _updateAllTextControllerContentFromRawText(
+          _controllerSingleColumn.text,
+        );
       } else {
         _fromThreeToOneColumn();
       }
@@ -257,10 +265,7 @@ class _InputByColumnsOrFreeStyleState extends State<InputByColumnsOrFreeStyle> {
     );
 
     if (context.mounted) {
-      parser.convertInputTextToTransactionList(
-        context,
-        widget.inputText,
-      );
+      parser.convertInputTextToTransactionList(context, widget.inputText);
 
       _controllerColumn1.text = parser.getListOfDatesString().join('\n');
       _controllerColumn2.text = parser.getListOfDescriptionString().join('\n');

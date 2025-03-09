@@ -5,11 +5,16 @@ import 'package:money/data/models/fields/field.dart';
 import 'package:money/views/home/sub_views/adaptive_view/view_money_objects.dart';
 
 class FooterAccumulators {
-  final AccumulatorDateRange<Field<dynamic>> accumulatorDateRange = AccumulatorDateRange<Field<dynamic>>();
-  final AccumulatorAverage<Field<dynamic>> accumulatorForAverage = AccumulatorAverage<Field<dynamic>>();
-  final AccumulatorList<Field<dynamic>, String> accumulatorListOfText = AccumulatorList<Field<dynamic>, String>();
-  final AccumulatorSum<Field<dynamic>, double> accumulatorSumAmount = AccumulatorSum<Field<dynamic>, double>();
-  final AccumulatorSum<Field<dynamic>, double> accumulatorSumNumber = AccumulatorSum<Field<dynamic>, double>();
+  final AccumulatorDateRange<Field<dynamic>> accumulatorDateRange =
+      AccumulatorDateRange<Field<dynamic>>();
+  final AccumulatorAverage<Field<dynamic>> accumulatorForAverage =
+      AccumulatorAverage<Field<dynamic>>();
+  final AccumulatorList<Field<dynamic>, String> accumulatorListOfText =
+      AccumulatorList<Field<dynamic>, String>();
+  final AccumulatorSum<Field<dynamic>, double> accumulatorSumAmount =
+      AccumulatorSum<Field<dynamic>, double>();
+  final AccumulatorSum<Field<dynamic>, double> accumulatorSumNumber =
+      AccumulatorSum<Field<dynamic>, double>();
 
   /// Allowed to be override by derived classes
   /// to be overridden by derived class
@@ -49,26 +54,31 @@ class FooterAccumulators {
       case FooterType.sum:
         Widget? widget;
         if (accumulatorSumAmount.containsKey(field)) {
-          widget = getFooterForAmount(accumulatorSumAmount.getValue(field) as double);
+          widget = getFooterForAmount(
+            accumulatorSumAmount.getValue(field) as double,
+          );
         } else {
           if (accumulatorSumNumber.containsKey(field)) {
-            widget = getFooterForInt(accumulatorSumNumber.getValue(field) as num);
+            widget = getFooterForInt(
+              accumulatorSumNumber.getValue(field) as num,
+            );
           }
         }
-        return Tooltip(
-          message: 'Sum.',
-          child: widget,
-        );
+        return Tooltip(message: 'Sum.', child: widget);
 
       case FooterType.average:
         if (accumulatorForAverage.containsKey(field)) {
           final RunningAverage range = accumulatorForAverage.getValue(field)!;
           final double value = range.getAverage();
-          final Widget widget = field.type == FieldType.amount
-              ? getFooterForAmount(value, prefix: 'Av ')
-              : getFooterForInt(value, prefix: 'Av ');
+          final Widget widget =
+              field.type == FieldType.amount
+                  ? getFooterForAmount(value, prefix: 'Av ')
+                  : getFooterForInt(value, prefix: 'Av ');
           return Tooltip(
-            message: field.type == FieldType.amount ? range.descriptionAsMoney : range.descriptionAsInt,
+            message:
+                field.type == FieldType.amount
+                    ? range.descriptionAsMoney
+                    : range.descriptionAsInt,
             child: widget,
           );
         }

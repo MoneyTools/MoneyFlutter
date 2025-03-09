@@ -2,20 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:money/core/widgets/gaps.dart';
 
 /// Display a message to the user
-void messageBox(
-  final BuildContext context,
-  final String message,
-) {
+void messageBox(final BuildContext context, final String message) {
   showDialog<dynamic>(
     context: context,
     builder: (BuildContext context) {
       return SimpleDialog(
         children: <Widget>[
           gapLarge(),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(message),
-          ),
+          Padding(padding: const EdgeInsets.all(16.0), child: Text(message)),
           gapLarge(),
         ],
       );

@@ -8,7 +8,11 @@ void main() {
     test('Read', () {
       final String qfxString = getQfxSample();
 
-      final String ofxString = getStringDelimitedStartEndTokens(qfxString, '<OFX>', '</OFX>');
+      final String ofxString = getStringDelimitedStartEndTokens(
+        qfxString,
+        '<OFX>',
+        '</OFX>',
+      );
       expect(ofxString.isEmpty, false);
 
       final List<ImportEntry> list = getTransactionFromOFX(ofxString);

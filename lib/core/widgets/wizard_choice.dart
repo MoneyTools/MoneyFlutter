@@ -31,7 +31,10 @@ class WizardChoice extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 400),
         child: ListTile(
           title: Text(title),
-          titleTextStyle: TextStyle(fontSize: 20, color: getColorTheme(context).onSurface),
+          titleTextStyle: TextStyle(
+            fontSize: 20,
+            color: getColorTheme(context).onSurface,
+          ),
           subtitle: Padding(
             padding: const EdgeInsets.only(top: SizeForPadding.medium),
             child: Text(description),

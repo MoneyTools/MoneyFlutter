@@ -11,16 +11,18 @@ import 'package:money/core/widgets/quantity_widget.dart';
 import 'package:money/core/widgets/widgets.dart';
 import 'package:money/data/models/fields/field.dart';
 
-class MockThemeController extends GetxController with Mock implements ThemeController {
+class MockThemeController extends GetxController
+    with Mock
+    implements ThemeController {
   @override
   RxBool get isDarkTheme => false.obs;
 }
 
-class MockPreferenceController extends GetxController with Mock implements PreferenceController {
+class MockPreferenceController extends GetxController
+    with Mock
+    implements PreferenceController {
   @override
-  String getString(String key, [String defaultValueIfNotFound = '']) {
-    return '';
-  }
+  String getString(String key, [String defaultValueIfNotFound = '']) => '';
 
   @override
   Future<void> setString(
@@ -37,7 +39,8 @@ void main() {
     // Enable test mode
     Get.testMode = true;
 
-    final MockPreferenceController mockPreferenceController = MockPreferenceController();
+    final MockPreferenceController mockPreferenceController =
+        MockPreferenceController();
     final MockThemeController mockThemeController = MockThemeController();
 
     Get.put<ThemeController>(mockThemeController);
@@ -52,7 +55,9 @@ void main() {
     expect(isPlatformMobile(), false);
   });
 
-  testWidgets('buildFieldWidgetForAmount renders correct text', (WidgetTester tester) async {
+  testWidgets('buildFieldWidgetForAmount renders correct text', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -64,7 +69,9 @@ void main() {
     expect(find.text('\$1,234.56'), findsOneWidget);
   });
 
-  testWidgets('buildFieldWidgetForAmount renders shorthand text', (WidgetTester tester) async {
+  testWidgets('buildFieldWidgetForAmount renders shorthand text', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -77,7 +84,9 @@ void main() {
   });
 
   group('buildWidgetFromTypeAndValue', () {
-    testWidgets('renders Text widget for numeric field with String value', (WidgetTester tester) async {
+    testWidgets('renders Text widget for numeric field with String value', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -95,7 +104,9 @@ void main() {
       expect(find.text('42'), findsOneWidget);
     });
 
-    testWidgets('renders number widget for numeric field with num value', (WidgetTester tester) async {
+    testWidgets('renders number widget for numeric field with num value', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -113,7 +124,9 @@ void main() {
       expect(find.text('42'), findsOneWidget);
     });
 
-    testWidgets('renders number widget for numericShorthand field', (WidgetTester tester) async {
+    testWidgets('renders number widget for numericShorthand field', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -131,7 +144,9 @@ void main() {
       expect(find.text('1.23M'), findsOneWidget);
     });
 
-    testWidgets('renders quantity widget for quantity field with num value', (WidgetTester tester) async {
+    testWidgets('renders quantity widget for quantity field with num value', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -148,7 +163,9 @@ void main() {
       expect(find.byType(QuantityWidget), findsOneWidget);
     });
 
-    testWidgets('renders Text widget for quantity field with String value', (WidgetTester tester) async {
+    testWidgets('renders Text widget for quantity field with String value', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -166,7 +183,9 @@ void main() {
       expect(find.text('text'), findsOneWidget);
     });
 
-    testWidgets('renders percentage widget for percentage field', (WidgetTester tester) async {
+    testWidgets('renders percentage widget for percentage field', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -187,7 +206,9 @@ void main() {
       expect(find.text(s), findsOneWidget);
     });
 
-    testWidgets('renders Text widget for amount field with String value', (WidgetTester tester) async {
+    testWidgets('renders Text widget for amount field with String value', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -206,7 +227,9 @@ void main() {
       expect(find.text('1,234.56'), findsOneWidget);
     });
 
-    testWidgets('renders MoneyWidget for amount field with MoneyModel value', (WidgetTester tester) async {
+    testWidgets('renders MoneyWidget for amount field with MoneyModel value', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -224,7 +247,9 @@ void main() {
       expect(find.byType(MoneyWidget), findsOneWidget);
     });
 
-    testWidgets('renders MoneyWidget for amount field with num value', (WidgetTester tester) async {
+    testWidgets('renders MoneyWidget for amount field with num value', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -242,7 +267,9 @@ void main() {
       expect(find.byType(MoneyWidget), findsOneWidget);
     });
 
-    testWidgets('renders amount widget for amountShorthand field', (WidgetTester tester) async {
+    testWidgets('renders amount widget for amountShorthand field', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -264,7 +291,9 @@ void main() {
       expect(find.text('1.23M'), findsOneWidget);
     });
 
-    testWidgets('renders the provided widget for widget field', (WidgetTester tester) async {
+    testWidgets('renders the provided widget for widget field', (
+      WidgetTester tester,
+    ) async {
       const Text testWidget = Text('Test Widget');
       await tester.pumpWidget(
         MaterialApp(
@@ -283,7 +312,9 @@ void main() {
       expect(find.text('Test Widget'), findsOneWidget);
     });
 
-    testWidgets('renders Text widget for date field with String value', (WidgetTester tester) async {
+    testWidgets('renders Text widget for date field with String value', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -301,7 +332,9 @@ void main() {
       expect(find.text('2023-05-15'), findsOneWidget);
     });
 
-    testWidgets('renders date widget for date field with DateTime value', (WidgetTester tester) async {
+    testWidgets('renders date widget for date field with DateTime value', (
+      WidgetTester tester,
+    ) async {
       final DateTime inputDate = DateTime(2023, 5, 15);
       await tester.pumpWidget(
         MaterialApp(
@@ -323,7 +356,9 @@ void main() {
       expect(find.text(result), findsOneWidget);
     });
 
-    testWidgets('renders Text widget for text field', (WidgetTester tester) async {
+    testWidgets('renders Text widget for text field', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(

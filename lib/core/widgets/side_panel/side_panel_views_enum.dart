@@ -1,6 +1,1 @@
-enum SidePanelSubViewEnum {
-  details,
-  chart,
-  transactions,
-  pnl,
-}
+enum SidePanelSubViewEnum { details, chart, transactions, pnl }

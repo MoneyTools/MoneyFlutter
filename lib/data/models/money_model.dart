@@ -57,9 +57,13 @@ class MoneyModel {
   /// If the input is a String, it attempts to parse it as a double using the attemptToGetDoubleFromText function.
   /// If the input is not a String, it calls the toDouble() method on the input to convert it to a double.
   void setAmount(final dynamic newValueToSet) {
-    _amount = newValueToSet is String // Check if the input is a String
-        ? attemptToGetDoubleFromText(newValueToSet) ?? 0.0 // If it's a String, attempt to parse it as a double
-        : (newValueToSet as num).toDouble(); // If it's not a String, call toDouble() to convert it to a double
+    _amount =
+        newValueToSet
+                is String // Check if the input is a String
+            ? attemptToGetDoubleFromText(newValueToSet) ??
+                0.0 // If it's a String, attempt to parse it as a double
+            : (newValueToSet as num)
+                .toDouble(); // If it's not a String, call toDouble() to convert it to a double
   }
 
   /// the raw value as double

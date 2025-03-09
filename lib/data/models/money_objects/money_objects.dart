@@ -27,7 +27,7 @@ class MoneyObjects<T> {
     // assert(moneyObject.uniqueId != -1);
 
     _list.add(moneyObject);
-    _map[(moneyObject).uniqueId] = moneyObject;
+    _map[moneyObject.uniqueId] = moneyObject;
   }
 
   MoneyObject appendNewMoneyObject(
@@ -130,17 +130,15 @@ class MoneyObjects<T> {
 
   List<MoneyObject> getListSortedById() {
     _list.sort((final MoneyObject a, final MoneyObject b) {
-      return sortByValue(
-        (a).uniqueId,
-        (b).uniqueId,
-        true,
-      );
+      return sortByValue(a.uniqueId, b.uniqueId, true);
     });
     return _list;
   }
 
   List<MoneyObject> getMutatedObjects(MutationType typeOfMutation) {
-    return _list.where((MoneyObject element) => element.mutation == typeOfMutation).toList();
+    return _list
+        .where((MoneyObject element) => element.mutation == typeOfMutation)
+        .toList();
   }
 
   int getNextId() {
@@ -161,8 +159,12 @@ class MoneyObjects<T> {
     return _list.isEmpty;
   }
 
-  static bool isFieldMatchingCondition(final Field<dynamic> field, bool forSerialization) {
-    return ((forSerialization == true && field.serializeName.isNotEmpty) || (forSerialization == false));
+  static bool isFieldMatchingCondition(
+    final Field<dynamic> field,
+    bool forSerialization,
+  ) {
+    return (forSerialization == true && field.serializeName.isNotEmpty) ||
+        (forSerialization == false);
   }
 
   bool get isNotEmpty => !isEmpty;
@@ -202,10 +204,7 @@ class MoneyObjects<T> {
         case MutationType.none:
           break;
         case MutationType.inserted:
-          db.itemInsert(
-            tableName,
-            item.getPersistableJSon(),
-          );
+          db.itemInsert(tableName, item.getPersistableJSon());
 
         case MutationType.changed:
           db.itemUpdate(
@@ -215,10 +214,7 @@ class MoneyObjects<T> {
           );
 
         case MutationType.deleted:
-          db.itemDelete(
-            tableName,
-            item.getWhereClause(),
-          );
+          db.itemDelete(tableName, item.getWhereClause());
 
         default:
           debugPrint('Unhandled change ${item.mutation}');
@@ -235,7 +231,10 @@ class MoneyObjects<T> {
     final int sortBy,
     final bool sortAscending,
   ) {
-    final Field<dynamic>? fieldDefinition = isIndexInRange(fieldDefinitions, sortBy) ? fieldDefinitions[sortBy] : null;
+    final Field<dynamic>? fieldDefinition =
+        isIndexInRange(fieldDefinitions, sortBy)
+            ? fieldDefinitions[sortBy]
+            : null;
 
     sortListFallbackOnIdForTieBreaker(
       list,
@@ -272,9 +271,11 @@ class MoneyObjects<T> {
   ]) {
     final List<String> listValues = <String>[];
     for (final Field<dynamic> field in fieldDefinitions) {
-      final dynamic value = field.getValueForSerialization == defaultCallbackValue || forSerialization == false
-          ? item.toReadableString(field)
-          : field.getValueForSerialization(item);
+      final dynamic value =
+          field.getValueForSerialization == defaultCallbackValue ||
+                  forSerialization == false
+              ? item.toReadableString(field)
+              : field.getValueForSerialization(item);
 
       final String valueAsString = '"$value"';
       listValues.add(valueAsString);
@@ -291,7 +292,10 @@ class MoneyObjects<T> {
 
       jsonDelta.forEach((String key, dynamic value) {
         // Field Name
-        final Widget instanceName = Text(key, style: const TextStyle(fontSize: 10));
+        final Widget instanceName = Text(
+          key,
+          style: const TextStyle(fontSize: 10),
+        );
 
         switch (moneyObject.mutation) {
           case MutationType.inserted:
@@ -376,7 +380,9 @@ class MoneyObjects<T> {
       // No filtering needed
       return _list;
     }
-    return _list.where((final MoneyObject item) => item.mutation != MutationType.deleted);
+    return _list.where(
+      (final MoneyObject item) => item.mutation != MutationType.deleted,
+    );
   }
 }
 
@@ -387,5 +393,7 @@ MoneyObject? findObjectById(
   if (uniqueId == null) {
     return null;
   }
-  return listToSearch.firstWhereOrNull((MoneyObject element) => (element).uniqueId == uniqueId);
+  return listToSearch.firstWhereOrNull(
+    (MoneyObject element) => element.uniqueId == uniqueId,
+  );
 }

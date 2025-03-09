@@ -18,19 +18,13 @@ class VerticalLineWithTooltip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Tooltip(
-      message: tooltip,
-      child: _build(),
-    );
+    return Tooltip(message: tooltip, child: _build());
   }
 
   Widget _build() {
     if (height == 0) {
       // we do this just to get the tooltip to work
-      return SizedBox(
-        height: 5,
-        width: width,
-      );
+      return SizedBox(height: 5, width: width);
     } else {
       return Container(
         height: max(1, height),

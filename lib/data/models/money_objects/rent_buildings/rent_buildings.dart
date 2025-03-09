@@ -34,9 +34,7 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
 
   @override
   String toCSV() {
-    return MoneyObjects.getCsvFromList(
-      getListSortedById(),
-    );
+    return MoneyObjects.getCsvFromList(getListSortedById());
   }
 
   /// Accumulates transaction data for a given rental building.

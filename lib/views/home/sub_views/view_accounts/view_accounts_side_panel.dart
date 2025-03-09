@@ -46,7 +46,8 @@ extension ViewAccountsSidePanel on ViewAccountsState {
   }
 
   List<Widget> _buildStockHoldingCards(final Account account) {
-    final AccumulatorList<String, Investment> groupBySymbol = AccumulatorList<String, Investment>();
+    final AccumulatorList<String, Investment> groupBySymbol =
+        AccumulatorList<String, Investment>();
     Accounts.groupAccountStockSymbols(account, groupBySymbol);
 
     if (groupBySymbol.getKeys().isEmpty) {
@@ -55,16 +56,21 @@ extension ViewAccountsSidePanel on ViewAccountsState {
 
     final List<StockSummary> stockSummaries = <StockSummary>[];
 
-    groupBySymbol.values.forEach((String key, Set<Investment> listOfInvestmentsForAccount) {
-      final double sharesForThisStock = Investments.applyHoldingSharesAdjustedForSplits(
-        listOfInvestmentsForAccount.toList(),
-      );
+    groupBySymbol.values.forEach((
+      String key,
+      Set<Investment> listOfInvestmentsForAccount,
+    ) {
+      final double sharesForThisStock =
+          Investments.applyHoldingSharesAdjustedForSplits(
+            listOfInvestmentsForAccount.toList(),
+          );
 
       if (isConsideredZero(sharesForThisStock) == false) {
         //  "123|MSFT" >> "MSFT"
         // tally the cost of the stock
         double totalCost = 0.0;
-        for (final Investment investment in listOfInvestmentsForAccount.toList()) {
+        for (final Investment investment
+            in listOfInvestmentsForAccount.toList()) {
           totalCost += investment.costForShares;
         }
 
@@ -89,87 +95,100 @@ extension ViewAccountsSidePanel on ViewAccountsState {
     });
 
     // sort by descending holding-value
-    stockSummaries.sort((StockSummary a, StockSummary b) => b.holdingValue.compareTo(a.holdingValue));
+    stockSummaries.sort(
+      (StockSummary a, StockSummary b) =>
+          b.holdingValue.compareTo(a.holdingValue),
+    );
 
-    final List<Widget> stockPanels = stockSummaries
-        .map(
-          (StockSummary summary) => BoxWithScrollingContent(
-            height: 180,
-            children: <Widget>[
-              Row(
+    final List<Widget> stockPanels =
+        stockSummaries
+            .map(
+              (StockSummary summary) => BoxWithScrollingContent(
+                height: 180,
                 children: <Widget>[
-                  Expanded(
-                    child: TextTitle(summary.symbol),
+                  Row(
+                    children: <Widget>[
+                      Expanded(child: TextTitle(summary.symbol)),
+                      buildMenuButton(<MenuEntry>[
+                        MenuEntry.toInvestments(
+                          symbol: summary.symbol,
+                          accountName: account.fieldName.value,
+                        ),
+                        MenuEntry.toStocks(symbol: summary.symbol),
+                        MenuEntry.toWeb(
+                          url:
+                              'https://finance.yahoo.com/quote/${summary.symbol}/',
+                        ),
+                        MenuEntry.customAction(
+                          icon: Icons.refresh,
+                          text: 'Get latest price',
+                          onPressed: () async {
+                            await loadFomBackendAndSaveToCache(summary.symbol);
+                          },
+                        ),
+                        MenuEntry.customAction(
+                          icon: Icons.add,
+                          text: 'Add investment',
+                          onPressed: () async {
+                            showImportInvestment(
+                              inputData: InvestmentImportFields(
+                                account:
+                                    Data().accounts
+                                        .getMostRecentlySelectedAccount(),
+                                date: DateTime.now(),
+                                // inverse the position
+                                investmentType:
+                                    summary.shares > 0
+                                        ? InvestmentType.sell
+                                        : InvestmentType.buy,
+                                category: Data().categories.investmentOther,
+                                symbol: summary.symbol,
+                                units: summary.shares,
+                                amountPerUnit: summary.sharePrice,
+                                transactionAmount:
+                                    summary.shares * summary.sharePrice,
+                                description: 'Close Position',
+                              ),
+                            );
+                          },
+                        ),
+                      ]),
+                    ],
                   ),
-                  buildMenuButton(<MenuEntry>[
-                    MenuEntry.toInvestments(symbol: summary.symbol, accountName: account.fieldName.value),
-                    MenuEntry.toStocks(symbol: summary.symbol),
-                    MenuEntry.toWeb(url: 'https://finance.yahoo.com/quote/${summary.symbol}/'),
-                    MenuEntry.customAction(
-                      icon: Icons.refresh,
-                      text: 'Get latest price',
-                      onPressed: () async {
-                        await loadFomBackendAndSaveToCache(summary.symbol);
-                      },
-                    ),
-                    MenuEntry.customAction(
-                      icon: Icons.add,
-                      text: 'Add investment',
-                      onPressed: () async {
-                        showImportInvestment(
-                          inputData: InvestmentImportFields(
-                            account: Data().accounts.getMostRecentlySelectedAccount(),
-                            date: DateTime.now(),
-                            // inverse the position
-                            investmentType: summary.shares > 0 ? InvestmentType.sell : InvestmentType.buy,
-                            category: Data().categories.investmentOther,
-                            symbol: summary.symbol,
-                            units: summary.shares,
-                            amountPerUnit: summary.sharePrice,
-                            transactionAmount: summary.shares * summary.sharePrice,
-                            description: 'Close Position',
-                          ),
-                        );
-                      },
-                    ),
-                  ]),
+                  gapMedium(),
+
+                  // number of shares
+                  LabelAndQuantity(caption: 'Shares', quantity: summary.shares),
+
+                  // Average cost price
+                  LabelAndAmount(
+                    caption: 'Average cost',
+                    amount: summary.averageCost,
+                  ),
+
+                  // Price per share
+                  LabelAndAmount(
+                    caption: 'Market price',
+                    amount: summary.sharePrice,
+                  ),
+
+                  // Hold value
+                  gapMedium(),
+                  const Divider(),
+                  LabelAndAmount(
+                    caption: 'Value',
+                    amount: summary.holdingValue,
+                  ),
                 ],
               ),
-              gapMedium(),
-
-              // number of shares
-              LabelAndQuantity(
-                caption: 'Shares',
-                quantity: summary.shares,
-              ),
-
-              // Average cost price
-              LabelAndAmount(
-                caption: 'Average cost',
-                amount: summary.averageCost,
-              ),
-
-              // Price per share
-              LabelAndAmount(
-                caption: 'Market price',
-                amount: summary.sharePrice,
-              ),
-
-              // Hold value
-              gapMedium(),
-              const Divider(),
-              LabelAndAmount(
-                caption: 'Value',
-                amount: summary.holdingValue,
-              ),
-            ],
-          ),
-        )
-        .toList();
+            )
+            .toList();
 
     // also add Summary Cash and Stock
     double totalInvestment = 0.0;
-    stockSummaries.forEach((StockSummary element) => totalInvestment += element.holdingValue);
+    stockSummaries.forEach(
+      (StockSummary element) => totalInvestment += element.holdingValue,
+    );
 
     final double totalCash = account.balance - totalInvestment;
 
@@ -209,10 +228,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
           ),
           gapMedium(),
           const Divider(),
-          LabelAndAmount(
-            caption: 'Value',
-            amount: account.balance,
-          ),
+          LabelAndAmount(caption: 'Value', amount: account.balance),
         ],
       ),
     );
@@ -228,23 +244,30 @@ extension ViewAccountsSidePanel on ViewAccountsState {
     final List<PairXYY> listOfPairXY = <PairXYY>[];
 
     if (selectedIds.length == 1) {
-      final Account? account = getFirstSelectedItemFromSelectedList(selectedIds) as Account?;
+      final Account? account =
+          getFirstSelectedItemFromSelectedList(selectedIds) as Account?;
       if (account == null) {
         // this should not happen
         return const Text('No account selected');
       }
 
       account.maxBalancePerYears.forEach((int key, double value) {
-        final double valueCurrencyChoice = showAsNativeCurrency ? value : value * account.getCurrencyRatio();
+        final double valueCurrencyChoice =
+            showAsNativeCurrency ? value : value * account.getCurrencyRatio();
 
         listOfPairXY.add(PairXYY(key.toString(), valueCurrencyChoice));
       });
-      listOfPairXY.sort((PairXYY a, PairXYY b) => compareAsciiLowerCase(a.xText, b.xText));
+      listOfPairXY.sort(
+        (PairXYY a, PairXYY b) => compareAsciiLowerCase(a.xText, b.xText),
+      );
 
       return Chart(
         key: Key('$selectedIds $showAsNativeCurrency'),
         list: listOfPairXY.take(100).toList(),
-        currency: showAsNativeCurrency ? account.fieldCurrency.value : Constants.defaultCurrency,
+        currency:
+            showAsNativeCurrency
+                ? account.fieldCurrency.value
+                : Constants.defaultCurrency,
       );
     } else {
       for (final MoneyObject item in getList()) {
@@ -253,14 +276,18 @@ extension ViewAccountsSidePanel on ViewAccountsState {
           listOfPairXY.add(
             PairXYY(
               account.fieldName.value,
-              showAsNativeCurrency ? account.balance : account.fieldBalanceNormalized.getValueForDisplay(account) as num,
+              showAsNativeCurrency
+                  ? account.balance
+                  : account.fieldBalanceNormalized.getValueForDisplay(account)
+                      as num,
             ),
           );
         }
       }
 
       listOfPairXY.sort(
-        (final PairXYY a, final PairXYY b) => (b.yValue1.abs() - a.yValue1.abs()).toInt(),
+        (final PairXYY a, final PairXYY b) =>
+            (b.yValue1.abs() - a.yValue1.abs()).toInt(),
       );
 
       return Chart(
@@ -297,12 +324,20 @@ extension ViewAccountsSidePanel on ViewAccountsState {
     required final Account account,
     required final bool showAsNativeCurrency,
   }) {
-    int sortFieldIndex = PreferenceController.to.getInt(getPreferenceKey(settingKeySidePanel + settingKeySortBy), 0);
-    final bool sortAscending =
-        PreferenceController.to.getBool(getPreferenceKey(settingKeySidePanel + settingKeySortAscending), true);
+    int sortFieldIndex = PreferenceController.to.getInt(
+      getPreferenceKey(settingKeySidePanel + settingKeySortBy),
+      0,
+    );
+    final bool sortAscending = PreferenceController.to.getBool(
+      getPreferenceKey(settingKeySidePanel + settingKeySortAscending),
+      true,
+    );
 
-    final SelectionController selectionController =
-        Get.put(SelectionController(getPreferenceKey(settingKeySidePanel + settingKeySelectedListItemId)));
+    final SelectionController selectionController = Get.put(
+      SelectionController(
+        getPreferenceKey(settingKeySidePanel + settingKeySelectedListItemId),
+      ),
+    );
 
     selectionController.load();
 
@@ -319,48 +354,53 @@ extension ViewAccountsSidePanel on ViewAccountsState {
         showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized,
       ),
       // Credit Card account has a PaidOn column to help with balancing Statements
-      if (account.fieldType.value == AccountType.credit) Transaction.fields.getFieldByName(columnIdPaidOn),
+      if (account.fieldType.value == AccountType.credit)
+        Transaction.fields.getFieldByName(columnIdPaidOn),
     ];
 
-    return Obx(
-      () {
-        return ListViewTransactions(
-          key: Key(
-            'transaction_list_currency_${showAsNativeCurrency}_changedOn${DataController.to.lastUpdateAsString}',
-          ),
-          columnsToInclude: columnsToDisplay,
-          getList: () => getTransactionForLastSelectedAccount(account),
-          sortFieldIndex: sortFieldIndex,
-          sortAscending: sortAscending,
-          listController: Get.find<ListControllerSidePanel>(),
-          selectionController: selectionController,
-          onUserChoiceChanged: (int sortByFieldIndex, bool sortAscending, final int selectedTransactionId) {
-            // keep track of user choice
-            sortFieldIndex = sortByFieldIndex;
-            sortAscending = sortAscending;
+    return Obx(() {
+      return ListViewTransactions(
+        key: Key(
+          'transaction_list_currency_${showAsNativeCurrency}_changedOn${DataController.to.lastUpdateAsString}',
+        ),
+        columnsToInclude: columnsToDisplay,
+        getList: () => getTransactionForLastSelectedAccount(account),
+        sortFieldIndex: sortFieldIndex,
+        sortAscending: sortAscending,
+        listController: Get.find<ListControllerSidePanel>(),
+        selectionController: selectionController,
+        onUserChoiceChanged: (
+          int sortByFieldIndex,
+          bool sortAscending,
+          final int selectedTransactionId,
+        ) {
+          // keep track of user choice
+          sortFieldIndex = sortByFieldIndex;
+          sortAscending = sortAscending;
 
-            // Save user choices
+          // Save user choices
 
-            // Select Column
-            PreferenceController.to.setInt(
-              getPreferenceKey(settingKeySidePanel + settingKeySortBy),
-              sortByFieldIndex,
-            );
-            // Sort
-            PreferenceController.to.setBool(
-              getPreferenceKey(settingKeySidePanel + settingKeySortAscending),
-              sortAscending,
-            );
+          // Select Column
+          PreferenceController.to.setInt(
+            getPreferenceKey(settingKeySidePanel + settingKeySortBy),
+            sortByFieldIndex,
+          );
+          // Sort
+          PreferenceController.to.setBool(
+            getPreferenceKey(settingKeySidePanel + settingKeySortAscending),
+            sortAscending,
+          );
 
-            // last item selected
-            PreferenceController.to.setInt(
-              getPreferenceKey(settingKeySidePanel + settingKeySelectedListItemId),
-              selectedTransactionId,
-            );
-          },
-        );
-      },
-    );
+          // last item selected
+          PreferenceController.to.setInt(
+            getPreferenceKey(
+              settingKeySidePanel + settingKeySelectedListItemId,
+            ),
+            selectedTransactionId,
+          );
+        },
+      );
+    });
   }
 
   // Details Panel for Transactions
@@ -368,11 +408,18 @@ extension ViewAccountsSidePanel on ViewAccountsState {
     required final Account account,
     required final bool showAsNativeCurrency,
   }) {
-    int sortFieldIndex = PreferenceController.to.getInt(getPreferenceKey(settingKeySidePanel + settingKeySortBy), 0);
-    bool sortAscending =
-        PreferenceController.to.getBool(getPreferenceKey(settingKeySidePanel + settingKeySortAscending), true);
-    int selectedItemId =
-        PreferenceController.to.getInt(getPreferenceKey(settingKeySidePanel + settingKeySelectedListItemId), -1);
+    int sortFieldIndex = PreferenceController.to.getInt(
+      getPreferenceKey(settingKeySidePanel + settingKeySortBy),
+      0,
+    );
+    bool sortAscending = PreferenceController.to.getBool(
+      getPreferenceKey(settingKeySidePanel + settingKeySortAscending),
+      true,
+    );
+    int selectedItemId = PreferenceController.to.getInt(
+      getPreferenceKey(settingKeySidePanel + settingKeySelectedListItemId),
+      -1,
+    );
 
     final List<LoanPayment> aggregatedList = getAccountLoanPayments(account);
 
@@ -421,13 +468,16 @@ extension ViewAccountsSidePanel on ViewAccountsState {
         setState(() {
           selectedItemId = uniqueId;
           PreferenceController.to.setInt(
-            getPreferenceKey(settingKeySidePanel + settingKeySelectedListItemId),
+            getPreferenceKey(
+              settingKeySidePanel + settingKeySelectedListItemId,
+            ),
             selectedItemId,
           );
         });
       },
       onItemLongPress: (BuildContext context2, int itemId) {
-        final LoanPayment instance = findObjectById(itemId, aggregatedList) as LoanPayment;
+        final LoanPayment instance =
+            findObjectById(itemId, aggregatedList) as LoanPayment;
         myShowDialogAndActionsForMoneyObject(
           title: 'Loan Payment',
           moneyObject: instance,

@@ -27,7 +27,10 @@ void importQfxFromString(final BuildContext? context, final String text) {
   final AccountType? accountType = getAccountTypeFromText(bankInfo.accountType);
 
   final ImportData importData = ImportData();
-  importData.account = Data().accounts.findByIdAndType(bankInfo.accountId, accountType);
+  importData.account = Data().accounts.findByIdAndType(
+    bankInfo.accountId,
+    accountType,
+  );
   importData.entries = getTransactionFromOFX(ofx);
   importData.fileType = 'QFX';
   if (context != null) {
@@ -54,7 +57,11 @@ class OfxBankInfo {
     final OfxBankInfo bankInfo = OfxBankInfo();
     bankInfo.id = findAndGetValueOf(ofx, '<BANKID>', bankInfo.id);
     bankInfo.accountId = findAndGetValueOf(ofx, '<ACCTID>', bankInfo.accountId);
-    bankInfo.accountType = findAndGetValueOf(ofx, '<ACCTTYPE>', bankInfo.accountType);
+    bankInfo.accountType = findAndGetValueOf(
+      ofx,
+      '<ACCTTYPE>',
+      bankInfo.accountType,
+    );
     return bankInfo;
   }
 }
@@ -112,7 +119,10 @@ List<ImportEntry> getTransactionFromOFX(final String rawOfx) {
       '</BANKTRANLIST>',
     );
 
-    bankTransactionLit = bankTransactionLit.replaceAll('</STMTTRN>', '</STMTTRN>\n');
+    bankTransactionLit = bankTransactionLit.replaceAll(
+      '</STMTTRN>',
+      '</STMTTRN>\n',
+    );
     final List<String> lines = LineSplitter.split(bankTransactionLit).toList();
 
     final List<ImportEntry> qfxTransactions = parseQFXTransactions(lines);
@@ -137,7 +147,8 @@ List<ImportEntry> parseQFXTransactions(final List<String> lines) {
     if (rawTransactionText.isNotEmpty) {
       final ImportEntry currentTransaction = ImportEntry(
         type: findAndGetValueOf(rawTransactionText, '<TRNTYPE>', ''),
-        date: parseQfxDataFormat(
+        date:
+            parseQfxDataFormat(
               findAndGetValueOf(rawTransactionText, '<DTPOSTED>', ''),
             ) ??
             DateTime.now(),
@@ -173,7 +184,7 @@ String getValuePortion(final String line) {
   final int startIndexOfValue = line.indexOf('>') + 1;
   String lineContent = line.substring(startIndexOfValue);
 
-// Find the end of the value
+  // Find the end of the value
   int end = lineContent.indexOf('<');
   if (end == -1) {
     end = lineContent.indexOf('\n');

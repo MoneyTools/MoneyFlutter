@@ -28,7 +28,9 @@ class Securities extends MoneyObjects<Security> {
   void onAllDataLoaded() {
     for (final Security security in iterableList()) {
       // Sets the splits history for each Security.
-      security.splitsHistory = Data().stockSplits.getStockSplitsForSecurity(security);
+      security.splitsHistory = Data().stockSplits.getStockSplitsForSecurity(
+        security,
+      );
 
       // Retrieves associated investments and updates various fields.
       final List<Investment> list = security.getAssociatedInvestments();
@@ -38,7 +40,9 @@ class Securities extends MoneyObjects<Security> {
       final StockCumulative cumulative = Investments.getSharesAndProfit(list);
       security.fieldTransactionDateRange.value = cumulative.dateRange;
       security.fieldHoldingShares.value = cumulative.quantity;
-      security.fieldActivityProfit.value.setAmount(cumulative.amount - cumulative.dividendsSum);
+      security.fieldActivityProfit.value.setAmount(
+        cumulative.amount - cumulative.dividendsSum,
+      );
       security.fieldActivityDividend.value.setAmount(cumulative.dividendsSum);
       security.dividends = cumulative.dividends;
     }
@@ -54,16 +58,23 @@ class Securities extends MoneyObjects<Security> {
 
   // Retrieves a Security object by its symbol, ignoring case.
   Security? getBySymbol(final String symbolToFind) {
-    return iterableList()
-        .firstWhereOrNull((Security item) => stringCompareIgnoreCasing2(item.fieldSymbol.value, symbolToFind) == 0);
+    return iterableList().firstWhereOrNull(
+      (Security item) =>
+          stringCompareIgnoreCasing2(item.fieldSymbol.value, symbolToFind) == 0,
+    );
   }
 
   // Retrieves a Security object by its symbol or creates a new one if it doesn't exist.
   Security getOrCreate(final String symbolToFind) {
     Security? security = getBySymbol(symbolToFind);
     if (security == null) {
-      security = Security.fromJson(<String, dynamic>{'Symbol': symbolToFind}); // Creates a new Security if not found.
-      appendNewMoneyObject(security, fireNotification: false); // Appends the new Security to the collection.
+      security = Security.fromJson(<String, dynamic>{
+        'Symbol': symbolToFind,
+      }); // Creates a new Security if not found.
+      appendNewMoneyObject(
+        security,
+        fireNotification: false,
+      ); // Appends the new Security to the collection.
     }
     return security;
   }

@@ -41,7 +41,9 @@ class ViewRentalsSidePanel {
   /// Currently unused and incomplete. Needs further implementation to calculate and store P&L values.
   void getPnLOverYears(RentBuilding rental) {
     for (final Transaction transaction in Data().transactions.iterableList()) {
-      if (rental.categoryForIncomeTreeIds.contains(transaction.fieldCategoryId.value)) {
+      if (rental.categoryForIncomeTreeIds.contains(
+        transaction.fieldCategoryId.value,
+      )) {
         // TODO: Implement P&L calculation logic here
       }
     }
@@ -62,28 +64,29 @@ class ViewRentalsSidePanel {
       for (final RentBuilding entry in getList()) {
         list.add(PairXYY(entry.fieldName.value, entry.lifeTimePnL.profit));
       }
-      return Chart(
-        list: list,
-      );
+      return Chart(list: list);
     } else {
       //
       // SELECTED: Show cumulated profit over time for the selected rental(s)
       //
-      final RentBuilding rental = Data().rentBuildings.get(selectedIds.first) as RentBuilding;
+      final RentBuilding rental =
+          Data().rentBuildings.get(selectedIds.first) as RentBuilding;
 
       final List<PairXYY> dataPoints = <PairXYY>[];
 
       if (!rental.dateRangeOfOperation.hasNullDates) {
-        for (int year = rental.dateRangeOfOperation.min!.year; year <= rental.dateRangeOfOperation.max!.year; year++) {
+        for (
+          int year = rental.dateRangeOfOperation.min!.year;
+          year <= rental.dateRangeOfOperation.max!.year;
+          year++
+        ) {
           RentalPnL? pnl = rental.pnlOverYears[year];
           pnl ??= RentalPnL(date: DateTime(year, 1, 1));
           dataPoints.add(PairXYY(year.toString(), pnl.profit, pnl.income));
         }
       }
 
-      return Chart(
-        list: dataPoints,
-      );
+      return Chart(list: dataPoints);
     }
   }
 
@@ -99,13 +102,18 @@ class ViewRentalsSidePanel {
     }
 
     // Single Rental property selected
-    final RentBuilding rental = Data().rentBuildings.get(selectedIds.first) as RentBuilding;
+    final RentBuilding rental =
+        Data().rentBuildings.get(selectedIds.first) as RentBuilding;
 
     // Show PnL for the selected rental property, per year
     final List<Widget> pnlCards = <Widget>[];
 
     if (!rental.dateRangeOfOperation.hasNullDates) {
-      for (int year = rental.dateRangeOfOperation.min!.year; year <= rental.dateRangeOfOperation.max!.year; year++) {
+      for (
+        int year = rental.dateRangeOfOperation.min!.year;
+        year <= rental.dateRangeOfOperation.max!.year;
+        year++
+      ) {
         RentalPnL? pnl = rental.pnlOverYears[year];
         pnl ??= RentalPnL(date: DateTime(year, 1, 1));
         pnlCards.add(RentalPnLCard(pnl: pnl));
@@ -113,18 +121,13 @@ class ViewRentalsSidePanel {
     }
 
     pnlCards.add(
-      RentalPnLCard(
-        pnl: rental.lifeTimePnL,
-        customTitle: 'Life Time P&L',
-      ),
+      RentalPnLCard(pnl: rental.lifeTimePnL, customTitle: 'Life Time P&L'),
     );
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       reverse: true,
-      child: Row(
-        children: pnlCards,
-      ),
+      child: Row(children: pnlCards),
     );
   }
 
@@ -134,8 +137,11 @@ class ViewRentalsSidePanel {
     required final List<int> selectedIds,
     required bool showAsNativeCurrency, // Currently unused
   }) {
-    final RentBuilding rental = Data().rentBuildings.get(selectedIds.first) as RentBuilding;
-    final SelectionController selectionController = Get.put(SelectionController());
+    final RentBuilding rental =
+        Data().rentBuildings.get(selectedIds.first) as RentBuilding;
+    final SelectionController selectionController = Get.put(
+      SelectionController(),
+    );
     return ListViewTransactions(
       listController: Get.find<ListControllerSidePanel>(),
       columnsToInclude: <Field<dynamic>>[
@@ -152,12 +158,13 @@ class ViewRentalsSidePanel {
   }
 
   /// Retrieves transactions filtered by the provided rental property's categories.
-  static List<Transaction> getTransactionLastSelectedItem(RentBuilding rentBuildings) {
+  static List<Transaction> getTransactionLastSelectedItem(
+    RentBuilding rentBuildings,
+  ) {
     return getTransactions(
-      filter: (final Transaction transaction) => filterByRentalCategories(
-        transaction,
-        rentBuildings,
-      ),
+      filter:
+          (final Transaction transaction) =>
+              filterByRentalCategories(transaction, rentBuildings),
     );
   }
 

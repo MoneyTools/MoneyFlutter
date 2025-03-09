@@ -238,18 +238,33 @@ CREATE TABLE IF NOT EXISTS [Currencies] (
 
   /// SQL Insert
   void itemInsert(final String tableName, final MyJson data) {
-    final String columnNames = data.keys.map((final String key) => '"$key"').join(', ');
-    final String columnValues = data.values.map((final dynamic value) => encodeValueWrapStringTypes(value)).join(', ');
+    final String columnNames = data.keys
+        .map((final String key) => '"$key"')
+        .join(', ');
+    final String columnValues = data.values
+        .map((final dynamic value) => encodeValueWrapStringTypes(value))
+        .join(', ');
     _db.execute('INSERT INTO $tableName ($columnNames) VALUES ($columnValues)');
   }
 
   /// SQL Update
-  void itemUpdate(final String tableName, final MyJson jsonMap, final String whereClause) {
+  void itemUpdate(
+    final String tableName,
+    final MyJson jsonMap,
+    final String whereClause,
+  ) {
     final List<String> setStatements =
-        jsonMap.keys.map((String key) => '"$key" = ${encodeValueWrapStringTypes(jsonMap[key])}').toList();
+        jsonMap.keys
+            .map(
+              (String key) =>
+                  '"$key" = ${encodeValueWrapStringTypes(jsonMap[key])}',
+            )
+            .toList();
 
     final String fieldNamesAndValues = setStatements.join(', ');
-    _db.execute('UPDATE $tableName SET $fieldNamesAndValues WHERE $whereClause;');
+    _db.execute(
+      'UPDATE $tableName SET $fieldNamesAndValues WHERE $whereClause;',
+    );
   }
 
   Future<void> load(final String fileToOpen, final Uint8List fileBytes) async {

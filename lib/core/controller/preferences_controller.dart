@@ -96,29 +96,24 @@ class PreferenceController extends GetxController {
   }
 
   // Retrieve a boolean value from preferences
-  bool getBool(String key, [bool defaultValueIfNotFound = false]) {
-    return _preferences?.getBool(key) ?? defaultValueIfNotFound;
-  }
+  bool getBool(String key, [bool defaultValueIfNotFound = false]) =>
+      _preferences?.getBool(key) ?? defaultValueIfNotFound;
 
   // Retrieve a double value from preferences
-  double getDouble(String key, [double defaultValueIfNotFound = 0.0]) {
-    return _preferences?.getDouble(key) ?? defaultValueIfNotFound;
-  }
+  double getDouble(String key, [double defaultValueIfNotFound = 0.0]) =>
+      _preferences?.getDouble(key) ?? defaultValueIfNotFound;
 
   // Retrieve an integer value from preferences
-  int getInt(String key, [int defaultValueIfNotFound = 0]) {
-    return _preferences?.getInt(key) ?? defaultValueIfNotFound;
-  }
+  int getInt(String key, [int defaultValueIfNotFound = 0]) =>
+      _preferences?.getInt(key) ?? defaultValueIfNotFound;
 
   // Retrieve a string value from preferences
-  String getString(String key, [String defaultValueIfNotFound = '']) {
-    return _preferences?.getString(key) ?? defaultValueIfNotFound;
-  }
+  String getString(String key, [String defaultValueIfNotFound = '']) =>
+      _preferences?.getString(key) ?? defaultValueIfNotFound;
 
   // Retrieve a list of strings from preferences
-  Future<List<String>> getStringList(String key) async {
-    return _preferences?.getStringList(key) ?? <String>[];
-  }
+  Future<List<String>> getStringList(String key) async =>
+      _preferences?.getStringList(key) ?? <String>[];
 
   String get getUniqueState =>
       'isReady:${isReady.value} Rental:$includeRentalManagement IncludeClosedAccounts:$includeClosedAccounts TextScale:$textScale';
@@ -152,7 +147,7 @@ class PreferenceController extends GetxController {
 
   set isDetailsPanelExpanded(final bool value) {
     _isDetailsPanelExpanded.value = value;
-    
+
     // persist
     setBool(settingKeyDetailsPanelExpanded, value);
   }
@@ -164,14 +159,23 @@ class PreferenceController extends GetxController {
     final FieldFilters? columnFilters,
   }) async {
     // First set all filters on the destination view
-    await setString(viewId.getViewPreferenceId(settingKeyFilterText), textFilter);
+    await setString(
+      viewId.getViewPreferenceId(settingKeyFilterText),
+      textFilter,
+    );
     if (columnFilters != null) {
-      await setString(viewId.getViewPreferenceId(settingKeyFiltersColumns), columnFilters.toJsonString());
+      await setString(
+        viewId.getViewPreferenceId(settingKeyFiltersColumns),
+        columnFilters.toJsonString(),
+      );
     }
 
     // Set the last selected item, in order to have it selected when the view changes
     if (selectedId != -1) {
-      await setInt(viewId.getViewPreferenceId(settingKeySelectedListItemId), selectedId);
+      await setInt(
+        viewId.getViewPreferenceId(settingKeySelectedListItemId),
+        selectedId,
+      );
     }
 
     // Change to the requested view
@@ -180,16 +184,36 @@ class PreferenceController extends GetxController {
 
   Future<void> loadDefaults() async {
     mru.value = _preferences!.getStringList(settingKeyMRU) ?? <String>[];
-    _isDetailsPanelExpanded.value = getBool(settingKeyDetailsPanelExpanded, false);
-    _includeClosedAccounts.value = getBool(settingKeyIncludeClosedAccounts, false);
+    _isDetailsPanelExpanded.value = getBool(
+      settingKeyDetailsPanelExpanded,
+      false,
+    );
+    _includeClosedAccounts.value = getBool(
+      settingKeyIncludeClosedAccounts,
+      false,
+    );
     _includeRentalManagement.value = getBool(settingKeyRentalsSupport, false);
     _apiKeyForStocks.value = getString(settingKeyStockApiKey, '');
 
-    cashflowViewAs.value = CashflowViewAs.values[getInt(settingKeyCashflowView, CashflowViewAs.sankey.index)];
-    budgetViewAsForIncomes.value = BudgetViewAs.values[getInt(settingKeyBudgetViewAsIncomes, BudgetViewAs.list.index)];
+    cashflowViewAs.value =
+        CashflowViewAs.values[getInt(
+          settingKeyCashflowView,
+          CashflowViewAs.sankey.index,
+        )];
+    budgetViewAsForIncomes.value =
+        BudgetViewAs.values[getInt(
+          settingKeyBudgetViewAsIncomes,
+          BudgetViewAs.list.index,
+        )];
     budgetViewAsForExpenses.value =
-        BudgetViewAs.values[getInt(settingKeyBudgetViewAsExpenses, BudgetViewAs.list.index)];
-    cashflowRecurringOccurrences.value = getInt(settingKeyCashflowRecurringOccurrences, 12);
+        BudgetViewAs.values[getInt(
+          settingKeyBudgetViewAsExpenses,
+          BudgetViewAs.list.index,
+        )];
+    cashflowRecurringOccurrences.value = getInt(
+      settingKeyCashflowRecurringOccurrences,
+      12,
+    );
   }
 
   // Remove a value from preferences
@@ -219,10 +243,7 @@ class PreferenceController extends GetxController {
     _preferences?.setString(key, json.encode(mapOfJson));
   }
 
-  Future<void> setMyJson(
-    final String key,
-    final MyJson myJson,
-  ) async {
+  Future<void> setMyJson(final String key, final MyJson myJson) async {
     _preferences?.setString(key, json.encode(myJson));
   }
 
@@ -283,16 +304,6 @@ void switchViewTransactionForPayee(final String payeeName) {
   PreferenceController.to.setView(ViewId.viewTransactions);
 }
 
-enum CashflowViewAs {
-  sankey,
-  netWorthOverTime,
-  budget,
-  trend,
-}
+enum CashflowViewAs { sankey, netWorthOverTime, budget, trend }
 
-enum BudgetViewAs {
-  list,
-  chart,
-  recurrences,
-  suggestions,
-}
+enum BudgetViewAs { list, chart, recurrences, suggestions }

@@ -34,20 +34,22 @@ class ImportFieldsForTransfer {
 
 /// use for free style text to transaction import
 class ImportFieldsForTransferPanel extends StatefulWidget {
-  const ImportFieldsForTransferPanel({
-    super.key,
-    required this.inputFields,
-  });
+  const ImportFieldsForTransferPanel({super.key, required this.inputFields});
 
   final ImportFieldsForTransfer inputFields;
 
   @override
-  ImportFieldsForTransferPanelState createState() => ImportFieldsForTransferPanelState();
+  ImportFieldsForTransferPanelState createState() =>
+      ImportFieldsForTransferPanelState();
 }
 
-class ImportFieldsForTransferPanelState extends State<ImportFieldsForTransferPanel> {
-  late final TextEditingController _controllerAmount = TextEditingController(text: widget.inputFields.amount.toString());
-  late final TextEditingController _controllerDescription = TextEditingController(text: widget.inputFields.memo.toString());
+class ImportFieldsForTransferPanelState
+    extends State<ImportFieldsForTransferPanel> {
+  late final TextEditingController _controllerAmount = TextEditingController(
+    text: widget.inputFields.amount.toString(),
+  );
+  late final TextEditingController _controllerDescription =
+      TextEditingController(text: widget.inputFields.memo.toString());
   final FocusNode _focusNode = FocusNode();
   final SafeKeyboardHandler _keyboardHandler = SafeKeyboardHandler();
 
@@ -139,7 +141,9 @@ class ImportFieldsForTransferPanelState extends State<ImportFieldsForTransferPan
                       initialValue: dateToString(widget.inputFields.date),
                       onChanged: (String? newDateSelected) {
                         if (newDateSelected != null) {
-                          widget.inputFields.date = attemptToGetDateFromText(newDateSelected) ?? DateTime.now();
+                          widget.inputFields.date =
+                              attemptToGetDateFromText(newDateSelected) ??
+                              DateTime.now();
                         }
                       },
                     ),

@@ -150,7 +150,11 @@ class _PendingChangesDialogState extends State<PendingChangesDialog> {
       value: id,
       label: SizedBox(
         width: 120,
-        child: Text(mutations.fullTitle, textAlign: TextAlign.center, style: TextStyle(color: mutations.color)),
+        child: Text(
+          mutations.fullTitle,
+          textAlign: TextAlign.center,
+          style: TextStyle(color: mutations.color),
+        ),
       ),
     );
   }
@@ -165,9 +169,7 @@ class _PendingChangesDialogState extends State<PendingChangesDialog> {
         padding: const EdgeInsets.only(bottom: 4),
         child: Badge(
           backgroundColor: mutations.color,
-          label: Text(
-            getIntAsText(group.whatWasMutated.length),
-          ),
+          label: Text(getIntAsText(group.whatWasMutated.length)),
           child: InputChip(
             label: Text(group.title),
             selected: i == mutations.selectedGroup,

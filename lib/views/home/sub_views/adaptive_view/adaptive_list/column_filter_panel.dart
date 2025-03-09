@@ -28,11 +28,14 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
 
   @override
   Widget build(BuildContext context) {
-    list = widget.listOfUniqueInstances
-        .where(
-          (ValueSelection element) => filterText.isEmpty || element.name.toLowerCase().contains(filterText.toLowerCase()),
-        )
-        .toList();
+    list =
+        widget.listOfUniqueInstances
+            .where(
+              (ValueSelection element) =>
+                  filterText.isEmpty ||
+                  element.name.toLowerCase().contains(filterText.toLowerCase()),
+            )
+            .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -75,10 +78,7 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
               itemCount: list.length,
               itemBuilder: (final BuildContext context, final int index) {
                 return CheckboxListTile(
-                  title: Text(
-                    list[index].name,
-                    textAlign: widget.textAlign,
-                  ),
+                  title: Text(list[index].name, textAlign: widget.textAlign),
                   value: list[index].isSelected,
                   onChanged: (final bool? isChecked) {
                     setState(() {
@@ -98,7 +98,10 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
 
   /// true if all items are selected
   bool areAllItemSelected() {
-    return list.firstWhereOrNull((ValueSelection element) => element.isSelected == false) == null;
+    return list.firstWhereOrNull(
+          (ValueSelection element) => element.isSelected == false,
+        ) ==
+        null;
   }
 
   String getItemCounts() {
@@ -110,7 +113,9 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
   }
 
   int getSelectedCount() {
-    return widget.listOfUniqueInstances.where((ValueSelection item) => item.isSelected).length;
+    return widget.listOfUniqueInstances
+        .where((ValueSelection item) => item.isSelected)
+        .length;
   }
 }
 

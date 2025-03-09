@@ -72,13 +72,11 @@ void copyToClipboardAndInformUser(
   final BuildContext context,
   final String textToCopy,
 ) {
-  FlutterClipboard.copy(textToCopy).then(
-    (_) {
-      if (context.mounted) {
-        showSnackBar(context, 'Copied to clipboard');
-      }
-    },
-  );
+  FlutterClipboard.copy(textToCopy).then((_) {
+    if (context.mounted) {
+      showSnackBar(context, 'Copied to clipboard');
+    }
+  });
 }
 
 bool isBetween(final num value, final num min, final num max) {
@@ -91,12 +89,12 @@ bool isBetweenOrEqual(final num value, final num min, final num max) {
 
 bool isPlatformMobile() {
   return !kIsWeb && (Platform.isAndroid || Platform.isIOS);
-//  return defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android;
+  //  return defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android;
 }
 
 double roundDouble(final double value, final int places) {
   final num mod = pow(10.0, places);
-  return ((value * mod).round().toDouble() / mod);
+  return (value * mod).round().toDouble() / mod;
 }
 
 /// Rounds a given value to the specified number of decimal places.
@@ -164,10 +162,7 @@ int roundToTheNextNaturalFit(final int value) {
 
 void showSnackBar(final BuildContext context, final String message) {
   ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(message),
-      duration: const Duration(seconds: 1),
-    ),
+    SnackBar(content: Text(message), duration: const Duration(seconds: 1)),
   );
 }
 

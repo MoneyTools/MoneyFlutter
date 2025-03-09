@@ -1,7 +1,7 @@
 include: package:flutter_lints/flutter.yaml
 
-formatter:
-  page_width: 120
+# formatter:
+#   page_width: 120
 
 analyzer:
   exclude:
@@ -18,20 +18,15 @@ analyzer:
     avoid_function_literals_in_foreach_calls: ignore
 
   language:
-      strict-casts: true
-      strict-inference: true
-      strict-raw-types: true
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
 
   strong-mode:
-      implicit-casts: false
-
-dart_code_metrics:
-  rules:
-    - max-line-length: 120
-    - prefer-trailing-comma: true
+    implicit-casts: false
 
 linter:
-  rules:    
+  rules:
     always_declare_return_types: true
     always_put_control_body_on_new_line: true
     always_put_required_named_parameters_first: false
@@ -45,11 +40,13 @@ linter:
     directives_ordering: true
     matching_super_parameters: true
     prefer_const_constructors: true
+    prefer_expression_function_bodies: false
     prefer_final_fields: true
     prefer_final_locals: true
+    prefer_is_empty: true
     prefer_single_quotes: true
     # public_member_api_docs: true
-    require_trailing_commas: true
+    require_trailing_commas: false
     sort_child_properties_last: true
     sort_constructors_first: true
     sort_pub_dependencies: true
@@ -57,3 +54,4 @@ linter:
     use_decorated_box: true
     use_key_in_widget_constructors: true
     use_super_parameters: true
+    unnecessary_parenthesis: true

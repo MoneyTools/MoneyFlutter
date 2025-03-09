@@ -21,7 +21,9 @@ class DummyHostingApp extends StatefulWidget {
 }
 
 class DummyHostingAppState extends State<DummyHostingApp> {
-  final PreferenceController preferenceController = Get.put(PreferenceController());
+  final PreferenceController preferenceController = Get.put(
+    PreferenceController(),
+  );
   final ThemeController themeController = Get.put(ThemeController());
 
   @override
@@ -31,11 +33,7 @@ class DummyHostingAppState extends State<DummyHostingApp> {
       home: SizedBox(
         height: 600,
         width: 800,
-        child: Column(
-          children: <Widget>[
-            Expanded(child: ViewCashFlow()),
-          ],
-        ),
+        child: Column(children: <Widget>[Expanded(child: ViewCashFlow())]),
       ),
     );
   }

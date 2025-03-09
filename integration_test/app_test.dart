@@ -14,56 +14,50 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'test_helpers.dart';
 
 void main() {
-  group(
-    'App Test',
-    () {
-      testWidgets(
-        'Full app test',
-        (WidgetTester tester) async {
-          // Use an empty SharedPreferences to get the same results each time
-          SharedPreferences.setMockInitialValues(<String, Object>{});
+  group('App Test', () {
+    testWidgets('Full app test', (WidgetTester tester) async {
+      // Use an empty SharedPreferences to get the same results each time
+      SharedPreferences.setMockInitialValues(<String, Object>{});
 
-          app.main();
-          await tester.pumpAndSettle();
+      app.main();
+      await tester.pumpAndSettle();
 
-          //*************************************************************************
-          //
-          // Small screen
-          //
-          await switchToSmall(tester);
-          await stepWelcomeSettingAndTheme(tester);
+      //*************************************************************************
+      //
+      // Small screen
+      //
+      await switchToSmall(tester);
+      await stepWelcomeSettingAndTheme(tester);
 
-          //*************************************************************************
-          //
-          // Medium screen - import
-          //
-          await switchToMedium(tester);
-          await stepImportWizardOptions(tester);
+      //*************************************************************************
+      //
+      // Medium screen - import
+      //
+      await switchToMedium(tester);
+      await stepImportWizardOptions(tester);
 
-          //------------------------------------------------------------------------
-          // Close the current file
-          await tapOnKeyString(tester, 'key_menu_button');
-          await tester.pumpAndSettle();
-          await tapOnText(tester, 'Close file');
-          await tester.pumpAndSettle();
+      //------------------------------------------------------------------------
+      // Close the current file
+      await tapOnKeyString(tester, 'key_menu_button');
+      await tester.pumpAndSettle();
+      await tapOnText(tester, 'Close file');
+      await tester.pumpAndSettle();
 
-          //*************************************************************************
-          //
-          // Large screen - Demo data
-          //
-          await switchToLarge(tester);
-          await stepDemoDataViews(tester);
+      //*************************************************************************
+      //
+      // Large screen - Demo data
+      //
+      await switchToLarge(tester);
+      await stepDemoDataViews(tester);
 
-          //*************************************************************************
-          //
-          // Back to small screen using Demo data
-          //
-          await switchToSmall(tester);
-          await stepDemoDataViewInSmallScreen(tester);
-        },
-      );
-    },
-  );
+      //*************************************************************************
+      //
+      // Back to small screen using Demo data
+      //
+      await switchToSmall(tester);
+      await stepDemoDataViewInSmallScreen(tester);
+    });
+  });
 }
 
 Future<void> stepWelcomeSettingAndTheme(WidgetTester tester) async {
@@ -78,7 +72,7 @@ Future<void> stepWelcomeSettingAndTheme(WidgetTester tester) async {
   //------------------------------------------------------------------------
   // Platforms
   await tapOnKey(tester, Constants.keySettingsButton);
-  await tapOnKey(tester, Constants.keyPlatformsButton);  
+  await tapOnKey(tester, Constants.keyPlatformsButton);
   await tapBackButton(tester);
 
   //------------------------------------------------------------------------
@@ -202,11 +196,7 @@ Future<void> testImportQfx(WidgetTester tester) async {
     await tester.pumpAndSettle();
     // Wait for the dialog box to appear
     expect(find.text('Pick account to import to'), findsOneWidget);
-    await tapOnText(
-      tester,
-      'New Bank Account',
-      lastOneFound: true,
-    );
+    await tapOnText(tester, 'New Bank Account', lastOneFound: true);
     await tester.pumpAndSettle();
     await tapOnText(tester, 'Import');
     // expect(find.text('Imported'), findsOneWidget);
@@ -231,7 +221,9 @@ Future<void> testImportBulkManualTextInput(WidgetTester tester) async {
 
   await tapOnKeyString(tester, 'key_import_tab_free_style');
   await tester.pumpAndSettle();
-  final Finder textFieldInput = find.byKey(const Key('key_input_text_field_value')).at(0); // top most element found
+  final Finder textFieldInput = find
+      .byKey(const Key('key_input_text_field_value'))
+      .at(0); // top most element found
   await tester.pumpAndSettle(Durations.extralong4);
   await inputTextToElement(
     tester,
@@ -251,7 +243,14 @@ Future<void> testImportBulkManualTextInput(WidgetTester tester) async {
 Future<void> testThemeColors(WidgetTester tester) async {
   // Change Colors, Purple is the default, and we use "Teal" as the last color.
   {
-    for (final String themeColorName in <String>['Blue', 'Green', 'Yellow', 'Orange', 'Pink', 'Teal']) {
+    for (final String themeColorName in <String>[
+      'Blue',
+      'Green',
+      'Yellow',
+      'Orange',
+      'Pink',
+      'Teal',
+    ]) {
       await tapOnKey(tester, Constants.keySettingsButton);
       await tapOnKeyString(tester, 'key_theme_$themeColorName');
     }
@@ -274,7 +273,10 @@ Future<void> testSettingsFontsAndRental(WidgetTester tester) async {
   {
     // Find the SwitchListTile using the text label provided in the Semantics
     final Finder switchTileFinder = find.byWidgetPredicate(
-      (Widget widget) => widget is SwitchListTile && widget.title is Text && (widget.title as Text).data == 'Rental',
+      (Widget widget) =>
+          widget is SwitchListTile &&
+          widget.title is Text &&
+          (widget.title as Text).data == 'Rental',
     );
 
     // Verify initial state is OFF (false)
@@ -331,8 +333,10 @@ Future<void> testCashFlow(WidgetTester tester) async {
   final int attemptsX = 40; // Number of attempts (scan points)
   // ignore: deprecated_member_use
   final Size appSize = tester.binding.window.physicalSize;
-  final double scanSpacingWidth = appSize.width / attemptsX; // Horizontal scan step
-  final double scanSpacingHeight = appSize.height / attemptsY; // Horizontal scan step
+  final double scanSpacingWidth =
+      appSize.width / attemptsX; // Horizontal scan step
+  final double scanSpacingHeight =
+      appSize.height / attemptsY; // Horizontal scan step
 
   // print(
   //   '******************** Screen size $appSize scanSpacingWidth $scanSpacingWidth   scanSpacingHeight $scanSpacingHeight',
@@ -367,13 +371,21 @@ Future<void> testCashFlow(WidgetTester tester) async {
       break;
     }
   }
-  expect(tooltipFound, isTrue, reason: 'No tooltip was found after ${attemptsY * attemptsX} attempts.');
+  expect(
+    tooltipFound,
+    isTrue,
+    reason: 'No tooltip was found after ${attemptsY * attemptsX} attempts.',
+  );
 
   // At this point we are displaying the Transaction view with some filters for the BarChart that was tapped
 
   // remove all filters on the Transaction view
-  PreferenceController.to.remove(ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterText));
-  PreferenceController.to.remove(ViewId.viewTransactions.getViewPreferenceId(settingKeyFiltersColumns));
+  PreferenceController.to.remove(
+    ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterText),
+  );
+  PreferenceController.to.remove(
+    ViewId.viewTransactions.getViewPreferenceId(settingKeyFiltersColumns),
+  );
 
   await tapOnText(tester, 'Cashflow');
 
@@ -517,7 +529,7 @@ Future<void> testAccountEdit(WidgetTester tester) async {
 Future<void> testCategories(WidgetTester tester) async {
   await tapOnText(tester, 'Categories');
 
-// Iterate over all found ToggleButtons and click on each child button
+  // Iterate over all found ToggleButtons and click on each child button
   await tapAllToggleButtons(tester, <String>[
     'key_toggle_show_none',
     'key_toggle_show_expenses',
@@ -595,7 +607,10 @@ Future<void> testEvents(WidgetTester tester) async {
     // Edit the date
     {
       // Find the TextFormField (or TextField) by its labelText.
-      final Finder textFormFieldFinder = find.widgetWithText(InputDecorator, 'Begins');
+      final Finder textFormFieldFinder = find.widgetWithText(
+        InputDecorator,
+        'Begins',
+      );
 
       // Check if the TextFormField with the labelText was found.
       expect(textFormFieldFinder, findsOneWidget);
@@ -613,16 +628,28 @@ Future<void> testEvents(WidgetTester tester) async {
     // Edit the Category
     {
       await tapOnKeyString(tester, 'key_dropdown');
-      await inputTextToElement(tester, findByKeyString('key_pick_category'), 'Food');
-      await tester.pumpAndSettle(const Duration(milliseconds: 500)); // fix soem odd timing issues
+      await inputTextToElement(
+        tester,
+        findByKeyString('key_pick_category'),
+        'Food',
+      );
+      await tester.pumpAndSettle(
+        const Duration(milliseconds: 500),
+      ); // fix soem odd timing issues
 
       // Find the widget that displays the text 'Grocery'.
-      final Finder groceryFinder = find.text('Grocery').at(0); // top most element found
-      await tester.pumpAndSettle(const Duration(milliseconds: 500)); // fix soem odd timing issues
+      final Finder groceryFinder = find
+          .text('Grocery')
+          .at(0); // top most element found
+      await tester.pumpAndSettle(
+        const Duration(milliseconds: 500),
+      ); // fix soem odd timing issues
 
       // Tap on the widget.
       await tester.tap(groceryFinder);
-      await tester.pumpAndSettle(const Duration(milliseconds: 500)); // fix soem odd timing issues     
+      await tester.pumpAndSettle(
+        const Duration(milliseconds: 500),
+      ); // fix soem odd timing issues
     }
 
     await tapOnText(tester, 'Apply');
@@ -650,14 +677,15 @@ Future<void> testPayees(WidgetTester tester) async {
   await sidePanelTabs(tester);
 
   // Perform a Payee merge
-  await tapOnKey(
-    tester,
-    Constants.keyMergeButton,
-  );
+  await tapOnKey(tester, Constants.keyMergeButton);
 
   await tapOnKeyString(tester, 'key_dropdown');
 
-  await inputTextToElementByKey(tester, MyKeys.keyHeaderFilterTextInput, 'mobile');
+  await inputTextToElementByKey(
+    tester,
+    MyKeys.keyHeaderFilterTextInput,
+    'mobile',
+  );
 
   await tapOnText(tester, 'TMobile');
 
@@ -688,7 +716,11 @@ Future<void> testStocks(WidgetTester tester) async {
   await tapOnTextFromParentType(tester, SidePanelHeader, 'Chart');
   await tapOnText(tester, 'Set API Key');
 
-  await inputTextToElementByKey(tester, const Key('key_single_input_dialog'), Constants.fakeStockApiKey);
+  await inputTextToElementByKey(
+    tester,
+    const Key('key_single_input_dialog'),
+    Constants.fakeStockApiKey,
+  );
 
   await tapOnText(tester, 'Continue');
 
@@ -724,10 +756,18 @@ Future<void> testTransactions(WidgetTester tester) async {
     await tapOnKey(tester, Constants.keyEditSelectedItems);
 
     // Edit  the Date
-    await inputTextToElement(tester, find.byKey(Constants.keyDatePicker), '2021-01-01');
+    await inputTextToElement(
+      tester,
+      find.byKey(Constants.keyDatePicker),
+      '2021-01-01',
+    );
 
     // Edit the Category of a single transaction
-    await inputTextToElement(tester, findByKeyString('key_pick_category'), 'Food');
+    await inputTextToElement(
+      tester,
+      findByKeyString('key_pick_category'),
+      'Food',
+    );
 
     // Edit  the Amount
     await inputTextToTextFieldWithThisLabel(tester, 'Amount', '66.99');
@@ -788,7 +828,11 @@ Future<void> testTransactions(WidgetTester tester) async {
   {
     await tester.longPress(find.text('Category').first);
     await tapOnKeyString(tester, 'key_select_unselect_all');
-    await inputTextToElement(tester, findByKeyString('key_picker_input_filter'), 'Split');
+    await inputTextToElement(
+      tester,
+      findByKeyString('key_picker_input_filter'),
+      'Split',
+    );
     await tapOnKeyString(tester, 'key_select_unselect_all');
     await tapOnText(tester, 'Apply');
   }
@@ -798,7 +842,10 @@ Future<void> testTransactions(WidgetTester tester) async {
 
   // Do some CRUD with Splits
   {
-    final Finder categorySplitButton = find.descendant(of: firstRow, matching: find.text('Split'));
+    final Finder categorySplitButton = find.descendant(
+      of: firstRow,
+      matching: find.text('Split'),
+    );
     await tester.tap(categorySplitButton, warnIfMissed: false);
     await tester.myPump();
 
@@ -808,7 +855,11 @@ Future<void> testTransactions(WidgetTester tester) async {
     await tapOnText(tester, 'Refresh list');
     await tester.myPump();
 
-    await tester.longPress(find.text('Principal').last, warnIfMissed: true, kind: PointerDeviceKind.mouse);
+    await tester.longPress(
+      find.text('Principal').last,
+      warnIfMissed: true,
+      kind: PointerDeviceKind.mouse,
+    );
     await tester.myPump();
 
     // Go in Edit mode by tapping button "Edit"
@@ -838,11 +889,7 @@ Future<void> testTransactions(WidgetTester tester) async {
 Future<void> testTransfers(WidgetTester tester) async {
   await tapOnText(tester, 'Transfers');
   await tapOnFirstRowOfListView(tester);
-  await sidePanelTabs(
-    tester,
-    expectChart: false,
-    expectTransactions: false,
-  );
+  await sidePanelTabs(tester, expectChart: false, expectTransactions: false);
 }
 
 Future<void> testRentals(WidgetTester tester) async {
@@ -924,7 +971,9 @@ Future<void> testPendingChanges(WidgetTester tester) async {
   // Load from SQL
   {
     final DataSource dataSource = DataSource(filePath: testFilename);
-    final bool successLoading = await DataController.to.loadFileFromPath(dataSource);
+    final bool successLoading = await DataController.to.loadFileFromPath(
+      dataSource,
+    );
     expect(successLoading, true);
   }
   // Save to SQL

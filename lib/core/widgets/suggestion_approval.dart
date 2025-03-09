@@ -26,7 +26,8 @@ class SuggestionApproval extends StatefulWidget {
   SuggestionApprovalState createState() => SuggestionApprovalState();
 }
 
-class SuggestionApprovalState extends State<SuggestionApproval> with SingleTickerProviderStateMixin {
+class SuggestionApprovalState extends State<SuggestionApproval>
+    with SingleTickerProviderStateMixin {
   bool approved = false;
 
   late AnimationController _animationController;
@@ -116,7 +117,10 @@ class SuggestionApprovalState extends State<SuggestionApproval> with SingleTicke
         approved = true;
       });
       if (widget.onApproved != null) {
-        Future<void>.delayed(const Duration(milliseconds: 10), () => widget.onApproved!());
+        Future<void>.delayed(
+          const Duration(milliseconds: 10),
+          () => widget.onApproved!(),
+        );
       }
     });
   }

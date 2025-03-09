@@ -49,14 +49,16 @@ class DataController extends GetxController {
 
   Future<String> generateNextFolderToSaveTo() async {
     if (currentLoadedFileName.value.isNotEmpty) {
-      if (p.extension(currentLoadedFileName.value) == 'mmcsv' || p.extension(currentLoadedFileName.value) == 'mmdb') {
+      if (p.extension(currentLoadedFileName.value) == 'mmcsv' ||
+          p.extension(currentLoadedFileName.value) == 'mmdb') {
         return p.dirname(currentLoadedFileName.value);
       }
     }
     return await getDocumentDirectory();
   }
 
-  bool get isUntitled => currentLoadedFileName.value == Constants.untitledFileName;
+  bool get isUntitled =>
+      currentLoadedFileName.value == Constants.untitledFileName;
 
   String get lastUpdateAsString => '${trackMutations.lastDateTimeChanged}';
 
@@ -73,7 +75,9 @@ class DataController extends GetxController {
 
     if (success) {
       setCurrentFileName(dataSource.filePath);
-      currentLoadedFileDateTime.value = await MyFileSystems.getFileModifiedTime(dataSource.filePath);
+      currentLoadedFileDateTime.value = await MyFileSystems.getFileModifiedTime(
+        dataSource.filePath,
+      );
       Future<Null>.delayed(Duration.zero, () {
         Get.offNamed<dynamic>(Constants.routeHomePage);
       });
@@ -92,11 +96,7 @@ class DataController extends GetxController {
       isLoading.value = true;
 
       if (PreferenceController.to.mru.isNotEmpty) {
-        await loadFile(
-          DataSource(
-            filePath: PreferenceController.to.mru.first,
-          ),
-        );
+        await loadFile(DataSource(filePath: PreferenceController.to.mru.first));
         return;
       } else {
         // Once the file is loaded, navigate to the main screen
@@ -115,7 +115,9 @@ class DataController extends GetxController {
   void onFileNew() async {
     this.closeFile();
 
-    final Account newAccount = Data().accounts.addNewAccount('New Bank Account');
+    final Account newAccount = Data().accounts.addNewAccount(
+      'New Bank Account',
+    );
     PreferenceController.to.jumpToView(
       viewId: ViewId.viewAccounts,
       selectedId: newAccount.uniqueId,
@@ -139,9 +141,7 @@ class DataController extends GetxController {
     try {
       // WEB
       if (kIsWeb) {
-        pickerResult = await FilePicker.platform.pickFiles(
-          type: FileType.any,
-        );
+        pickerResult = await FilePicker.platform.pickFiles(type: FileType.any);
       } else
       // Mobile
       if (Platform.isAndroid || Platform.isIOS) {
@@ -169,9 +169,14 @@ class DataController extends GetxController {
           late DataSource dataSource;
           if (kIsWeb) {
             final PlatformFile file = pickerResult.files.first;
-            dataSource = DataSource(filePath: file.name, fileBytes: file.bytes!);
+            dataSource = DataSource(
+              filePath: file.name,
+              fileBytes: file.bytes!,
+            );
           } else {
-            dataSource = DataSource(filePath: pickerResult.files.single.path ?? '');
+            dataSource = DataSource(
+              filePath: pickerResult.files.single.path ?? '',
+            );
           }
 
           await loadFile(dataSource);
@@ -236,10 +241,8 @@ class DataController extends GetxController {
 /// - In-memory byte data
 /// - File format validation
 class DataSource {
-  DataSource({
-    this.filePath = '',
-    Uint8List? fileBytes,
-  }) : _fileBytes = fileBytes ?? Uint8List(0);
+  DataSource({this.filePath = '', Uint8List? fileBytes})
+    : _fileBytes = fileBytes ?? Uint8List(0);
 
   final String filePath;
 

@@ -18,21 +18,19 @@ class DialogActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget child = icon == null
-        ? Text(text)
-        : IntrinsicWidth(
-            child: Row(
-              children: <Widget>[
-                Opacity(opacity: 0.5, child: Icon(icon)),
-                gapSmall(),
-                Text(text),
-              ],
-            ),
-          );
-    return OutlinedButton(
-      onPressed: onPressed,
-      child: child,
-    );
+    final Widget child =
+        icon == null
+            ? Text(text)
+            : IntrinsicWidth(
+              child: Row(
+                children: <Widget>[
+                  Opacity(opacity: 0.5, child: Icon(icon)),
+                  gapSmall(),
+                  Text(text),
+                ],
+              ),
+            );
+    return OutlinedButton(onPressed: onPressed, child: child);
   }
 }
 
@@ -103,7 +101,10 @@ Widget buildDeleteButton(final void Function() callback) {
   );
 }
 
-Widget buildCopyButton(final void Function() callback, [final Key key = Constants.keyCopyListToClipboardHeaderMain]) {
+Widget buildCopyButton(
+  final void Function() callback, [
+  final Key key = Constants.keyCopyListToClipboardHeaderMain,
+]) {
   return IconButton(
     key: key,
     onPressed: () {
@@ -145,10 +146,12 @@ Widget buildMenuButton(
   );
 }
 
-Widget buildJumpToButton(
-  final List<MenuEntry> listOfViewToJumpTo,
-) {
-  return buildMenuButton(listOfViewToJumpTo, icon: Icons.open_in_new_outlined, tooltip: 'Switch view');
+Widget buildJumpToButton(final List<MenuEntry> listOfViewToJumpTo) {
+  return buildMenuButton(
+    listOfViewToJumpTo,
+    icon: Icons.open_in_new_outlined,
+    tooltip: 'Switch view',
+  );
 }
 
 PopupMenuButton<int> myPopupMenuIconButton({

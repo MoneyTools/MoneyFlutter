@@ -119,9 +119,7 @@ TextStyle adjustOpacityOfTextStyle(
   final TextStyle textStyle, [
   final double opacity = 0.7,
 ]) {
-  return textStyle.copyWith(
-    color: textStyle.color!.withValues(alpha: opacity),
-  );
+  return textStyle.copyWith(color: textStyle.color!.withValues(alpha: opacity));
 }
 
 Color colorBasedOnValue(final num value) {
@@ -193,9 +191,15 @@ String colorToHexString(
   bool includeAlpha = true,
 }) {
   final String red = (color.r * 255).toInt().toRadixString(16).padLeft(2, '0');
-  final String green = (color.g * 255).toInt().toRadixString(16).padLeft(2, '0');
+  final String green = (color.g * 255)
+      .toInt()
+      .toRadixString(16)
+      .padLeft(2, '0');
   final String blue = (color.b * 255).toInt().toRadixString(16).padLeft(2, '0');
-  final String alpha = (color.a * 255).toInt().toRadixString(16).padLeft(2, '0');
+  final String alpha = (color.a * 255)
+      .toInt()
+      .toRadixString(16)
+      .padLeft(2, '0');
   if (includeAlpha == false) {
     return '#$red$green$blue';
   }
@@ -215,7 +219,11 @@ String colorToHexString(
 ///
 Color contrastColor(Color color) {
   // Calculate the luminance of the color
-  final double luminance = (0.299 * (color.r * 255) + 0.587 * (color.g * 255) + 0.114 * (color.b * 255)) / 255;
+  final double luminance =
+      (0.299 * (color.r * 255) +
+          0.587 * (color.g * 255) +
+          0.114 * (color.b * 255)) /
+      255;
 
   // Determine whether to make the contrast color black or white based on the luminance
   final Color contrastColor = luminance > 0.5 ? Colors.black : Colors.white;
@@ -316,13 +324,15 @@ Color invertColor(final Color color) {
   final double invertedBlue = 1.0 - color.b;
 
   // Return the inverted color
-  return Color.fromRGBO((invertedRed * 255).toInt(), (invertedGreen * 255).toInt(), (invertedBlue * 255).toInt(), 1.0);
+  return Color.fromRGBO(
+    (invertedRed * 255).toInt(),
+    (invertedGreen * 255).toInt(),
+    (invertedBlue * 255).toInt(),
+    1.0,
+  );
 }
 
-Color? getTextColorToUse(
-  final num value, [
-  final bool autoColor = true,
-]) {
+Color? getTextColorToUse(final num value, [final bool autoColor = true]) {
   if (autoColor) {
     if (isConsideredZero(value)) {
       return getColorFromState(ColorState.disabled);

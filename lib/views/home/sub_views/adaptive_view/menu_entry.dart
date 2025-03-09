@@ -16,11 +16,7 @@ class MenuEntry {
     required final String text,
     required final void Function() onPressed,
   }) {
-    return MenuEntry(
-      icon: icon,
-      title: text,
-      onPressed: onPressed,
-    );
+    return MenuEntry(icon: icon, title: text, onPressed: onPressed);
   }
 
   factory MenuEntry.editCategory({
@@ -68,9 +64,7 @@ class MenuEntry {
     );
   }
 
-  factory MenuEntry.toCategory({
-    required final Category category,
-  }) {
+  factory MenuEntry.toCategory({required final Category category}) {
     return MenuEntry(
       icon: ViewId.viewCategories.getIconData(),
       title: 'Go to Category',
@@ -122,9 +116,7 @@ class MenuEntry {
     );
   }
 
-  factory MenuEntry.toStocks({
-    final String symbol = '',
-  }) {
+  factory MenuEntry.toStocks({final String symbol = ''}) {
     late FieldFilter fieldFilterToUse;
     if (symbol.isNotEmpty) {
       fieldFilterToUse = FieldFilter(
@@ -168,9 +160,7 @@ class MenuEntry {
     );
   }
 
-  factory MenuEntry.toWeb({
-    required final String url,
-  }) {
+  factory MenuEntry.toWeb({required final String url}) {
     return MenuEntry(
       icon: Icons.web_asset_outlined,
       title: 'Yahoo finance',

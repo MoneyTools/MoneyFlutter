@@ -15,7 +15,9 @@ import 'package:money/data/storage/get_stock_from_cache_or_backend.dart';
 import 'package:money/views/home/sub_views/view_stocks/stock_chart.dart';
 
 // Mock the SharedPreference
-class MockPreferenceController extends GetxController with Mock implements PreferenceController {
+class MockPreferenceController extends GetxController
+    with Mock
+    implements PreferenceController {
   @override
   String getString(String key, [String defaultValueIfNotFound = '']) {
     switch (key) {
@@ -43,9 +45,10 @@ class MockPreferenceController extends GetxController with Mock implements Prefe
 // @GenerateMocks([http.Client])
 class MockHttpClient extends Mock implements http.Client {
   @override
-  Future<http.Response> get(Uri url, {Map<String, String>? headers}) {
-    return Future<http.Response>.value(http.Response(jsonEncode(<String, String>{'key': 'value'}), 200));
-  }
+  Future<http.Response> get(Uri url, {Map<String, String>? headers}) =>
+      Future<http.Response>.value(
+        http.Response(jsonEncode(<String, String>{'key': 'value'}), 200),
+      );
 }
 
 void main() {
@@ -71,13 +74,17 @@ void main() {
 
     // Test getting from a Mocked Fetch
     {
-      final StockPriceHistoryCache result = await getFromCacheOrBackend(Constants.mockStockSymbol);
+      final StockPriceHistoryCache result = await getFromCacheOrBackend(
+        Constants.mockStockSymbol,
+      );
       expect(result.status, StockLookupStatus.notFoundInCache);
     }
   });
 
   group('StockChartWidget', () {
-    testWidgets('renders CenterMessage when security is null', (WidgetTester tester) async {
+    testWidgets('renders CenterMessage when security is null', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: StockChartWidget(
@@ -93,8 +100,11 @@ void main() {
       expect(find.text('Security "INVALID" is not valid'), findsOneWidget);
     });
 
-    testWidgets('renders chart when data is available', (WidgetTester tester) async {
-      final MoneyObject newFakeSecurity = Data().securities.appendNewMoneyObject(
+    testWidgets('renders chart when data is available', (
+      WidgetTester tester,
+    ) async {
+      final MoneyObject newFakeSecurity = Data().securities
+          .appendNewMoneyObject(
             Security.fromJson(<String, dynamic>{
               'Id': -1,
               'name': 'Fake Company',

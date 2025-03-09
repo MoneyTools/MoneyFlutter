@@ -9,7 +9,9 @@ extension ViewInvestmentsSidePanel on ViewInvestmentsState {
     double balance = 0.00;
 
     final List<Investment> investments = getList();
-    investments.sort((Investment a, Investment b) => sortByDate(a.date, b.date, true));
+    investments.sort(
+      (Investment a, Investment b) => sortByDate(a.date, b.date, true),
+    );
 
     final List<FlSpot> dataPoints = <FlSpot>[];
     if (investments.isEmpty) {
@@ -19,28 +21,28 @@ extension ViewInvestmentsSidePanel on ViewInvestmentsState {
     for (final Investment investment in investments) {
       balance += investment.activityAmount;
       dataPoints.add(
-        FlSpot(
-          investment.date.millisecondsSinceEpoch.toDouble(),
-          balance,
-        ),
+        FlSpot(investment.date.millisecondsSinceEpoch.toDouble(), balance),
       );
     }
 
-    return MyLineChart(
-      dataPoints: dataPoints,
-      showDots: true,
-    );
+    return MyLineChart(dataPoints: dataPoints, showDots: true);
   }
 
   int _getAccountIdForInvestment(final int investmentTransactionId) {
-    final Transaction? transactionFound = Data().transactions.get(investmentTransactionId);
+    final Transaction? transactionFound = Data().transactions.get(
+      investmentTransactionId,
+    );
     if (transactionFound != null) {
       return transactionFound.fieldAccountId.value;
     }
     return -1;
   }
 
-  bool _isSameSecurityFromTheSameAccount(final Investment investment, final int securityId, int accountId) {
+  bool _isSameSecurityFromTheSameAccount(
+    final Investment investment,
+    final int securityId,
+    int accountId,
+  ) {
     if (investment.fieldSecurity.value != securityId) {
       return false;
     }
@@ -51,32 +53,43 @@ extension ViewInvestmentsSidePanel on ViewInvestmentsState {
   }
 
   // Details Panel for Transactions Payees
-  Widget _getSubViewContentForTransactions({required final List<int> selectedIds, required bool showAsNativeCurrency}) {
-    final Investment? instance = getMoneyObjectFromFirstSelectedId<Investment>(selectedIds, list);
+  Widget _getSubViewContentForTransactions({
+    required final List<int> selectedIds,
+    required bool showAsNativeCurrency,
+  }) {
+    final Investment? instance = getMoneyObjectFromFirstSelectedId<Investment>(
+      selectedIds,
+      list,
+    );
 
     if (instance == null) {
       return CenterMessage.noTransaction();
     }
 
     // get the related Transaction in order to get the associated Account
-    final List<int> listOfInvestmentIdForThisSecurityAndAccount = Data()
-        .investments
-        .iterableList()
-        .where(
-          (Investment i) => _isSameSecurityFromTheSameAccount(
-            i,
-            instance.fieldSecurity.value,
-            _getAccountIdForInvestment(instance.uniqueId),
-          ),
-        )
-        .map((Investment i) => i.uniqueId)
-        .toList();
+    final List<int> listOfInvestmentIdForThisSecurityAndAccount =
+        Data().investments
+            .iterableList()
+            .where(
+              (Investment i) => _isSameSecurityFromTheSameAccount(
+                i,
+                instance.fieldSecurity.value,
+                _getAccountIdForInvestment(instance.uniqueId),
+              ),
+            )
+            .map((Investment i) => i.uniqueId)
+            .toList();
 
     final List<Transaction> listOfTransactions = getTransactions(
-      filter: (final Transaction transaction) =>
-          listOfInvestmentIdForThisSecurityAndAccount.contains(transaction.uniqueId),
+      filter:
+          (final Transaction transaction) =>
+              listOfInvestmentIdForThisSecurityAndAccount.contains(
+                transaction.uniqueId,
+              ),
     );
-    final SelectionController selectionController = Get.put(SelectionController());
+    final SelectionController selectionController = Get.put(
+      SelectionController(),
+    );
     return ListViewTransactions(
       key: Key(instance.uniqueId.toString()),
       listController: Get.find<ListControllerSidePanel>(),

@@ -22,9 +22,7 @@ class Events extends MoneyObjects<Event> {
 
   @override
   String toCSV() {
-    return MoneyObjects.getCsvFromList(
-      getListSortedById(),
-    );
+    return MoneyObjects.getCsvFromList(getListSortedById());
   }
 
   Event addNewEvent() {

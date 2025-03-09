@@ -65,33 +65,88 @@ void main() {
     });
 
     test('returns correct formats for 4-digit year dates with dashes', () {
-      expect(getPossibleDateFormats('2023-05-15'), <String>['yyyy-MM-dd', 'yyyy-MM-d']);
-      expect(getPossibleDateFormats('05-15-2023'), <String>['MM-dd-yyyy', 'MM-d-yyyy']);
-      expect(getPossibleDateFormats('15-05-2023'), <String>['dd-MM-yyyy', 'd-MM-yyyy']);
+      expect(getPossibleDateFormats('2023-05-15'), <String>[
+        'yyyy-MM-dd',
+        'yyyy-MM-d',
+      ]);
+      expect(getPossibleDateFormats('05-15-2023'), <String>[
+        'MM-dd-yyyy',
+        'MM-d-yyyy',
+      ]);
+      expect(getPossibleDateFormats('15-05-2023'), <String>[
+        'dd-MM-yyyy',
+        'd-MM-yyyy',
+      ]);
     });
 
     test('returns correct formats for 4-digit year dates with slashes', () {
-      expect(getPossibleDateFormats('2023/05/15'), <String>['yyyy/MM/dd', 'yyyy/MM/d']);
-      expect(getPossibleDateFormats('05/15/2023'), <String>['MM/dd/yyyy', 'MM/d/yyyy']);
-      expect(getPossibleDateFormats('15/05/2023'), <String>['dd/MM/yyyy', 'd/MM/yyyy']);
+      expect(getPossibleDateFormats('2023/05/15'), <String>[
+        'yyyy/MM/dd',
+        'yyyy/MM/d',
+      ]);
+      expect(getPossibleDateFormats('05/15/2023'), <String>[
+        'MM/dd/yyyy',
+        'MM/d/yyyy',
+      ]);
+      expect(getPossibleDateFormats('15/05/2023'), <String>[
+        'dd/MM/yyyy',
+        'd/MM/yyyy',
+      ]);
     });
 
     test('returns correct formats for 2-digit year dates with dashes', () {
-      expect(getPossibleDateFormats('23-05-15'), <String>['yy-MM-dd', 'dd-MM-yy', 'yy-MM-d', 'd-MM-yy']);
-      expect(getPossibleDateFormats('05-15-23'), <String>['MM-dd-yy', 'MM-d-yy']);
-      expect(getPossibleDateFormats('15-05-23'), <String>['yy-MM-dd', 'dd-MM-yy', 'yy-MM-d', 'd-MM-yy']);
+      expect(getPossibleDateFormats('23-05-15'), <String>[
+        'yy-MM-dd',
+        'dd-MM-yy',
+        'yy-MM-d',
+        'd-MM-yy',
+      ]);
+      expect(getPossibleDateFormats('05-15-23'), <String>[
+        'MM-dd-yy',
+        'MM-d-yy',
+      ]);
+      expect(getPossibleDateFormats('15-05-23'), <String>[
+        'yy-MM-dd',
+        'dd-MM-yy',
+        'yy-MM-d',
+        'd-MM-yy',
+      ]);
     });
 
     test('returns correct formats for 2-digit year dates with slashes', () {
-      expect(getPossibleDateFormats('23/05/15'), <String>['yy/MM/dd', 'dd/MM/yy', 'yy/MM/d', 'd/MM/yy']);
-      expect(getPossibleDateFormats('05/15/23'), <String>['MM/dd/yy', 'MM/d/yy']);
-      expect(getPossibleDateFormats('15/05/23'), <String>['yy/MM/dd', 'dd/MM/yy', 'yy/MM/d', 'd/MM/yy']);
+      expect(getPossibleDateFormats('23/05/15'), <String>[
+        'yy/MM/dd',
+        'dd/MM/yy',
+        'yy/MM/d',
+        'd/MM/yy',
+      ]);
+      expect(getPossibleDateFormats('05/15/23'), <String>[
+        'MM/dd/yy',
+        'MM/d/yy',
+      ]);
+      expect(getPossibleDateFormats('15/05/23'), <String>[
+        'yy/MM/dd',
+        'dd/MM/yy',
+        'yy/MM/d',
+        'd/MM/yy',
+      ]);
     });
 
-    test('returns multiple formats if the date string matches multiple formats', () {
-      expect(getPossibleDateFormats('05/15/2023'), <String>['MM/dd/yyyy', 'MM/d/yyyy']);
-      expect(getPossibleDateFormats('15/05/23'), <String>['yy/MM/dd', 'dd/MM/yy', 'yy/MM/d', 'd/MM/yy']);
-    });
+    test(
+      'returns multiple formats if the date string matches multiple formats',
+      () {
+        expect(getPossibleDateFormats('05/15/2023'), <String>[
+          'MM/dd/yyyy',
+          'MM/d/yyyy',
+        ]);
+        expect(getPossibleDateFormats('15/05/23'), <String>[
+          'yy/MM/dd',
+          'dd/MM/yy',
+          'yy/MM/d',
+          'd/MM/yy',
+        ]);
+      },
+    );
 
     test('returns an empty list for invalid date strings', () {
       expect(getPossibleDateFormats(''), isEmpty);
@@ -114,63 +169,98 @@ void main() {
 
     test('Elsapse time', () {
       {
-        final String result = getElapsedTime(DateTime.now().subtract(const Duration(seconds: 10)));
+        final String result = getElapsedTime(
+          DateTime.now().subtract(const Duration(seconds: 10)),
+        );
         expect(result, 'Just now');
       }
 
       final DateTime now = DateTime(2000, 1, 1);
       {
-        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(seconds: 61)));
+        final String result = getElapsedTime(
+          relativeTo: now,
+          now.subtract(const Duration(seconds: 61)),
+        );
         expect(result, '1 minute ago');
       }
 
       {
-        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(minutes: 5)));
+        final String result = getElapsedTime(
+          relativeTo: now,
+          now.subtract(const Duration(minutes: 5)),
+        );
         expect(result, '5 minutes ago');
       }
 
       {
-        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(minutes: 59)));
+        final String result = getElapsedTime(
+          relativeTo: now,
+          now.subtract(const Duration(minutes: 59)),
+        );
         expect(result, '59 minutes ago');
       }
 
       {
-        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(minutes: 60)));
+        final String result = getElapsedTime(
+          relativeTo: now,
+          now.subtract(const Duration(minutes: 60)),
+        );
         expect(result, '1 hour ago');
       }
 
       {
-        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(hours: 23, minutes: 59)));
+        final String result = getElapsedTime(
+          relativeTo: now,
+          now.subtract(const Duration(hours: 23, minutes: 59)),
+        );
         expect(result, '23 hours ago');
       }
 
       {
-        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(days: 1)));
+        final String result = getElapsedTime(
+          relativeTo: now,
+          now.subtract(const Duration(days: 1)),
+        );
         expect(result, '1 day ago');
       }
 
       {
-        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(days: 30)));
+        final String result = getElapsedTime(
+          relativeTo: now,
+          now.subtract(const Duration(days: 30)),
+        );
         expect(result, '1 month ago');
       }
 
       {
-        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(days: 45)));
+        final String result = getElapsedTime(
+          relativeTo: now,
+          now.subtract(const Duration(days: 45)),
+        );
         expect(result, '1 month, 15 days ago');
       }
 
       {
-        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(days: 365)));
+        final String result = getElapsedTime(
+          relativeTo: now,
+          now.subtract(const Duration(days: 365)),
+        );
         expect(result, '1 year ago');
       }
 
       {
-        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(days: 395)));
+        final String result = getElapsedTime(
+          relativeTo: now,
+          now.subtract(const Duration(days: 395)),
+        );
         expect(result, '1 year, 1 month ago');
       }
 
       {
-        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(days: 400)));
+        final String result = getElapsedTime(
+          relativeTo: now,
+          now.subtract(const Duration(days: 400)),
+        );
         expect(result, '1 year, 1 month, 5 days ago');
       }
     });

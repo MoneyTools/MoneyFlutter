@@ -86,38 +86,31 @@ class AccumulatorSum<K, V> {
     }
   }
 
-  List<MapEntry<K, V>> getEntries() {
-    return values.entries.toList();
-  }
+  List<MapEntry<K, V>> getEntries() => values.entries.toList();
 
   K? getKeyWithLargestSum() {
     K? keyFound;
     V? maxFound;
 
-    values.forEach(
-      (K key, V value) {
-        if (keyFound == null) {
+    values.forEach((K key, V value) {
+      if (keyFound == null) {
+        keyFound = key;
+        maxFound = value;
+      } else {
+        if ((maxFound as num) < (value as num)) {
           keyFound = key;
           maxFound = value;
-        } else {
-          if ((maxFound as num) < (value as num)) {
-            keyFound = key;
-            maxFound = value;
-          }
         }
-      },
-    );
+      }
+    });
     return keyFound;
   }
 
-  dynamic getValue(final K key) {
-    return values[key] ?? 0;
-  }
+  dynamic getValue(final K key) => values[key] ?? 0;
 
   // Replace this function with your specific logic for accumulating values of type T
-  dynamic _accumulate(V existingValue, V value) {
-    return (existingValue as num) + (value as num);
-  }
+  dynamic _accumulate(V existingValue, V value) =>
+      (existingValue as num) + (value as num);
 }
 
 /// Tracks date ranges for values by key.
@@ -132,9 +125,7 @@ class AccumulatorDateRange<K> {
     values.clear();
   }
 
-  bool containsKey(final K key) {
-    return values.containsKey(key);
-  }
+  bool containsKey(final K key) => values.containsKey(key);
 
   void cumulate(final K key, final DateTime value) {
     if (values.containsKey(key)) {
@@ -144,13 +135,9 @@ class AccumulatorDateRange<K> {
     }
   }
 
-  List<MapEntry<K, DateRange>> getEntries() {
-    return values.entries.toList();
-  }
+  List<MapEntry<K, DateRange>> getEntries() => values.entries.toList();
 
-  DateRange? getValue(final K key) {
-    return values[key];
-  }
+  DateRange? getValue(final K key) => values[key];
 }
 
 /// Calculates running averages for values by key.
@@ -165,18 +152,15 @@ class AccumulatorAverage<K> {
     values.clear();
   }
 
-  bool containsKey(final K key) {
-    return values.containsKey(key);
-  }
+  bool containsKey(final K key) => values.containsKey(key);
 
   void cumulate(final K key, final num value) {
-    final RunningAverage average = values.containsKey(key) ? values[key]! : values[key] = RunningAverage();
+    final RunningAverage average =
+        values.containsKey(key) ? values[key]! : values[key] = RunningAverage();
     average.addValue(value);
   }
 
-  RunningAverage? getValue(final K key) {
-    return values[key];
-  }
+  RunningAverage? getValue(final K key) => values[key];
 }
 
 /// Two-level accumulator mapping keys to sums.
@@ -194,9 +178,7 @@ class MapAccumulatorSum<K, I, V> {
     map[k]!.cumulate(i, v);
   }
 
-  AccumulatorSum<I, V>? getLevel1(K key) {
-    return map[key];
-  }
+  AccumulatorSum<I, V>? getLevel1(K key) => map[key];
 }
 
 /// Two-level accumulator mapping keys to sets.
@@ -216,14 +198,12 @@ class MapAccumulatorSet<K, I, V> {
 
   /// Retrieves the set of values [V] associated with the given keys [K] and [I].
   /// If no values are found for the given keys, an empty set is returned.
-  Set<V> find(final K key1,final I key2) {
+  Set<V> find(final K key1, final I key2) {
     final AccumulatorList<I, V>? foundInLevel1 = map[key1];
     return foundInLevel1?.getValue(key2) ?? <V>{};
   }
 
-  AccumulatorList<I, V>? getLevel1(final K key1) {
-    return map[key1];
-  }
+  AccumulatorList<I, V>? getLevel1(final K key1) => map[key1];
 }
 
 /// Tracks running statistics for numeric values.
@@ -233,10 +213,7 @@ class MapAccumulatorSet<K, I, V> {
 /// - Zero handling
 /// - Min/max range
 class RunningAverage {
-  NumRange range = NumRange(
-    min: double.infinity,
-    max: -double.infinity,
-  );
+  NumRange range = NumRange(min: double.infinity, max: -double.infinity);
 
   int _count = 0;
   int _countZeros = 0;
@@ -252,9 +229,11 @@ class RunningAverage {
     }
   }
 
-  String get descriptionAsInt => 'Average\n${range.descriptionAsInt}\n$descriptionCount';
+  String get descriptionAsInt =>
+      'Average\n${range.descriptionAsInt}\n$descriptionCount';
 
-  String get descriptionAsMoney => 'Average\n${range.descriptionAsMoney}\n$descriptionCount';
+  String get descriptionAsMoney =>
+      'Average\n${range.descriptionAsMoney}\n$descriptionCount';
 
   String get descriptionCount {
     if (_countZeros == 0) {

@@ -15,10 +15,12 @@ class MergeCategoriesTransactionsDialog extends StatefulWidget {
   final Category categoryToMove;
 
   @override
-  State<MergeCategoriesTransactionsDialog> createState() => _MergeCategoriesTransactionsDialogState();
+  State<MergeCategoriesTransactionsDialog> createState() =>
+      _MergeCategoriesTransactionsDialogState();
 }
 
-class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTransactionsDialog> {
+class _MergeCategoriesTransactionsDialogState
+    extends State<MergeCategoriesTransactionsDialog> {
   final List<Transaction> _transactions = <Transaction>[];
 
   late Category _categoryPicked = widget.categoryToMove;
@@ -27,7 +29,9 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
   void initState() {
     super.initState();
 
-    for (final Transaction t in Data().transactions.iterableList(includeDeleted: true)) {
+    for (final Transaction t in Data().transactions.iterableList(
+      includeDeleted: true,
+    )) {
       if (t.fieldCategoryId.value == widget.categoryToMove.uniqueId) {
         _transactions.add(t);
       }
@@ -71,10 +75,7 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
           ],
         ),
         const Spacer(),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: _buildActionPanel(),
-        ),
+        Padding(padding: const EdgeInsets.all(8.0), child: _buildActionPanel()),
         const Spacer(),
       ],
     );
@@ -86,10 +87,7 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: action,
-          ),
+          Padding(padding: const EdgeInsets.all(8), child: action),
           gapMedium(),
           Text(text),
           gapMedium(),
@@ -125,7 +123,10 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
                   );
                 } else {
                   // reparent Category
-                  Data().categories.reparentCategory(widget.categoryToMove, _categoryPicked);
+                  Data().categories.reparentCategory(
+                    widget.categoryToMove,
+                    _categoryPicked,
+                  );
                   Navigator.pop(context);
                 }
               },
@@ -145,10 +146,7 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
                   );
                 } else {
                   // move to Transaction to the picked category
-                  moveTransactionsToCategory(
-                    _transactions,
-                    _categoryPicked,
-                  );
+                  moveTransactionsToCategory(_transactions, _categoryPicked);
 
                   // we can now delete picked category
                   widget.categoryToMove.stashValueBeforeEditing();

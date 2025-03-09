@@ -37,10 +37,7 @@ class InvestmentImportFields {
 
 /// use for free style text to transaction import
 class ImportInvestmentPanel extends StatefulWidget {
-  const ImportInvestmentPanel({
-    super.key,
-    required this.inputFields,
-  });
+  const ImportInvestmentPanel({super.key, required this.inputFields});
 
   final InvestmentImportFields inputFields;
 
@@ -49,13 +46,22 @@ class ImportInvestmentPanel extends StatefulWidget {
 }
 
 class ImportInvestmentPanelState extends State<ImportInvestmentPanel> {
-  late final TextEditingController _controllerAmount = TextEditingController(text: widget.inputFields.amountPerUnit.toString());
-  late final TextEditingController _controllerDescription = TextEditingController(text: widget.inputFields.description.toString());
-  late final TextEditingController _controllerSymbol = TextEditingController(text: widget.inputFields.symbol.toString());
+  late final TextEditingController _controllerAmount = TextEditingController(
+    text: widget.inputFields.amountPerUnit.toString(),
+  );
+  late final TextEditingController _controllerDescription =
+      TextEditingController(text: widget.inputFields.description.toString());
+  late final TextEditingController _controllerSymbol = TextEditingController(
+    text: widget.inputFields.symbol.toString(),
+  );
   late final TextEditingController _controllerTransactionAmount =
-      TextEditingController(text: widget.inputFields.transactionAmount.toString());
+      TextEditingController(
+        text: widget.inputFields.transactionAmount.toString(),
+      );
 
-  late final TextEditingController _controllerUnites = TextEditingController(text: widget.inputFields.units.toString());
+  late final TextEditingController _controllerUnites = TextEditingController(
+    text: widget.inputFields.units.toString(),
+  );
   final FocusNode _focusNode = FocusNode();
   final SafeKeyboardHandler _keyboardHandler = SafeKeyboardHandler();
 
@@ -122,7 +128,9 @@ class ImportInvestmentPanelState extends State<ImportInvestmentPanel> {
                     initialValue: dateToString(widget.inputFields.date),
                     onChanged: (String? newDateSelected) {
                       if (newDateSelected != null) {
-                        widget.inputFields.date = attemptToGetDateFromText(newDateSelected) ?? DateTime.now();
+                        widget.inputFields.date =
+                            attemptToGetDateFromText(newDateSelected) ??
+                            DateTime.now();
                       }
                     },
                   ),
@@ -153,16 +161,10 @@ class ImportInvestmentPanelState extends State<ImportInvestmentPanel> {
                 ),
 
                 // Symbol
-                MyTextInput(
-                  hintText: 'Symbol',
-                  controller: _controllerSymbol,
-                ),
+                MyTextInput(hintText: 'Symbol', controller: _controllerSymbol),
 
                 // Units
-                MyTextInput(
-                  hintText: 'Units',
-                  controller: _controllerUnites,
-                ),
+                MyTextInput(hintText: 'Units', controller: _controllerUnites),
 
                 // Amount per unit
                 MyTextInput(
@@ -200,8 +202,10 @@ class ImportInvestmentPanelState extends State<ImportInvestmentPanel> {
   void _updateInputFields() {
     widget.inputFields.symbol = _controllerSymbol.text;
     widget.inputFields.units = double.tryParse(_controllerUnites.text) ?? 0.0;
-    widget.inputFields.amountPerUnit = double.tryParse(_controllerAmount.text) ?? 0.0;
-    widget.inputFields.transactionAmount = double.tryParse(_controllerTransactionAmount.text) ?? 0.0;
+    widget.inputFields.amountPerUnit =
+        double.tryParse(_controllerAmount.text) ?? 0.0;
+    widget.inputFields.transactionAmount =
+        double.tryParse(_controllerTransactionAmount.text) ?? 0.0;
     widget.inputFields.description = _controllerDescription.text;
   }
 }

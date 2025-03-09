@@ -93,7 +93,9 @@ class Pair<F, S> {
     if (identical(this, other)) {
       return true;
     }
-    return other is Pair<F, S> && other.first == first && other.second == second;
+    return other is Pair<F, S> &&
+        other.first == first &&
+        other.second == second;
   }
 
   @override
@@ -115,7 +117,10 @@ class Triple<F, S, T> {
     if (identical(this, other)) {
       return true;
     }
-    return other is Triple<F, S, T> && other.first == first && other.second == second && other.third == third;
+    return other is Triple<F, S, T> &&
+        other.first == first &&
+        other.second == second &&
+        other.third == third;
   }
 
   @override

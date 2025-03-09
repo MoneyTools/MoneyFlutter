@@ -18,9 +18,7 @@ class Currencies extends MoneyObjects<Currency> {
 
   @override
   String toCSV() {
-    return MoneyObjects.getCsvFromList(
-      getListSortedById(),
-    );
+    return MoneyObjects.getCsvFromList(getListSortedById());
   }
 
   /// Converts a currency symbol to the corresponding country's alpha-2 code.
@@ -31,11 +29,14 @@ class Currencies extends MoneyObjects<Currency> {
     if (currency == null) {
       return 'US';
     }
-    return currency.fieldCultureCode.getValueForSerialization(currency) as String;
+    return currency.fieldCultureCode.getValueForSerialization(currency)
+        as String;
   }
 
   Currency? getCurrencyFromSymbol(final String symbolToMatch) {
-    return iterableList().firstWhereOrNull((Currency currency) => currency.fieldSymbol.value == symbolToMatch);
+    return iterableList().firstWhereOrNull(
+      (Currency currency) => currency.fieldSymbol.value == symbolToMatch,
+    );
   }
 
   double getRatioFromSymbol(final String symbol) {

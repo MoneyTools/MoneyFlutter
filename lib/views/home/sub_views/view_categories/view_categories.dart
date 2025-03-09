@@ -50,47 +50,43 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
       // Add a new Category, place this at the top of the list
       list.insert(
         0,
-        buildAddItemButton(
-          () {
-            // add a new Category
-            final Category? currentSelectedCategory = getFirstSelectedItem() as Category?;
-            final Category newItem = Data().categories.addNewCategory(
-                  parentId: currentSelectedCategory?.uniqueId ?? -1,
-                );
-            updateListAndSelect(newItem.uniqueId);
+        buildAddItemButton(() {
+          // add a new Category
+          final Category? currentSelectedCategory =
+              getFirstSelectedItem() as Category?;
+          final Category newItem = Data().categories.addNewCategory(
+            parentId: currentSelectedCategory?.uniqueId ?? -1,
+          );
+          updateListAndSelect(newItem.uniqueId);
 
-            // Queue up the edit dialog
-            myShowDialogAndActionsForMoneyObject(
-              title: 'New ${getClassNameSingular()}',
-              moneyObject: newItem,
-              onApplyChange: () {
-                setState(() {
-                  /// update
-                });
-              },
-            );
-          },
-          'Add new category',
-        ),
+          // Queue up the edit dialog
+          myShowDialogAndActionsForMoneyObject(
+            title: 'New ${getClassNameSingular()}',
+            moneyObject: newItem,
+            onApplyChange: () {
+              setState(() {
+                /// update
+              });
+            },
+          );
+        }, 'Add new category'),
       );
 
       /// Merge
       final MoneyObject? moneyObject = getFirstSelectedItem();
       if (moneyObject != null) {
         list.add(
-          buildMergeButton(
-            () {
-              // let the user pick another Category and move the transactions of the current selected Category to the destination
-              adaptiveScreenSizeDialog(
-                context: context,
-                title: 'Move Category',
-                captionForClose: 'Cancel', // this will hide the close button
-                child: MergeCategoriesTransactionsDialog(
-                  categoryToMove: getFirstSelectedItem() as Category,
-                ),
-              );
-            },
-          ),
+          buildMergeButton(() {
+            // let the user pick another Category and move the transactions of the current selected Category to the destination
+            adaptiveScreenSizeDialog(
+              context: context,
+              title: 'Move Category',
+              captionForClose: 'Cancel', // this will hide the close button
+              child: MergeCategoriesTransactionsDialog(
+                categoryToMove: getFirstSelectedItem() as Category,
+              ),
+            );
+          }),
         );
       }
 
@@ -98,21 +94,17 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
       final Category? category = getFirstSelectedItem() as Category?;
       if (category != null) {
         list.add(
-          buildJumpToButton(
-            <MenuEntry>[
-              MenuEntry.toTransactions(
-                transactionId: -1,
-                filters: FieldFilters(
-                  <FieldFilter>[
-                    FieldFilter(
-                      fieldName: Constants.viewTransactionFieldNameCategory,
-                      strings: <String>[category.uniqueId.toString()],
-                    ),
-                  ],
+          buildJumpToButton(<MenuEntry>[
+            MenuEntry.toTransactions(
+              transactionId: -1,
+              filters: FieldFilters(<FieldFilter>[
+                FieldFilter(
+                  fieldName: Constants.viewTransactionFieldNameCategory,
+                  strings: <String>[category.uniqueId.toString()],
                 ),
-              ),
-            ],
-          ),
+              ]),
+            ),
+          ]),
         );
       }
     }
@@ -145,15 +137,16 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     bool applyFilter = true,
   }) {
     final List<CategoryType> filterType = _getSelectedCategoryType();
-    final List<Category> list = Data()
-        .categories
-        .iterableList(includeDeleted: includeDeleted)
-        .where(
-          (final Category instance) =>
-              (filterType.isEmpty || filterType.contains(instance.fieldType.value)) &&
-              (applyFilter == false || isMatchingFilters(instance)),
-        )
-        .toList();
+    final List<Category> list =
+        Data().categories
+            .iterableList(includeDeleted: includeDeleted)
+            .where(
+              (final Category instance) =>
+                  (filterType.isEmpty ||
+                      filterType.contains(instance.fieldType.value)) &&
+                  (applyFilter == false || isMatchingFilters(instance)),
+            )
+            .toList();
     return list;
   }
 
@@ -257,10 +250,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
           });
         },
         borderRadius: const BorderRadius.all(Radius.circular(8)),
-        constraints: const BoxConstraints(
-          minHeight: 40.0,
-          minWidth: 100.0,
-        ),
+        constraints: const BoxConstraints(minHeight: 40.0, minWidth: 100.0),
         isSelected: _selectedPivot,
         children: _pivots,
       ),
@@ -272,7 +262,10 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
       return <CategoryType>[CategoryType.none];
     }
     if (_selectedPivot[1]) {
-      return <CategoryType>[CategoryType.expense, CategoryType.recurringExpense];
+      return <CategoryType>[
+        CategoryType.expense,
+        CategoryType.recurringExpense,
+      ];
     }
     if (_selectedPivot[2]) {
       return <CategoryType>[CategoryType.income];
@@ -290,22 +283,31 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   double _getTotalBalanceOfAccounts(final List<CategoryType> types) {
     double total = 0.0;
     getList().forEach((final Category category) {
-      if (types.isEmpty || (category).fieldType.value == types.first) {
+      if (types.isEmpty || category.fieldType.value == types.first) {
         total += category.fieldSum.value.asDouble();
       }
     });
     return total;
   }
 
-  List<Transaction> _getTransactionsFromSelectedIds(final List<int> selectedIds) {
-    final Category? category = getMoneyObjectFromFirstSelectedId<Category>(selectedIds, list);
+  List<Transaction> _getTransactionsFromSelectedIds(
+    final List<int> selectedIds,
+  ) {
+    final Category? category = getMoneyObjectFromFirstSelectedId<Category>(
+      selectedIds,
+      list,
+    );
     if (category != null) {
       final List<int> listOfDescendentCategories = <int>[];
-      Data().categories.getTreeIdsRecursive(category.uniqueId, listOfDescendentCategories);
+      Data().categories.getTreeIdsRecursive(
+        category.uniqueId,
+        listOfDescendentCategories,
+      );
       return getTransactions(
         flattenSplits: true,
-        filter: (final Transaction transaction) =>
-            listOfDescendentCategories.contains(transaction.fieldCategoryId.value),
+        filter:
+            (final Transaction transaction) => listOfDescendentCategories
+                .contains(transaction.fieldCategoryId.value),
       );
     }
     return <Transaction>[];

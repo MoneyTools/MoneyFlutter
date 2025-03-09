@@ -75,7 +75,6 @@ class Data {
       securities, // 12 Must be locate after [investments]
 
       accounts, // 2
-
       // Can be last
       rentBuildings, // 10
       rentUnits, // 11
@@ -244,11 +243,15 @@ class Data {
     final List<MutationGroup> allMutationGroups = <MutationGroup>[];
 
     for (final MoneyObjects<dynamic> moneyObjects in tables) {
-      final List<MoneyObject> mutatedInstances = moneyObjects.getMutatedObjects(typeOfMutation);
+      final List<MoneyObject> mutatedInstances = moneyObjects.getMutatedObjects(
+        typeOfMutation,
+      );
       if (mutatedInstances.isNotEmpty) {
         final MutationGroup mutationGroup = MutationGroup();
         mutationGroup.title = moneyObjects.collectionName;
-        mutationGroup.whatWasMutated = moneyObjects.whatWasMutated(mutatedInstances);
+        mutationGroup.whatWasMutated = moneyObjects.whatWasMutated(
+          mutatedInstances,
+        );
         allMutationGroups.add(mutationGroup);
       }
     }
@@ -269,16 +272,22 @@ class Data {
       return null;
     }
 
-    final double destinationAmount = transactionSource.fieldAmount.value.asDouble() * -1;
+    final double destinationAmount =
+        transactionSource.fieldAmount.value.asDouble() * -1;
 
-    Transaction? relatedTransaction = Data().transactions.findExistingTransaction(
-          accountId: destinationAccount.uniqueId,
-          dateRange: DateRange(
-            min: transactionSource.fieldDateTime.value!.startOfDay,
-            max: transactionSource.fieldDateTime.value!.endOfDay,
-          ),
-          amount: destinationAmount,
-        );
+    Transaction? relatedTransaction;
+    try {
+      relatedTransaction = Data().transactions.findExistingTransaction(
+        accountId: destinationAccount.uniqueId,
+        dateRange: DateRange(
+          min: transactionSource.fieldDateTime.value!.startOfDay,
+          max: transactionSource.fieldDateTime.value!.endOfDay,
+        ),
+        amount: destinationAmount,
+      );
+    } catch (error) {
+      // something went wrong, assume no match found
+    }
 
     if (relatedTransaction == null) {
       relatedTransaction = Transaction(
@@ -288,9 +297,11 @@ class Data {
 
       // flip the sign on the amount
       relatedTransaction.fieldAmount.value.setAmount(destinationAmount);
-      relatedTransaction.fieldCategoryId.value = transactionSource.fieldCategoryId.value;
+      relatedTransaction.fieldCategoryId.value =
+          transactionSource.fieldCategoryId.value;
       relatedTransaction.fieldFitid.value = transactionSource.fieldFitid.value;
-      relatedTransaction.fieldNumber.value = transactionSource.fieldNumber.value;
+      relatedTransaction.fieldNumber.value =
+          transactionSource.fieldNumber.value;
       relatedTransaction.fieldMemo.value = transactionSource.fieldMemo.value;
       //u.Status = t.Status; no !!!
     }
@@ -325,12 +336,17 @@ class Data {
   /// Automated detection of what type of storage to load the data from
   Future<bool> loadFromPath(final DataSource dateSource) async {
     try {
-      final String fileExtension = MyFileSystems.getFileExtension(dateSource.filePath);
+      final String fileExtension = MyFileSystems.getFileExtension(
+        dateSource.filePath,
+      );
       switch (fileExtension.toLowerCase()) {
         // Sqlite
         case '.mmdb':
           // Load from SQLite
-          if (await loadFromSql(filePath: dateSource.filePath, fileBytes: dateSource.fileBytes)) {
+          if (await loadFromSql(
+            filePath: dateSource.filePath,
+            fileBytes: dateSource.fileBytes,
+          )) {
             PreferenceController.to.addToMRU(dateSource.filePath);
           }
         case '.mmcsv':
@@ -397,7 +413,10 @@ class Data {
 
       if (relatedTransaction.uniqueId == -1) {
         // This is a new related transaction Append and get a new UniqueID
-        transactions.appendNewMoneyObject(relatedTransaction, fireNotification: false);
+        transactions.appendNewMoneyObject(
+          relatedTransaction,
+          fireNotification: false,
+        );
       } else {
         Data().notifyMutationChanged(
           mutation: MutationType.changed,
@@ -460,7 +479,8 @@ class Data {
   }
 
   bool removeTransaction(Transaction t) {
-    if (t.fieldStatus.value == TransactionStatus.reconciled && t.fieldAmount.value.asDouble() != 0) {
+    if (t.fieldStatus.value == TransactionStatus.reconciled &&
+        t.fieldAmount.value.asDouble() != 0) {
       throw Exception('Cannot removed reconciled transaction');
     }
     // TODO

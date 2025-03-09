@@ -27,10 +27,7 @@ import 'package:money/views/home/sub_views/view_transfers/transfer_sender_receiv
 /// for the transaction list.
 
 class ViewTransactions extends ViewForMoneyObjects {
-  const ViewTransactions({
-    super.key,
-    this.startingBalance = 0.00,
-  });
+  const ViewTransactions({super.key, this.startingBalance = 0.00});
 
   final double startingBalance;
 
@@ -45,7 +42,10 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   }
 
   final List<Widget> pivots = <Widget>[];
-  final TextStyle styleHeader = const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
+  final TextStyle styleHeader = const TextStyle(
+    fontWeight: FontWeight.w600,
+    fontSize: 20,
+  );
 
   bool balanceDone = false;
 
@@ -60,59 +60,62 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
 
       // this can go last
       list.add(
-        buildJumpToButton(
-          <MenuEntry>[
-            // Account
-            MenuEntry.toAccounts(accountId: transaction?.fieldAccountId.value ?? -1),
+        buildJumpToButton(<MenuEntry>[
+          // Account
+          MenuEntry.toAccounts(
+            accountId: transaction?.fieldAccountId.value ?? -1,
+          ),
 
-            // Category
-            MenuEntry(
-              icon: ViewId.viewCategories.getIconData(),
-              title: 'Switch to Categories',
-              onPressed: () {
-                final Transaction? transaction = getFirstSelectedItem() as Transaction?;
-                if (transaction != null) {
-                  // Preselect the Category of this Transaction
-                  PreferenceController.to.jumpToView(
-                    viewId: ViewId.viewCategories,
-                    selectedId: transaction.fieldCategoryId.value,
-                    textFilter: '',
-                    columnFilters: null,
-                  );
-                }
-              },
-            ),
+          // Category
+          MenuEntry(
+            icon: ViewId.viewCategories.getIconData(),
+            title: 'Switch to Categories',
+            onPressed: () {
+              final Transaction? transaction =
+                  getFirstSelectedItem() as Transaction?;
+              if (transaction != null) {
+                // Preselect the Category of this Transaction
+                PreferenceController.to.jumpToView(
+                  viewId: ViewId.viewCategories,
+                  selectedId: transaction.fieldCategoryId.value,
+                  textFilter: '',
+                  columnFilters: null,
+                );
+              }
+            },
+          ),
 
-            // Payee
-            MenuEntry(
-              icon: ViewId.viewPayees.getIconData(),
-              title: 'Switch to Payees',
-              onPressed: () {
-                final Transaction? transaction = getFirstSelectedItem() as Transaction?;
-                if (transaction != null) {
-                  // Preselect the Payee of this Transaction
-                  PreferenceController.to.jumpToView(
-                    viewId: ViewId.viewPayees,
-                    selectedId: transaction.fieldPayee.value,
-                    textFilter: '',
-                    columnFilters: null,
-                  );
-                }
-              },
-            ),
-            // Search Payee
-            MenuEntry(
-              icon: Icons.person_search_outlined,
-              title: 'Search for Payee',
-              onPressed: () {
-                final Transaction? transaction = getFirstSelectedItem() as Transaction?;
-                if (transaction != null) {
-                  launchGoogleSearch(transaction.getPayeeOrTransferCaption());
-                }
-              },
-            ),
-          ],
-        ),
+          // Payee
+          MenuEntry(
+            icon: ViewId.viewPayees.getIconData(),
+            title: 'Switch to Payees',
+            onPressed: () {
+              final Transaction? transaction =
+                  getFirstSelectedItem() as Transaction?;
+              if (transaction != null) {
+                // Preselect the Payee of this Transaction
+                PreferenceController.to.jumpToView(
+                  viewId: ViewId.viewPayees,
+                  selectedId: transaction.fieldPayee.value,
+                  textFilter: '',
+                  columnFilters: null,
+                );
+              }
+            },
+          ),
+          // Search Payee
+          MenuEntry(
+            icon: Icons.person_search_outlined,
+            title: 'Search for Payee',
+            onPressed: () {
+              final Transaction? transaction =
+                  getFirstSelectedItem() as Transaction?;
+              if (transaction != null) {
+                launchGoogleSearch(transaction.getPayeeOrTransferCaption());
+              }
+            },
+          ),
+        ]),
       );
     }
 
@@ -144,18 +147,20 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
     bool includeDeleted = false,
     bool applyFilter = true,
   }) {
-    final List<Transaction> list = Data()
-        .transactions
-        .iterableList(includeDeleted: includeDeleted)
-        .where(
-          (final Transaction transaction) =>
-              isMatchingIncomeExpense(transaction) && (applyFilter == false || isMatchingFilters(transaction)),
-        )
-        .toList();
+    final List<Transaction> list =
+        Data().transactions
+            .iterableList(includeDeleted: includeDeleted)
+            .where(
+              (final Transaction transaction) =>
+                  isMatchingIncomeExpense(transaction) &&
+                  (applyFilter == false || isMatchingFilters(transaction)),
+            )
+            .toList();
 
     if (!balanceDone) {
       list.sort(
-        (final Transaction a, final Transaction b) => sortByDate(a.fieldDateTime.value, b.fieldDateTime.value),
+        (final Transaction a, final Transaction b) =>
+            sortByDate(a.fieldDateTime.value, b.fieldDateTime.value),
       );
 
       double runningNativeBalance = 0.0;
@@ -189,11 +194,11 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
         small: true,
         isVertical: true,
         text2: getIntAsText(
-          Data()
-              .transactions
+          Data().transactions
               .iterableList()
               .where(
-                (final Transaction element) => element.fieldAmount.value.asDouble() > 0,
+                (final Transaction element) =>
+                    element.fieldAmount.value.asDouble() > 0,
               )
               .length,
         ),
@@ -205,11 +210,11 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
         small: true,
         isVertical: true,
         text2: getIntAsText(
-          Data()
-              .transactions
+          Data().transactions
               .iterableList()
               .where(
-                (final Transaction element) => element.fieldAmount.value.asDouble() < 0,
+                (final Transaction element) =>
+                    element.fieldAmount.value.asDouble() < 0,
               )
               .length,
         ),
@@ -257,10 +262,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
           });
         },
         borderRadius: const BorderRadius.all(Radius.circular(8)),
-        constraints: const BoxConstraints(
-          minHeight: 40.0,
-          minWidth: 100.0,
-        ),
+        constraints: const BoxConstraints(minHeight: 40.0, minWidth: 100.0),
         isSelected: _selectedPivot,
         children: pivots,
       ),
@@ -278,7 +280,9 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
       final int categoryId = transaction.fieldCategoryId.value;
       Category? category = Data().categories.get(categoryId);
       category ??= Data().categories.unknown;
-      final Category parentCategory = Data().categories.getTopAncestor(category);
+      final Category parentCategory = Data().categories.getTopAncestor(
+        category,
+      );
 
       // Update the map or add a new entry
       tallyPerCategory.update(
@@ -293,11 +297,11 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
       list.add(PairXYY(key, value));
     });
 
-    list.sort((final PairXYY a, final PairXYY b) => a.yValue1.compareTo(b.yValue1));
-
-    return Chart(
-      list: list,
+    list.sort(
+      (final PairXYY a, final PairXYY b) => a.yValue1.compareTo(b.yValue1),
     );
+
+    return Chart(list: list);
   }
 
   Widget _getSidePanelViewTransactions({
@@ -319,9 +323,13 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
       }
 
       if (transaction.isTransfer) {
-        return TransferSenderReceiver(transfer: transaction.instanceOfTransfer!);
+        return TransferSenderReceiver(
+          transfer: transaction.instanceOfTransfer!,
+        );
       } else {
-        final Investment? investment = Data().investments.get(transaction.uniqueId);
+        final Investment? investment = Data().investments.get(
+          transaction.uniqueId,
+        );
         if (investment != null) {
           return SingleChildScrollView(
             scrollDirection: Axis.vertical,

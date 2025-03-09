@@ -43,10 +43,7 @@ class SidePanelHeader extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return LayoutBuilder(
-      builder: (
-        final BuildContext context,
-        final BoxConstraints constraints,
-      ) {
+      builder: (final BuildContext context, final BoxConstraints constraints) {
         return InkWell(
           onTap: () {
             onExpanded(!isExpanded);
@@ -86,11 +83,17 @@ class SidePanelHeader extends StatelessWidget {
       segments: <ButtonSegment<int>>[
         ButtonSegment<int>(
           value: 0,
-          label: smallDevice ? Text(currencyChoices[0]) : Currency.buildCurrencyWidget(currencyChoices[0]),
+          label:
+              smallDevice
+                  ? Text(currencyChoices[0])
+                  : Currency.buildCurrencyWidget(currencyChoices[0]),
         ),
         ButtonSegment<int>(
           value: 1,
-          label: smallDevice ? Text(currencyChoices[1]) : Currency.buildCurrencyWidget(currencyChoices[1]),
+          label:
+              smallDevice
+                  ? Text(currencyChoices[1])
+                  : Currency.buildCurrencyWidget(currencyChoices[1]),
         ),
       ],
       selectedId: currencySelected,
@@ -120,25 +123,33 @@ class SidePanelHeader extends StatelessWidget {
 
     return mySegmentSelector(
       segments: <ButtonSegment<int>>[
-        if (sidePanelSupport.supportedSubViews.contains(SidePanelSubViewEnum.details))
+        if (sidePanelSupport.supportedSubViews.contains(
+          SidePanelSubViewEnum.details,
+        ))
           ButtonSegment<int>(
             value: 0,
             label: smallDevice ? null : const Text('Details'),
             icon: const Icon(Icons.info_outline),
           ),
-        if (sidePanelSupport.supportedSubViews.contains(SidePanelSubViewEnum.chart))
+        if (sidePanelSupport.supportedSubViews.contains(
+          SidePanelSubViewEnum.chart,
+        ))
           ButtonSegment<int>(
             value: 1,
             label: smallDevice ? null : const Text('Chart'),
             icon: const Icon(Icons.bar_chart),
           ),
-        if (sidePanelSupport.supportedSubViews.contains(SidePanelSubViewEnum.transactions))
+        if (sidePanelSupport.supportedSubViews.contains(
+          SidePanelSubViewEnum.transactions,
+        ))
           ButtonSegment<int>(
             value: 2,
             label: smallDevice ? null : const Text('Transactions'),
             icon: const Icon(Icons.calendar_view_day),
           ),
-        if (sidePanelSupport.supportedSubViews.contains(SidePanelSubViewEnum.pnl))
+        if (sidePanelSupport.supportedSubViews.contains(
+          SidePanelSubViewEnum.pnl,
+        ))
           ButtonSegment<int>(
             value: 3,
             label: smallDevice ? null : const Text('PnL'),
@@ -150,9 +161,7 @@ class SidePanelHeader extends StatelessWidget {
         if (!isExpanded) {
           onExpanded(true);
         }
-        subViewSelectionChanged(
-          SidePanelSubViewEnum.values[newSelection],
-        );
+        subViewSelectionChanged(SidePanelSubViewEnum.values[newSelection]);
       },
     );
   }

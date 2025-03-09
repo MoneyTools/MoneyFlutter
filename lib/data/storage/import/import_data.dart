@@ -79,7 +79,10 @@ void showAndConfirmTransactionToImport(
 ) {
   if (importData.account == null) {
     final List<String> activeAccountNames =
-        Data().accounts.getListSorted().map((Account element) => element.fieldName.value).toList();
+        Data().accounts
+            .getListSorted()
+            .map((Account element) => element.fieldName.value)
+            .toList();
 
     showPopupSelection(
       title: 'Pick account to import to',
@@ -89,7 +92,12 @@ void showAndConfirmTransactionToImport(
       onSelected: (final String text) {
         final Account? accountSelected = Data().accounts.getByName(text);
         if (accountSelected != null) {
-          _showAndConfirmTransactionToImport(context, importData.fileType, importData.entries, accountSelected);
+          _showAndConfirmTransactionToImport(
+            context,
+            importData.fileType,
+            importData.entries,
+            accountSelected,
+          );
         } else {
           SnackBarService.displayWarning(
             autoDismiss: false,
@@ -101,7 +109,12 @@ void showAndConfirmTransactionToImport(
       },
     );
   } else {
-    _showAndConfirmTransactionToImport(context, importData.fileType, importData.entries, importData.account!);
+    _showAndConfirmTransactionToImport(
+      context,
+      importData.fileType,
+      importData.entries,
+      importData.account!,
+    );
   }
 }
 

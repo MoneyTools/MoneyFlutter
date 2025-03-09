@@ -37,35 +37,51 @@ class StockSplit extends MoneyObject {
   FieldDate fieldDate = FieldDate(
     name: 'Date',
     serializeName: 'Date',
-    getValueForDisplay: (final MoneyObject instance) => (instance as StockSplit).fieldDate.value,
-    getValueForSerialization: (final MoneyObject instance) =>
-        dateToSqliteFormat((instance as StockSplit).fieldDate.value),
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as StockSplit).fieldDate.value,
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            dateToSqliteFormat((instance as StockSplit).fieldDate.value),
   );
 
   FieldInt fieldDenominator = FieldInt(
     name: 'Denominator',
     serializeName: 'Denominator',
-    getValueForDisplay: (final MoneyObject instance) => (instance as StockSplit).fieldDenominator.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as StockSplit).fieldDenominator.value,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as StockSplit).fieldDenominator.value,
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            (instance as StockSplit).fieldDenominator.value,
   );
 
   FieldId fieldId = FieldId(
-    getValueForDisplay: (final MoneyObject instance) => (instance as StockSplit).uniqueId,
+    getValueForDisplay:
+        (final MoneyObject instance) => (instance as StockSplit).uniqueId,
     getValueForSerialization: (final MoneyObject instance) => instance.uniqueId,
   );
 
   FieldInt fieldNumerator = FieldInt(
     name: 'Numerator',
     serializeName: 'Numerator',
-    getValueForDisplay: (final MoneyObject instance) => (instance as StockSplit).fieldNumerator.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as StockSplit).fieldNumerator.value,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as StockSplit).fieldNumerator.value,
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            (instance as StockSplit).fieldNumerator.value,
   );
 
   FieldInt fieldSecurity = FieldInt(
     name: 'Security',
     serializeName: 'Security',
-    getValueForDisplay: (final MoneyObject instance) => (instance as StockSplit).fieldSecurity.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as StockSplit).fieldSecurity.value,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as StockSplit).fieldSecurity.value,
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            (instance as StockSplit).fieldSecurity.value,
   );
 
   // Fields for this instance

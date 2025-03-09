@@ -41,7 +41,11 @@ class StockChartWidget extends StatefulWidget {
 
 class StockChartWidgetState extends State<StockChartWidget> {
   List<FlSpot> dataPoints = <FlSpot>[];
-  StockPriceHistoryCache latestPriceHistoryData = StockPriceHistoryCache('', StockLookupStatus.notFoundInCache, null);
+  StockPriceHistoryCache latestPriceHistoryData = StockPriceHistoryCache(
+    '',
+    StockLookupStatus.notFoundInCache,
+    null,
+  );
 
   late Security? security = Data().securities.getBySymbol(widget.symbol);
 
@@ -94,10 +98,13 @@ class StockChartWidgetState extends State<StockChartWidget> {
   }
 
   void fromPriceHistoryToChartDataPoints(StockPriceHistoryCache priceCache) {
-    if (priceCache.status == StockLookupStatus.validSymbol || priceCache.status == StockLookupStatus.foundInCache) {
+    if (priceCache.status == StockLookupStatus.validSymbol ||
+        priceCache.status == StockLookupStatus.foundInCache) {
       final List<FlSpot> tmpDataPoints = <FlSpot>[];
       for (final StockDatePrice sp in priceCache.prices) {
-        tmpDataPoints.add(FlSpot(sp.date.millisecondsSinceEpoch.toDouble(), sp.price));
+        tmpDataPoints.add(
+          FlSpot(sp.date.millisecondsSinceEpoch.toDouble(), sp.price),
+        );
       }
       if (mounted) {
         setState(() {
@@ -117,7 +124,8 @@ class StockChartWidgetState extends State<StockChartWidget> {
 
   void _adjustMissingDataPointInThePast() {
     for (final ChartEvent activity in widget.holdingsActivities.reversed) {
-      if (dataPoints.isEmpty || activity.dates.min!.millisecondsSinceEpoch < dataPoints.first.x) {
+      if (dataPoints.isEmpty ||
+          activity.dates.min!.millisecondsSinceEpoch < dataPoints.first.x) {
         dataPoints.insert(
           0,
           FlSpot(
@@ -144,14 +152,19 @@ class StockChartWidgetState extends State<StockChartWidget> {
 
     // lines are drawn let to right sorted by time
     // the labels are drawn bottom to top sorted by ascending currentUnitPrice
-    widget.holdingsActivities.sort((ChartEvent a, ChartEvent b) => a.amount.compareTo(b.amount));
+    widget.holdingsActivities.sort(
+      (ChartEvent a, ChartEvent b) => a.amount.compareTo(b.amount),
+    );
 
     return Stack(
       alignment: Alignment.topCenter,
       children: <Widget>[
         // Splits
         Padding(
-          padding: const EdgeInsets.only(left: marginLeft, bottom: marginBottom),
+          padding: const EdgeInsets.only(
+            left: marginLeft,
+            bottom: marginBottom,
+          ),
           child: CustomPaint(
             size: const Size(double.infinity, double.infinity),
             painter: PaintSplits(
@@ -164,7 +177,10 @@ class StockChartWidgetState extends State<StockChartWidget> {
 
         // Activities Buy & Sell
         Padding(
-          padding: const EdgeInsets.only(left: marginLeft, bottom: marginBottom),
+          padding: const EdgeInsets.only(
+            left: marginLeft,
+            bottom: marginBottom,
+          ),
           child: CustomPaint(
             size: const Size(double.infinity, double.infinity),
             painter: PaintActivities(
@@ -177,7 +193,10 @@ class StockChartWidgetState extends State<StockChartWidget> {
 
         // Dividends
         Padding(
-          padding: const EdgeInsets.only(left: marginLeft, bottom: marginBottom),
+          padding: const EdgeInsets.only(
+            left: marginLeft,
+            bottom: marginBottom,
+          ),
           child: CustomPaint(
             size: const Size(double.infinity, double.infinity),
             painter: PaintDividends(
@@ -191,7 +210,10 @@ class StockChartWidgetState extends State<StockChartWidget> {
 
         /// Price and Refresh button
         Padding(
-          padding: const EdgeInsets.only(left: marginLeft, bottom: marginBottom),
+          padding: const EdgeInsets.only(
+            left: marginLeft,
+            bottom: marginBottom,
+          ),
           child: _buildPriceRefreshButton(),
         ),
       ],
@@ -200,7 +222,9 @@ class StockChartWidgetState extends State<StockChartWidget> {
 
   Widget _buildPriceRefreshButton() {
     if (dataPoints.isEmpty) {
-      return CenterMessage(message: 'No history information about "${widget.symbol}"');
+      return CenterMessage(
+        message: 'No history information about "${widget.symbol}"',
+      );
     }
     return scaleDown(
       IntrinsicWidth(
@@ -209,15 +233,22 @@ class StockChartWidgetState extends State<StockChartWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: SizeForPadding.medium),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: SizeForPadding.medium,
+                ),
                 child: Text(
                   '${widget.symbol} ${doubleToCurrency(dataPoints.last.y)}',
                   style: const TextStyle(fontSize: SizeForText.large),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: SizeForPadding.medium),
-                child: _refreshing ? const CupertinoActivityIndicator() : const Icon(Icons.refresh_outlined),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: SizeForPadding.medium,
+                ),
+                child:
+                    _refreshing
+                        ? const CupertinoActivityIndicator()
+                        : const Icon(Icons.refresh_outlined),
               ),
               Text(getElapsedTime(latestPriceHistoryData.lastDateTime)),
             ],
@@ -226,8 +257,12 @@ class StockChartWidgetState extends State<StockChartWidget> {
             setState(() {
               _refreshing = true;
             });
-            loadFomBackendAndSaveToCache(widget.symbol).then((StockPriceHistoryCache result) async {
-              fromPriceHistoryToChartDataPoints(await loadFomBackendAndSaveToCache(widget.symbol));
+            loadFomBackendAndSaveToCache(widget.symbol).then((
+              StockPriceHistoryCache result,
+            ) async {
+              fromPriceHistoryToChartDataPoints(
+                await loadFomBackendAndSaveToCache(widget.symbol),
+              );
 
               // Fetch Historical Stock Splits
               List<StockSplit> splits = <StockSplit>[];
@@ -258,9 +293,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
     );
   }
 
-  Future<List<StockSplit>> _fetchSplitsFromTwelveData(
-    String symbol,
-  ) async {
+  Future<List<StockSplit>> _fetchSplitsFromTwelveData(String symbol) async {
     final List<StockSplit> splitsFound = <StockSplit>[];
 
     if (PreferenceController.to.apiKeyForStocks.isNotEmpty) {
@@ -281,9 +314,12 @@ class StockChartWidgetState extends State<StockChartWidget> {
           } else {
             final List<dynamic> dataSplits = data['splits'] as List<dynamic>;
 
-            final int securityId = Data().securities.getBySymbol(symbol)!.uniqueId;
+            final int securityId =
+                Data().securities.getBySymbol(symbol)!.uniqueId;
             for (final dynamic dataSplit in dataSplits) {
-              final DateTime dateOfSplit = DateTime.parse(dataSplit['date'] as String);
+              final DateTime dateOfSplit = DateTime.parse(
+                dataSplit['date'] as String,
+              );
               final StockSplit sp = StockSplit(
                 security: securityId,
                 date: dateOfSplit,
@@ -308,7 +344,8 @@ class StockChartWidgetState extends State<StockChartWidget> {
     final List<StockSplit> splitsFound = <StockSplit>[];
 
     // Base URL for Yahoo Finance API v8
-    final String baseUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/$symbol';
+    final String baseUrl =
+        'https://query1.finance.yahoo.com/v8/finance/chart/$symbol';
 
     // Define the query parameters
     final Map<String, String> queryParams = <String, String>{
@@ -326,7 +363,8 @@ class StockChartWidgetState extends State<StockChartWidget> {
     // Check if the request was successful
     if (response.statusCode == 200) {
       // Parse the response body as JSON
-      final Map<String, dynamic> jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
+      final Map<String, dynamic> jsonResponse =
+          jsonDecode(response.body) as Map<String, dynamic>;
       final Security? security = Data().securities.getBySymbol(symbol);
       if (security != null) {
         // Extract the stock splits data
@@ -336,7 +374,8 @@ class StockChartWidgetState extends State<StockChartWidget> {
           // ignore: always_specify_types
           final responseChartResult = responseChart['result'];
           if (responseChartResult != null) {
-            if ((responseChartResult is List) && responseChartResult.isNotEmpty) {
+            if ((responseChartResult is List) &&
+                responseChartResult.isNotEmpty) {
               // ignore: always_specify_types
               final firstEntry = responseChartResult.firstOrNull;
               if (firstEntry != null) {
@@ -349,7 +388,10 @@ class StockChartWidgetState extends State<StockChartWidget> {
                     // ignore: always_specify_types
                     for (var splitJson in splits.values) {
                       final int dateInMilliseconds = splitJson['date'] as int;
-                      final DateTime dateOSplit = DateTime.fromMillisecondsSinceEpoch(dateInMilliseconds * 1000);
+                      final DateTime dateOSplit =
+                          DateTime.fromMillisecondsSinceEpoch(
+                            dateInMilliseconds * 1000,
+                          );
                       final StockSplit sp = StockSplit(
                         security: security.uniqueId,
                         date: dateOSplit,
@@ -373,7 +415,9 @@ class StockChartWidgetState extends State<StockChartWidget> {
   }
 
   void _getStockHistoricalData() async {
-    final StockPriceHistoryCache priceCache = await getFromCacheOrBackend(widget.symbol);
+    final StockPriceHistoryCache priceCache = await getFromCacheOrBackend(
+      widget.symbol,
+    );
     fromPriceHistoryToChartDataPoints(priceCache);
   }
 }
@@ -415,20 +459,13 @@ void _paintLabel(
     textDirection: ui.TextDirection.ltr,
   );
 
-  textPainter.layout(
-    minWidth: 0,
-    maxWidth: 400,
-  );
+  textPainter.layout(minWidth: 0, maxWidth: 400);
 
   textPainter.paint(canvas, Offset(x, y));
 }
 
 class PaintSplits extends CustomPainter {
-  PaintSplits({
-    required this.splits,
-    required this.minX,
-    required this.maxX,
-  });
+  PaintSplits({required this.splits, required this.minX, required this.maxX});
 
   final double maxX;
   final double minX;
@@ -444,7 +481,10 @@ class PaintSplits extends CustomPainter {
     for (final StockSplit split in splits) {
       double left = 0;
       if (split.fieldDate.value!.millisecondsSinceEpoch > minX) {
-        left = ((split.fieldDate.value!.millisecondsSinceEpoch - minX) / (maxX - minX)) * chartWidth;
+        left =
+            ((split.fieldDate.value!.millisecondsSinceEpoch - minX) /
+                (maxX - minX)) *
+            chartWidth;
       }
       _paintLine(canvas, Colors.grey, left, chartHeight - 5, 45);
       _paintLabel(
@@ -489,12 +529,24 @@ class PaintActivities extends CustomPainter {
       double left = 0;
       double right = 0;
       if (activity.dates.min!.millisecondsSinceEpoch > minX) {
-        left = ((activity.dates.min!.millisecondsSinceEpoch - minX) / (maxX - minX)) * chartWidth;
+        left =
+            ((activity.dates.min!.millisecondsSinceEpoch - minX) /
+                (maxX - minX)) *
+            chartWidth;
       }
       if (activity.dates.max != null) {
-        right = ((activity.dates.max!.millisecondsSinceEpoch - minX) / (maxX - minX)) * chartWidth;
+        right =
+            ((activity.dates.max!.millisecondsSinceEpoch - minX) /
+                (maxX - minX)) *
+            chartWidth;
       }
-      _paintLine(canvas, lineColor?.withAlpha(150) ?? activity.colorToUse.withValues(alpha: 0.8), left, 0, chartHeight);
+      _paintLine(
+        canvas,
+        lineColor?.withAlpha(150) ?? activity.colorToUse.withValues(alpha: 0.8),
+        left,
+        0,
+        chartHeight,
+      );
 
       String text = '';
       // show the quantity if not 1
@@ -522,13 +574,7 @@ class PaintActivities extends CustomPainter {
         );
         textColor = contrastColor(boxColor);
       }
-      _paintLabel(
-        canvas,
-        text,
-        textColor,
-        left + 2,
-        nextVerticalLabelPosition,
-      );
+      _paintLabel(canvas, text, textColor, left + 2, nextVerticalLabelPosition);
 
       nextVerticalLabelPosition -= labelVerticalDistribution;
     }
@@ -552,20 +598,17 @@ class PaintActivities extends CustomPainter {
     Color color,
   ) {
     final ui.Rect rect = Rect.fromLTWH(left, top, width, height);
-    final ui.Paint paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
+    final ui.Paint paint =
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.fill;
 
     canvas.drawRect(rect, paint);
   }
 }
 
 class PaintDividends extends CustomPainter {
-  PaintDividends({
-    required this.list,
-    required this.minX,
-    required this.maxX,
-  });
+  PaintDividends({required this.list, required this.minX, required this.maxX});
 
   final List<Dividend> list;
   final double maxX;
@@ -581,7 +624,9 @@ class PaintDividends extends CustomPainter {
     for (final Dividend item in list) {
       double left = 0;
       if (item.date.millisecondsSinceEpoch > minX) {
-        left = ((item.date.millisecondsSinceEpoch - minX) / (maxX - minX)) * chartWidth;
+        left =
+            ((item.date.millisecondsSinceEpoch - minX) / (maxX - minX)) *
+            chartWidth;
       }
       _paintLine(canvas, Colors.grey, left, chartHeight - 5, 45);
       _paintLabel(

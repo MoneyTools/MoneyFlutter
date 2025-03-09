@@ -15,7 +15,7 @@ Widget buildColumnHeaderButton({
   return Expanded(
     flex: flex,
     child: Tooltip(
-      message: ('$text\n${_getTooltipText(sortIndicator, hasFilters)}').trim(),
+      message: '$text\n${_getTooltipText(sortIndicator, hasFilters)}'.trim(),
       child: TextButton(
         style: ButtonStyle(
           shape: WidgetStateProperty.all<OutlinedBorder>(
@@ -64,7 +64,9 @@ Widget _buildTextAndSortAndFilter(
               softWrap: false,
               textAlign: TextAlign.right,
               overflow: TextOverflow.clip,
-              style: getTextTheme(context).labelSmall!.copyWith(color: getColorTheme(context).secondary),
+              style: getTextTheme(
+                context,
+              ).labelSmall!.copyWith(color: getColorTheme(context).secondary),
             ),
           ),
           adorner,
@@ -73,7 +75,7 @@ Widget _buildTextAndSortAndFilter(
 
     case TextAlign.left:
     case TextAlign.start:
-    default:    
+    default:
       return Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -82,7 +84,9 @@ Widget _buildTextAndSortAndFilter(
             softWrap: false,
             textAlign: TextAlign.left,
             overflow: TextOverflow.clip,
-            style: getTextTheme(context).labelSmall!.copyWith(color: getColorTheme(context).secondary),
+            style: getTextTheme(
+              context,
+            ).labelSmall!.copyWith(color: getColorTheme(context).secondary),
           ),
           adorner,
         ],
@@ -107,7 +111,9 @@ Widget buildSortIconNameWidget(final SortIndicator sortIndicator) {
     case SortIndicator.sortAscending:
       return Transform(
         alignment: Alignment.center,
-        transform: Matrix4.rotationX(3.14159), // Rotate 180 degrees on both X and Y axes
+        transform: Matrix4.rotationX(
+          3.14159,
+        ), // Rotate 180 degrees on both X and Y axes
         child: const Icon(
           Icons.sort,
           size: 20.0,
@@ -141,11 +147,7 @@ String _getTooltipText(final SortIndicator sortIndicator, final bool filterOn) {
   return tooltip;
 }
 
-enum SortIndicator {
-  none,
-  sortAscending,
-  sortDescending,
-}
+enum SortIndicator { none, sortAscending, sortDescending }
 
 SortIndicator getSortIndicator(
   final int currentSort,
@@ -153,7 +155,9 @@ SortIndicator getSortIndicator(
   final bool ascending,
 ) {
   if (sortToMatch == currentSort) {
-    return ascending ? SortIndicator.sortAscending : SortIndicator.sortDescending;
+    return ascending
+        ? SortIndicator.sortAscending
+        : SortIndicator.sortDescending;
   }
   return SortIndicator.none;
 }

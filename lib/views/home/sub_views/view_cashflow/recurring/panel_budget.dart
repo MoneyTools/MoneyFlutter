@@ -46,9 +46,10 @@ class PanelBudget extends StatefulWidget {
 
 class _PanelBudgetState extends State<PanelBudget> {
   List<RecurringExpenses> items = <RecurringExpenses>[];
-  late BudgetViewAs panelType = isForIncome
-      ? PreferenceController.to.budgetViewAsForIncomes.value
-      : PreferenceController.to.budgetViewAsForExpenses.value;
+  late BudgetViewAs panelType =
+      isForIncome
+          ? PreferenceController.to.budgetViewAsForIncomes.value
+          : PreferenceController.to.budgetViewAsForExpenses.value;
 
   double sumForAllCategories = 0.00;
   double sumForAllCategoriesBudget = 0.00;
@@ -71,7 +72,10 @@ class _PanelBudgetState extends State<PanelBudget> {
       width: double.infinity,
       height: double.infinity,
       child: Center(
-        child: ThemeController.to.isDeviceWidthSmall.value ? _buildContentForSmallScreen() : _buildContentAsList(),
+        child:
+            ThemeController.to.isDeviceWidthSmall.value
+                ? _buildContentForSmallScreen()
+                : _buildContentAsList(),
       ),
     );
   }
@@ -110,7 +114,8 @@ class _PanelBudgetState extends State<PanelBudget> {
           );
     }
 
-    final List<Transaction> transactions = Data().transactions.getListFlattenSplits(whereClause: whereClause);
+    final List<Transaction> transactions = Data().transactions
+        .getListFlattenSplits(whereClause: whereClause);
 
     final BudgetAnalyzer analyzer = BudgetAnalyzer(transactions);
     _budget = analyzer.calculateMonthlyBudget();
@@ -130,7 +135,8 @@ class _PanelBudgetState extends State<PanelBudget> {
 
     items.forEach((RecurringExpenses item) {
       sumForAllCategories += item.sumOfAllTransactions;
-      sumForAllCategoriesBudget += item.category.fieldBudget.value.asDouble() * adjustValue;
+      sumForAllCategoriesBudget +=
+          item.category.fieldBudget.value.asDouble() * adjustValue;
     });
 
     _sort();
@@ -163,19 +169,18 @@ class _PanelBudgetState extends State<PanelBudget> {
               value: BudgetViewAs.recurrences.index,
               label: const Text('Recurring'),
             ),
-            const ButtonSegment<int>(
-              value: 3,
-              label: Text('Suggestion'),
-            ),
+            const ButtonSegment<int>(value: 3, label: Text('Suggestion')),
           ],
           selectedId: panelType.index,
           onSelectionChanged: (final int newSelection) {
             setState(() {
               panelType = BudgetViewAs.values[newSelection];
               if (isForIncome) {
-                PreferenceController.to.budgetViewAsForIncomes.value = BudgetViewAs.values[newSelection];
+                PreferenceController.to.budgetViewAsForIncomes.value =
+                    BudgetViewAs.values[newSelection];
               } else {
-                PreferenceController.to.budgetViewAsForExpenses.value = BudgetViewAs.values[newSelection];
+                PreferenceController.to.budgetViewAsForExpenses.value =
+                    BudgetViewAs.values[newSelection];
               }
             });
           },
@@ -184,29 +189,29 @@ class _PanelBudgetState extends State<PanelBudget> {
     );
   }
 
-  double get sumForAllCategoriesActual => (sumForAllCategories / widget.numberOfYears) / 12;
+  double get sumForAllCategoriesActual =>
+      (sumForAllCategories / widget.numberOfYears) / 12;
 
   Widget verticalLine(Color color) {
-    return SizedBox(
-      height: 38,
-      child: VerticalDivider(
-        color: color,
-      ),
-    );
+    return SizedBox(height: 38, child: VerticalDivider(color: color));
   }
 
   Widget _buildContent() {
     switch (panelType) {
       case BudgetViewAs.list:
-        return isListEmpty ? const CenterMessage(message: 'No budget income category found') : _buildList();
+        return isListEmpty
+            ? const CenterMessage(message: 'No budget income category found')
+            : _buildList();
 
       case BudgetViewAs.chart:
         return const CenterMessage(message: 'CHART ');
 
       case BudgetViewAs.recurrences:
         final DateRange dateRangeTransactions = DateRange.fromStarEndYears(
-          Data().transactions.dateRangeActiveAccount.min?.year ?? DateTime.now().year,
-          Data().transactions.dateRangeActiveAccount.max?.year ?? DateTime.now().year,
+          Data().transactions.dateRangeActiveAccount.min?.year ??
+              DateTime.now().year,
+          Data().transactions.dateRangeActiveAccount.max?.year ??
+              DateTime.now().year,
         );
 
         return PanelRecurring(
@@ -230,38 +235,37 @@ class _PanelBudgetState extends State<PanelBudget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         sectionHeader(context),
-        Expanded(
-          child: _buildContent(),
-        ),
+        Expanded(child: _buildContent()),
       ],
     );
   }
 
   Widget _buildContentForSmallScreen() {
     return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxWidth: 400,
-      ),
+      constraints: const BoxConstraints(maxWidth: 400),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Text(widget.title, style: context.textTheme.headlineLarge),
           const SizedBox(height: 20),
-          Text(
-            'Monthly Budgeted',
-            style: context.textTheme.bodyLarge,
+          Text('Monthly Budgeted', style: context.textTheme.bodyLarge),
+          MoneyWidget.fromDouble(
+            sumForAllCategoriesBudget,
+            MoneyWidgetSize.header,
           ),
-          MoneyWidget.fromDouble(sumForAllCategoriesBudget, MoneyWidgetSize.header),
           const SizedBox(height: 10),
-          Text(
-            'Monthly Actual',
-            style: context.textTheme.bodyLarge,
+          Text('Monthly Actual', style: context.textTheme.bodyLarge),
+          MoneyWidget.fromDouble(
+            sumForAllCategoriesActual,
+            MoneyWidgetSize.header,
           ),
-          MoneyWidget.fromDouble(sumForAllCategoriesActual, MoneyWidgetSize.header),
           const SizedBox(height: 20),
           Text(
-            calculateBudgetAccuracy(sumForAllCategoriesBudget, sumForAllCategoriesActual),
+            calculateBudgetAccuracy(
+              sumForAllCategoriesBudget,
+              sumForAllCategoriesActual,
+            ),
             textAlign: TextAlign.end,
             style: context.textTheme.headlineSmall,
           ),
@@ -291,7 +295,11 @@ class _PanelBudgetState extends State<PanelBudget> {
                     text: 'Category',
                     textAlign: TextAlign.start,
                     flex: 3,
-                    sortIndicator: getSortIndicator(_sortColumnIndex, 0, _sortAscending),
+                    sortIndicator: getSortIndicator(
+                      _sortColumnIndex,
+                      0,
+                      _sortAscending,
+                    ),
                     onPressed: () => _onColumnSort(0),
                   ),
                   verticalLine(dividersColor),
@@ -300,7 +308,11 @@ class _PanelBudgetState extends State<PanelBudget> {
                     text: 'Budgeted/M',
                     textAlign: TextAlign.end,
                     flex: 1,
-                    sortIndicator: getSortIndicator(_sortColumnIndex, 4, _sortAscending),
+                    sortIndicator: getSortIndicator(
+                      _sortColumnIndex,
+                      4,
+                      _sortAscending,
+                    ),
                     onPressed: () => _onColumnSort(4),
                   ),
                   buildColumnHeaderButton(
@@ -308,7 +320,11 @@ class _PanelBudgetState extends State<PanelBudget> {
                     text: 'Actual/M',
                     textAlign: TextAlign.end,
                     flex: 1,
-                    sortIndicator: getSortIndicator(_sortColumnIndex, 3, _sortAscending),
+                    sortIndicator: getSortIndicator(
+                      _sortColumnIndex,
+                      3,
+                      _sortAscending,
+                    ),
                     onPressed: () => _onColumnSort(3),
                   ),
                   verticalLine(dividersColor),
@@ -317,7 +333,11 @@ class _PanelBudgetState extends State<PanelBudget> {
                     text: 'Budgeted/Y',
                     textAlign: TextAlign.end,
                     flex: 1,
-                    sortIndicator: getSortIndicator(_sortColumnIndex, 4, _sortAscending),
+                    sortIndicator: getSortIndicator(
+                      _sortColumnIndex,
+                      4,
+                      _sortAscending,
+                    ),
                     onPressed: () => _onColumnSort(4),
                   ),
                   buildColumnHeaderButton(
@@ -325,7 +345,11 @@ class _PanelBudgetState extends State<PanelBudget> {
                     text: 'Actual/Y',
                     textAlign: TextAlign.end,
                     flex: 1,
-                    sortIndicator: getSortIndicator(_sortColumnIndex, 2, _sortAscending),
+                    sortIndicator: getSortIndicator(
+                      _sortColumnIndex,
+                      2,
+                      _sortAscending,
+                    ),
                     onPressed: () => _onColumnSort(2),
                   ),
                   verticalLine(dividersColor),
@@ -340,7 +364,11 @@ class _PanelBudgetState extends State<PanelBudget> {
                     text: 'All time',
                     textAlign: TextAlign.end,
                     flex: 1,
-                    sortIndicator: getSortIndicator(_sortColumnIndex, 1, _sortAscending),
+                    sortIndicator: getSortIndicator(
+                      _sortColumnIndex,
+                      1,
+                      _sortAscending,
+                    ),
                     onPressed: () => _onColumnSort(1),
                   ),
                 ],
@@ -354,10 +382,9 @@ class _PanelBudgetState extends State<PanelBudget> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListView.separated(
-              separatorBuilder: (BuildContext context, int index) => Divider(
-                height: 0,
-                color: dividersColor,
-              ),
+              separatorBuilder:
+                  (BuildContext context, int index) =>
+                      Divider(height: 0, color: dividersColor),
               padding: const EdgeInsets.all(0),
               itemCount: items.length,
               itemBuilder: (final BuildContext context, final int index) {
@@ -371,9 +398,7 @@ class _PanelBudgetState extends State<PanelBudget> {
                       child: Row(
                         children: <Widget>[
                           _categoryContextMenu(item.category),
-                          Expanded(
-                            child: item.category.getNameAsWidget(),
-                          ),
+                          Expanded(child: item.category.getNameAsWidget()),
                         ],
                       ),
                     ),
@@ -386,7 +411,8 @@ class _PanelBudgetState extends State<PanelBudget> {
                           // Budgeted per month
                           Expanded(
                             child: MoneyWidget.fromDouble(
-                              item.category.fieldBudget.value.asDouble() * adjustValue,
+                              item.category.fieldBudget.value.asDouble() *
+                                  adjustValue,
                               MoneyWidgetSize.title,
                             ),
                           ),
@@ -411,7 +437,9 @@ class _PanelBudgetState extends State<PanelBudget> {
                           // Budget per year
                           Expanded(
                             child: MoneyWidget.fromDouble(
-                              item.category.fieldBudget.value.asDouble() * 12 * adjustValue,
+                              item.category.fieldBudget.value.asDouble() *
+                                  12 *
+                                  adjustValue,
                               MoneyWidgetSize.title,
                             ),
                           ),
@@ -465,10 +493,7 @@ class _PanelBudgetState extends State<PanelBudget> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            const Expanded(
-              flex: 3,
-              child: Text(''),
-            ),
+            const Expanded(flex: 3, child: Text('')),
             verticalLine(dividersColor),
             Expanded(
               child: MoneyWidget.fromDouble(
@@ -496,9 +521,7 @@ class _PanelBudgetState extends State<PanelBudget> {
               ),
             ),
             verticalLine(dividersColor),
-            const Expanded(
-              child: Text(''),
-            ),
+            const Expanded(child: Text('')),
             Expanded(
               child: MoneyWidget.fromDouble(
                 sumForAllCategories,
@@ -515,23 +538,25 @@ class _PanelBudgetState extends State<PanelBudget> {
     final List<Widget> widgets = <Widget>[];
 
     list.sort(
-      (MapEntry<String, BudgetCumulator> a, MapEntry<String, BudgetCumulator> b) => a.value.monthlyAmount.compareTo(b.value.monthlyAmount),
+      (
+        MapEntry<String, BudgetCumulator> a,
+        MapEntry<String, BudgetCumulator> b,
+      ) => a.value.monthlyAmount.compareTo(b.value.monthlyAmount),
     );
 
     for (final MapEntry<String, BudgetCumulator> categoryBudget in list) {
       widgets.add(
         Row(
           children: <Widget>[
-            _categoryContextMenu(Data().categories.getByName(categoryBudget.key)!),
-            Expanded(
-              flex: 2,
-              child: TokenText(categoryBudget.key),
+            _categoryContextMenu(
+              Data().categories.getByName(categoryBudget.key)!,
             ),
+            Expanded(flex: 2, child: TokenText(categoryBudget.key)),
+            Expanded(child: Text(categoryBudget.value.frequency.name)),
             Expanded(
-              child: Text(categoryBudget.value.frequency.name),
-            ),
-            Expanded(
-              child: MoneyWidget.fromDouble(categoryBudget.value.monthlyAmount.round().toDouble()),
+              child: MoneyWidget.fromDouble(
+                categoryBudget.value.monthlyAmount.round().toDouble(),
+              ),
             ),
           ],
         ),
@@ -552,43 +577,38 @@ class _PanelBudgetState extends State<PanelBudget> {
   }
 
   Widget _categoryContextMenu(final Category category) {
-    return buildMenuButton(
-      <MenuEntry>[
-        // View - Transactions
-        MenuEntry.toTransactions(
-          transactionId: -1,
-          filters: FieldFilters(
-            <FieldFilter>[
-              FieldFilter(
-                fieldName: Constants.viewTransactionFieldNameCategory,
-                strings: <String>[category.name],
-              ),
-              FieldFilter(
-                fieldName: Constants.viewTransactionFieldNameDate,
-                byDateRange: true,
-                strings: <String>[
-                  '${widget.minYear}-01-01',
-                  '${widget.maxYear}-12-31',
-                ],
-              ),
+    return buildMenuButton(<MenuEntry>[
+      // View - Transactions
+      MenuEntry.toTransactions(
+        transactionId: -1,
+        filters: FieldFilters(<FieldFilter>[
+          FieldFilter(
+            fieldName: Constants.viewTransactionFieldNameCategory,
+            strings: <String>[category.name],
+          ),
+          FieldFilter(
+            fieldName: Constants.viewTransactionFieldNameDate,
+            byDateRange: true,
+            strings: <String>[
+              '${widget.minYear}-01-01',
+              '${widget.maxYear}-12-31',
             ],
           ),
-        ),
+        ]),
+      ),
 
-        // View - Category
-        MenuEntry.toCategory(category: category),
-        // Edit Category
-        MenuEntry.editCategory(
-          category: category,
-          onApplyChange: () {
-            setState(() {
-              // refresh the screen
-            });
-          },
-        ),
-      ],
-      icon: Icons.more_vert,
-    );
+      // View - Category
+      MenuEntry.toCategory(category: category),
+      // Edit Category
+      MenuEntry.editCategory(
+        category: category,
+        onApplyChange: () {
+          setState(() {
+            // refresh the screen
+          });
+        },
+      ),
+    ], icon: Icons.more_vert);
   }
 
   void _onColumnSort(int columnIndex) {
@@ -608,11 +628,23 @@ class _PanelBudgetState extends State<PanelBudget> {
         case 0:
           return sortByString(a.category.name, b.category.name, _sortAscending);
         case 1:
-          return sortByValue(a.sumOfAllTransactions, b.sumOfAllTransactions, _sortAscending);
+          return sortByValue(
+            a.sumOfAllTransactions,
+            b.sumOfAllTransactions,
+            _sortAscending,
+          );
         case 2:
-          return sortByValue(a.sumOfAllTransactions, b.sumOfAllTransactions, _sortAscending);
+          return sortByValue(
+            a.sumOfAllTransactions,
+            b.sumOfAllTransactions,
+            _sortAscending,
+          );
         case 3:
-          return sortByValue(a.sumOfAllTransactions, b.sumOfAllTransactions, _sortAscending);
+          return sortByValue(
+            a.sumOfAllTransactions,
+            b.sumOfAllTransactions,
+            _sortAscending,
+          );
         case 4:
           return sortByValue(
             a.category.fieldBudget.value.asDouble(),
@@ -620,7 +652,11 @@ class _PanelBudgetState extends State<PanelBudget> {
             _sortAscending,
           );
         default:
-          return sortByValue(a.sumOfAllTransactions, b.sumOfAllTransactions, _sortAscending);
+          return sortByValue(
+            a.sumOfAllTransactions,
+            b.sumOfAllTransactions,
+            _sortAscending,
+          );
       }
     });
   }

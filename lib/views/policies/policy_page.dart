@@ -10,15 +10,10 @@ class PolicyPage extends GetView<GetxController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const TextTitle('Policy'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const TextTitle('Policy'), centerTitle: true),
       body: Container(
         color: getColorTheme(context).surface,
-        child: const SafeArea(
-          child: PolicyScreen(),
-        ),
+        child: const SafeArea(child: PolicyScreen()),
       ),
     );
   }

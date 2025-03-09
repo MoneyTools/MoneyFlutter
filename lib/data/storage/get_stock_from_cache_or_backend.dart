@@ -28,9 +28,7 @@ class StockPriceHistoryCache {
   DateTime? lastDateTime;
 }
 
-Future<StockPriceHistoryCache> getFromCacheOrBackend(
-  String symbol,
-) async {
+Future<StockPriceHistoryCache> getFromCacheOrBackend(String symbol) async {
   symbol = symbol.toLowerCase();
 
   StockPriceHistoryCache result = await _loadFromCache(symbol);
@@ -43,10 +41,15 @@ Future<StockPriceHistoryCache> getFromCacheOrBackend(
   return result;
 }
 
-Future<StockPriceHistoryCache> loadFomBackendAndSaveToCache(String symbol) async {
+Future<StockPriceHistoryCache> loadFomBackendAndSaveToCache(
+  String symbol,
+) async {
   final StockPriceHistoryCache result = await _loadFromBackend(symbol);
   if (result.errorMessage.isNotEmpty) {
-    SnackBarService.displayError(message: result.errorMessage, autoDismiss: false);
+    SnackBarService.displayError(
+      message: result.errorMessage,
+      autoDismiss: false,
+    );
   }
   switch (result.status) {
     case StockLookupStatus.validSymbol:
@@ -68,11 +71,12 @@ enum StockLookupStatus {
   error,
 }
 
-Future<StockPriceHistoryCache> _loadFromCache(
-  final String symbol,
-) async {
-  final StockPriceHistoryCache stockPriceHistoryCache =
-      StockPriceHistoryCache(symbol, StockLookupStatus.foundInCache, null);
+Future<StockPriceHistoryCache> _loadFromCache(final String symbol) async {
+  final StockPriceHistoryCache stockPriceHistoryCache = StockPriceHistoryCache(
+    symbol,
+    StockLookupStatus.foundInCache,
+    null,
+  );
 
   String? csvContent;
 
@@ -82,7 +86,9 @@ Future<StockPriceHistoryCache> _loadFromCache(
       // give up now
       stockPriceHistoryCache.status = StockLookupStatus.notFoundInCache;
     } else {
-      final String dateTimeAsString = PreferenceController.to.getString('stock-date-$symbol');
+      final String dateTimeAsString = PreferenceController.to.getString(
+        'stock-date-$symbol',
+      );
       if (dateTimeAsString.isNotEmpty) {
         stockPriceHistoryCache.lastDateTime = DateTime.parse(dateTimeAsString);
       }
@@ -113,17 +119,20 @@ Future<StockPriceHistoryCache> _loadFromCache(
   return StockPriceHistoryCache(symbol, StockLookupStatus.notFoundInCache);
 }
 
-Future<StockPriceHistoryCache> _loadFromBackend(
-  String symbol,
-) async {
-  final StockPriceHistoryCache result = StockPriceHistoryCache(symbol, StockLookupStatus.validSymbol);
+Future<StockPriceHistoryCache> _loadFromBackend(String symbol) async {
+  final StockPriceHistoryCache result = StockPriceHistoryCache(
+    symbol,
+    StockLookupStatus.validSymbol,
+  );
 
   if (PreferenceController.to.apiKeyForStocks.isEmpty) {
     // No API Key to make the backend request
     return StockPriceHistoryCache(symbol, StockLookupStatus.invalidApiKey);
   }
 
-  final DateTime numberOfDaysInThePast = DateTime.now().subtract(const Duration(days: 365 * 40));
+  final DateTime numberOfDaysInThePast = DateTime.now().subtract(
+    const Duration(days: 365 * 40),
+  );
 
   final String url =
       'https://api.twelvedata.com/time_series?symbol=$symbol&interval=1day&start_date=${numberOfDaysInThePast.toIso8601String()}&apikey=${PreferenceController.to.apiKeyForStocks}';
@@ -162,7 +171,8 @@ Future<StockPriceHistoryCache> _loadFromBackend(
 
       // Unfortunately for now (sometimes) the API may returns two entries with the same date
       // for this ensure that we only have one date and price, last one wins
-      final Map<String, StockDatePrice> mapByUniqueDate = <String, StockDatePrice>{};
+      final Map<String, StockDatePrice> mapByUniqueDate =
+          <String, StockDatePrice>{};
 
       for (final dynamic value in values) {
         final String dateAsText = value['datetime'] as String;
@@ -197,12 +207,16 @@ void _saveToCache(final String symbol, List<StockDatePrice> prices) async {
   }
 
   await PreferenceController.to.setString('stock-$symbol', csvContent);
-  await PreferenceController.to.setString('stock-date-$symbol', DateTime.now().toIso8601String());
+  await PreferenceController.to.setString(
+    'stock-date-$symbol',
+    DateTime.now().toIso8601String(),
+  );
 
   // Also save to the last price to the Security table
   final Security? security = Data().securities.getBySymbol(symbol);
   if (security != null) {
-    if (security.fieldPriceDate.value == null || prices.first.date.isAfter(security.fieldPriceDate.value!)) {
+    if (security.fieldPriceDate.value == null ||
+        prices.first.date.isAfter(security.fieldPriceDate.value!)) {
       // update to the last known stock price
 
       security.stashValueBeforeEditing();

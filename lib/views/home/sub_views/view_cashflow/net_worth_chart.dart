@@ -13,7 +13,11 @@ import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/view_stocks/stock_chart.dart';
 
 class NetWorthChart extends StatefulWidget {
-  const NetWorthChart({super.key, required this.minYear, required this.maxYear});
+  const NetWorthChart({
+    super.key,
+    required this.minYear,
+    required this.maxYear,
+  });
 
   final int maxYear;
   final int minYear;
@@ -32,14 +36,22 @@ class NetWorthChartState extends State<NetWorthChart> {
   void initState() {
     super.initState();
 
-    _transactions = Data().transactions.iterableList(includeDeleted: true).where((Transaction t) => t.isTransfer == false).toList();
+    _transactions =
+        Data().transactions
+            .iterableList(includeDeleted: true)
+            .where((Transaction t) => t.isTransfer == false)
+            .toList();
 
-    final List<FlSpot> tmpDataPointsWithNetWorth = Transactions.cumulateTransactionPerYearMonth(_transactions);
+    final List<FlSpot> tmpDataPointsWithNetWorth =
+        Transactions.cumulateTransactionPerYearMonth(_transactions);
 
     _yearMonthDataPoints.addAll(
       tmpDataPointsWithNetWorth.where(
-        (FlSpot entry) =>
-            isBetweenOrEqual(DateTime.fromMillisecondsSinceEpoch(entry.x.toInt()).year, widget.minYear, widget.maxYear),
+        (FlSpot entry) => isBetweenOrEqual(
+          DateTime.fromMillisecondsSinceEpoch(entry.x.toInt()).year,
+          widget.minYear,
+          widget.maxYear,
+        ),
       ),
     );
   }
@@ -49,15 +61,16 @@ class NetWorthChartState extends State<NetWorthChart> {
     const double marginLeft = 80.0;
     const double marginBottom = 50.0;
 
-    final List<Transaction> transactionSubSet = _transactions
-        .where(
-          (Transaction t) => isBetweenOrEqual(
-            t.fieldDateTime.value!.year,
-            widget.minYear,
-            widget.maxYear,
-          ),
-        )
-        .toList();
+    final List<Transaction> transactionSubSet =
+        _transactions
+            .where(
+              (Transaction t) => isBetweenOrEqual(
+                t.fieldDateTime.value!.year,
+                widget.minYear,
+                widget.maxYear,
+              ),
+            )
+            .toList();
 
     _milestoneTransactions = getMilestonesEvents(transactionSubSet);
 
@@ -65,7 +78,10 @@ class NetWorthChartState extends State<NetWorthChart> {
       alignment: Alignment.topCenter,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(left: marginLeft, bottom: marginBottom),
+          padding: const EdgeInsets.only(
+            left: marginLeft,
+            bottom: marginBottom,
+          ),
           child: CustomPaint(
             size: const Size(double.infinity, double.infinity),
             painter: PaintActivities(
@@ -75,10 +91,7 @@ class NetWorthChartState extends State<NetWorthChart> {
             ),
           ),
         ),
-        MyLineChart(
-          dataPoints: _yearMonthDataPoints,
-          showDots: false,
-        ),
+        MyLineChart(dataPoints: _yearMonthDataPoints, showDots: false),
       ],
     );
   }
@@ -89,7 +102,9 @@ List<ChartEvent> getMilestonesEvents(final List<Transaction> transactions) {
 
   if (PreferenceController.to.netWorthEventThreshold.value == 0) {
     for (final Event event in Data().events.iterableList()) {
-      final Category? category = Data().categories.get(event.fieldCategoryId.value);
+      final Category? category = Data().categories.get(
+        event.fieldCategoryId.value,
+      );
       milestoneTransactions.add(
         ChartEvent(
           dates: DateRange(min: event.fieldDateBegin.value!),
@@ -97,7 +112,10 @@ List<ChartEvent> getMilestonesEvents(final List<Transaction> transactions) {
           quantity: 1,
           colorBasedOnQuantity: false, // use Amount
           description: event.fieldName.value,
-          color: category == null ? Colors.blue : category.getColorOrAncestorsColor(),
+          color:
+              category == null
+                  ? Colors.blue
+                  : category.getColorOrAncestorsColor(),
         ),
       );
     }
@@ -105,18 +123,29 @@ List<ChartEvent> getMilestonesEvents(final List<Transaction> transactions) {
   }
 
   // Calculate Z-scores for outlier detection based on amount
-  final List<double> amounts = transactions.map((Transaction t) => t.fieldAmount.value.asDouble()).toList();
+  final List<double> amounts =
+      transactions
+          .map((Transaction t) => t.fieldAmount.value.asDouble())
+          .toList();
   if (amounts.isEmpty) {
     // nothing to work on;
     return <ChartEvent>[];
   }
 
   // Find outlier events
-  final double mean = amounts.reduce((double a, double b) => a + b) / amounts.length;
-  final double variance = amounts.map((double amount) => (amount - mean) * (amount - mean)).reduce((double a, double b) => a + b) / amounts.length;
+  final double mean =
+      amounts.reduce((double a, double b) => a + b) / amounts.length;
+  final double variance =
+      amounts
+          .map((double amount) => (amount - mean) * (amount - mean))
+          .reduce((double a, double b) => a + b) /
+      amounts.length;
   final double stdDev = sqrt(variance);
 
-  final List<double> zScores = amounts.map((double amount) => stdDev == 0 ? 0.0 : (amount - mean) / stdDev).toList();
+  final List<double> zScores =
+      amounts
+          .map((double amount) => stdDev == 0 ? 0.0 : (amount - mean) / stdDev)
+          .toList();
 
   for (int i = 0; i < transactions.length; i++) {
     final double zScore = zScores[i];
@@ -133,6 +162,8 @@ List<ChartEvent> getMilestonesEvents(final List<Transaction> transactions) {
       );
     }
   }
-  milestoneTransactions.sort((ChartEvent a, ChartEvent b) => sortByDate(a.dates.min, b.dates.min, true));
+  milestoneTransactions.sort(
+    (ChartEvent a, ChartEvent b) => sortByDate(a.dates.min, b.dates.min, true),
+  );
   return milestoneTransactions;
 }

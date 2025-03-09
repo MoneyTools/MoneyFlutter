@@ -28,7 +28,8 @@ class RentalPnL {
 
   @override
   String toString() {
-    String text = textAmount('Income', income) +
+    String text =
+        textAmount('Income', income) +
         textAmount('Expenses', expenses) +
         textAmount('  Interest', expenseInterest) +
         textAmount('  Maintenance', expenseMaintenance) +
@@ -53,13 +54,23 @@ class RentalPnL {
     return text;
   }
 
-  double get expenses => expenseInterest + expenseMaintenance + expenseManagement + expenseRepairs + expenseTaxes;
+  double get expenses =>
+      expenseInterest +
+      expenseMaintenance +
+      expenseManagement +
+      expenseRepairs +
+      expenseTaxes;
 
-  double get profit => income + expenses; // since Expense is stored as a negative value we use a [+]
+  double get profit =>
+      income +
+      expenses; // since Expense is stored as a negative value we use a [+]
 
   String textAmount(final String text, final double amount) {
     final String textPadded = '$text:'.padRight(15);
-    final String amountPadded = Currency.getAmountAsStringUsingCurrency(amount, iso4217code: currency).padLeft(15);
+    final String amountPadded = Currency.getAmountAsStringUsingCurrency(
+      amount,
+      iso4217code: currency,
+    ).padLeft(15);
     return '$textPadded\t$amountPadded\n';
   }
 }

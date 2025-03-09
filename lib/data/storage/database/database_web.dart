@@ -18,7 +18,11 @@ class MyDatabaseImplementation {
   void itemInsert(final String tableName, final MyJson data) {}
 
   /// SQL Update
-  void itemUpdate(final String tableName, final MyJson jsonMap, final String whereClause) {}
+  void itemUpdate(
+    final String tableName,
+    final MyJson jsonMap,
+    final String whereClause,
+  ) {}
 
   Future<void> load(final String fileToOpen, final Uint8List fileBytes) async {
     try {
@@ -38,7 +42,10 @@ class MyDatabaseImplementation {
 
   Future<List<Map<String, dynamic>>> select(final String query) async {
     try {
-      final dynamic jsObjectResult = await js.context.callMethod('executeSql', <dynamic>[query]);
+      final dynamic jsObjectResult = await js.context.callMethod(
+        'executeSql',
+        <dynamic>[query],
+      );
 
       if (jsObjectResult == null || jsObjectResult.length == 0) {
         // no results found from the query
@@ -63,7 +70,9 @@ class MyDatabaseImplementation {
   /// Check if a table exists in the database
   Future<bool> tableExists(final String tableName) async {
     try {
-      final List<Map<String, dynamic>> list = await select("SELECT name FROM sqlite_master WHERE type='table'");
+      final List<Map<String, dynamic>> list = await select(
+        "SELECT name FROM sqlite_master WHERE type='table'",
+      );
       return _listMapContains(list, 'name', tableName);
     } catch (e) {
       print('Error checking if table exists: $e');
@@ -73,7 +82,9 @@ class MyDatabaseImplementation {
 
   // Helper to convert JsObject to List<Map<String, dynamic>>
   List<Map<String, dynamic>> _convertJsResultToList(js.JsObject jsResult) {
-    final List<String> columns = List<String>.from(jsResult['columns'] as List<String>);
+    final List<String> columns = List<String>.from(
+      jsResult['columns'] as List<String>,
+    );
     final List<dynamic> values = jsResult['values'] as List<dynamic>;
     if (values.isEmpty) {
       return <Map<String, dynamic>>[];
@@ -85,7 +96,11 @@ class MyDatabaseImplementation {
     }).toList();
   }
 
-  bool _listMapContains(List<Map<String, dynamic>> list, String field, String value) {
+  bool _listMapContains(
+    List<Map<String, dynamic>> list,
+    String field,
+    String value,
+  ) {
     return list.any((Map<String, dynamic> map) => map[field] == value);
   }
 }

@@ -49,7 +49,9 @@ class MyLineChart extends StatelessWidget {
                 if (value == meta.min || value == meta.max) {
                   return const SizedBox();
                 }
-                final DateTime date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
+                final DateTime date = DateTime.fromMillisecondsSinceEpoch(
+                  value.toInt(),
+                );
                 return Text(
                   formatDate(date),
                   textAlign: TextAlign.center,
@@ -64,15 +66,17 @@ class MyLineChart extends StatelessWidget {
           touchTooltipData: LineTouchTooltipData(
             fitInsideVertically: true,
             fitInsideHorizontally: true,
-            getTooltipItems: (List<LineBarSpot> touchedSpots) {
-              return touchedSpots.map((LineBarSpot touchedSpot) {
-                final DateTime date = DateTime.fromMillisecondsSinceEpoch(touchedSpot.x.toInt());
-                return LineTooltipItem(
-                  '${dateToString(date)}\n${doubleToCurrency(touchedSpot.y)}',
-                  const TextStyle(color: Colors.white),
-                );
-              }).toList();
-            },
+            getTooltipItems:
+                (List<LineBarSpot> touchedSpots) =>
+                    touchedSpots.map((LineBarSpot touchedSpot) {
+                      final DateTime date = DateTime.fromMillisecondsSinceEpoch(
+                        touchedSpot.x.toInt(),
+                      );
+                      return LineTooltipItem(
+                        '${dateToString(date)}\n${doubleToCurrency(touchedSpot.y)}',
+                        const TextStyle(color: Colors.white),
+                      );
+                    }).toList(),
           ),
           // touchCallback: (LineTouchResponse touchResponse) {},
           handleBuiltInTouches: true,
@@ -82,6 +86,4 @@ class MyLineChart extends StatelessWidget {
   }
 }
 
-String formatDate(DateTime date) {
-  return DateFormat('yyyy\nMMM').format(date);
-}
+String formatDate(DateTime date) => DateFormat('yyyy\nMMM').format(date);

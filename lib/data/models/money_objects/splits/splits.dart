@@ -15,8 +15,10 @@ class Splits extends MoneyObjects<MoneySplit> {
     super.appendMoneyObject(moneyObject);
 
     // Attach the split back to the their  container Transaction
-    final MoneySplit splitAdded = (moneyObject as MoneySplit);
-    final Transaction? containerTransaction = Data().transactions.get(splitAdded.fieldTransactionId.value);
+    final MoneySplit splitAdded = moneyObject as MoneySplit;
+    final Transaction? containerTransaction = Data().transactions.get(
+      splitAdded.fieldTransactionId.value,
+    );
     if (containerTransaction != null) {
       containerTransaction.splits.add(moneyObject);
     }
@@ -54,8 +56,6 @@ class Splits extends MoneyObjects<MoneySplit> {
 
   @override
   String toCSV() {
-    return MoneyObjects.getCsvFromList(
-      getListSortedById(),
-    );
+    return MoneyObjects.getCsvFromList(getListSortedById());
   }
 }

@@ -27,9 +27,7 @@ void showImportTransfer({ImportFieldsForTransfer? inputData}) {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         gapLarge(),
-        Expanded(
-          child: ImportFieldsForTransferPanel(inputFields: inputData),
-        ),
+        Expanded(child: ImportFieldsForTransferPanel(inputFields: inputData)),
       ],
     ),
   );
@@ -45,22 +43,32 @@ List<Widget> getActionButtons(
       text: 'Record Transfer',
       onPressed: () {
         if (!inputData.validAccounts) {
-          SnackBarService.display(message: 'Select valid accounts.', autoDismiss: true, title: 'Transfer', duration: 5);
+          SnackBarService.display(
+            message: 'Select valid accounts.',
+            autoDismiss: true,
+            title: 'Transfer',
+            duration: 5,
+          );
         } else {
           // Add the main Transaction of the transfer
-          final Transaction newTransactionFromAccount = Transaction(date: inputData.date);
-          newTransactionFromAccount.fieldAccountId.value = inputData.accountFrom.uniqueId;
+          final Transaction newTransactionFromAccount = Transaction(
+            date: inputData.date,
+          );
+          newTransactionFromAccount.fieldAccountId.value =
+              inputData.accountFrom.uniqueId;
           newTransactionFromAccount.fieldMemo.value = inputData.memo;
           if (inputData.category != null) {
-            newTransactionFromAccount.fieldCategoryId.value = inputData.category!.uniqueId;
+            newTransactionFromAccount.fieldCategoryId.value =
+                inputData.category!.uniqueId;
           }
-          newTransactionFromAccount.fieldAmount.value
-              .setAmount(inputData.amount.abs() * -1); // From account must be negative
+          newTransactionFromAccount.fieldAmount.value.setAmount(
+            inputData.amount.abs() * -1,
+          ); // From account must be negative
 
           Data().transactions.appendNewMoneyObject(
-                newTransactionFromAccount,
-                fireNotification: false,
-              );
+            newTransactionFromAccount,
+            fireNotification: false,
+          );
 
           // add the receiving account transaction and link them
           Data().makeTransferLinkage(

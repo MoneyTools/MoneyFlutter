@@ -46,12 +46,19 @@ void main() {
 
   group('convertMapToListOfPair', () {
     test('returns empty list for empty map', () {
-      expect(convertMapToListOfPair<String, int>(<String, int>{}).isEmpty, true);
+      expect(
+        convertMapToListOfPair<String, int>(<String, int>{}).isEmpty,
+        true,
+      );
     });
 
     test('converts map to list of pairs correctly', () {
       final Map<String, int> map = <String, int>{'a': 1, 'b': 2, 'c': 3};
-      final List<Pair<String, int>> expected = <Pair<String, int>>[Pair<String, int>('a', 1), Pair<String, int>('b', 2), Pair<String, int>('c', 3)];
+      final List<Pair<String, int>> expected = <Pair<String, int>>[
+        Pair<String, int>('a', 1),
+        Pair<String, int>('b', 2),
+        Pair<String, int>('c', 3),
+      ];
       expect(convertMapToListOfPair<String, int>(map), expected);
     });
   });

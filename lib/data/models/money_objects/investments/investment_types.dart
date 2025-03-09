@@ -37,5 +37,7 @@ InvestmentType getInvestmentTypeFromText(final String name) {
 }
 
 List<String> getInvestmentTypeNames() {
-  return InvestmentType.values.map((InvestmentType item) => item.toString().split('.').last).toList();
+  return InvestmentType.values
+      .map((InvestmentType item) => item.toString().split('.').last)
+      .toList();
 }

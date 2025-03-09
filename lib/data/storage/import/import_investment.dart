@@ -34,9 +34,7 @@ void showImportInvestment({InvestmentImportFields? inputData}) {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         gapLarge(),
-        Expanded(
-          child: ImportInvestmentPanel(inputFields: inputData),
-        ),
+        Expanded(child: ImportInvestmentPanel(inputFields: inputData)),
       ],
     ),
   );
@@ -53,19 +51,30 @@ List<Widget> getActionButtons(
       onPressed: () {
         // Import
 
-        final Security security = Data().securities.getOrCreate(inputData.symbol);
+        final Security security = Data().securities.getOrCreate(
+          inputData.symbol,
+        );
 
         // add the Transaction to the Transaction list
-        final Payee payee = Data().aliases.findOrCreateNewPayee(security.fieldSymbol.value, fireNotification: false)!;
+        final Payee payee =
+            Data().aliases.findOrCreateNewPayee(
+              security.fieldSymbol.value,
+              fireNotification: false,
+            )!;
 
         final Transaction newTransaction = Transaction(date: inputData.date);
         newTransaction.fieldAccountId.value = inputData.account.uniqueId;
         newTransaction.fieldPayee.value = payee.uniqueId;
         newTransaction.fieldMemo.value = inputData.description;
         newTransaction.fieldCategoryId.value = inputData.category.uniqueId;
-        newTransaction.fieldAmount.value.setAmount(inputData.transactionAmount.toDouble());
+        newTransaction.fieldAmount.value.setAmount(
+          inputData.transactionAmount.toDouble(),
+        );
 
-        Data().transactions.appendNewMoneyObject(newTransaction, fireNotification: false);
+        Data().transactions.appendNewMoneyObject(
+          newTransaction,
+          fireNotification: false,
+        );
 
         // add the Investment transaction to the Investment list
         final Investment investmentToBeAdded = Investment(
@@ -77,7 +86,10 @@ List<Widget> getActionButtons(
           tradeType: fromInvestmentType(inputData.investmentType).index,
         );
 
-        Data().investments.appendNewMoneyObject(investmentToBeAdded, fireNotification: false);
+        Data().investments.appendNewMoneyObject(
+          investmentToBeAdded,
+          fireNotification: false,
+        );
         // Investment are linked to transactions by the uniqueId
         investmentToBeAdded.fieldId.value = newTransaction.uniqueId;
 

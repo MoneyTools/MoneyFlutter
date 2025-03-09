@@ -71,7 +71,9 @@ class MyListViewState<T> extends State<MyListView<T>> {
       itemBuilder: (final BuildContext context, final int index) {
         final MoneyObject itemInstance = getMoneyObjectFromIndex(index);
         final bool isLastItemOfTheList = (index == widget.list.length - 1);
-        final bool isSelected = widget.selectedItemIds.value.contains(itemInstance.uniqueId);
+        final bool isSelected = widget.selectedItemIds.value.contains(
+          itemInstance.uniqueId,
+        );
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: padding),
           child: Row(
@@ -86,7 +88,9 @@ class MyListViewState<T> extends State<MyListView<T>> {
                         selectedItem(itemInstance.uniqueId);
                       }
                       if (value == false) {
-                        widget.selectedItemIds.value.remove(itemInstance.uniqueId);
+                        widget.selectedItemIds.value.remove(
+                          itemInstance.uniqueId,
+                        );
                       }
                       widget.onSelectionChanged?.call(itemInstance.uniqueId);
                       FocusScope.of(context).requestFocus();
@@ -97,8 +101,12 @@ class MyListViewState<T> extends State<MyListView<T>> {
                 child: MyListItem(
                   onListViewKeyEvent: onListViewKeyEvent,
                   onTap: () {
-                    if (widget.selectedItemIds.value.contains(itemInstance.uniqueId)) {
-                      widget.selectedItemIds.value.remove(itemInstance.uniqueId);
+                    if (widget.selectedItemIds.value.contains(
+                      itemInstance.uniqueId,
+                    )) {
+                      widget.selectedItemIds.value.remove(
+                        itemInstance.uniqueId,
+                      );
                     } else {
                       if (widget.isMultiSelectionOn == false) {
                         // single selection
@@ -133,11 +141,14 @@ class MyListViewState<T> extends State<MyListView<T>> {
 
   /// return -1 if not found
   int getListIndexFromUniqueId(final int uniqueId) {
-    return widget.list.indexWhere((final T element) => (element as MoneyObject).uniqueId == uniqueId);
+    return widget.list.indexWhere(
+      (final T element) => (element as MoneyObject).uniqueId == uniqueId,
+    );
   }
 
   /// don't make it flush to the top, we do this in order to give some clue that there's other item above,
-  double getListOffsetOfItemIndex(final int index) => (index * _rowHeight); // * -1.5;
+  double getListOffsetOfItemIndex(final int index) =>
+      index * _rowHeight; // * -1.5;
 
   MoneyObject getMoneyObjectFromIndex(int index) {
     return widget.list[index] as MoneyObject;
@@ -151,12 +162,16 @@ class MyListViewState<T> extends State<MyListView<T>> {
   NumRange indexOfItemsInView() {
     final int itemCount = widget.list.length;
     final double scrollOffset = widget.scrollController.position.pixels;
-    final double viewportHeight = widget.scrollController.position.viewportDimension;
+    final double viewportHeight =
+        widget.scrollController.position.viewportDimension;
     final double scrollRange =
-        widget.scrollController.position.maxScrollExtent - widget.scrollController.position.minScrollExtent;
+        widget.scrollController.position.maxScrollExtent -
+        widget.scrollController.position.minScrollExtent;
 
-    final int firstVisibleItemIndex = (scrollOffset / (scrollRange + viewportHeight) * itemCount).ceil();
-    final int lastVisibleItemIndex = firstVisibleItemIndex + numberOfItemOnViewPort() - 1;
+    final int firstVisibleItemIndex =
+        (scrollOffset / (scrollRange + viewportHeight) * itemCount).ceil();
+    final int lastVisibleItemIndex =
+        firstVisibleItemIndex + numberOfItemOnViewPort() - 1;
 
     return NumRange(min: firstVisibleItemIndex, max: lastVisibleItemIndex);
   }
@@ -173,7 +188,9 @@ class MyListViewState<T> extends State<MyListView<T>> {
 
   int moveCurrentSelection(final int incrementBy) {
     int itemIdToSelect = -1;
-    final int firstSelectedIndex = getListIndexFromUniqueId(widget.selectedItemIds.value.first);
+    final int firstSelectedIndex = getListIndexFromUniqueId(
+      widget.selectedItemIds.value.first,
+    );
     if (firstSelectedIndex != -1) {
       final int newIndexToSelect = firstSelectedIndex + incrementBy; // go up
       if (isIndexInRange(widget.list, newIndexToSelect)) {
@@ -189,7 +206,8 @@ class MyListViewState<T> extends State<MyListView<T>> {
   }
 
   int numberOfItemOnViewPort() {
-    final double viewportHeight = widget.scrollController.position.viewportDimension;
+    final double viewportHeight =
+        widget.scrollController.position.viewportDimension;
     final int numberOfItemDisplayed = (viewportHeight / _rowHeight).floor();
     return numberOfItemDisplayed;
   }
@@ -227,7 +245,9 @@ class MyListViewState<T> extends State<MyListView<T>> {
         case LogicalKeyboardKey.end:
           final int idToSelect = (widget.list.last as MoneyObject).uniqueId;
           selectedItem(idToSelect);
-          widget.scrollController.jumpTo(getListOffsetOfItemIndex(widget.list.length - 1));
+          widget.scrollController.jumpTo(
+            getListOffsetOfItemIndex(widget.list.length - 1),
+          );
           return KeyEventResult.handled;
 
         case LogicalKeyboardKey.pageUp:
@@ -265,7 +285,11 @@ class MyListViewState<T> extends State<MyListView<T>> {
 
     if (isIndexInRange(widget.list, index)) {
       final NumRange viewingIndexRange = indexOfItemsInView();
-      if (isBetweenOrEqual(index, viewingIndexRange.min, viewingIndexRange.max)) {
+      if (isBetweenOrEqual(
+        index,
+        viewingIndexRange.min,
+        viewingIndexRange.max,
+      )) {
         // item is already on the screen
         // print('$index is range $viewingIndexRange');
       } else {
@@ -277,10 +301,10 @@ class MyListViewState<T> extends State<MyListView<T>> {
         late double desiredNewPosition;
         if (index == viewingIndexRange.min - 1) {
           // scroll up by one
-          desiredNewPosition = (widget.scrollController.offset - _rowHeight);
+          desiredNewPosition = widget.scrollController.offset - _rowHeight;
         } else {
           if (index == viewingIndexRange.max + 1) {
-            desiredNewPosition = (widget.scrollController.offset + (_rowHeight));
+            desiredNewPosition = widget.scrollController.offset + _rowHeight;
           } else {
             desiredNewPosition = _rowHeight * index;
           }
@@ -324,17 +348,23 @@ class MyListViewState<T> extends State<MyListView<T>> {
     return widget.displayAsColumn
         ? itemInstance.buildFieldsAsWidgetForLargeScreen(widget.fields)
         : Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: isSelected ? getColorTheme(context).primaryContainer : getColorTheme(context).surface,
-              border: Border(
-                bottom: BorderSide(
-                  width: 1,
-                  color: isLastItemOfTheList ? Colors.transparent : Theme.of(context).dividerColor,
-                ),
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color:
+                isSelected
+                    ? getColorTheme(context).primaryContainer
+                    : getColorTheme(context).surface,
+            border: Border(
+              bottom: BorderSide(
+                width: 1,
+                color:
+                    isLastItemOfTheList
+                        ? Colors.transparent
+                        : Theme.of(context).dividerColor,
               ),
             ),
-            child: itemInstance.buildFieldsAsWidgetForSmallScreen(),
-          );
+          ),
+          child: itemInstance.buildFieldsAsWidgetForSmallScreen(),
+        );
   }
 }

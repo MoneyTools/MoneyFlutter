@@ -22,13 +22,13 @@ class StockSplits extends MoneyObjects<StockSplit> {
 
   @override
   String toCSV() {
-    return MoneyObjects.getCsvFromList(
-      getListSortedById(),
-    );
+    return MoneyObjects.getCsvFromList(getListSortedById());
   }
 
   void clearSplitForSecurity(final int securityId) {
-    final Iterable<StockSplit> listOfSplitsFound = iterableList().where((StockSplit split) => split.fieldSecurity.value == securityId);
+    final Iterable<StockSplit> listOfSplitsFound = iterableList().where(
+      (StockSplit split) => split.fieldSecurity.value == securityId,
+    );
     for (final StockSplit ss in listOfSplitsFound) {
       deleteItem(ss);
     }
@@ -51,10 +51,17 @@ class StockSplits extends MoneyObjects<StockSplit> {
   /// Only add, no removal of existing splits
   void setStockSplits(final int securityId, final List<StockSplit> values) {
     final List<StockSplit> listOfSplitsFound =
-        iterableList().where((StockSplit split) => split.fieldSecurity.value == securityId).toList();
+        iterableList()
+            .where(
+              (StockSplit split) => split.fieldSecurity.value == securityId,
+            )
+            .toList();
     for (final StockSplit ss in values) {
       final StockSplit? foundMatch = listOfSplitsFound.firstWhereOrNull(
-        (StockSplit existingSplit) => isSameDateWithoutTime(existingSplit.fieldDate.value, ss.fieldDate.value),
+        (StockSplit existingSplit) => isSameDateWithoutTime(
+          existingSplit.fieldDate.value,
+          ss.fieldDate.value,
+        ),
       );
       if (foundMatch == null) {
         appendNewMoneyObject(ss, fireNotification: false);

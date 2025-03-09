@@ -6,10 +6,7 @@ import 'package:money/data/models/money_model.dart';
 import 'package:money/data/models/money_objects/categories/category.dart';
 
 class Distribution {
-  Distribution({
-    required this.category,
-    required this.amount,
-  });
+  Distribution({required this.category, required this.amount});
 
   final double amount;
   final Category category;
@@ -37,7 +34,8 @@ class _DistributionBarState extends State<DistributionBar> {
 
     final double sum = widget.segments.fold(
       0,
-      (double previousValue, Distribution element) => previousValue + element.amount.abs(),
+      (double previousValue, Distribution element) =>
+          previousValue + element.amount.abs(),
     );
     if (sum > 0) {
       for (final Distribution segment in widget.segments) {
@@ -45,7 +43,9 @@ class _DistributionBarState extends State<DistributionBar> {
       }
     }
     // Sort descending by percentage
-    widget.segments.sort((Distribution a, Distribution b) => b.percentage.compareTo(a.percentage));
+    widget.segments.sort(
+      (Distribution a, Distribution b) => b.percentage.compareTo(a.percentage),
+    );
 
     _buildWidgets(context);
 
@@ -69,17 +69,8 @@ class _DistributionBarState extends State<DistributionBar> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         gapSmall(),
-        Expanded(
-          flex: 2,
-          child: category.getColorAndNameWidget(),
-        ),
-        Expanded(
-          child: MoneyWidget(
-            amountModel: MoneyModel(
-              amount: value,
-            ),
-          ),
-        ),
+        Expanded(flex: 2, child: category.getColorAndNameWidget()),
+        Expanded(child: MoneyWidget(amountModel: MoneyModel(amount: value))),
         Opacity(
           opacity: category.isExpense ? 1 : 0,
           child: Checkbox(
@@ -89,7 +80,9 @@ class _DistributionBarState extends State<DistributionBar> {
                 setState(() {
                   category.mutateField(
                     'Type',
-                    value == true ? CategoryType.recurringExpense.index : CategoryType.expense.index,
+                    value == true
+                        ? CategoryType.recurringExpense.index
+                        : CategoryType.expense.index,
                     true,
                   );
                 });
@@ -104,12 +97,7 @@ class _DistributionBarState extends State<DistributionBar> {
   Widget _buildHorizontalBar() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(3), // Radius for rounded ends
-      child: SizedBox(
-        height: 20,
-        child: Row(
-          children: segmentWidgets,
-        ),
-      ),
+      child: SizedBox(height: 20, child: Row(children: segmentWidgets)),
     );
   }
 
@@ -122,7 +110,8 @@ class _DistributionBarState extends State<DistributionBar> {
 
   void _buildWidgets(final BuildContext context) {
     for (final Distribution segment in widget.segments) {
-      Color backgroundColorOfSegment = segment.category.getColorOrAncestorsColor();
+      Color backgroundColorOfSegment =
+          segment.category.getColorOrAncestorsColor();
       Color foregroundColorOfSegment = contrastColor(backgroundColorOfSegment);
 
       if (backgroundColorOfSegment.a == 0) {
@@ -139,7 +128,9 @@ class _DistributionBarState extends State<DistributionBar> {
             child: Container(
               alignment: Alignment.center,
               color: backgroundColorOfSegment,
-              margin: EdgeInsets.only(right: segment == widget.segments.last ? 0.0 : 1.0),
+              margin: EdgeInsets.only(
+                right: segment == widget.segments.last ? 0.0 : 1.0,
+              ),
               child: _builtSegmentOverlayText(
                 segment.percentage,
                 foregroundColorOfSegment,
@@ -150,11 +141,7 @@ class _DistributionBarState extends State<DistributionBar> {
       );
 
       detailRowWidgets.add(
-        _buildDetailRow(
-          context,
-          segment.category,
-          segment.amount,
-        ),
+        _buildDetailRow(context, segment.category, segment.amount),
       );
     }
   }

@@ -25,22 +25,16 @@ class AccountAlias extends MoneyObject {
       ..fieldAccountId.value = row.getString('AccountId');
   }
 
-  FieldString fieldAccountId = FieldString(
-    serializeName: 'AccountId',
-  );
+  FieldString fieldAccountId = FieldString(serializeName: 'AccountId');
 
-  FieldInt fieldFlags = FieldInt(
-    serializeName: 'Flags',
-    defaultValue: 0,
-  );
+  FieldInt fieldFlags = FieldInt(serializeName: 'Flags', defaultValue: 0);
 
   FieldId fieldId = FieldId(
-    getValueForSerialization: (final MoneyObject instance) => (instance as AccountAlias).uniqueId,
+    getValueForSerialization:
+        (final MoneyObject instance) => (instance as AccountAlias).uniqueId,
   );
 
-  FieldString fieldPattern = FieldString(
-    serializeName: 'Pattern',
-  );
+  FieldString fieldPattern = FieldString(serializeName: 'Pattern');
 
   // Fields for this instance
   @override

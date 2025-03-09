@@ -17,8 +17,6 @@ class OnlineAccounts extends MoneyObjects<OnlineAccount> {
 
   @override
   String toCSV() {
-    return MoneyObjects.getCsvFromList(
-      getListSortedById(),
-    );
+    return MoneyObjects.getCsvFromList(getListSortedById());
   }
 }

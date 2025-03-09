@@ -27,7 +27,8 @@ const String settingKeyBudgetViewAsExpenses = 'keyBudgetViewAsExpenses';
 const String settingKeyDarkMode = 'themeDarkMode';
 const String settingKeyTheme = 'themeColor';
 const String settingKeyDetailsPanelExpanded = 'isDetailsPanelExpanded';
-const String settingKeyDomainAccountsInfoTransactions = 'accountDetailsTransactions';
+const String settingKeyDomainAccountsInfoTransactions =
+    'accountDetailsTransactions';
 const String settingKeyFilterText = 'filterText';
 const String settingKeyFiltersColumns = 'filtersColumns';
 const String settingKeyIncludeClosedAccounts = 'includeClosedAccounts';
@@ -64,13 +65,21 @@ class Constants {
   // Keys
   static const Key keyAddNewItem = Key('key_add_new_item');
 
-  static const Key keyButtonAddTransactions = Key('key_button_add_transactions');
+  static const Key keyButtonAddTransactions = Key(
+    'key_button_add_transactions',
+  );
   static const Key keyButtonApplyOrDone = Key('key_button_apply_done');
   static const Key keyButtonCancel = Key('key_button_cancel');
   static const Key keyButtonEdit = Key('key_button_edit');
-  static const Key keyCheckboxToggleSelectAll = Key('key_checkbox_toggle_select_all');
-  static const Key keyCopyListToClipboardHeaderMain = Key('keyCopyListToClipboardHeaderMain');
-  static const Key keyCopyListToClipboardHeaderSidePanel = Key('keyCopyListToClipboardHeaderSidePanel');
+  static const Key keyCheckboxToggleSelectAll = Key(
+    'key_checkbox_toggle_select_all',
+  );
+  static const Key keyCopyListToClipboardHeaderMain = Key(
+    'keyCopyListToClipboardHeaderMain',
+  );
+  static const Key keyCopyListToClipboardHeaderSidePanel = Key(
+    'keyCopyListToClipboardHeaderSidePanel',
+  );
   static const Key keyDatePicker = Key('key_date_picker');
   static const Key keyDeleteSelectedItems = Key('key_delete_button');
   static const Key keyEditSelectedItems = Key('key_edit_item');
@@ -161,7 +170,7 @@ class IntValues {
 
   static int minUnsigned(int bitCount) {
     RangeError.checkValueInInterval(bitCount, 1, 64);
-    return (-1 << (bitCount - 1));
+    return -1 << (bitCount - 1);
   }
 }
 

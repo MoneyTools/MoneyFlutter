@@ -3,19 +3,14 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:money/data/models/constants.dart';
 
 class PolicyScreen extends StatelessWidget {
-  const PolicyScreen({
-    super.key,
-  });
+  const PolicyScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(SizeForPadding.large),
-        child: Markdown(
-          data: getMDContext(),
-          selectable: true,
-        ),
+        child: Markdown(data: getMDContext(), selectable: true),
       ),
     );
   }

@@ -11,8 +11,13 @@ extension ViewAccountsHelpers on ViewAccountsState {
   /// @return The total balance of the specified account types.
   double getTotalBalanceOfAccounts(final List<AccountType> types) {
     double total = 0.0;
-    Data().accounts.activeAccount(types).forEach(
-          (final Account x) => total += (x.fieldBalanceNormalized.getValueForDisplay(x) as MoneyModel).asDouble(),
+    Data().accounts
+        .activeAccount(types)
+        .forEach(
+          (final Account x) =>
+              total +=
+                  (x.fieldBalanceNormalized.getValueForDisplay(x) as MoneyModel)
+                      .asDouble(),
         );
     return total;
   }
@@ -69,7 +74,11 @@ extension ViewAccountsHelpers on ViewAccountsState {
         return <AccountType>[AccountType.credit, AccountType.creditLine];
 
       case 3:
-        return <AccountType>[AccountType.asset, AccountType.cash, AccountType.loan];
+        return <AccountType>[
+          AccountType.asset,
+          AccountType.cash,
+          AccountType.loan,
+        ];
 
       default: // all
         return <AccountType>[];
@@ -94,10 +103,7 @@ extension ViewAccountsHelpers on ViewAccountsState {
           });
         },
         borderRadius: const BorderRadius.all(Radius.circular(8)),
-        constraints: const BoxConstraints(
-          minHeight: 40.0,
-          minWidth: 100.0,
-        ),
+        constraints: const BoxConstraints(minHeight: 40.0, minWidth: 100.0),
         isSelected: _selectedPivot,
         children: _pivots,
       ),

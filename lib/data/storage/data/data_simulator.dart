@@ -98,13 +98,20 @@ class DataSimulator {
     final DateTime whenToStop = stopDate ?? DateTime.now();
     for (int i = yearInThePast * howManyPerYear; i >= 0; i--) {
       // Subtract the current month index from today's date
-      final DateTime date = DateTime(whenToStop.year, whenToStop.month - i, dayOfTheMonth);
+      final DateTime date = DateTime(
+        whenToStop.year,
+        whenToStop.month - i,
+        dayOfTheMonth,
+      );
       dates.add(date);
     }
     return dates;
   }
 
-  List<DateTime> generateListOfDatesRandom({required int year, required int howManyPerMonths}) {
+  List<DateTime> generateListOfDatesRandom({
+    required int year,
+    required int howManyPerMonths,
+  }) {
     final List<DateTime> dates = <DateTime>[];
 
     final DateTime today = DateTime.now();
@@ -130,7 +137,9 @@ class DataSimulator {
 
     final Random random = Random();
     final List<DateTime> dates = List<DateTime>.generate(count, (int index) {
-      final int randomDaysSinceTenYearsAgo = random.nextInt(365 * _numberOFYearInThePast);
+      final int randomDaysSinceTenYearsAgo = random.nextInt(
+        365 * _numberOFYearInThePast,
+      );
       return tenYearsAgo.add(Duration(days: randomDaysSinceTenYearsAgo));
     });
     return dates;
@@ -163,7 +172,8 @@ class DataSimulator {
 
   /// Generates a random amount between a minimum and maximum value.
   double getAmount(final int minValue, final int maxValue) {
-    final double amount = minValue + Random().nextDouble() * (maxValue - minValue);
+    final double amount =
+        minValue + Random().nextDouble() * (maxValue - minValue);
     return roundDouble(amount, 2);
   }
 
@@ -175,8 +185,13 @@ class DataSimulator {
   /// Returns the last day of the previous month for a given date.
   DateTime getLastDayOfPreviousMonth(DateTime date) {
     final DateTime previousMonth = DateTime(date.year, date.month - 1);
-    final int daysInPreviousMonth = DateTime(previousMonth.year, previousMonth.month + 1, 0).day;
-    return DateTime(previousMonth.year, previousMonth.month, daysInPreviousMonth).endOfDay;
+    final int daysInPreviousMonth =
+        DateTime(previousMonth.year, previousMonth.month + 1, 0).day;
+    return DateTime(
+      previousMonth.year,
+      previousMonth.month,
+      daysInPreviousMonth,
+    ).endOfDay;
   }
 
   double getRandomAmount(final int maxValue) {
@@ -186,7 +201,11 @@ class DataSimulator {
 
   int getShiftedYearFromNow(int numberOfYearFromToday) {
     final DateTime today = DateTime.now();
-    return DateTime(today.year + numberOfYearFromToday, today.month, today.day).year;
+    return DateTime(
+      today.year + numberOfYearFromToday,
+      today.month,
+      today.day,
+    ).year;
   }
 
   /// Adds an investment transaction to the account.
@@ -220,19 +239,25 @@ class DataSimulator {
     );
 
     Data().investments.appendMoneyObject(
-          Investment(
-            id: t.uniqueId,
-            investmentType: activity.index,
-            security: stockId,
-            unitPrice: tradePrice,
-            units: quantity,
-            tradeType: InvestmentTradeType.none.index,
-          ),
-        );
+      Investment(
+        id: t.uniqueId,
+        investmentType: activity.index,
+        security: stockId,
+        unitPrice: tradePrice,
+        units: quantity,
+        tradeType: InvestmentTradeType.none.index,
+      ),
+    );
   }
 
   /// Adds a new account to the data.
-  Account _addNewAccount(final int id, final String name, final String accountId, final int type, final String currency,) {
+  Account _addNewAccount(
+    final int id,
+    final String name,
+    final String accountId,
+    final int type,
+    final String currency,
+  ) {
     final Account account = Account.fromJson(<String, dynamic>{
       'Id': id,
       'Name': name,
@@ -299,7 +324,12 @@ class DataSimulator {
       date: date,
       amount: 250000,
       categoryId:
-          Data().categories.addNewCategory(name: 'Investment:PropertyValue', type: CategoryType.investment).uniqueId,
+          Data().categories
+              .addNewCategory(
+                name: 'Investment:PropertyValue',
+                type: CategoryType.investment,
+              )
+              .uniqueId,
       memo: 'Purchase house valued at 250K',
     );
 
@@ -342,21 +372,21 @@ class DataSimulator {
   /// Generates sample account aliases.
   void _generateAccountAliases() {
     Data().accountAliases.appendNewMoneyObject(
-          AccountAlias.fromJson(<String, dynamic>{
-            'Pattern': '*foo*',
-            'Flag': 0,
-            'AccountId': 'A12345',
-          }),
-          fireNotification: false,
-        );
+      AccountAlias.fromJson(<String, dynamic>{
+        'Pattern': '*foo*',
+        'Flag': 0,
+        'AccountId': 'A12345',
+      }),
+      fireNotification: false,
+    );
     Data().accountAliases.appendNewMoneyObject(
-          AccountAlias.fromJson(<String, dynamic>{
-            'Pattern': '*bar*',
-            'Flag': 0,
-            'AccountId': 'B987654',
-          }),
-          fireNotification: false,
-        );
+      AccountAlias.fromJson(<String, dynamic>{
+        'Pattern': '*bar*',
+        'Flag': 0,
+        'AccountId': 'B987654',
+      }),
+      fireNotification: false,
+    );
   }
 
   /// Generates sample accounts.
@@ -384,14 +414,14 @@ class DataSimulator {
       date: getDateShiftedByYears(-21, 1, 1),
       amount: 100000,
       payeeId: Data().payees.getByName('Lottery Win')!.uniqueId,
-      categoryId: Data()
-          .categories
-          .addNewCategory(
-            name: 'Misc Incomes',
-            type: CategoryType.income,
-            color: '#004400',
-          )
-          .uniqueId,
+      categoryId:
+          Data().categories
+              .addNewCategory(
+                name: 'Misc Incomes',
+                type: CategoryType.income,
+                color: '#004400',
+              )
+              .uniqueId,
       memo: 'Initial opening of account',
     );
 
@@ -420,49 +450,43 @@ class DataSimulator {
 
     /// Setup categories for this loans
     Data().categories.appendNewMoneyObject(
-          Category(
-            id: -1,
-            name: 'Lend',
-            description: '',
-            type: CategoryType.investment,
-            color: '#FFAAFFAA',
-          ),
-        );
+      Category(
+        id: -1,
+        name: 'Lend',
+        description: '',
+        type: CategoryType.investment,
+        color: '#FFAAFFAA',
+      ),
+    );
     _accountStartupLoan.fieldCategoryIdForInterest.value =
-        Data().categories.getOrCreate('Lend:Interest:Startup', CategoryType.investment).uniqueId;
+        Data().categories
+            .getOrCreate('Lend:Interest:Startup', CategoryType.investment)
+            .uniqueId;
     _accountStartupLoan.fieldCategoryIdForPrincipal.value =
-        Data().categories.getOrCreate('Lend:Principal:Startup', CategoryType.investment).uniqueId;
+        Data().categories
+            .getOrCreate('Lend:Principal:Startup', CategoryType.investment)
+            .uniqueId;
   }
 
   /// Generates sample aliases.
   void _generateAliases() {
     Data().aliases.appendNewMoneyObject(
-          Alias(
-            id: -1,
-            payeeId: 2,
-            pattern: 'ABC',
-            flags: AliasType.none.index,
-          ),
-          fireNotification: false,
-        );
+      Alias(id: -1, payeeId: 2, pattern: 'ABC', flags: AliasType.none.index),
+      fireNotification: false,
+    );
     Data().aliases.appendNewMoneyObject(
-          Alias(
-            id: -1,
-            payeeId: 2,
-            pattern: 'abc',
-            flags: AliasType.none.index,
-          ),
-          fireNotification: false,
-        );
+      Alias(id: -1, payeeId: 2, pattern: 'abc', flags: AliasType.none.index),
+      fireNotification: false,
+    );
     Data().aliases.appendNewMoneyObject(
-          Alias(
-            id: -1,
-            payeeId: 3,
-            pattern: '.*starbucks.*',
-            flags: AliasType.regex.index,
-          ),
-          fireNotification: false,
-        );
+      Alias(
+        id: -1,
+        payeeId: 3,
+        pattern: '.*starbucks.*',
+        flags: AliasType.regex.index,
+      ),
+      fireNotification: false,
+    );
   }
 
   /// Generates sample categories.
@@ -494,196 +518,190 @@ class DataSimulator {
     // Bills
     {
       _categoryBills = Data().categories.addNewCategory(
-            name: 'Bills',
-            type: CategoryType.expense,
-            color: '#FFFF0000',
-          );
+        name: 'Bills',
+        type: CategoryType.expense,
+        color: '#FFFF0000',
+      );
       _categoryBills.fieldBudget.value.setAmount(100.00);
       _categoryBillsElectricity = Data().categories.addNewCategory(
-            parentId: _categoryBills.uniqueId,
-            name: 'Electricity',
-            type: CategoryType.recurringExpense,
-          );
+        parentId: _categoryBills.uniqueId,
+        name: 'Electricity',
+        type: CategoryType.recurringExpense,
+      );
 
       Data().categories.addNewCategory(
-            parentId: _categoryBills.uniqueId,
-            name: 'School',
-            description: '',
-            type: CategoryType.expense,
-          );
+        parentId: _categoryBills.uniqueId,
+        name: 'School',
+        description: '',
+        type: CategoryType.expense,
+      );
 
       _categoryBillsPhone = Data().categories.addNewCategory(
-            parentId: _categoryBills.uniqueId,
-            name: 'Phone',
-            type: CategoryType.recurringExpense,
-          );
+        parentId: _categoryBills.uniqueId,
+        name: 'Phone',
+        type: CategoryType.recurringExpense,
+      );
 
       _categoryBillsTV = Data().categories.addNewCategory(
-            parentId: _categoryBills.uniqueId,
-            name: 'TV',
-            type: CategoryType.recurringExpense,
-          );
+        parentId: _categoryBills.uniqueId,
+        name: 'TV',
+        type: CategoryType.recurringExpense,
+      );
 
       _categoryBillsInternet = Data().categories.addNewCategory(
-            parentId: _categoryBills.uniqueId,
-            name: 'Internet',
-            type: CategoryType.recurringExpense,
-          );
+        parentId: _categoryBills.uniqueId,
+        name: 'Internet',
+        type: CategoryType.recurringExpense,
+      );
     }
 
     // Food
     {
       _categoryFood = Data().categories.addNewCategory(
-            name: 'Food',
-            type: CategoryType.expense,
-            color: '#FFFF22FF',
-          );
+        name: 'Food',
+        type: CategoryType.expense,
+        color: '#FFFF22FF',
+      );
 
       _categoryFoodGrocery = Data().categories.addNewCategory(
-            parentId: _categoryFood.uniqueId,
-            name: 'Grocery',
-            type: CategoryType.recurringExpense,
-          );
+        parentId: _categoryFood.uniqueId,
+        name: 'Grocery',
+        type: CategoryType.recurringExpense,
+      );
 
       _categoryFoodRestaurant = Data().categories.addNewCategory(
-            parentId: _categoryFood.uniqueId,
-            name: 'Restaurant',
-            type: CategoryType.recurringExpense,
-          );
+        parentId: _categoryFood.uniqueId,
+        name: 'Restaurant',
+        type: CategoryType.recurringExpense,
+      );
     }
 
     // Subscriptions
     {
       _categorySubscriptions = Data().categories.addNewCategory(
-            name: 'Subscriptions',
-            type: CategoryType.expense,
-            color: '#FFFFaaaa',
-          );
+        name: 'Subscriptions',
+        type: CategoryType.expense,
+        color: '#FFFFaaaa',
+      );
 
       _categorySubscriptionsGym = Data().categories.addNewCategory(
-            parentId: _categorySubscriptions.uniqueId,
-            name: 'Gym',
-            type: CategoryType.recurringExpense,
-          );
+        parentId: _categorySubscriptions.uniqueId,
+        name: 'Gym',
+        type: CategoryType.recurringExpense,
+      );
 
       _categorySubscriptionsStreaming = Data().categories.addNewCategory(
-            parentId: _categorySubscriptions.uniqueId,
-            name: 'Streaming',
-            type: CategoryType.recurringExpense,
-          );
+        parentId: _categorySubscriptions.uniqueId,
+        name: 'Streaming',
+        type: CategoryType.recurringExpense,
+      );
 
       _categorySubscriptionTransport = Data().categories.addNewCategory(
-            parentId: _categorySubscriptions.uniqueId,
-            name: 'Transportation',
-            type: CategoryType.recurringExpense,
-          );
+        parentId: _categorySubscriptions.uniqueId,
+        name: 'Transportation',
+        type: CategoryType.recurringExpense,
+      );
     }
 
     // Salary
     {
       _categorySalary = Data().categories.addNewCategory(
-            parentId: _categoryFood.uniqueId,
-            name: 'Salary',
-            type: CategoryType.income,
-            color: '#FF00FF00',
-            description: 'Main income',
-          );
+        parentId: _categoryFood.uniqueId,
+        name: 'Salary',
+        type: CategoryType.income,
+        color: '#FF00FF00',
+        description: 'Main income',
+      );
 
       _categorySalaryPaycheck = Data().categories.addNewCategory(
-            parentId: _categorySalary.uniqueId,
-            name: 'Paycheck',
-          );
+        parentId: _categorySalary.uniqueId,
+        name: 'Paycheck',
+      );
       _categorySalaryPaycheck.fieldBudget.value.setAmount(900);
 
       _categorySalaryBonus = Data().categories.addNewCategory(
-            parentId: _categorySalary.uniqueId,
-            name: 'Bonus',
-          );
+        parentId: _categorySalary.uniqueId,
+        name: 'Bonus',
+      );
     }
 
     // Investment
     {
       Data().categories.addNewCategory(
-            name: 'Investment',
-            description: '',
-            type: CategoryType.investment,
-            color: '#FF1122DD',
-          );
+        name: 'Investment',
+        description: '',
+        type: CategoryType.investment,
+        color: '#FF1122DD',
+      );
 
       _categoryInvestmentTrades = Data().categories.addNewCategory(
-            name: 'Investment:Trades',
-          );
+        name: 'Investment:Trades',
+      );
 
       Data().categories.addNewCategory(
-            name: 'Properties',
-            description: '',
-            type: CategoryType.investment,
-            color: '#FF11FFDD',
-          );
+        name: 'Properties',
+        description: '',
+        type: CategoryType.investment,
+        color: '#FF11FFDD',
+      );
     }
 
     Data().categories.addNewCategory(
-          name: 'Rental',
-          description: '',
-          type: CategoryType.income,
-          color: '#FF11FF33',
-        );
+      name: 'Rental',
+      description: '',
+      type: CategoryType.income,
+      color: '#FF11FF33',
+    );
 
     // Loans
     {
       final Category homeLoan = Data().categories.addNewCategory(
-            name: 'HomeLoans',
-            description: '',
-            type: CategoryType.expense,
-            color: '#FFBB2233',
-          );
+        name: 'HomeLoans',
+        description: '',
+        type: CategoryType.expense,
+        color: '#FFBB2233',
+      );
 
       _categoryHomeLoanDownPayment = Data().categories.addNewCategory(
-            parentId: homeLoan.uniqueId,
-            name: 'DownPayment',
-            type: CategoryType.investment,
-          );
+        parentId: homeLoan.uniqueId,
+        name: 'DownPayment',
+        type: CategoryType.investment,
+      );
 
       _categoryHomeLoanMortgagePrincipal = Data().categories.addNewCategory(
-            name: 'HomeLoans:Mortgage:Principal',
-            type: CategoryType.investment,
-          );
+        name: 'HomeLoans:Mortgage:Principal',
+        type: CategoryType.investment,
+      );
 
       _categoryHomeLoanMortgageInterest = Data().categories.addNewCategory(
-            name: 'HomeLoans:Mortgage:Interest',
-            type: CategoryType.expense,
-          );
+        name: 'HomeLoans:Mortgage:Interest',
+        type: CategoryType.expense,
+      );
     }
 
     Data().categories.addNewCategory(
-          name: 'Saving',
-          description: '',
-          type: CategoryType.income,
-          color: '#FFBB2233',
-        );
+      name: 'Saving',
+      description: '',
+      type: CategoryType.income,
+      color: '#FFBB2233',
+    );
 
     Data().categories.addNewCategory(
-          name: 'Travel',
-          description: '',
-          type: CategoryType.expense,
-          color: '#FFBB22FF',
-        );
+      name: 'Travel',
+      description: '',
+      type: CategoryType.expense,
+      color: '#FFBB22FF',
+    );
 
     {
       Data().categories.addNewCategory(
-            name: 'Taxes',
-            type: CategoryType.expense,
-            color: '#FFA1A2A3',
-          );
-      Data().categories.addNewCategory(
-            name: 'Taxes:IRS',
-          );
-      Data().categories.addNewCategory(
-            name: 'Taxes:Property',
-          );
-      Data().categories.addNewCategory(
-            name: 'Taxes:School',
-          );
+        name: 'Taxes',
+        type: CategoryType.expense,
+        color: '#FFA1A2A3',
+      );
+      Data().categories.addNewCategory(name: 'Taxes:IRS');
+      Data().categories.addNewCategory(name: 'Taxes:Property');
+      Data().categories.addNewCategory(name: 'Taxes:School');
     }
   }
 
@@ -737,9 +755,11 @@ class DataSimulator {
   }
 
   void _generateEvents() {
-    final Category categoryIdForProperties = Data().categories.getByName('Properties')!;
+    final Category categoryIdForProperties =
+        Data().categories.getByName('Properties')!;
 
-    final Category categoryIdForTravels = Data().categories.getByName('Travel')!;
+    final Category categoryIdForTravels =
+        Data().categories.getByName('Travel')!;
 
     Data().events.loadFromJson(<MyJson>[
       <String, dynamic>{
@@ -791,7 +811,7 @@ class DataSimulator {
         'End': '2020-07-05',
         'People': 'Bob, John, Paul, Ringo',
         'Memo': 'My trip to Vegas with buddies',
-      }
+      },
     ]);
   }
 
@@ -802,23 +822,65 @@ class DataSimulator {
     // Trade Apple 'AAPL'
     {
       // Buy
-      _addInvestment(_accountForInvestments, '2010-06-20', idStockApple, InvestmentType.buy, 100, 199.99);
+      _addInvestment(
+        _accountForInvestments,
+        '2010-06-20',
+        idStockApple,
+        InvestmentType.buy,
+        100,
+        199.99,
+      );
       // Sell
-      _addInvestment(_accountForInvestments, '2000-07-21', idStockApple, InvestmentType.sell, 100, 300.00);
+      _addInvestment(
+        _accountForInvestments,
+        '2000-07-21',
+        idStockApple,
+        InvestmentType.sell,
+        100,
+        300.00,
+      );
 
       // add Dividends
-      _addInvestment(_accountForInvestments, '2012-01-01', idStockApple, InvestmentType.dividend, 1, 5000.00);
+      _addInvestment(
+        _accountForInvestments,
+        '2012-01-01',
+        idStockApple,
+        InvestmentType.dividend,
+        1,
+        5000.00,
+      );
 
       // Buy
-      _addInvestment(_accountForInvestments, '2020-08-22', idStockApple, InvestmentType.buy, 100, 400.00);
+      _addInvestment(
+        _accountForInvestments,
+        '2020-08-22',
+        idStockApple,
+        InvestmentType.buy,
+        100,
+        400.00,
+      );
     }
     // Trade Ford 'F'
     {
       // Buy
-      _addInvestment(_accountForInvestments, '2012-07-26', idStockFord, InvestmentType.buy, 1000, 8.86);
+      _addInvestment(
+        _accountForInvestments,
+        '2012-07-26',
+        idStockFord,
+        InvestmentType.buy,
+        1000,
+        8.86,
+      );
 
       // Sell
-      _addInvestment(_accountForInvestments, '2013-01-15', idStockFord, InvestmentType.sell, 1000, 14.14);
+      _addInvestment(
+        _accountForInvestments,
+        '2013-01-15',
+        idStockFord,
+        InvestmentType.sell,
+        1000,
+        14.14,
+      );
     }
   }
 
@@ -840,7 +902,11 @@ class DataSimulator {
       memo: 'Invest in project goto Mars',
     );
 
-    final List<DateTime> dates = generateListOfDates(yearInThePast: 5, howManyPerYear: 12, dayOfTheMonth: 9);
+    final List<DateTime> dates = generateListOfDates(
+      yearInThePast: 5,
+      howManyPerYear: 12,
+      dayOfTheMonth: 9,
+    );
 
     for (final DateTime date in dates) {
       if (loanAmount < 0) {
@@ -849,7 +915,7 @@ class DataSimulator {
 
       final double annuallyInterest = loanAmount * loanRate;
       double monthlyInterest = annuallyInterest / 12;
-      double principalForThisMonday = (monthlyPayment - monthlyInterest);
+      double principalForThisMonday = monthlyPayment - monthlyInterest;
       if (isConsideredZero(monthlyInterest)) {
         monthlyInterest = 0;
         principalForThisMonday = loanAmount;
@@ -861,15 +927,15 @@ class DataSimulator {
       loanAmount -= principalForThisMonday;
 
       Data().loanPayments.appendNewMoneyObject(
-            LoanPayment(
-              id: -1,
-              accountId: _accountStartupLoan.uniqueId,
-              date: date,
-              principal: -principalForThisMonday,
-              interest: monthlyInterest,
-              memo: '',
-            ),
-          );
+        LoanPayment(
+          id: -1,
+          accountId: _accountStartupLoan.uniqueId,
+          date: date,
+          principal: -principalForThisMonday,
+          interest: monthlyInterest,
+          memo: '',
+        ),
+      );
 
       // Show the payment to the lender
       _addTransactionAccountDatePayeeCategory(
@@ -886,23 +952,15 @@ class DataSimulator {
   void _generateOnlineAccounts() {
     // Pretend to load
     Data().onlineAccounts.loadFromJson(<MyJson>[
-      <String, dynamic>{
-        'Id': 0,
-        'Name': 'test1',
-      },
-      <String, dynamic>{
-        'Id': 1,
-        'Name': 'test2',
-      },
+      <String, dynamic>{'Id': 0, 'Name': 'test1'},
+      <String, dynamic>{'Id': 1, 'Name': 'test2'},
     ]);
 
     // Also add a new one
     Data().onlineAccounts.appendNewMoneyObject(
-          OnlineAccount.fromJson(<String, dynamic>{
-            'Name': 'test3',
-          }),
-          fireNotification: false,
-        );
+      OnlineAccount.fromJson(<String, dynamic>{'Name': 'test3'}),
+      fireNotification: false,
+    );
   }
 
   void _generatePayees() {
@@ -921,12 +979,27 @@ class DataSimulator {
         'Id': 0,
         'Name': 'AirBnB',
         'Address': 'One Washington DC',
-        'CategoryForIncome': Data().categories.getOrCreate('RentalIncome', CategoryType.income).uniqueId,
-        'CategoryForInterest': Data().categories.getOrCreate('RentalInterest', CategoryType.expense).uniqueId,
-        'CategoryForTaxes': Data().categories.getOrCreate('RentalTaxes', CategoryType.expense).uniqueId,
-        'CategoryForMaintenance': Data().categories.getOrCreate('RentalMaintenance', CategoryType.expense).uniqueId,
-        'CategoryForManagement': Data().categories.getOrCreate('RentalManagement', CategoryType.expense).uniqueId,
-      }
+        'CategoryForIncome':
+            Data().categories
+                .getOrCreate('RentalIncome', CategoryType.income)
+                .uniqueId,
+        'CategoryForInterest':
+            Data().categories
+                .getOrCreate('RentalInterest', CategoryType.expense)
+                .uniqueId,
+        'CategoryForTaxes':
+            Data().categories
+                .getOrCreate('RentalTaxes', CategoryType.expense)
+                .uniqueId,
+        'CategoryForMaintenance':
+            Data().categories
+                .getOrCreate('RentalMaintenance', CategoryType.expense)
+                .uniqueId,
+        'CategoryForManagement':
+            Data().categories
+                .getOrCreate('RentalManagement', CategoryType.expense)
+                .uniqueId,
+      },
     ]);
 
     // Rent Units
@@ -944,52 +1017,54 @@ class DataSimulator {
         'Building': 0,
         'Renter': 'Sue Richard',
         'Note': 'Renting for 6 months',
-      }
+      },
     ]);
   }
 
   /// Generates sample stock data.
   void _generateStocks() {
     Data().securities.appendMoneyObject(
-          Security(
-            id: idStockApple,
-            name: 'Apple Inc',
-            symbol: 'AAPL',
-            price: 200.0,
-            lastPrice: 201.0,
-            cuspid: '',
-            securityType: SecurityType.equity.index,
-            taxable: 0,
-            priceDate: DateTime(2015, 1, 1),
-          ),
-        );
+      Security(
+        id: idStockApple,
+        name: 'Apple Inc',
+        symbol: 'AAPL',
+        price: 200.0,
+        lastPrice: 201.0,
+        cuspid: '',
+        securityType: SecurityType.equity.index,
+        taxable: 0,
+        priceDate: DateTime(2015, 1, 1),
+      ),
+    );
     Data().securities.appendMoneyObject(
-          Security(
-            id: idStockFord,
-            name: 'Ford',
-            symbol: 'F',
-            price: 7.0,
-            lastPrice: 7.10,
-            cuspid: '',
-            securityType: SecurityType.equity.index,
-            taxable: 0,
-            priceDate: DateTime(2020, 1, 1),
-          ),
-        );
+      Security(
+        id: idStockFord,
+        name: 'Ford',
+        symbol: 'F',
+        price: 7.0,
+        lastPrice: 7.10,
+        cuspid: '',
+        securityType: SecurityType.equity.index,
+        taxable: 0,
+        priceDate: DateTime(2020, 1, 1),
+      ),
+    );
 
     Data().stockSplits.appendNewMoneyObject(
-          StockSplit.fromJson(<String, dynamic>{
-            'Date': '2005-05-05',
-            'Security': idStockApple, // AAPL
-            'Numerator': 2,
-            'Denominator': 1,
-          }),
-        );
+      StockSplit.fromJson(<String, dynamic>{
+        'Date': '2005-05-05',
+        'Security': idStockApple, // AAPL
+        'Numerator': 2,
+        'Denominator': 1,
+      }),
+    );
   }
 
   /// 4 years of GYM and Netflix
   void _generateSubscriptionsOnCheckingAccount() {
-    final DateTime startDate = _today.subtract(Duration(days: (365.25 * _numberOFYearInThePast).toInt()));
+    final DateTime startDate = _today.subtract(
+      Duration(days: (365.25 * _numberOFYearInThePast).toInt()),
+    );
 
     // Electricity
     generateTransactionsMonthlyExpenses(
@@ -1050,7 +1125,9 @@ class DataSimulator {
     );
 
     // 5 years of netflix
-    final DateTime dateForNetflix = _today.subtract(const Duration(days: 365 * 5));
+    final DateTime dateForNetflix = _today.subtract(
+      const Duration(days: 365 * 5),
+    );
     generateTransactionsMonthlyExpenses(
       account: _accountCreditCardUSD,
       payeeName: 'Netflix',
@@ -1076,63 +1153,75 @@ class DataSimulator {
         'TaxDate': DateTime(2020, 1, 1),
         'TaxYear': 2020,
         'Transaction': 1,
-      }
+      },
     ]);
   }
 
   /// Generates credit card transactions for the past 20 years.
   void _generateTransactionsForCreditCard() {
-    final List<DateTime> dates = generateListOfDatesRandom(year: _numberOFYearInThePast, howManyPerMonths: 4);
+    final List<DateTime> dates = generateListOfDatesRandom(
+      year: _numberOFYearInThePast,
+      howManyPerMonths: 4,
+    );
 
     for (final DateTime date in dates) {
-      final List<Object> selectedCategory = <List<Object>>[
-        <Object>[
-          _categorySubscriptionTransport,
+      final List<Object> selectedCategory =
           <List<Object>>[
-            <Object>['City Bus', 3],
-            <Object>['Taxi', 20],
-            <Object>['Uber', 30],
-          ],
-        ],
-        <Object>[
-          _categoryFoodGrocery,
-          <List<Object>>[
-            <Object>['TheFoodStore', 50],
-            <Object>['SafeWay', 80],
-            <Object>['WholeFood', 200],
-          ],
-        ],
-        <Object>[
-          _categoryFoodRestaurant,
-          <List<Object>>[
-            <Object>['Starbucks', 10],
-            <Object>['AppleBees', 100],
-            <Object>['PizzaHut', 20],
-          ],
-        ],
-      ].getRandomItem();
+            <Object>[
+              _categorySubscriptionTransport,
+              <List<Object>>[
+                <Object>['City Bus', 3],
+                <Object>['Taxi', 20],
+                <Object>['Uber', 30],
+              ],
+            ],
+            <Object>[
+              _categoryFoodGrocery,
+              <List<Object>>[
+                <Object>['TheFoodStore', 50],
+                <Object>['SafeWay', 80],
+                <Object>['WholeFood', 200],
+              ],
+            ],
+            <Object>[
+              _categoryFoodRestaurant,
+              <List<Object>>[
+                <Object>['Starbucks', 10],
+                <Object>['AppleBees', 100],
+                <Object>['PizzaHut', 20],
+              ],
+            ],
+          ].getRandomItem();
 
       final Category category = selectedCategory[0] as Category;
 
-      final dynamic payeeAndMaxAmount = (selectedCategory[1] as List<Object>).getRandomItem();
+      final dynamic payeeAndMaxAmount =
+          (selectedCategory[1] as List<Object>).getRandomItem();
       double maxSpendingOnCreditCard = (payeeAndMaxAmount[1] as num).toDouble();
 
       final Transaction source = _addTransactionAccountDatePayeeCategory(
         account: _accountCreditCardUSD,
         date: date,
-        payeeId: Data().payees.getOrCreate(payeeAndMaxAmount[0] as String).uniqueId,
+        payeeId:
+            Data().payees.getOrCreate(payeeAndMaxAmount[0] as String).uniqueId,
         categoryId: category.uniqueId,
       );
       if (date.isAfter(_dateOfFirstBigJob)) {
         // big job and spends more
         maxSpendingOnCreditCard = maxSpendingOnCreditCard * 3;
       }
-      source.fieldAmount.setAmount(-getRandomAmount(maxSpendingOnCreditCard.toInt()));
+      source.fieldAmount.setAmount(
+        -getRandomAmount(maxSpendingOnCreditCard.toInt()),
+      );
     }
   }
 
   void _generateTransactionsSalary() {
-    final List<DateTime> dates = generateListOfDates(yearInThePast: _numberOFYearInThePast, howManyPerYear: 12, dayOfTheMonth: 5);
+    final List<DateTime> dates = generateListOfDates(
+      yearInThePast: _numberOFYearInThePast,
+      howManyPerYear: 12,
+      dayOfTheMonth: 5,
+    );
     _dateOfFirstBigJob = dates[dates.length ~/ 2];
 
     double yearlySalary = _startingYearlySalaryFirstJob;
@@ -1209,7 +1298,10 @@ class DataSimulator {
 
     final List<Transaction> list = _accountCreditCardUSD.getTransaction();
 
-    list.sort((Transaction a, Transaction b) => sortByDate(a.fieldDateTime.value, b.fieldDateTime.value, true));
+    list.sort(
+      (Transaction a, Transaction b) =>
+          sortByDate(a.fieldDateTime.value, b.fieldDateTime.value, true),
+    );
     int lastMonth = list.first.fieldDateTime.value!.month;
 
     for (final Transaction t in list) {
@@ -1233,7 +1325,11 @@ class DataSimulator {
     final Payee payeeLandLord = Data().payees.getOrCreate('TheLandlord');
     final Payee payeeForHomeLoan = Data().payees.getOrCreate('HomeLoanBank');
     // Iterate over the last 'n' years of loan paid each month
-    final List<DateTime> dates = generateListOfDates(yearInThePast: _numberOFYearInThePast, howManyPerYear: 12, dayOfTheMonth: 10);
+    final List<DateTime> dates = generateListOfDates(
+      yearInThePast: _numberOFYearInThePast,
+      howManyPerYear: 12,
+      dayOfTheMonth: 10,
+    );
     final DateTime midPointInTime = dates[dates.length ~/ 2];
 
     bool boughtHome = false;
@@ -1246,7 +1342,10 @@ class DataSimulator {
           account: _accountBankUSA,
           date: date,
           payeeId: payeeLandLord.uniqueId,
-          categoryId: Data().categories.getOrCreate('Bills:Rent', CategoryType.expense).uniqueId,
+          categoryId:
+              Data().categories
+                  .getOrCreate('Bills:Rent', CategoryType.expense)
+                  .uniqueId,
           amount: _monthlyRent,
           memo: 'Pay Rent #${++numberOfRentPayment}',
         );

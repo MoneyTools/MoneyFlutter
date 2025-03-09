@@ -18,7 +18,10 @@ void showImportTransactionsFromTextInput(
 
   Account account = Data().accounts.getMostRecentlySelectedAccount();
 
-  final ValuesParser parser = ValuesParser(dateFormat: 'MM/dd/yyyy', currency: 'USD');
+  final ValuesParser parser = ValuesParser(
+    dateFormat: 'MM/dd/yyyy',
+    currency: 'USD',
+  );
 
   final List<Widget> actionButtons = <Widget>[
     // Button - Import
@@ -94,7 +97,10 @@ void addNewTransactions(
   }
 
   for (final Transaction transactionToAdd in transactionsNew) {
-    Data().transactions.appendNewMoneyObject(transactionToAdd, fireNotification: false);
+    Data().transactions.appendNewMoneyObject(
+      transactionToAdd,
+      fireNotification: false,
+    );
   }
   Data().updateAll();
 

@@ -40,13 +40,19 @@ void myShowDialogAndActionsForMoneyObjects({
 
   return adaptiveScreenSizeDialog(
     context: context,
-    title: moneyObjects.length == 1 ? title : '${getIntAsText(moneyObjects.length)} $title',
+    title:
+        moneyObjects.length == 1
+            ? title
+            : '${getIntAsText(moneyObjects.length)} $title',
     captionForClose: null, // this will hide the close button
     child: DialogMutateMoneyObject(
       moneyObject: rollup,
       onApplyChange: (MoneyObject objectChanged) {
         final MyJson afterEditing = rollup.getPersistableJSon();
-        final MyJson diff = myJsonDiff(before: beforeEditing, after: afterEditing);
+        final MyJson diff = myJsonDiff(
+          before: beforeEditing,
+          after: afterEditing,
+        );
 
         if (diff.keys.isNotEmpty) {
           for (final MoneyObject m in moneyObjects) {
@@ -74,7 +80,8 @@ class DialogMutateMoneyObject extends StatefulWidget {
   final void Function(MoneyObject) onApplyChange;
 
   @override
-  State<DialogMutateMoneyObject> createState() => _DialogMutateMoneyObjectState();
+  State<DialogMutateMoneyObject> createState() =>
+      _DialogMutateMoneyObjectState();
 }
 
 class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
@@ -100,7 +107,8 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
               children: _moneyObject.buildListOfNamesValuesWidgets(
                 onEdit: (bool wasModified) {
                   setState(() {
-                    dataWasModified = wasModified || MoneyObject.isDataModified(_moneyObject);
+                    dataWasModified =
+                        wasModified || MoneyObject.isDataModified(_moneyObject);
                   });
                 },
               ),

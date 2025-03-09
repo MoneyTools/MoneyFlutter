@@ -13,9 +13,4 @@ class SecurityGroup {
   SecurityType? type;
 }
 
-enum TaxStatus {
-  taxable,
-  taxDeferred,
-  taxFree,
-  any,
-}
+enum TaxStatus { taxable, taxDeferred, taxFree, any }

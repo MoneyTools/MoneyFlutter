@@ -11,22 +11,22 @@ import 'package:money/data/storage/import/import_data.dart';
 ///
 /// schema https://www.w3.org/2000/10/swap/pim/qif-doc/QIF-doc.htm
 ///
-void importQIF(
-  final BuildContext context,
-  final String filePath,
-) {
+void importQIF(final BuildContext context, final String filePath) {
   final File file = File(filePath);
 
-  file.readAsLines().then((final List<String> lines) {
-    final ImportData importData = loadQIF(lines);
-    importData.fileType = 'QIF';
-    if (context.mounted) {
-      showAndConfirmTransactionToImport(context, importData);
-    }
-  }).catchError((final dynamic e) {
-    logger.e('Error reading file: $e');
-    SnackBarService.displayError(message: e.toString(), autoDismiss: false);
-  });
+  file
+      .readAsLines()
+      .then((final List<String> lines) {
+        final ImportData importData = loadQIF(lines);
+        importData.fileType = 'QIF';
+        if (context.mounted) {
+          showAndConfirmTransactionToImport(context, importData);
+        }
+      })
+      .catchError((final dynamic e) {
+        logger.e('Error reading file: $e');
+        SnackBarService.displayError(message: e.toString(), autoDismiss: false);
+      });
 }
 
 ImportData loadQIF(final List<String> lines) {

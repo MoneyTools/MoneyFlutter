@@ -3,13 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:money/views/splash_page.dart';
 
 void main() {
-  testWidgets('SplashScreen displays title and progress indicator', (WidgetTester tester) async {
+  testWidgets('SplashScreen displays title and progress indicator', (
+    WidgetTester tester,
+  ) async {
     // Arrange: Build the SplashScreen widget.
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: SplashScreen(),
-      ),
-    );
+    await tester.pumpWidget(const MaterialApp(home: SplashScreen()));
 
     // Act: Trigger a frame.
     // await tester.pumpAndSettle();

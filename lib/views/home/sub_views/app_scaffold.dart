@@ -6,14 +6,8 @@ Widget myScaffold(
   final PreferredSizeWidget? appBar,
   final Widget body,
 ) {
-  final MediaQueryData data = MediaQuery.of(context).copyWith(
-    textScaler: TextScaler.linear(PreferenceController.to.textScale),
-  );
-  return MediaQuery(
-    data: data,
-    child: Scaffold(
-      appBar: appBar,
-      body: body,
-    ),
-  );
+  final MediaQueryData data = MediaQuery.of(
+    context,
+  ).copyWith(textScaler: TextScaler.linear(PreferenceController.to.textScale));
+  return MediaQuery(data: data, child: Scaffold(appBar: appBar, body: body));
 }

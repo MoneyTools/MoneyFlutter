@@ -61,10 +61,7 @@ MyJson myJsonDiff({required MyJson before, required MyJson after}) {
   after.forEach((String key, dynamic valueAfter) {
     final dynamic valueBefore = before[key];
     if (valueBefore != valueAfter) {
-      diff[key] = <String, dynamic>{
-        'before': valueBefore,
-        'after': valueAfter,
-      };
+      diff[key] = <String, dynamic>{'before': valueBefore, 'after': valueAfter};
     }
   });
   return diff;
@@ -97,10 +94,7 @@ extension MyJsonExtensions on MyJson {
   /// @param key The key to retrieve the boolean value for.
   /// @param defaultIfNotFound The default value to return if the key is not found or the value cannot be parsed as a boolean. Defaults to `false`.
   /// @return The boolean value associated with the key, or the default value if the key is not found or the value is not a boolean.
-  bool getBool(
-    final String key, [
-    final bool defaultIfNotFound = false,
-  ]) {
+  bool getBool(final String key, [final bool defaultIfNotFound = false]) {
     final dynamic value = this[key];
     if (value == null) {
       return defaultIfNotFound;
@@ -120,10 +114,7 @@ extension MyJsonExtensions on MyJson {
   /// '1999-12-25T00:00:00.000'
   /// or
   /// '1999-12-25'
-  DateTime? getDate(
-    final String key, {
-    final DateTime? defaultIfNotFound,
-  }) {
+  DateTime? getDate(final String key, {final DateTime? defaultIfNotFound}) {
     final dynamic value = this[key];
 
     if (value == null || value.toString().isEmpty) {
@@ -147,17 +138,14 @@ extension MyJsonExtensions on MyJson {
   /// @param key The key to retrieve the double value for.
   /// @param defaultIfNotFound The default value to return if the key is not found or the value cannot be parsed as a double. Defaults to `0.0`.
   /// @return The double value associated with the key, or the default value if the key is not found or the value cannot be parsed as a double.
-  double getDouble(
-    final String key, [
-    final double defaultIfNotFound = 0.0,
-  ]) {
+  double getDouble(final String key, [final double defaultIfNotFound = 0.0]) {
     final dynamic value = this[key];
     if (value == null) {
       return defaultIfNotFound;
     }
     try {
       if (value is int) {
-        return (value).toDouble();
+        return value.toDouble();
       }
       if (value is String) {
         return attemptToGetDoubleFromText(value) ?? 0.0;
@@ -200,10 +188,7 @@ extension MyJsonExtensions on MyJson {
   /// @param key The key to retrieve the string value for.
   /// @param defaultIfNotFound The default value to return if the key is not found or the value cannot be parsed as a string. Defaults to an empty string.
   /// @return The string value associated with the key, or the default value if the key is not found or the value cannot be parsed as a string.
-  String getString(
-    final String key, [
-    final String defaultIfNotFound = '',
-  ]) {
+  String getString(final String key, [final String defaultIfNotFound = '']) {
     final dynamic value = this[key];
     if (value == null) {
       return defaultIfNotFound;
@@ -259,11 +244,16 @@ extension MyJsonExtensions on MyJson {
 ///
 List<MyJson> convertFromRawCsvTextToListOfJSonObject(String fileContent) {
   final List<MyJson> rows = <MyJson>[];
-  final List<List<String>> lines = getLinesFromRawTextWithSeparator(fileContent);
+  final List<List<String>> lines = getLinesFromRawTextWithSeparator(
+    fileContent,
+  );
   if (lines.length > 1) {
     final List<String> csvHeaderColumns = lines.first;
     for (final List<String> csvRowValues in lines.skip(1)) {
-      final MyJson rowValues = myJsonFromKeyValuePairs(csvHeaderColumns, csvRowValues);
+      final MyJson rowValues = myJsonFromKeyValuePairs(
+        csvHeaderColumns,
+        csvRowValues,
+      );
       rows.add(rowValues);
     }
   }

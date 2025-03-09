@@ -37,12 +37,17 @@ class MoneyObjectCard extends StatelessWidget {
       widgets.add(const Text('- not found -'));
     } else {
       widgets.add(gapLarge());
-      widgets.addAll(moneyObject!.buildListOfNamesValuesWidgets(onEdit: null, compact: true));
+      widgets.addAll(
+        moneyObject!.buildListOfNamesValuesWidgets(onEdit: null, compact: true),
+      );
     }
 
     return Box(
       color: getColorTheme(context).primaryContainer,
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: widgets),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: widgets,
+      ),
     );
   }
 
@@ -81,7 +86,10 @@ class MoneyObjectCard extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.copy_all),
               onPressed: () {
-                copyToClipboardAndInformUser(context, moneyObject!.getPersistableJSon().toString());
+                copyToClipboardAndInformUser(
+                  context,
+                  moneyObject!.getPersistableJSon().toString(),
+                );
               },
             ),
           ],
@@ -113,7 +121,11 @@ Widget buildAdaptiveBox({
   return Box(
     height: 300,
     color: getColorTheme(context).primaryContainer,
-    header: buildHeaderTitleAndCounter(context, title, count == 0 ? '' : getIntAsText(count)),
+    header: buildHeaderTitleAndCounter(
+      context,
+      title,
+      count == 0 ? '' : getIntAsText(count),
+    ),
     footer: footer,
     padding: SizeForPadding.huge,
     child: count == 0 ? CenterMessage(message: 'No $title found') : content,

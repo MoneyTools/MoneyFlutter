@@ -12,14 +12,14 @@ class MyTextInput extends StatelessWidget {
     this.onChanged,
     this.onFieldSubmitted,
   }) : decoration = InputDecoration(
-          border: border ? const OutlineInputBorder() : null,
-          prefixIcon: icon == null ? null : Icon(icon),
-          isDense: isDense,
-          // isCollapsed: isDense,
-          // contentPadding: isDense ? EdgeInsets.zero : null,
-          labelText: hintText,
-          hintText: hintText,
-        );
+         border: border ? const OutlineInputBorder() : null,
+         prefixIcon: icon == null ? null : Icon(icon),
+         isDense: isDense,
+         // isCollapsed: isDense,
+         // contentPadding: isDense ? EdgeInsets.zero : null,
+         labelText: hintText,
+         hintText: hintText,
+       );
 
   final bool border;
   final TextEditingController? controller;

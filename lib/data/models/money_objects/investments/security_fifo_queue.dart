@@ -59,13 +59,17 @@ class SecurityFifoQueue {
   }
 
   List<SecuritySale> processPendingSales() {
-// now that more has arrived, time to see if we can process those pending sales.
+    // now that more has arrived, time to see if we can process those pending sales.
     final List<SecuritySale> copy = List<SecuritySale>.from(this.pending);
     this.pending.clear();
     final List<SecuritySale> result = <SecuritySale>[];
     for (final SecuritySale s in copy) {
       // this will put any remainder back in the pending list if it still can't be covered.
-      for (SecuritySale real in this.sell(s.dateSold!, s.unitsSold, s.unitsSold * s.salePricePerUnit)) {
+      for (SecuritySale real in this.sell(
+        s.dateSold!,
+        s.unitsSold,
+        s.unitsSold * s.salePricePerUnit,
+      )) {
         result.add(real);
       }
     }
@@ -84,7 +88,11 @@ class SecurityFifoQueue {
     final double salePricePerUnit = amount / units;
     final List<SecuritySale> result = <SecuritySale>[];
     for (SecurityPurchase purchase in this.list) {
-      final SecuritySale? sale = purchase.sell(dateSold, units, salePricePerUnit);
+      final SecuritySale? sale = purchase.sell(
+        dateSold,
+        units,
+        salePricePerUnit,
+      );
       if (sale != null) {
         sale.account = account;
         units -= sale.unitsSold;

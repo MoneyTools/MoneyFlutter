@@ -54,8 +54,12 @@ class Currency extends MoneyObject {
   FieldString fieldCultureCode = FieldString(
     name: 'Culture Code',
     serializeName: 'CultureCode',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).fieldCultureCode.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).fieldCultureCode.value,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Currency).fieldCultureCode.value,
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            (instance as Currency).fieldCultureCode.value,
   );
 
   // 0
@@ -67,8 +71,12 @@ class Currency extends MoneyObject {
   FieldDouble fieldLastRatio = FieldDouble(
     name: 'LastRatio',
     serializeName: 'LastRatio',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).fieldLastRatio.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).fieldLastRatio.value,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Currency).fieldLastRatio.value,
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            (instance as Currency).fieldLastRatio.value,
   );
 
   /// 2
@@ -76,24 +84,32 @@ class Currency extends MoneyObject {
   FieldString fieldName = FieldString(
     name: 'Name',
     serializeName: 'Name',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).fieldName.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).fieldName.value,
+    getValueForDisplay:
+        (final MoneyObject instance) => (instance as Currency).fieldName.value,
+    getValueForSerialization:
+        (final MoneyObject instance) => (instance as Currency).fieldName.value,
   );
 
   /// 3    Ratio        money
   FieldDouble fieldRatio = FieldDouble(
     name: 'Ratio',
     serializeName: 'Ratio',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).fieldRatio.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).fieldRatio.value,
+    getValueForDisplay:
+        (final MoneyObject instance) => (instance as Currency).fieldRatio.value,
+    getValueForSerialization:
+        (final MoneyObject instance) => (instance as Currency).fieldRatio.value,
   );
 
   /// 1    Symbol       nchar(20)
   FieldString fieldSymbol = FieldString(
     name: 'Symbol',
     serializeName: 'Symbol',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).fieldSymbol.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).fieldSymbol.value,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Currency).fieldSymbol.value,
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            (instance as Currency).fieldSymbol.value,
   );
 
   // Fields for this instance
@@ -114,7 +130,9 @@ class Currency extends MoneyObject {
   static final Fields<Currency> _fields = Fields<Currency>();
 
   static Widget buildCurrencyWidget(String threeLetterCurrencySymbol) {
-    final String locale = Data().currencies.fromSymbolToCountryAlpha2(threeLetterCurrencySymbol);
+    final String locale = Data().currencies.fromSymbolToCountryAlpha2(
+      threeLetterCurrencySymbol,
+    );
 
     return CurrencyLabel(
       threeLetterCurrencySymbol: getCurrencyAsString(threeLetterCurrencySymbol),
@@ -163,12 +181,15 @@ class Currency extends MoneyObject {
     }
 
     // determining the locale to be used when formatting the currency amount
-    final String localeToUse = iso4217code == Constants.defaultCurrency || iso4217code.isEmpty
-        ? 'en_US'
-        : Currency.getLocaleFromCurrencyIso4217(iso4217code) ?? 'en_US';
+    final String localeToUse =
+        iso4217code == Constants.defaultCurrency || iso4217code.isEmpty
+            ? 'en_US'
+            : Currency.getLocaleFromCurrencyIso4217(iso4217code) ?? 'en_US';
 
     // Use NumberFormat.simpleCurrency to get the symbol for the locale
-    final NumberFormat tempFormat = NumberFormat.simpleCurrency(locale: localeToUse);
+    final NumberFormat tempFormat = NumberFormat.simpleCurrency(
+      locale: localeToUse,
+    );
     final String currencySymbol = tempFormat.currencySymbol;
 
     // Create a NumberFormat instance with a custom pattern using the currency constructor
@@ -179,7 +200,9 @@ class Currency extends MoneyObject {
       customPattern: '¤#,##0.00', // Pattern to place the symbol on the left
     );
 
-    return currencyFormat.format(isConsideredZero(amount as num) ? 0.00 : amount);
+    return currencyFormat.format(
+      isConsideredZero(amount as num) ? 0.00 : amount,
+    );
   }
 
   static String getCurrencyAsString(final String threeLetterCurrencySymbol) {

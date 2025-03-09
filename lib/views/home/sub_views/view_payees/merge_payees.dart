@@ -13,12 +13,10 @@ import 'package:money/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/view_payees/picker_payee.dart';
 
-void showMergePayee(
-  final BuildContext context,
-  Payee payee,
-) {
-  final Iterable<Transaction> transactions =
-      Data().transactions.iterableList(includeDeleted: true).where((Transaction t) => t.fieldPayee.value == payee.uniqueId);
+void showMergePayee(final BuildContext context, Payee payee) {
+  final Iterable<Transaction> transactions = Data().transactions
+      .iterableList(includeDeleted: true)
+      .where((Transaction t) => t.fieldPayee.value == payee.uniqueId);
 
   adaptiveScreenSizeDialog(
     context: context,
@@ -42,7 +40,8 @@ class MergeTransactionsDialog extends StatefulWidget {
   final List<Transaction> transactions;
 
   @override
-  State<MergeTransactionsDialog> createState() => _MergeTransactionsDialogState();
+  State<MergeTransactionsDialog> createState() =>
+      _MergeTransactionsDialogState();
 }
 
 class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
@@ -90,26 +89,24 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
           gapLarge(),
           _buildCategoryChoices(),
           const Spacer(),
-          dialogActionButtons(
-            <Widget>[
+          dialogActionButtons(<Widget>[
+            DialogActionButton(
+              text: 'Cancel',
+              onPressed: () => Navigator.pop(context),
+            ),
+            if (_selectedPayee != null && _selectedPayee != widget.currentPayee)
               DialogActionButton(
-                text: 'Cancel',
-                onPressed: () => Navigator.pop(context),
+                text: 'Merge',
+                onPressed: () {
+                  mutateTransactionsToPayee(
+                    widget.transactions,
+                    _selectedPayee!.uniqueId,
+                    _estimatedCategory,
+                  );
+                  Navigator.pop(context);
+                },
               ),
-              if (_selectedPayee != null && _selectedPayee != widget.currentPayee)
-                DialogActionButton(
-                  text: 'Merge',
-                  onPressed: () {
-                    mutateTransactionsToPayee(
-                      widget.transactions,
-                      _selectedPayee!.uniqueId,
-                      _estimatedCategory,
-                    );
-                    Navigator.pop(context);
-                  },
-                ),
-            ],
-          ),
+          ]),
         ],
       ),
     );
@@ -118,7 +115,9 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
   void getAssociatedCategories() {
     if (_selectedPayee != null) {
       categoryIdsFound.clear();
-      for (final Transaction t in Data().transactions.iterableList(includeDeleted: true)) {
+      for (final Transaction t in Data().transactions.iterableList(
+        includeDeleted: true,
+      )) {
         if (t.fieldPayee.value == _selectedPayee!.uniqueId) {
           categoryIdsFound.cumulate(t.fieldCategoryId.value, 1);
         }
@@ -132,14 +131,19 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
     }
 
     final List<Widget> radioButtonChoices = <Widget>[];
-    final List<MapEntry<int, int>> sortedDescendingListOfCategories = categoryIdsFound.getEntries();
-    sortedDescendingListOfCategories.sort((MapEntry<int, int> a, MapEntry<int, int> b) => sortByValue(a.value, b.value, false));
+    final List<MapEntry<int, int>> sortedDescendingListOfCategories =
+        categoryIdsFound.getEntries();
+    sortedDescendingListOfCategories.sort(
+      (MapEntry<int, int> a, MapEntry<int, int> b) =>
+          sortByValue(a.value, b.value, false),
+    );
 
     for (final MapEntry<int, int> entry in sortedDescendingListOfCategories) {
       final int categoryId = entry.key;
       final int categoryCounts = entry.value;
 
-      final String categoryName = Data().categories.getNameFromId(categoryId).trim();
+      final String categoryName =
+          Data().categories.getNameFromId(categoryId).trim();
       if (categoryName.isNotEmpty) {
         radioButtonChoices.add(
           ListTile(
@@ -198,18 +202,16 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
               });
             },
           ),
-          title: const Text('Keep all transactions to their current categories'),
+          title: const Text(
+            'Keep all transactions to their current categories',
+          ),
         ),
       );
     }
 
     return SizedBox(
       height: 400,
-      child: SingleChildScrollView(
-        child: Column(
-          children: radioButtonChoices,
-        ),
-      ),
+      child: SingleChildScrollView(child: Column(children: radioButtonChoices)),
     );
   }
 }

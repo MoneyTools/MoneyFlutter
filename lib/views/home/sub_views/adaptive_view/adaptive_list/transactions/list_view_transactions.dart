@@ -18,7 +18,12 @@ class ListViewTransactions extends StatefulWidget {
     this.onUserChoiceChanged,
   });
 
-  final void Function(int sortingField, bool sortAscending, int selectedItemIndex)? onUserChoiceChanged;
+  final void Function(
+    int sortingField,
+    bool sortAscending,
+    int selectedItemIndex,
+  )?
+  onUserChoiceChanged;
   final List<Field<dynamic>> columnsToInclude;
   final List<Transaction> Function() getList;
   final ListController listController;
@@ -73,39 +78,58 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
           } else {
             _sortBy = index;
           }
-          widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, widget.selectionController.firstSelectedId);
+          widget.onUserChoiceChanged?.call(
+            _sortBy,
+            _sortAscending,
+            widget.selectionController.firstSelectedId,
+          );
         });
       },
       onItemLongPress: (final BuildContext context2, final int uniqueId) {
-        final Transaction instance = findObjectById(uniqueId, transactions) as Transaction;
+        final Transaction instance =
+            findObjectById(uniqueId, transactions) as Transaction;
         showTransactionAndActions(
           context: context2,
           transaction: instance,
         ).then((final dynamic _) {
           widget.selectionController.select(uniqueId);
-          widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, widget.selectionController.firstSelectedId);
+          widget.onUserChoiceChanged?.call(
+            _sortBy,
+            _sortAscending,
+            widget.selectionController.firstSelectedId,
+          );
         });
       },
     );
   }
 }
 
-List<Transaction> getTransactions({bool Function(Transaction)? filter, bool flattenSplits = false}) {
+List<Transaction> getTransactions({
+  bool Function(Transaction)? filter,
+  bool flattenSplits = false,
+}) {
   filter ??= (Transaction transaction) => true;
 
   List<Transaction> list = <Transaction>[];
 
   if (flattenSplits) {
     // Flatten the splits
-    list = Transactions.flatTransactions(Data().transactions.iterableList())
-        .where((final Transaction transaction) => filter!(transaction))
-        .toList();
+    list =
+        Transactions.flatTransactions(Data().transactions.iterableList())
+            .where((final Transaction transaction) => filter!(transaction))
+            .toList();
   } else {
     // No flattening of splits
-    list = Data().transactions.iterableList().where((final Transaction transaction) => filter!(transaction)).toList();
+    list =
+        Data().transactions
+            .iterableList()
+            .where((final Transaction transaction) => filter!(transaction))
+            .toList();
   }
 
-  list.sort((Transaction a, Transaction b) => Transaction.sortByDateTime(a, b, true));
+  list.sort(
+    (Transaction a, Transaction b) => Transaction.sortByDateTime(a, b, true),
+  );
 
   double runningBalance = 0.0;
   for (Transaction transaction in list) {

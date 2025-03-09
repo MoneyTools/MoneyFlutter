@@ -23,25 +23,31 @@ class Transfer extends MoneyObject {
 
   final num id; // used when the transfer is part of a split
   final bool isOrphan;
-  final MoneySplit? relatedSplit; // the related split, if it is a transfer in a split.
+  final MoneySplit?
+  relatedSplit; // the related split, if it is a transfer in a split.
   final Transaction? relatedTransaction; // the related transaction
   final Transaction? source; // the source of the transfer.
-  final MoneySplit? sourceSplit; // the source split, if it is a transfer in a split.
+  final MoneySplit?
+  sourceSplit; // the source split, if it is a transfer in a split.
 
   /// Status
   FieldString fieldAccountStatusDestination = FieldString(
     name: 'RS',
     align: TextAlign.center,
     columnWidth: ColumnWidth.nano,
-    getValueForDisplay: (final MoneyObject instance) =>
-        transactionStatusToLetter((instance as Transfer).relatedTransaction!.fieldStatus.value),
+    getValueForDisplay:
+        (final MoneyObject instance) => transactionStatusToLetter(
+          (instance as Transfer).relatedTransaction!.fieldStatus.value,
+        ),
   );
 
   /// memo
   FieldString fieldMemoDestination = FieldString(
     name: 'Recipient memo',
     columnWidth: ColumnWidth.largest,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).getMemoDestination(),
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Transfer).getMemoDestination(),
   );
 
   /// Account
@@ -49,7 +55,9 @@ class Transfer extends MoneyObject {
     type: FieldType.text,
     name: 'Recipient account',
     defaultValue: -1,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).receiverAccountName,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Transfer).receiverAccountName,
   );
 
   //
@@ -59,7 +67,9 @@ class Transfer extends MoneyObject {
   /// Date received
   FieldDate fieldReceiverTransactionDate = FieldDate(
     name: 'Date Received',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).receiverTransactionDate,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Transfer).receiverTransactionDate,
   );
 
   /// Account
@@ -67,7 +77,9 @@ class Transfer extends MoneyObject {
     type: FieldType.text,
     name: 'Sender',
     defaultValue: -1,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).senderAccountName,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Transfer).senderAccountName,
   );
 
   //
@@ -75,14 +87,17 @@ class Transfer extends MoneyObject {
   //
   FieldDate fieldSenderTransactionDate = FieldDate(
     name: 'Sent on',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).geSenderTransactionDate(),
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Transfer).geSenderTransactionDate(),
   );
 
   /// memo
   FieldString fieldSenderTransactionMemo = FieldString(
     name: 'Sender memo',
     columnWidth: ColumnWidth.largest,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).getMemoSource(),
+    getValueForDisplay:
+        (final MoneyObject instance) => (instance as Transfer).getMemoSource(),
   );
 
   /// Status
@@ -90,15 +105,19 @@ class Transfer extends MoneyObject {
     name: 'SS',
     align: TextAlign.center,
     columnWidth: ColumnWidth.nano,
-    getValueForDisplay: (final MoneyObject instance) =>
-        transactionStatusToLetter((instance as Transfer).source!.fieldStatus.value),
+    getValueForDisplay:
+        (final MoneyObject instance) => transactionStatusToLetter(
+          (instance as Transfer).source!.fieldStatus.value,
+        ),
   );
 
   /// Transfer amount
   FieldMoney fieldTransactionAmount = FieldMoney(
     name: 'Amount',
     columnWidth: ColumnWidth.small,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).source!.fieldAmount.value,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Transfer).source!.fieldAmount.value,
   );
 
   ///
@@ -108,7 +127,9 @@ class Transfer extends MoneyObject {
   /// Troubleshoot
   FieldString fieldTroubleshoot = FieldString(
     name: 'Troubleshoot',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).getTroubleshoot(),
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Transfer).getTroubleshoot(),
   );
 
   @override
@@ -123,19 +144,18 @@ class Transfer extends MoneyObject {
   static Fields<Transfer> get fieldsForColumnView {
     final Transfer tmp = Transfer.fromJson(<String, dynamic>{});
 
-    return Fields<Transfer>()
-      ..setDefinitions(<Field<dynamic>>[
-        tmp.fieldSenderTransactionDate,
-        tmp.fieldSenderAccountId,
-        tmp.fieldSenderTransactionStatus,
-        tmp.fieldSenderTransactionMemo,
-        tmp.fieldReceiverTransactionDate,
-        tmp.fieldReceiverAccountId,
-        tmp.fieldAccountStatusDestination,
-        tmp.fieldMemoDestination,
-        tmp.fieldTroubleshoot,
-        tmp.fieldTransactionAmount,
-      ]);
+    return Fields<Transfer>()..setDefinitions(<Field<dynamic>>[
+      tmp.fieldSenderTransactionDate,
+      tmp.fieldSenderAccountId,
+      tmp.fieldSenderTransactionStatus,
+      tmp.fieldSenderTransactionMemo,
+      tmp.fieldReceiverTransactionDate,
+      tmp.fieldReceiverAccountId,
+      tmp.fieldAccountStatusDestination,
+      tmp.fieldMemoDestination,
+      tmp.fieldTroubleshoot,
+      tmp.fieldTransactionAmount,
+    ]);
   }
 
   //---------------------------------------------
@@ -145,7 +165,10 @@ class Transfer extends MoneyObject {
   }
 
   String getMemoDestination() {
-    String memos = source!.fieldTransferSplit.value == -1 ? '' : '[Split:${source!.fieldTransferSplit.value}] ';
+    String memos =
+        source!.fieldTransferSplit.value == -1
+            ? ''
+            : '[Split:${source!.fieldTransferSplit.value}] ';
     if (relatedTransaction != null) {
       memos += relatedTransaction!.fieldMemo.value;
     }
@@ -178,7 +201,8 @@ class Transfer extends MoneyObject {
 
   Account? get receiverAccount => relatedTransaction?.instanceOfAccount;
 
-  String get receiverAccountName => receiverAccount?.fieldName.value ?? '<account not found>';
+  String get receiverAccountName =>
+      receiverAccount?.fieldName.value ?? '<account not found>';
 
   Transaction? get receiverTransaction => relatedTransaction;
 
@@ -200,7 +224,7 @@ class Transfer extends MoneyObject {
   //---------------------------------------------
   // Account Names
   String get senderAccountName {
-    return (senderAccount?.fieldName.value) ?? '<account not found>';
+    return senderAccount?.fieldName.value ?? '<account not found>';
   }
 
   //---------------------------------------------
@@ -214,7 +238,10 @@ class Transfer extends MoneyObject {
 // although it would be possible, if you withdraw 500 cash from one account, then combine $100 of that with
 // a check for $200 in a single deposit, then the $100 is split on the source as a "transfer" to the
 // deposited account, and the $300 deposit is split between the cash and the check.  Like I said, pretty unlikely.
-void linkTransfer(Transaction transactionSource, Transaction transactionRelated) {
+void linkTransfer(
+  Transaction transactionSource,
+  Transaction transactionRelated,
+) {
   transactionSource.instanceOfTransfer = Transfer(
     id: 0,
     source: transactionSource,

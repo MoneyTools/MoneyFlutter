@@ -73,37 +73,50 @@ class Security extends MoneyObject {
 
   final FieldMoney fieldHoldingValue = FieldMoney(
     name: 'HoldingsValue',
-    getValueForDisplay: (final MoneyObject instance) => MoneyModel(amount: (instance as Security).holdingValue),
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            MoneyModel(amount: (instance as Security).holdingValue),
   );
 
   List<Dividend> dividends = <Dividend>[];
   FieldMoney fieldActivityDividend = FieldMoney(
     name: 'Dividend',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).fieldActivityDividend.value,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Security).fieldActivityDividend.value,
   );
 
   FieldMoney fieldActivityProfit = FieldMoney(
     name: 'ActivityProfit',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).fieldActivityProfit.value,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Security).fieldActivityProfit.value,
   );
 
   // 5
   FieldString fieldCuspid = FieldString(
     name: 'CUSPID',
     serializeName: 'CUSPID',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).fieldCuspid.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).fieldCuspid.value,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Security).fieldCuspid.value,
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            (instance as Security).fieldCuspid.value,
   );
 
   FieldQuantity fieldHoldingShares = FieldQuantity(
     name: 'Holding',
     columnWidth: ColumnWidth.small,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).fieldHoldingShares.value,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Security).fieldHoldingShares.value,
   );
 
   // 0
   FieldId fieldId = FieldId(
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).uniqueId,
+    getValueForSerialization:
+        (final MoneyObject instance) => (instance as Security).uniqueId,
   );
 
   // 4
@@ -111,8 +124,12 @@ class Security extends MoneyObject {
     name: 'Last Price',
     serializeName: 'LastPrice',
     columnWidth: ColumnWidth.small,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).fieldLastPrice.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).fieldLastPrice.value.asDouble(),
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Security).fieldLastPrice.value,
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            (instance as Security).fieldLastPrice.value.asDouble(),
     setValue: (final MoneyObject instance, dynamic value) {
       (instance as Security).fieldLastPrice.value.setAmount(value);
     },
@@ -123,8 +140,10 @@ class Security extends MoneyObject {
     name: 'Name',
     serializeName: 'Name',
     columnWidth: ColumnWidth.largest,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).fieldName.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).fieldName.value,
+    getValueForDisplay:
+        (final MoneyObject instance) => (instance as Security).fieldName.value,
+    getValueForSerialization:
+        (final MoneyObject instance) => (instance as Security).fieldName.value,
     setValue: (final MoneyObject instance, dynamic value) {
       (instance as Security).fieldName.value = value as String;
     },
@@ -135,7 +154,9 @@ class Security extends MoneyObject {
   FieldInt fieldNumberOfTrades = FieldInt(
     name: 'Trades',
     columnWidth: ColumnWidth.nano,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).fieldNumberOfTrades.value,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Security).fieldNumberOfTrades.value,
   );
 
   // 3
@@ -143,29 +164,42 @@ class Security extends MoneyObject {
     name: 'Price',
     columnWidth: ColumnWidth.small,
     serializeName: 'Price',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).fieldPrice.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).fieldPrice.value.asDouble(),
-    setValue: (final MoneyObject instance, dynamic value) => (instance as Security).fieldPrice.value.setAmount(value),
+    getValueForDisplay:
+        (final MoneyObject instance) => (instance as Security).fieldPrice.value,
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            (instance as Security).fieldPrice.value.asDouble(),
+    setValue:
+        (final MoneyObject instance, dynamic value) =>
+            (instance as Security).fieldPrice.value.setAmount(value),
   );
 
   // 8
   FieldDate fieldPriceDate = FieldDate(
     name: 'LatestPrice',
     serializeName: 'PriceDate',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).fieldPriceDate.value,
-    getValueForSerialization: (final MoneyObject instance) =>
-        dateToSqliteFormat((instance as Security).fieldPriceDate.value),
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Security).fieldPriceDate.value,
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            dateToSqliteFormat((instance as Security).fieldPriceDate.value),
     setValue: (final MoneyObject instance, dynamic value) {
-      (instance as Security).fieldPriceDate.value = attemptToGetDateFromDynamic(value);
+      (instance as Security).fieldPriceDate.value = attemptToGetDateFromDynamic(
+        value,
+      );
     },
   );
 
-  double get profit => this.fieldActivityProfit.value.asDouble() +
-        this.fieldActivityDividend.value.asDouble() +
-        this.holdingValue;
+  double get profit =>
+      this.fieldActivityProfit.value.asDouble() +
+      this.fieldActivityDividend.value.asDouble() +
+      this.holdingValue;
   FieldMoney fieldProfit = FieldMoney(
     name: 'Profit',
-    getValueForDisplay: (final MoneyObject instance) => MoneyModel(amount: (instance as Security).profit),
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            MoneyModel(amount: (instance as Security).profit),
   );
 
   /* 
@@ -188,16 +222,24 @@ class Security extends MoneyObject {
     columnWidth: ColumnWidth.tiny,
     type: FieldType.text,
     align: TextAlign.center,
-    getValueForDisplay: (final MoneyObject instance) =>
-        getSecurityTypeFromInt((instance as Security).fieldSecurityType.value),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).fieldSecurityType.value,
-    getEditWidget: (MoneyObject instance, void Function(bool wasModified) onEdited) {
-      instance = (instance as Security);
+    getValueForDisplay:
+        (final MoneyObject instance) => getSecurityTypeFromInt(
+          (instance as Security).fieldSecurityType.value,
+        ),
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            (instance as Security).fieldSecurityType.value,
+    getEditWidget: (
+      MoneyObject instance,
+      void Function(bool wasModified) onEdited,
+    ) {
+      instance = instance as Security;
       return pickerSecurityType(
         itemSelected: SecurityType.values[instance.fieldSecurityType.value],
         onSelected: (final SecurityType? newSecurityType) {
           if (newSecurityType != null) {
-            (instance as Security).fieldSecurityType.value = newSecurityType.index;
+            (instance as Security).fieldSecurityType.value =
+                newSecurityType.index;
             // notify container
             onEdited(true);
           }
@@ -213,8 +255,12 @@ class Security extends MoneyObject {
   FieldString fieldSymbol = FieldString(
     name: 'Symbol',
     serializeName: 'Symbol',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).fieldSymbol.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).fieldSymbol.value,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Security).fieldSymbol.value,
+    getValueForSerialization:
+        (final MoneyObject instance) =>
+            (instance as Security).fieldSymbol.value,
     setValue: (final MoneyObject instance, dynamic value) {
       (instance as Security).fieldSymbol.value = value as String;
     },
@@ -225,9 +271,13 @@ class Security extends MoneyObject {
     defaultValue: DateRange(),
     type: FieldType.dateRange,
     footer: FooterType.range,
-    getValue: (final MoneyObject instance) => (instance as Security).fieldTransactionDateRange.value,
-    getValueForDisplay: (final MoneyObject instance) =>
-        (instance as Security).fieldTransactionDateRange.value.toStringYears(),
+    getValue:
+        (final MoneyObject instance) =>
+            (instance as Security).fieldTransactionDateRange.value,
+    getValueForDisplay:
+        (final MoneyObject instance) =>
+            (instance as Security).fieldTransactionDateRange.value
+                .toStringYears(),
   );
 
   List<StockSplit> splitsHistory = <StockSplit>[];
@@ -235,8 +285,10 @@ class Security extends MoneyObject {
   FieldInt taxable = FieldInt(
     name: 'Taxable',
     serializeName: 'Taxable',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).taxable.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).taxable.value,
+    getValueForDisplay:
+        (final MoneyObject instance) => (instance as Security).taxable.value,
+    getValueForSerialization:
+        (final MoneyObject instance) => (instance as Security).taxable.value,
   );
 
   @override
@@ -289,25 +341,27 @@ class Security extends MoneyObject {
 
   static Fields<Security> get fieldsForColumnView {
     final Security tmp = Security.fromJson(<String, dynamic>{});
-    return Fields<Security>()
-      ..setDefinitions(<Field<dynamic>>[
-        tmp.fieldName,
-        tmp.fieldSymbol,
-        tmp.fieldTransactionDateRange,
-        tmp.fieldPrice,
-        tmp.fieldLastPrice,
-        tmp.fieldSecurityType,
-        tmp.fieldNumberOfTrades,
-        tmp.fieldHoldingShares,
-        tmp.fieldHoldingValue,
-        tmp.fieldActivityProfit,
-        tmp.fieldActivityDividend,
-        tmp.fieldProfit,
-      ]);
+    return Fields<Security>()..setDefinitions(<Field<dynamic>>[
+      tmp.fieldName,
+      tmp.fieldSymbol,
+      tmp.fieldTransactionDateRange,
+      tmp.fieldPrice,
+      tmp.fieldLastPrice,
+      tmp.fieldSecurityType,
+      tmp.fieldNumberOfTrades,
+      tmp.fieldHoldingShares,
+      tmp.fieldHoldingValue,
+      tmp.fieldActivityProfit,
+      tmp.fieldActivityDividend,
+      tmp.fieldProfit,
+    ]);
   }
 
   List<Investment> getAssociatedInvestments() =>
-      Data().investments.iterableList().where((Investment item) => item.fieldSecurity.value == this.uniqueId).toList();
+      Data().investments
+          .iterableList()
+          .where((Investment item) => item.fieldSecurity.value == this.uniqueId)
+          .toList();
 
   static String getSecurityTypeFromInt(final int index) {
     if (isIndexInRange(SecurityType.values, index)) {
@@ -316,5 +370,6 @@ class Security extends MoneyObject {
     return '';
   }
 
-  double get holdingValue => this.fieldHoldingShares.value * this.fieldPrice.value.asDouble();
+  double get holdingValue =>
+      this.fieldHoldingShares.value * this.fieldPrice.value.asDouble();
 }

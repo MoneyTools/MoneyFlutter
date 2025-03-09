@@ -115,7 +115,9 @@ class RecurringCard extends StatelessWidget {
   }
 
   Widget _buildBoxTimelinePerDayOverYears(final BuildContext context) {
-    final List<Pair<int, double>> sumByDays = Transactions.transactionSumByTime(payment.transactions);
+    final List<Pair<int, double>> sumByDays = Transactions.transactionSumByTime(
+      payment.transactions,
+    );
 
     return Box(
       title: 'Timeline',
@@ -129,14 +131,13 @@ class RecurringCard extends StatelessWidget {
               values: sumByDays,
               yearStart: dateRangeSearch.min!.year,
               yearEnd: dateRangeSearch.max!.year,
-              offsetStartingDay: dateRangeSearch.min!.millisecondsSinceEpoch ~/ Duration.millisecondsPerDay,
+              offsetStartingDay:
+                  dateRangeSearch.min!.millisecondsSinceEpoch ~/
+                  Duration.millisecondsPerDay,
               color: getColorTheme(context).primary,
             ),
           ),
-          const Divider(
-            height: 1,
-            thickness: 1,
-          ),
+          const Divider(height: 1, thickness: 1),
           _buildDateRangeRow(payment.dateRangeFound, 100, 100, false),
           gapLarge(),
           _buildTextAmountRow(

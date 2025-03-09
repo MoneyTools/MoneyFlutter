@@ -123,11 +123,15 @@ class Field<T> {
           getValueForDisplay = (final MoneyObject c) => value as num;
           getValueForSerialization = getValueForDisplay;
         case FieldType.text:
-          getValueForDisplay = (final MoneyObject objectInstance) => value.toString();
+          getValueForDisplay =
+              (final MoneyObject objectInstance) => value.toString();
         case FieldType.amount:
-          getValueForDisplay = (final MoneyObject c) => MoneyWidget(amountModel: value as MoneyModel);
+          getValueForDisplay =
+              (final MoneyObject c) =>
+                  MoneyWidget(amountModel: value as MoneyModel);
         case FieldType.date:
-          getValueForDisplay = (final MoneyObject c) => dateToString(value as DateTime?);
+          getValueForDisplay =
+              (final MoneyObject c) => dateToString(value as DateTime?);
         default:
           //
           debugPrint('No match');
@@ -151,45 +155,46 @@ class Field<T> {
         case FieldType.numericShorthand:
         case FieldType.quantity:
         case FieldType.amountShorthand:
-          sort = (
-            final MoneyObject a,
-            final MoneyObject b,
-            final bool ascending,
-          ) =>
-              sortByValue(
+          sort =
+              (
+                final MoneyObject a,
+                final MoneyObject b,
+                final bool ascending,
+              ) => sortByValue(
                 (getValueForDisplay(a) ?? 0) as num,
                 (getValueForDisplay(b) ?? 0) as num,
-                ascending,              );
+                ascending,
+              );
         case FieldType.amount:
-          sort = (
-            final MoneyObject a,
-            final MoneyObject b,
-            final bool ascending,
-          ) =>
-              sortByAmount(
+          sort =
+              (
+                final MoneyObject a,
+                final MoneyObject b,
+                final bool ascending,
+              ) => sortByAmount(
                 getValueForDisplay(a) as MoneyModel,
                 getValueForDisplay(b) as MoneyModel,
                 ascending,
               );
         case FieldType.date:
-          sort = (
-            final MoneyObject a,
-            final MoneyObject b,
-            final bool ascending,
-          ) =>
-              sortByDate(
+          sort =
+              (
+                final MoneyObject a,
+                final MoneyObject b,
+                final bool ascending,
+              ) => sortByDate(
                 getValueForDisplay(a) as DateTime?,
                 getValueForDisplay(b) as DateTime?,
                 ascending,
               );
         case FieldType.text:
         default:
-          sort = (
-            final MoneyObject a,
-            final MoneyObject b,
-            final bool ascending,
-          ) =>
-              sortByString(
+          sort =
+              (
+                final MoneyObject a,
+                final MoneyObject b,
+                final bool ascending,
+              ) => sortByString(
                 getValueForDisplay(a).toString(),
                 getValueForDisplay(b).toString(),
                 ascending,
@@ -197,9 +202,10 @@ class Field<T> {
       }
     }
   }
-  
+
   /// Customize/override the edit widget
-  Widget Function(MoneyObject, void Function(bool wasModified) onEdited)? getEditWidget;
+  Widget Function(MoneyObject, void Function(bool wasModified) onEdited)?
+  getEditWidget;
 
   /// override the value edited
   dynamic Function(MoneyObject, dynamic)? setValue;
@@ -325,11 +331,11 @@ class FieldDate extends Field<DateTime?> {
     super.columnWidth = ColumnWidth.tiny,
     super.getEditWidget,
   }) : super(
-          defaultValue: null,
-          align: TextAlign.left,
-          type: FieldType.date,
-          footer: FooterType.range,
-        );
+         defaultValue: null,
+         align: TextAlign.left,
+         type: FieldType.date,
+         footer: FooterType.range,
+       );
 }
 
 class FieldDouble extends Field<double> {
@@ -341,10 +347,7 @@ class FieldDouble extends Field<double> {
     super.defaultValue = 0.00,
     super.useAsDetailPanels,
     super.sort,
-  }) : super(
-          align: TextAlign.right,
-          type: FieldType.numeric,
-        );
+  }) : super(align: TextAlign.right, type: FieldType.numeric);
 }
 
 class FieldPercentage extends Field<double> {
@@ -357,22 +360,20 @@ class FieldPercentage extends Field<double> {
     super.useAsDetailPanels,
     super.sort,
   }) : super(
-          align: TextAlign.right,
-          type: FieldType.percentage,
-          fixedFont: true,
-        );
+         align: TextAlign.right,
+         type: FieldType.percentage,
+         fixedFont: true,
+       );
 }
 
 class FieldId extends Field<int> {
-  FieldId({
-    super.getValueForDisplay,
-    super.getValueForSerialization,
-  }) : super(
-          serializeName: 'Id',
-          useAsDetailPanels: defaultCallbackValueFalse,
-          defaultValue: -1,
-          columnWidth: ColumnWidth.hidden,
-        );
+  FieldId({super.getValueForDisplay, super.getValueForSerialization})
+    : super(
+        serializeName: 'Id',
+        useAsDetailPanels: defaultCallbackValueFalse,
+        defaultValue: -1,
+        columnWidth: ColumnWidth.hidden,
+      );
 }
 
 class FieldInt extends Field<int> {
@@ -406,10 +407,10 @@ class FieldMoney extends Field<MoneyModel> {
     super.useAsDetailPanels,
     super.sort,
   }) : super(
-          defaultValue: MoneyModel(amount: 0.00, autoColor: true),
-          align: TextAlign.right,
-          type: FieldType.amount,
-        );
+         defaultValue: MoneyModel(amount: 0.00, autoColor: true),
+         align: TextAlign.right,
+         type: FieldType.amount,
+       );
 }
 
 class FieldQuantity extends Field<double> {
@@ -445,11 +446,13 @@ class FieldString extends Field<String> {
     super.type = FieldType.text,
     super.footer = FooterType.count,
     super.sort,
-  }) : super(
-          defaultValue: '',
-        ) {
+  }) : super(defaultValue: '') {
     if (sort == null) {
-      super.sort = (final MoneyObject a, final MoneyObject b, final bool ascending) {
+      super.sort = (
+        final MoneyObject a,
+        final MoneyObject b,
+        final bool ascending,
+      ) {
         return sortByString(
           getValueForDisplay(a),
           getValueForDisplay(b),

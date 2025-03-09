@@ -108,7 +108,9 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
                   inputText: _textToParse,
                   dateFormat: userChoiceOfDateFormat,
                   currency:
-                      _userChoiceNativeVsUSD == 0 ? _account.getAccountCurrencyAsText() : Constants.defaultCurrency,
+                      _userChoiceNativeVsUSD == 0
+                          ? _account.getAccountCurrencyAsText()
+                          : Constants.defaultCurrency,
                   reverseAmountValue: _userChoiceDebitVsCredit == 1,
                   onChanged: (String newTextInput) {
                     setState(() {
@@ -165,13 +167,13 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
 
     final ValuesParser parser = ValuesParser(
       dateFormat: userChoiceOfDateFormat,
-      currency: _userChoiceNativeVsUSD == 0 ? _account.getAccountCurrencyAsText() : Constants.defaultCurrency,
+      currency:
+          _userChoiceNativeVsUSD == 0
+              ? _account.getAccountCurrencyAsText()
+              : Constants.defaultCurrency,
       reverseAmountValue: _userChoiceDebitVsCredit == 1,
     );
-    parser.convertInputTextToTransactionList(
-      context,
-      inputText,
-    );
+    parser.convertInputTextToTransactionList(context, inputText);
     _values = parser.lines;
     widget.onTransactionsFound(parser);
   }
@@ -251,12 +253,18 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
       return const SizedBox();
     }
 
-    final List<String> listOfDateAsStrings = _values.map((ValuesQuality entry) => entry.date.asString()).toList();
+    final List<String> listOfDateAsStrings =
+        _values.map((ValuesQuality entry) => entry.date.asString()).toList();
 
-    final List<String> choiceOfDateFormat = getPossibleDateFormatsForAllValues(listOfDateAsStrings);
+    final List<String> choiceOfDateFormat = getPossibleDateFormatsForAllValues(
+      listOfDateAsStrings,
+    );
 
     if (choiceOfDateFormat.isEmpty) {
-      return Text('Bad Date Format', style: TextStyle(color: getColorFromState(ColorState.error)));
+      return Text(
+        'Bad Date Format',
+        style: TextStyle(color: getColorFromState(ColorState.error)),
+      );
     }
 
     // make sure that the last choice is a valid one
@@ -267,14 +275,20 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     return DropdownButton<String>(
       dropdownColor: getColorTheme(context).secondaryContainer,
       value: userChoiceOfDateFormat,
-      items: choiceOfDateFormat
-          .map(
-            (String item) => DropdownMenuItem<String>(
-              value: item,
-              child: Text(item, style: TextStyle(color: getColorTheme(context).onSecondaryContainer)),
-            ),
-          )
-          .toList(),
+      items:
+          choiceOfDateFormat
+              .map(
+                (String item) => DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(
+                    item,
+                    style: TextStyle(
+                      color: getColorTheme(context).onSecondaryContainer,
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
       onChanged: (final String? value) {
         setState(() {
           userChoiceOfDateFormat = value!;
@@ -287,14 +301,8 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
   Widget _buildChoiceOfDebitVsCredit() {
     return mySegmentSelector(
       segments: const <ButtonSegment<int>>[
-        ButtonSegment<int>(
-          value: 0,
-          label: Text('Credit'),
-        ),
-        ButtonSegment<int>(
-          value: 1,
-          label: Text('Debit'),
-        ),
+        ButtonSegment<int>(value: 0, label: Text('Credit')),
+        ButtonSegment<int>(value: 1, label: Text('Debit')),
       ],
       selectedId: _userChoiceDebitVsCredit,
       onSelectionChanged: (final int newSelection) {
@@ -320,12 +328,10 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
           child: pickerAccount(
             selected: _account,
             onSelected: (final Account? accountSelected) {
-              setState(
-                () {
-                  _account = accountSelected!;
-                  widget.onAccountChanged(_account);
-                },
-              );
+              setState(() {
+                _account = accountSelected!;
+                widget.onAccountChanged(_account);
+              });
             },
           ),
         ),

@@ -21,7 +21,6 @@ class ViewEvents extends ViewForMoneyObjects {
   const ViewEvents({super.key});
 
   @override
-
   /// Creates and returns a new instance of the State class associated with this view.
   ///
   /// @return A new instance of the State class.
@@ -41,25 +40,22 @@ class ViewEventsState extends ViewForMoneyObjectsState {
       // Add a new Category, place this at the top of the list
       list.insert(
         0,
-        buildAddItemButton(
-          () {
-            // add a new Event
-            final Event newItem = Data().events.addNewEvent();
-            updateListAndSelect(newItem.uniqueId);
+        buildAddItemButton(() {
+          // add a new Event
+          final Event newItem = Data().events.addNewEvent();
+          updateListAndSelect(newItem.uniqueId);
 
-            // Queue up the edit dialog
-            myShowDialogAndActionsForMoneyObject(
-              title: 'New ${getClassNameSingular()}',
-              moneyObject: newItem,
-              onApplyChange: () {
-                setState(() {
-                  /// update
-                });
-              },
-            );
-          },
-          'Add new event',
-        ),
+          // Queue up the edit dialog
+          myShowDialogAndActionsForMoneyObject(
+            title: 'New ${getClassNameSingular()}',
+            moneyObject: newItem,
+            onApplyChange: () {
+              setState(() {
+                /// update
+              });
+            },
+          );
+        }, 'Add new event'),
       );
     }
     return list;
@@ -98,11 +94,11 @@ class ViewEventsState extends ViewForMoneyObjectsState {
   /// @return A list of Events matching the specified conditions.
   @override
   List<Event> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    return Data()
-        .events
+    return Data().events
         .iterableList(includeDeleted: includeDeleted)
         .where(
-          (Event instance) => applyFilter == false || isMatchingFilters(instance),
+          (Event instance) =>
+              applyFilter == false || isMatchingFilters(instance),
         )
         .toList();
   }
@@ -134,9 +130,15 @@ class ViewEventsState extends ViewForMoneyObjectsState {
   }) {
     // get net worth over time
     final List<Transaction> transactionsWithoutTransfers =
-        Data().transactions.iterableList(includeDeleted: true).where((Transaction t) => t.isTransfer == false).toList();
+        Data().transactions
+            .iterableList(includeDeleted: true)
+            .where((Transaction t) => t.isTransfer == false)
+            .toList();
 
-    final List<FlSpot> tmpDataPointsWithNetWorth = Transactions.cumulateTransactionPerYearMonth(transactionsWithoutTransfers);
+    final List<FlSpot> tmpDataPointsWithNetWorth =
+        Transactions.cumulateTransactionPerYearMonth(
+          transactionsWithoutTransfers,
+        );
 
     const double marginLeft = 80.0;
     const double marginBottom = 50.0;
@@ -145,27 +147,40 @@ class ViewEventsState extends ViewForMoneyObjectsState {
     final List<ChartEvent> milestoneTransactions = <ChartEvent>[];
 
     for (final Event event in getList()) {
-      final Category? category = Data().categories.get(event.fieldCategoryId.value);
+      final Category? category = Data().categories.get(
+        event.fieldCategoryId.value,
+      );
       milestoneTransactions.add(
         ChartEvent(
-          dates: DateRange(min: event.fieldDateBegin.value!, max: event.fieldDateEnd.value ?? DateTime.now()),
+          dates: DateRange(
+            min: event.fieldDateBegin.value!,
+            max: event.fieldDateEnd.value ?? DateTime.now(),
+          ),
           amount: 0,
           quantity: 1,
           colorBasedOnQuantity: false, // use Amount
           description: event.fieldName.value,
-          color: category == null ? Colors.blue : category.getColorOrAncestorsColor(),
+          color:
+              category == null
+                  ? Colors.blue
+                  : category.getColorOrAncestorsColor(),
         ),
       );
     }
 
     // sort by ascending date
-    milestoneTransactions.sort((ChartEvent a, ChartEvent b) => a.dates.min!.compareTo(b.dates.min!));
+    milestoneTransactions.sort(
+      (ChartEvent a, ChartEvent b) => a.dates.min!.compareTo(b.dates.min!),
+    );
 
     return Stack(
       alignment: Alignment.topCenter,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(left: marginLeft, bottom: marginBottom),
+          padding: const EdgeInsets.only(
+            left: marginLeft,
+            bottom: marginBottom,
+          ),
           child: CustomPaint(
             size: const Size(double.infinity, double.infinity),
             painter: PaintActivities(
@@ -175,10 +190,7 @@ class ViewEventsState extends ViewForMoneyObjectsState {
             ),
           ),
         ),
-        MyLineChart(
-          dataPoints: tmpDataPointsWithNetWorth,
-          showDots: false,
-        ),
+        MyLineChart(dataPoints: tmpDataPointsWithNetWorth, showDots: false),
       ],
     );
   }
@@ -196,8 +208,11 @@ class ViewEventsState extends ViewForMoneyObjectsState {
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    final SelectionController selectionController =
-        Get.put(SelectionController(getPreferenceKey(settingKeySidePanel + settingKeySelectedListItemId)));
+    final SelectionController selectionController = Get.put(
+      SelectionController(
+        getPreferenceKey(settingKeySidePanel + settingKeySelectedListItemId),
+      ),
+    );
 
     return ListViewTransactions(
       listController: Get.find<ListControllerSidePanel>(),
@@ -208,8 +223,9 @@ class ViewEventsState extends ViewForMoneyObjectsState {
         Transaction.fields.getFieldByName(columnIdMemo),
         Transaction.fields.getFieldByName(columnIdAmount),
       ],
-      getList: () => getTransactions(
-          // filter: (final Transaction transaction) => transaction.fieldDateTime.value == DateTime.now(),
+      getList:
+          () => getTransactions(
+            // filter: (final Transaction transaction) => transaction.fieldDateTime.value == DateTime.now(),
           ),
       selectionController: selectionController,
     );

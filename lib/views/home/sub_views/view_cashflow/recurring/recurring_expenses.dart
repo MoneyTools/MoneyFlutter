@@ -33,18 +33,22 @@ class RecurringExpenses {
   ) {
     final List<RecurringExpenses> items = <RecurringExpenses>[];
 
-    final Iterable<Category> recurringCategories = Data().categories.iterableList().where((Category c) {
-      if (!categoryTypes.contains(c.fieldType.value)) {
-        return false;
-      }
-      if (onlyNonZeroBudget && c.fieldBudget.value.asDouble() == 0) {
-        return false;
-      }
-      return true;
-    });
+    final Iterable<Category> recurringCategories = Data().categories
+        .iterableList()
+        .where((Category c) {
+          if (!categoryTypes.contains(c.fieldType.value)) {
+            return false;
+          }
+          if (onlyNonZeroBudget && c.fieldBudget.value.asDouble() == 0) {
+            return false;
+          }
+          return true;
+        });
 
     for (final Category category in recurringCategories) {
-      final List<Category> listOfDescendants = <Category>[category]; // include this Category
+      final List<Category> listOfDescendants = <Category>[
+        category,
+      ]; // include this Category
 
       category.getDescendants(listOfDescendants);
 
@@ -54,17 +58,21 @@ class RecurringExpenses {
             isBetweenOrEqual(t.fieldDateTime.value!.year, minYear, maxYear);
       }
 
-      final List<Transaction> flatTransactions = Data().transactions.getListFlattenSplits(whereClause: whereClause);
+      final List<Transaction> flatTransactions = Data().transactions
+          .getListFlattenSplits(whereClause: whereClause);
 
       double totalForAllTimeForThisCategory = 0;
       final DateRange dateRangeOfTransactions = DateRange();
 
       for (final Transaction transaction in flatTransactions) {
-        totalForAllTimeForThisCategory += transaction.fieldAmount.value.asDouble();
+        totalForAllTimeForThisCategory +=
+            transaction.fieldAmount.value.asDouble();
         dateRangeOfTransactions.inflate(transaction.fieldDateTime.value);
       }
 
-      final double sumByMonthForTheCategory = totalForAllTimeForThisCategory / dateRangeOfTransactions.durationInMonths;
+      final double sumByMonthForTheCategory =
+          totalForAllTimeForThisCategory /
+          dateRangeOfTransactions.durationInMonths;
 
       final RecurringExpenses item = RecurringExpenses(
         category: category,
@@ -78,7 +86,8 @@ class RecurringExpenses {
     }
 
     items.sort(
-      (RecurringExpenses a, RecurringExpenses b) => a.sumOfAllTransactions.compareTo(b.sumOfAllTransactions),
+      (RecurringExpenses a, RecurringExpenses b) =>
+          a.sumOfAllTransactions.compareTo(b.sumOfAllTransactions),
     );
     return items;
   }
@@ -91,20 +100,30 @@ class RecurringExpenses {
   ) {
     final Map<int, RecurringExpenses> yearMap = <int, RecurringExpenses>{};
 
-    final List<Transaction> flatTransactions = Data().transactions.getListFlattenSplits(
-          whereClause: (Transaction t) =>
-              t.category != null &&
-              isBetweenOrEqual(t.fieldDateTime.value!.year, minYear, maxYear) &&
-              (includeAssetAccounts || !t.isAssetAccount),
+    final List<Transaction> flatTransactions = Data().transactions
+        .getListFlattenSplits(
+          whereClause:
+              (Transaction t) =>
+                  t.category != null &&
+                  isBetweenOrEqual(
+                    t.fieldDateTime.value!.year,
+                    minYear,
+                    maxYear,
+                  ) &&
+                  (includeAssetAccounts || !t.isAssetAccount),
         );
 
     for (final Transaction t in flatTransactions) {
       if (t.category != null) {
         final int year = t.fieldDateTime.value!.year;
         if (!yearMap.containsKey(year)) {
-          yearMap[year] = RecurringExpenses(category: t.category!, sumOfAllTransactions: 0);
+          yearMap[year] = RecurringExpenses(
+            category: t.category!,
+            sumOfAllTransactions: 0,
+          );
         }
-        yearMap[year]!.sumBudget += t.category!.fieldBudget.value.asDouble() * multiplier;
+        yearMap[year]!.sumBudget +=
+            t.category!.fieldBudget.value.asDouble() * multiplier;
 
         final double amount = t.fieldAmount.value.asDouble();
         if (t.category!.isExpense) {

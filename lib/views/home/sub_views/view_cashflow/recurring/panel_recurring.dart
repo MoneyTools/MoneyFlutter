@@ -50,7 +50,10 @@ class _PanelRecurringState extends State<PanelRecurring> {
           return RecurringCard(
             index: index + 1,
             dateRangeSearch: widget.dateRangeSearch,
-            dateRangeSelected: DateRange.fromStarEndYears(widget.minYear, widget.maxYear),
+            dateRangeSelected: DateRange.fromStarEndYears(
+              widget.minYear,
+              widget.maxYear,
+            ),
             payment: payment,
             forIncomeTransaction: widget.forIncome,
           );
@@ -66,8 +69,10 @@ class _PanelRecurringState extends State<PanelRecurring> {
     // reset the content
     recurringPayments.clear();
 
-    final AccumulatorList<int, Transaction> groupTransactionsByPayeeId = AccumulatorList<int, Transaction>();
-    final AccumulatorList<int, int> groupMonthsListByPayeeId = AccumulatorList<int, int>();
+    final AccumulatorList<int, Transaction> groupTransactionsByPayeeId =
+        AccumulatorList<int, Transaction>();
+    final AccumulatorList<int, int> groupMonthsListByPayeeId =
+        AccumulatorList<int, int>();
 
     // Step 1: Group transactions by payeeId and record transaction months
     for (final Transaction transaction in transactions.where(
@@ -105,12 +110,17 @@ class _PanelRecurringState extends State<PanelRecurring> {
   void initRecurringTransactions({required final bool forIncome}) {
     // get all transactions meeting the request of date and type
     bool whereClause(Transaction t) {
-      return isBetweenOrEqual(t.fieldDateTime.value!.year, widget.minYear, widget.maxYear) &&
-          (((forIncome == true && t.fieldAmount.value.asDouble() > 0) ||
-              (forIncome == false && t.fieldAmount.value.asDouble() < 0)));
+      return isBetweenOrEqual(
+            t.fieldDateTime.value!.year,
+            widget.minYear,
+            widget.maxYear,
+          ) &&
+          ((forIncome == true && t.fieldAmount.value.asDouble() > 0) ||
+              (forIncome == false && t.fieldAmount.value.asDouble() < 0));
     }
 
-    final List<Transaction> flatTransactions = Data().transactions.getListFlattenSplits(whereClause: whereClause);
+    final List<Transaction> flatTransactions = Data().transactions
+        .getListFlattenSplits(whereClause: whereClause);
 
     // get all transaction Income | Expenses
     findMonthlyRecurringPayments(flatTransactions, forIncome);
@@ -121,6 +131,7 @@ class _PanelRecurringState extends State<PanelRecurring> {
       return true;
     }
     // we can conclude that if paid more than 'n' months its a recurring monthly event
-    return months.length == PreferenceController.to.cashflowRecurringOccurrences.value;
+    return months.length ==
+        PreferenceController.to.cashflowRecurringOccurrences.value;
   }
 }

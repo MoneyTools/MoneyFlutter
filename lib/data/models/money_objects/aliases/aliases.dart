@@ -14,13 +14,13 @@ class Aliases extends MoneyObjects<Alias> {
 
   @override
   String toCSV() {
-    return MoneyObjects.getCsvFromList(
-      getListSortedById(),
-    );
+    return MoneyObjects.getCsvFromList(getListSortedById());
   }
 
   Payee? findByMatch(final String text) {
-    final Alias? aliasFound = iterableList().firstWhereOrNull((final Alias item) => item.isMatch(text));
+    final Alias? aliasFound = iterableList().firstWhereOrNull(
+      (final Alias item) => item.isMatch(text),
+    );
     return aliasFound?.payeeInstance;
   }
 
@@ -29,7 +29,10 @@ class Aliases extends MoneyObjects<Alias> {
     bool fireNotification = true,
   }) {
     Payee? payee = findByMatch(text);
-    payee ??= Data().payees.getOrCreate(text, fireNotification: fireNotification);
+    payee ??= Data().payees.getOrCreate(
+      text,
+      fireNotification: fireNotification,
+    );
     return payee;
   }
 }

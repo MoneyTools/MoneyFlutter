@@ -25,10 +25,18 @@ int countOccurrences(String input, String char) {
   return count;
 }
 
-String doubleToCurrency(final double value, {final String symbol = '\$', final bool showPlusSign = false}) {
-  final NumberFormat currencyFormatter = NumberFormat.currency(locale: 'en_US', symbol: symbol);
+String doubleToCurrency(
+  final double value, {
+  final String symbol = '\$',
+  final bool showPlusSign = false,
+}) {
+  final NumberFormat currencyFormatter = NumberFormat.currency(
+    locale: 'en_US',
+    symbol: symbol,
+  );
   // Format the double value as currency text
-  return (showPlusSign ? getPlusSignIfPositive(value) : '') + currencyFormatter.format(value);
+  return (showPlusSign ? getPlusSignIfPositive(value) : '') +
+      currencyFormatter.format(value);
 }
 
 String getPlusSignIfPositive(final num value) {
@@ -38,13 +46,12 @@ String getPlusSignIfPositive(final num value) {
   return '';
 }
 
-String escapeString(String input) {
-  return input.replaceAll("'", "''");
-}
+String escapeString(String input) => input.replaceAll("'", "''");
 
 String formatDoubleUpToFiveZero(double value, {bool showPlusSign = false}) {
   final NumberFormat formatter = NumberFormat('#,##0.#####', 'en_US');
-  return getPrefixPlusSignIfNeeded(value, showPlusSign: showPlusSign) + formatter.format(value);
+  return getPrefixPlusSignIfNeeded(value, showPlusSign: showPlusSign) +
+      formatter.format(value);
 }
 
 String formatDoubleTrimZeros(double value) {
@@ -56,12 +63,11 @@ String getAmountAsShorthandText(
   final num value, {
   final int decimalDigits = 0,
   final String symbol = '',
-}) {
-  return NumberFormat.compactCurrency(
-    decimalDigits: decimalDigits,
-    symbol: symbol, // if you want to add currency symbol then pass that in this else leave it empty.
-  ).format(value);
-}
+}) => NumberFormat.compactCurrency(
+  decimalDigits: decimalDigits,
+  symbol:
+      symbol, // if you want to add currency symbol then pass that in this else leave it empty.
+).format(value);
 
 List<String> getColumnInCsvLine(final String csvLine) {
   List<String> items = csvLine.split(RegExp(r',|;(?=(?:[^"]*"[^"]*")*[^"]*$)'));
@@ -87,17 +93,17 @@ Future<String> getDocumentDirectory() async {
   return directory.path;
 }
 
-String getInitials(String fullName) {
-  return fullName.split(' ').map((String word) => word[0].toUpperCase()).join('');
-}
+String getInitials(String fullName) =>
+    fullName.split(' ').map((String word) => word[0].toUpperCase()).join('');
 
-String getIntAsText(final int value, {final bool showPlusSign = false}) {
-  return getPrefixPlusSignIfNeeded(value, showPlusSign: showPlusSign) + NumberFormat.decimalPattern().format(value);
-}
+String getIntAsText(final int value, {final bool showPlusSign = false}) =>
+    getPrefixPlusSignIfNeeded(value, showPlusSign: showPlusSign) +
+    NumberFormat.decimalPattern().format(value);
 
-String getPrefixPlusSignIfNeeded(final num value, {final bool showPlusSign = false}) {
-  return (showPlusSign ? getPlusSignIfPositive(value) : '');
-}
+String getPrefixPlusSignIfNeeded(
+  final num value, {
+  final bool showPlusSign = false,
+}) => (showPlusSign ? getPlusSignIfPositive(value) : '');
 
 /// Parses a raw text string and splits it into rows and columns based on a specified separator character.
 ///
@@ -108,7 +114,10 @@ String getPrefixPlusSignIfNeeded(final num value, {final bool showPlusSign = fal
 /// [separator] The character used to separate fields within a row. Defaults to a comma `,`.
 ///
 /// Returns a `List<List<String>>` representing the parsed rows and fields.
-List<List<String>> getLinesFromRawTextWithSeparator(final String content, [final String separator = ',']) {
+List<List<String>> getLinesFromRawTextWithSeparator(
+  final String content, [
+  final String separator = ',',
+]) {
   final List<List<String>> rows = <List<String>>[];
   List<String> currentRow = <String>[];
   StringBuffer currentField = StringBuffer();
@@ -156,21 +165,22 @@ String getNormalizedValue(final String? s) {
     return '';
   }
 
-  return s.replaceAll('\r\n', ' ').replaceAll('\r', ' ').replaceAll('\n', ' ').trim();
+  return s
+      .replaceAll('\r\n', ' ')
+      .replaceAll('\r', ' ')
+      .replaceAll('\n', ' ')
+      .trim();
 }
 
-String getNumberShorthandText(final num value) {
-  return NumberFormat.compact().format(value);
-}
+String getNumberShorthandText(final num value) =>
+    NumberFormat.compact().format(value);
 
 String getSingularPluralText(
   final String title,
   final int quantity,
   final String singular,
   final String plural,
-) {
-  return '$title ${quantity == 1 ? singular : plural}';
-}
+) => '$title ${quantity == 1 ? singular : plural}';
 
 String getStringContentBetweenTwoTokens(
   final String input,
@@ -204,7 +214,10 @@ int getLineCount(final String text) {
 }
 
 /// Split the text into lines
-List<String> getLinesOfText(final String inputText, {bool includeEmptyLines = true}) {
+List<String> getLinesOfText(
+  final String inputText, {
+  bool includeEmptyLines = true,
+}) {
   final List<String> lines = inputText.split('\n');
   if (includeEmptyLines == false) {
     // Filter out the empty lines
@@ -215,7 +228,10 @@ List<String> getLinesOfText(final String inputText, {bool includeEmptyLines = tr
 
 String removeEmptyLines(String text) {
   // Filter out the empty lines
-  final List<String> nonEmptyLines = getLinesOfText(text, includeEmptyLines: false);
+  final List<String> nonEmptyLines = getLinesOfText(
+    text,
+    includeEmptyLines: false,
+  );
 
   // Join the non-empty lines back together
   final String result = nonEmptyLines.join('\n');
@@ -237,9 +253,8 @@ String shortenLongText(String fullName, [int maxLength = 5]) {
   return fullName.substring(0, maxLength);
 }
 
-int stringCompareIgnoreCasing1(final String textA, final String textB) {
-  return textA.toUpperCase().compareTo(textB.toUpperCase());
-}
+int stringCompareIgnoreCasing1(final String textA, final String textB) =>
+    textA.toUpperCase().compareTo(textB.toUpperCase());
 
 int stringCompareIgnoreCasing2(final String str1, final String str2) {
   if (str1 == str2) {
@@ -307,7 +322,9 @@ String removeUtf8Bom(String text) {
 double? parseUSDAmount(String input) {
   input = input.replaceAll('\$', '');
   input = input.replaceAll('USD', '');
-  final RegExp usdPattern = RegExp(r'^[+-]?(\d+(\,\d{3})*(\.\d+)?|\.\d+)(\s*USD)?$');
+  final RegExp usdPattern = RegExp(
+    r'^[+-]?(\d+(\,\d{3})*(\.\d+)?|\.\d+)(\s*USD)?$',
+  );
   final RegExpMatch? match = usdPattern.firstMatch(input);
 
   if (match != null) {
@@ -322,7 +339,9 @@ double? parseUSDAmount(String input) {
 }
 
 double? parseEuroAmount(String input) {
-  final RegExp euroPattern = RegExp(r'^([+-]?(?:\d+(?:\.\d{3})*|\d+))(,\d+)?\s*€?$');
+  final RegExp euroPattern = RegExp(
+    r'^([+-]?(?:\d+(?:\.\d{3})*|\d+))(,\d+)?\s*€?$',
+  );
   final RegExpMatch? match = euroPattern.firstMatch(input);
 
   if (match != null) {
@@ -361,18 +380,18 @@ double? parseAmount(String amountAsText, final String currency) {
 }
 
 /// Remove any characters not in the allowedChars argument
-String cleanString(String inputStr, String allowedChars) {
-  return inputStr.split('').where((String char) => allowedChars.contains(char)).join();
-}
+String cleanString(String inputStr, String allowedChars) =>
+    inputStr
+        .split('')
+        .where((String char) => allowedChars.contains(char))
+        .join();
 
-String validIntToCurrency(final num value) {
-  return getIntAsText(isNumber(value) ? value.toInt() : 0, showPlusSign: true);
-}
+String validIntToCurrency(final num value) =>
+    getIntAsText(isNumber(value) ? value.toInt() : 0, showPlusSign: true);
 
-String validDoubleToCurrency(final num value) {
-  return doubleToCurrency(isNumber(value) ? value.toDouble() : 0.0, showPlusSign: true);
-}
+String validDoubleToCurrency(final num value) => doubleToCurrency(
+  isNumber(value) ? value.toDouble() : 0.0,
+  showPlusSign: true,
+);
 
-bool isNumber(num value) {
-  return value.isFinite && !value.isNaN;
-}
+bool isNumber(num value) => value.isFinite && !value.isNaN;

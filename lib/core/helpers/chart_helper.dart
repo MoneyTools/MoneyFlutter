@@ -14,7 +14,10 @@ import 'package:flutter/material.dart';
 /// - Green if trending upward
 /// - Red if trending downward
 /// - Grey otherwise
-LineChartBarData getLineChartBarData(final List<FlSpot> dataPoints, {bool showDots = false}) {
+LineChartBarData getLineChartBarData(
+  final List<FlSpot> dataPoints, {
+  bool showDots = false,
+}) {
   dataPoints.sort((FlSpot a, FlSpot b) => a.x.compareTo(b.x));
 
   Color color = Colors.grey;

@@ -5,10 +5,7 @@ import 'package:money/data/models/constants.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/multiple_selection_context.dart';
 
 class MultipleSelectionToggle extends StatelessWidget {
-  const MultipleSelectionToggle({
-    required this.multipleSelection,
-    super.key,
-  });
+  const MultipleSelectionToggle({required this.multipleSelection, super.key});
 
   final ViewHeaderMultipleSelection? multipleSelection;
 
@@ -35,8 +32,13 @@ class MultipleSelectionToggle extends StatelessWidget {
             },
             style: TextButton.styleFrom(
               foregroundColor:
-                  isSelected ? getColorTheme(context).onPrimaryContainer : getColorTheme(context).onSecondaryContainer,
-              backgroundColor: isSelected ? getColorTheme(context).primaryContainer : Colors.transparent,
+                  isSelected
+                      ? getColorTheme(context).onPrimaryContainer
+                      : getColorTheme(context).onSecondaryContainer,
+              backgroundColor:
+                  isSelected
+                      ? getColorTheme(context).primaryContainer
+                      : Colors.transparent,
             ),
           ),
         );

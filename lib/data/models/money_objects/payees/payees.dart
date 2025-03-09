@@ -36,9 +36,12 @@ class Payees extends MoneyObjects<Payee> {
       if (item != null) {
         item.fieldCount.value++;
         item.fieldSum.value += t.fieldAmount.value;
-        final String categoryName = Data().categories.getNameFromId(t.fieldCategoryId.value).trim();
+        final String categoryName =
+            Data().categories.getNameFromId(t.fieldCategoryId.value).trim();
         if (categoryName.isNotEmpty) {
-          item.categories.add(Data().categories.getNameFromId(t.fieldCategoryId.value));
+          item.categories.add(
+            Data().categories.getNameFromId(t.fieldCategoryId.value),
+          );
         }
       }
     }
@@ -46,21 +49,24 @@ class Payees extends MoneyObjects<Payee> {
 
   @override
   String toCSV() {
-    return MoneyObjects.getCsvFromList(
-      getListSortedById(),
-    );
+    return MoneyObjects.getCsvFromList(getListSortedById());
   }
 
   Payee? getByName(final String name) {
     if (name.isEmpty) {
       return null;
     }
-    return iterableList().firstWhereOrNull((final Payee payee) => payee.fieldName.value == name);
+    return iterableList().firstWhereOrNull(
+      (final Payee payee) => payee.fieldName.value == name,
+    );
   }
 
   List<Payee> getListSorted() {
     final List<Payee> list = iterableList().toList();
-    list.sort((Payee a, Payee b) => sortByString(a.fieldName.value, b.fieldName.value, true));
+    list.sort(
+      (Payee a, Payee b) =>
+          sortByString(a.fieldName.value, b.fieldName.value, true),
+    );
     return list;
   }
 
@@ -88,7 +94,10 @@ class Payees extends MoneyObjects<Payee> {
       payee = Payee();
       payee.fieldId.value = -1;
       payee.fieldName.value = name;
-      Data().payees.appendNewMoneyObject(payee, fireNotification: fireNotification);
+      Data().payees.appendNewMoneyObject(
+        payee,
+        fireNotification: fireNotification,
+      );
     }
     return payee;
   }
@@ -107,8 +116,9 @@ class Payees extends MoneyObjects<Payee> {
       final Payee? payeeToCheck = Data().payees.get(payeeId);
       if (payeeToCheck != null) {
         if (Data().transactions.iterableList().firstWhereOrNull(
-                  (Transaction element) => element.fieldPayee.value == payeeToCheck.uniqueId,
-                ) ==
+              (Transaction element) =>
+                  element.fieldPayee.value == payeeToCheck.uniqueId,
+            ) ==
             null) {
           // No transactions for this payee, we can delete it
           Data().payees.deleteItem(payeeToCheck);

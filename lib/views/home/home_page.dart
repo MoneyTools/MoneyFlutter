@@ -39,14 +39,16 @@ class HomePage extends GetView<HomeController> {
       dataController.isLoading.value
           ? const WorkingIndicator()
           : DropZone(
-              onFilesDropped: (List<String> filePaths) {
-                filePaths.forEach((String filePath) => importQFX(context, filePath));
-              },
-              child: Container(
-                color: getColorTheme(context).secondaryContainer,
-                child: _buildAdaptiveContent(context),
-              ),
+            onFilesDropped: (List<String> filePaths) {
+              filePaths.forEach(
+                (String filePath) => importQFX(context, filePath),
+              );
+            },
+            child: Container(
+              color: getColorTheme(context).secondaryContainer,
+              child: _buildAdaptiveContent(context),
             ),
+          ),
     );
   }
 
@@ -89,9 +91,7 @@ class HomePage extends GetView<HomeController> {
   Widget _buildContentForSmallSurface(final BuildContext context) {
     return Column(
       children: <Widget>[
-        Expanded(
-          child: _getSubView(),
-        ),
+        Expanded(child: _getSubView()),
         MyNavigationBar(
           orientation: Axis.horizontal,
           key: Key(PreferenceController.to.currentView.value.toString()),

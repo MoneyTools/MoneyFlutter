@@ -44,7 +44,8 @@ class Transactions extends MoneyObjects<Transaction> {
   void onAllDataLoaded() {
     // Pre computer possible category matching for Transaction that have no associated categories
     // We use this to give a Hint to the user about the best category to pick for a transaction
-    final MapAccumulatorSet<int, String, int> accountsToPayeeNameToCategories = MapAccumulatorSet<int, String, int>();
+    final MapAccumulatorSet<int, String, int> accountsToPayeeNameToCategories =
+        MapAccumulatorSet<int, String, int>();
 
     final List<Transaction> transactionsWithCategories = getListFlattenSplits();
     for (final Transaction t in transactionsWithCategories) {
@@ -68,19 +69,24 @@ class Transactions extends MoneyObjects<Transaction> {
       // Pre computer possible category matching for Transaction that have no associated categories
       if (transactionSource.fieldCategoryId.value == -1) {
         // watchFind.start();
-        final Set<int> setOfPossibleCategoryId = accountsToPayeeNameToCategories.find(
-          transactionSource.fieldAccountId.value,
-          transactionSource.getPayeeOrTransferCaption(),
-        );
+        final Set<int> setOfPossibleCategoryId = accountsToPayeeNameToCategories
+            .find(
+              transactionSource.fieldAccountId.value,
+              transactionSource.getPayeeOrTransferCaption(),
+            );
         transactionSource.possibleMatchingCategoryId =
-            setOfPossibleCategoryId.isEmpty ? -1 : setOfPossibleCategoryId.first;
+            setOfPossibleCategoryId.isEmpty
+                ? -1
+                : setOfPossibleCategoryId.first;
         // watchFind.stop();
       }
 
       // Computer date range of all transactions
-      dateRangeIncludingClosedAccount.inflate(transactionSource.fieldDateTime.value);
+      dateRangeIncludingClosedAccount.inflate(
+        transactionSource.fieldDateTime.value,
+      );
       if (transactionSource.instanceOfAccount?.isOpen == true) {
-        dateRangeActiveAccount.inflate(transactionSource.fieldDateTime.value!);
+        dateRangeActiveAccount.inflate(transactionSource.fieldDateTime.value);
       }
 
       // Resolve the Transfers
@@ -144,24 +150,31 @@ class Transactions extends MoneyObjects<Transaction> {
 
   @override
   String toCSV() {
-    return MoneyObjects.getCsvFromList(
-      getListSortedById(),
-    );
+    return MoneyObjects.getCsvFromList(getListSortedById());
   }
 
-  void checkTransfers(Set<Transaction> dangling, List<Account> deletedAccounts) {
+  void checkTransfers(
+    Set<Transaction> dangling,
+    List<Account> deletedAccounts,
+  ) {
     for (Transaction t in iterableList()) {
       t.checkTransfers(dangling, deletedAccounts);
     }
   }
 
-  static List<FlSpot> cumulateTransactionPerYearMonth(final List<Transaction> transactions) {
-    final AccumulatorSum<String, double> cumulateYearMonthBalance = AccumulatorSum<String, double>();
+  static List<FlSpot> cumulateTransactionPerYearMonth(
+    final List<Transaction> transactions,
+  ) {
+    final AccumulatorSum<String, double> cumulateYearMonthBalance =
+        AccumulatorSum<String, double>();
 
     // Add transactions to the accumulator
     for (final Transaction t in transactions) {
       final String dateKey = dateToString(t.fieldDateTime.value);
-      cumulateYearMonthBalance.cumulate(dateKey, t.fieldAmount.value.asDouble());
+      cumulateYearMonthBalance.cumulate(
+        dateKey,
+        t.fieldAmount.value.asDouble(),
+      );
     }
 
     // Add events to the accumulator with zero amount
@@ -171,13 +184,19 @@ class Transactions extends MoneyObjects<Transaction> {
     }
 
     final List<FlSpot> tmpDataPoints = <FlSpot>[];
-    cumulateYearMonthBalance.getEntries().forEach(
-      (MapEntry<String, double> entry) {
-        final List<String> tokens = entry.key.split('-');
-        final DateTime dateForYearMonth = DateTime(int.parse(tokens[0]), int.parse(tokens[1]), int.parse(tokens[2]));
-        tmpDataPoints.add(FlSpot(dateForYearMonth.millisecondsSinceEpoch.toDouble(), entry.value));
-      },
-    );
+    cumulateYearMonthBalance.getEntries().forEach((
+      MapEntry<String, double> entry,
+    ) {
+      final List<String> tokens = entry.key.split('-');
+      final DateTime dateForYearMonth = DateTime(
+        int.parse(tokens[0]),
+        int.parse(tokens[1]),
+        int.parse(tokens[2]),
+      );
+      tmpDataPoints.add(
+        FlSpot(dateForYearMonth.millisecondsSinceEpoch.toDouble(), entry.value),
+      );
+    });
 
     tmpDataPoints.sort((FlSpot a, FlSpot b) => a.x.compareTo(b.x));
 
@@ -197,7 +216,9 @@ class Transactions extends MoneyObjects<Transaction> {
     required final DateRange dateRange,
     required final double amount,
   }) {
-    return iterableList(includeDeleted: true).firstWhereOrNull((Transaction transaction) {
+    return iterableList(includeDeleted: true).firstWhereOrNull((
+      Transaction transaction,
+    ) {
       if ((accountId == -1 || transaction.fieldAccountId.value == accountId) &&
           transaction.fieldAmount.value.asDouble() == amount &&
           dateRange.isBetweenEqual(transaction.fieldDateTime.value)) {
@@ -208,14 +229,20 @@ class Transactions extends MoneyObjects<Transaction> {
     });
   }
 
-  int findPossibleMatchingCategoryId(final Transaction t, List<Transaction> transactionWithCategories) {
-    final Transaction? transactionMatchingAccountPayeeAndHasCategory = transactionWithCategories.firstWhereOrNull(
-      (Transaction item) =>
-          item.fieldAccountId.value == t.fieldAccountId.value &&
-          item.getPayeeOrTransferCaption() == t.getPayeeOrTransferCaption(),
-    );
+  int findPossibleMatchingCategoryId(
+    final Transaction t,
+    List<Transaction> transactionWithCategories,
+  ) {
+    final Transaction? transactionMatchingAccountPayeeAndHasCategory =
+        transactionWithCategories.firstWhereOrNull(
+          (Transaction item) =>
+              item.fieldAccountId.value == t.fieldAccountId.value &&
+              item.getPayeeOrTransferCaption() == t.getPayeeOrTransferCaption(),
+        );
     if (transactionMatchingAccountPayeeAndHasCategory != null) {
-      return transactionMatchingAccountPayeeAndHasCategory.fieldCategoryId.value;
+      return transactionMatchingAccountPayeeAndHasCategory
+          .fieldCategoryId
+          .value;
     }
     return -1;
   }
@@ -242,7 +269,10 @@ class Transactions extends MoneyObjects<Transaction> {
     for (final Transaction t in transactions) {
       if (t.isSplit) {
         for (final MoneySplit s in t.splits) {
-          final Transaction fakeTransaction = Transaction(date: t.fieldDateTime.value, status: t.fieldStatus.value);
+          final Transaction fakeTransaction = Transaction(
+            date: t.fieldDateTime.value,
+            status: t.fieldStatus.value,
+          );
           fakeTransaction.fieldAccountId.value = t.fieldAccountId.value;
           fakeTransaction.fieldPayee.value = t.fieldPayee.value;
           fakeTransaction.fieldCategoryId.value = s.fieldCategoryId.value;
@@ -258,10 +288,15 @@ class Transactions extends MoneyObjects<Transaction> {
   }
 
   List<DateTime> getAllTransactionDatesForYear(final int year) {
-    final Iterable<Transaction> transactions = transactionInYearRange(minYear: year, maxYear: year, incomesOrExpenses: null);
+    final Iterable<Transaction> transactions = transactionInYearRange(
+      minYear: year,
+      maxYear: year,
+      incomesOrExpenses: null,
+    );
     final List<DateTime> dates = <DateTime>[];
     for (final Transaction t in transactions) {
-      if (t.fieldDateTime.value?.year == year && !dates.contains(t.fieldDateTime.value)) {
+      if (t.fieldDateTime.value?.year == year &&
+          !dates.contains(t.fieldDateTime.value)) {
         dates.add(t.fieldDateTime.value!);
       }
     }
@@ -276,12 +311,19 @@ class Transactions extends MoneyObjects<Transaction> {
       if (whereClause == null || whereClause(t)) {
         if (t.fieldCategoryId.value == Data().categories.splitCategoryId()) {
           for (final MoneySplit s in t.splits) {
-            final Transaction fakeT = Transaction(date: t.fieldDateTime.value, status: t.fieldStatus.value)
-              ..fieldAccountId.value = t.fieldAccountId.value
-              ..fieldPayee.value = s.fieldPayeeId.value == -1 ? t.fieldPayee.value : s.fieldPayeeId.value
-              ..fieldCategoryId.value = s.fieldCategoryId.value
-              ..fieldMemo.value = s.fieldMemo.value
-              ..fieldAmount.value = s.fieldAmount.value;
+            final Transaction fakeT =
+                Transaction(
+                    date: t.fieldDateTime.value,
+                    status: t.fieldStatus.value,
+                  )
+                  ..fieldAccountId.value = t.fieldAccountId.value
+                  ..fieldPayee.value =
+                      s.fieldPayeeId.value == -1
+                          ? t.fieldPayee.value
+                          : s.fieldPayeeId.value
+                  ..fieldCategoryId.value = s.fieldCategoryId.value
+                  ..fieldMemo.value = s.fieldMemo.value
+                  ..fieldAmount.value = s.fieldAmount.value;
 
             flattenList.add(fakeT);
           }
@@ -300,10 +342,16 @@ class Transactions extends MoneyObjects<Transaction> {
   }) {
     return iterableList(includeDeleted: true).where(
       (Transaction element) =>
-          isBetweenOrEqual(element.fieldDateTime.value!.year, minYear, maxYear) &&
-          ((incomesOrExpenses == null ||
-              (incomesOrExpenses == true && element.fieldAmount.value.asDouble() > 0) ||
-              (incomesOrExpenses == false && element.fieldAmount.value.asDouble() < 0))),
+          isBetweenOrEqual(
+            element.fieldDateTime.value!.year,
+            minYear,
+            maxYear,
+          ) &&
+          (incomesOrExpenses == null ||
+              (incomesOrExpenses == true &&
+                  element.fieldAmount.value.asDouble() > 0) ||
+              (incomesOrExpenses == false &&
+                  element.fieldAmount.value.asDouble() < 0)),
     );
   }
 
@@ -339,7 +387,10 @@ class Transactions extends MoneyObjects<Transaction> {
       sums[key] = (sums[key] ?? 0) + t.fieldAmount.value.asDouble();
     }
 
-    final List<PairXYY> result = sums.entries.map((MapEntry<String, double> e) => PairXYY(e.key, e.value)).toList();
+    final List<PairXYY> result =
+        sums.entries
+            .map((MapEntry<String, double> e) => PairXYY(e.key, e.value))
+            .toList();
     result.sort((PairXYY a, PairXYY b) => a.xText.compareTo(b.xText));
     return result;
   }
@@ -361,11 +412,17 @@ class Transactions extends MoneyObjects<Transaction> {
   ) {
     final List<Pair<int, double>> timeAndAmounts = <Pair<int, double>>[];
     for (final Transaction t in transactions) {
-      final int oneDaySlot = t.fieldDateTime.value!.millisecondsSinceEpoch ~/ Duration.millisecondsPerDay;
-      timeAndAmounts.add(Pair<int, double>(oneDaySlot, t.fieldAmount.value.asDouble()));
+      final int oneDaySlot =
+          t.fieldDateTime.value!.millisecondsSinceEpoch ~/
+          Duration.millisecondsPerDay;
+      timeAndAmounts.add(
+        Pair<int, double>(oneDaySlot, t.fieldAmount.value.asDouble()),
+      );
     }
     // sort by date time
-    timeAndAmounts.sort((Pair<int, double> a, Pair<int, double> b) => a.first.compareTo(b.first));
+    timeAndAmounts.sort(
+      (Pair<int, double> a, Pair<int, double> b) => a.first.compareTo(b.first),
+    );
     return timeAndAmounts;
   }
 }

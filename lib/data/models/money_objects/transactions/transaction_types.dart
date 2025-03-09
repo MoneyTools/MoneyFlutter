@@ -1,10 +1,4 @@
-enum TransactionStatus {
-  none,
-  electronic,
-  cleared,
-  reconciled,
-  voided,
-}
+enum TransactionStatus { none, electronic, cleared, reconciled, voided }
 
 String transactionStatusToLetter(final TransactionStatus status) {
   switch (status) {

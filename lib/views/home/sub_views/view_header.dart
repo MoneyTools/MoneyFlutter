@@ -67,10 +67,7 @@ class ViewHeader extends StatelessWidget {
         final _,
         /*widget*/
       ) {
-        return buildViewHeaderContainer(
-          context,
-          _buildContent(context),
-        );
+        return buildViewHeaderContainer(context, _buildContent(context));
       },
     );
   }
@@ -79,9 +76,7 @@ class ViewHeader extends StatelessWidget {
   static Widget buildViewHeaderContainer(BuildContext context, Widget child) {
     return Container(
       padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: getColorTheme(context).surfaceContainer,
-      ),
+      decoration: BoxDecoration(color: getColorTheme(context).surfaceContainer),
       child: child,
     );
   }
@@ -124,7 +119,9 @@ class ViewHeader extends StatelessWidget {
           IntrinsicWidth(
             child: Text(
               description,
-              style: getTextTheme(context).bodySmall!.copyWith(color: getColorTheme(context).onSurfaceVariant),
+              style: getTextTheme(context).bodySmall!.copyWith(
+                color: getColorTheme(context).onSurfaceVariant,
+              ),
             ),
           ),
         ],
@@ -138,9 +135,7 @@ class ViewHeader extends StatelessWidget {
       if (multipleSelection != null) {
         listOfActionButtons.insert(
           0,
-          MultipleSelectionToggle(
-            multipleSelection: multipleSelection,
-          ),
+          MultipleSelectionToggle(multipleSelection: multipleSelection),
         );
       }
 
@@ -168,7 +163,8 @@ class ViewHeader extends StatelessWidget {
           child: FilterInput(
             hintText: 'Filter',
             initialValue: textFilter,
-            autoSubmitAfterSeconds: -1, // -1 do not auto submit, user has to press Enter
+            autoSubmitAfterSeconds:
+                -1, // -1 do not auto submit, user has to press Enter
             onChanged: (final String text) {
               onTextFilterChanged!(text);
             },

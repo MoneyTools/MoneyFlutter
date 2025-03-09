@@ -26,9 +26,7 @@ class LoanPayments extends MoneyObjects<LoanPayment> {
 
   @override
   String toCSV() {
-    return MoneyObjects.getCsvFromList(
-      getListSortedById(),
-    );
+    return MoneyObjects.getCsvFromList(getListSortedById());
   }
 }
 
@@ -47,15 +45,18 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
   ];
 
   // include the manual entries done in the LoanPayments table
-  final List<LoanPayment> aggregatedList = Data()
-      .loanPayments
-      .iterableList(includeDeleted: false)
-      .where((LoanPayment a) => a.fieldAccountId.value == account.uniqueId)
-      .toList();
+  final List<LoanPayment> aggregatedList =
+      Data().loanPayments
+          .iterableList(includeDeleted: false)
+          .where((LoanPayment a) => a.fieldAccountId.value == account.uniqueId)
+          .toList();
 
   // include the bank transactions matching the Account Categories for Principal and Interest
-  final List<Transaction> listOfTransactions = Data().transactions.getListFlattenSplits(
-        whereClause: (Transaction t) => t.isMatchingAnyOfTheseCategories(categoriesToMatch),
+  final List<Transaction> listOfTransactions = Data().transactions
+      .getListFlattenSplits(
+        whereClause:
+            (Transaction t) =>
+                t.isMatchingAnyOfTheseCategories(categoriesToMatch),
       );
 
   // Rollup into a single Payment based on Date to match Principal and Interest payment
@@ -83,7 +84,12 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
     if (isFromSplit) {
       pr.reference = concat(pr.reference, '<Split>', ';', true);
     }
-    pr.reference = concat(pr.reference, t.getPayeeOrTransferCaption(), ';', true);
+    pr.reference = concat(
+      pr.reference,
+      t.getPayeeOrTransferCaption(),
+      ';',
+      true,
+    );
 
     // Principal
     if (t.fieldCategoryId.value == account.fieldCategoryIdForPrincipal.value) {
@@ -112,7 +118,10 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
     );
   }
 
-  aggregatedList.sort((LoanPayment a, LoanPayment b) => sortByDate(a.fieldDate.value, b.fieldDate.value, true));
+  aggregatedList.sort(
+    (LoanPayment a, LoanPayment b) =>
+        sortByDate(a.fieldDate.value, b.fieldDate.value, true),
+  );
 
   double runningBalance = 0.00;
 

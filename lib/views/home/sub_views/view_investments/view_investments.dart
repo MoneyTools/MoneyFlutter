@@ -30,45 +30,54 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
   List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
     final List<Widget> list = super.getActionsButtons(forSidePanelTransactions);
     if (!forSidePanelTransactions) {
-      final Investment? selectedInvestment = getFirstSelectedItem() as Investment?;
+      final Investment? selectedInvestment =
+          getFirstSelectedItem() as Investment?;
 
       // this can go last
       if (selectedInvestment != null) {
-        final Transaction? relatedTransaction = Data().transactions.get(selectedInvestment.uniqueId);
+        final Transaction? relatedTransaction = Data().transactions.get(
+          selectedInvestment.uniqueId,
+        );
         list.add(
-          buildJumpToButton(
-            <MenuEntry>[
-              // Jump to Account view
-              MenuEntry.toAccounts(accountId: relatedTransaction!.fieldAccountId.value),
+          buildJumpToButton(<MenuEntry>[
+            // Jump to Account view
+            MenuEntry.toAccounts(
+              accountId: relatedTransaction!.fieldAccountId.value,
+            ),
 
-              // Jump to Transaction view
-              MenuEntry.toTransactions(
-                transactionId: relatedTransaction.uniqueId,
-                filters: null,
-              ),
+            // Jump to Transaction view
+            MenuEntry.toTransactions(
+              transactionId: relatedTransaction.uniqueId,
+              filters: null,
+            ),
 
-              // Jump to Stock view
-              MenuEntry(
-                icon: ViewId.viewStocks.getIconData(),
-                title: 'Switch to Stocks',
-                onPressed: () {
-                  // Prepare the Stocks view
-                  // Filter by Stock Symbol
-                  final String symbol =
-                      (selectedInvestment.fieldSecuritySymbol.getValueForDisplay(selectedInvestment) as String).toLowerCase();
-                  final Security? securityFound = Data().securities.getBySymbol(symbol);
-                  if (securityFound != null) {
-                    PreferenceController.to.jumpToView(
-                      viewId: ViewId.viewStocks,
-                      selectedId: securityFound.uniqueId,
-                      textFilter: '',
-                      columnFilters: null,
-                    );
-                  }
-                },
-              ),
-            ],
-          ),
+            // Jump to Stock view
+            MenuEntry(
+              icon: ViewId.viewStocks.getIconData(),
+              title: 'Switch to Stocks',
+              onPressed: () {
+                // Prepare the Stocks view
+                // Filter by Stock Symbol
+                final String symbol =
+                    (selectedInvestment.fieldSecuritySymbol.getValueForDisplay(
+                              selectedInvestment,
+                            )
+                            as String)
+                        .toLowerCase();
+                final Security? securityFound = Data().securities.getBySymbol(
+                  symbol,
+                );
+                if (securityFound != null) {
+                  PreferenceController.to.jumpToView(
+                    viewId: ViewId.viewStocks,
+                    selectedId: securityFound.uniqueId,
+                    textFilter: '',
+                    columnFilters: null,
+                  );
+                }
+              },
+            ),
+          ]),
         );
       }
     }
@@ -100,13 +109,14 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
     bool includeDeleted = false,
     bool applyFilter = true,
   }) {
-    final List<Investment> list = Data()
-        .investments
-        .iterableList(includeDeleted: includeDeleted)
-        .where(
-          (Investment instance) => (applyFilter == false || isMatchingFilters(instance)),
-        )
-        .toList();
+    final List<Investment> list =
+        Data().investments
+            .iterableList(includeDeleted: includeDeleted)
+            .where(
+              (Investment instance) =>
+                  applyFilter == false || isMatchingFilters(instance),
+            )
+            .toList();
     Investments.applyHoldingSharesAdjustedForSplits(list);
 
     return list;

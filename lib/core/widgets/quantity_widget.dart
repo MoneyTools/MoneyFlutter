@@ -24,14 +24,22 @@ class QuantityWidget extends StatelessWidget {
       fontWeight: FontWeight.w900,
     );
 
-    final String originalString = formatDoubleUpToFiveZero(quantity, showPlusSign: true);
+    final String originalString = formatDoubleUpToFiveZero(
+      quantity,
+      showPlusSign: true,
+    );
 
     final int leftSideOfDecimalPoint = quantity.truncate();
     String leftSideOfDecimalPointAsString = '';
     if (leftSideOfDecimalPoint != 0) {
-      leftSideOfDecimalPointAsString = formatDoubleUpToFiveZero(leftSideOfDecimalPoint.toDouble(), showPlusSign: true);
+      leftSideOfDecimalPointAsString = formatDoubleUpToFiveZero(
+        leftSideOfDecimalPoint.toDouble(),
+        showPlusSign: true,
+      );
     }
-    final String rightOfDecimalPoint = originalString.substring(leftSideOfDecimalPointAsString.length);
+    final String rightOfDecimalPoint = originalString.substring(
+      leftSideOfDecimalPointAsString.length,
+    );
 
     return SelectableText.rich(
       maxLines: 1,
@@ -39,15 +47,11 @@ class QuantityWidget extends StatelessWidget {
       TextSpan(
         style: style,
         children: <InlineSpan>[
-          TextSpan(
-            text: leftSideOfDecimalPointAsString,
-          ),
+          TextSpan(text: leftSideOfDecimalPointAsString),
           if (rightOfDecimalPoint.isNotEmpty)
             TextSpan(
               text: rightOfDecimalPoint,
-              style: const TextStyle(
-                fontSize: 11,
-              ),
+              style: const TextStyle(fontSize: 11),
             ),
         ],
       ),

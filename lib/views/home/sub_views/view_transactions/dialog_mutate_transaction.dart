@@ -34,15 +34,13 @@ Future<dynamic> showTransactionAndActions({
 ///
 /// The [transaction] parameter is required and represents the transaction to be displayed and mutated in the dialog.
 class DialogMutateTransaction extends StatefulWidget {
-  const DialogMutateTransaction({
-    required this.transaction,
-    super.key,
-  });
+  const DialogMutateTransaction({required this.transaction, super.key});
 
   final Transaction transaction;
 
   @override
-  State<DialogMutateTransaction> createState() => _DialogMutateTransactionState();
+  State<DialogMutateTransaction> createState() =>
+      _DialogMutateTransactionState();
 }
 
 class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
@@ -68,13 +66,14 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: _transaction.buildListOfNamesValuesWidgets(
-                  onEdit: isInEditingMode
-                      ? (bool wasModified) {
-                          setState(() {
-                            dataWasModified = wasModified || isDataModified();
-                          });
-                        }
-                      : null,
+                  onEdit:
+                      isInEditingMode
+                          ? (bool wasModified) {
+                            setState(() {
+                              dataWasModified = wasModified || isDataModified();
+                            });
+                          }
+                          : null,
                 ),
               ),
             ),
@@ -136,7 +135,9 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
             title: 'Delete Transaction',
             question: 'Are you sure you want to delete this transaction?',
             content: Column(
-              children: transaction.buildListOfNamesValuesWidgets(compact: true),
+              children: transaction.buildListOfNamesValuesWidgets(
+                compact: true,
+              ),
             ),
             buttonText: 'Delete',
             onConfirmation: () {
@@ -151,14 +152,15 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
         icon: Icons.copy_outlined,
         text: 'Duplicate',
         onPressed: () {
-          _transaction = Transaction(date: transaction.fieldDateTime.value)
-            ..fieldId.value = -1
-            ..fieldAccountId.value = transaction.fieldAccountId.value
-            ..fieldPayee.value = transaction.fieldPayee.value
-            ..fieldCategoryId.value = transaction.fieldCategoryId.value
-            ..fieldTransfer = transaction.fieldTransfer
-            ..fieldAmount.value = transaction.fieldAmount.value
-            ..fieldMemo.value = transaction.fieldMemo.value;
+          _transaction =
+              Transaction(date: transaction.fieldDateTime.value)
+                ..fieldId.value = -1
+                ..fieldAccountId.value = transaction.fieldAccountId.value
+                ..fieldPayee.value = transaction.fieldPayee.value
+                ..fieldCategoryId.value = transaction.fieldCategoryId.value
+                ..fieldTransfer = transaction.fieldTransfer
+                ..fieldAmount.value = transaction.fieldAmount.value
+                ..fieldMemo.value = transaction.fieldMemo.value;
 
           setState(() {
             // append to the list of transactions

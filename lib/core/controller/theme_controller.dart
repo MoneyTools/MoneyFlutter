@@ -46,7 +46,10 @@ class ThemeController extends GetxController {
     if (!PreferenceController.to.isReady.value) {
       await PreferenceController.to.init();
     }
-    isDarkTheme.value = PreferenceController.to.getBool(settingKeyDarkMode, false);
+    isDarkTheme.value = PreferenceController.to.getBool(
+      settingKeyDarkMode,
+      false,
+    );
     colorSelected.value = PreferenceController.to.getInt(settingKeyTheme, 0);
     updateTheme();
   }
@@ -57,63 +60,57 @@ class ThemeController extends GetxController {
   }
 
   void setAppSizeToLarge() {
-    windowManager.ensureInitialized().then(
-      (void _) {
-        final WindowOptions windowOptions = const WindowOptions(
-          size: Size(1800, 900),
-          minimumSize: Size(Constants.screenWithSmall, 800),
-          center: true,
-          backgroundColor: Colors.transparent,
-          skipTaskbar: false,
-          titleBarStyle: TitleBarStyle.normal,
-          title: 'MyMoney by vTeam',
-        );
-        windowManager.waitUntilReadyToShow(windowOptions, () async {
-          await windowManager.show();
-          await windowManager.focus();
-        });
-      },
-    );
+    windowManager.ensureInitialized().then((void _) {
+      final WindowOptions windowOptions = const WindowOptions(
+        size: Size(1800, 900),
+        minimumSize: Size(Constants.screenWithSmall, 800),
+        center: true,
+        backgroundColor: Colors.transparent,
+        skipTaskbar: false,
+        titleBarStyle: TitleBarStyle.normal,
+        title: 'MyMoney by vTeam',
+      );
+      windowManager.waitUntilReadyToShow(windowOptions, () async {
+        await windowManager.show();
+        await windowManager.focus();
+      });
+    });
   }
 
   void setAppSizeToMedium() {
-    windowManager.ensureInitialized().then(
-      (void _) {
-        final WindowOptions windowOptions = const WindowOptions(
-          size: Size(Constants.screenWidthMedium, 900),
-          minimumSize: Size(Constants.screenWidthMedium, 800),
-          center: true,
-          backgroundColor: Colors.transparent,
-          skipTaskbar: false,
-          titleBarStyle: TitleBarStyle.normal,
-          title: 'MyMoney by vTeam',
-        );
-        windowManager.waitUntilReadyToShow(windowOptions, () async {
-          await windowManager.show();
-          await windowManager.focus();
-        });
-      },
-    );
+    windowManager.ensureInitialized().then((void _) {
+      final WindowOptions windowOptions = const WindowOptions(
+        size: Size(Constants.screenWidthMedium, 900),
+        minimumSize: Size(Constants.screenWidthMedium, 800),
+        center: true,
+        backgroundColor: Colors.transparent,
+        skipTaskbar: false,
+        titleBarStyle: TitleBarStyle.normal,
+        title: 'MyMoney by vTeam',
+      );
+      windowManager.waitUntilReadyToShow(windowOptions, () async {
+        await windowManager.show();
+        await windowManager.focus();
+      });
+    });
   }
 
   void setAppSizeToSmall() {
-    windowManager.ensureInitialized().then(
-      (void _) {
-        final WindowOptions windowOptions = const WindowOptions(
-          size: Size(Constants.screenWithSmall, 900),
-          maximumSize: Size(Constants.screenWithSmall, 900),
-          center: true,
-          backgroundColor: Colors.transparent,
-          skipTaskbar: false,
-          titleBarStyle: TitleBarStyle.normal,
-          title: 'MyMoney by vTeam',
-        );
-        windowManager.waitUntilReadyToShow(windowOptions, () async {
-          await windowManager.show();
-          await windowManager.focus();
-        });
-      },
-    );
+    windowManager.ensureInitialized().then((void _) {
+      final WindowOptions windowOptions = const WindowOptions(
+        size: Size(Constants.screenWithSmall, 900),
+        maximumSize: Size(Constants.screenWithSmall, 900),
+        center: true,
+        backgroundColor: Colors.transparent,
+        skipTaskbar: false,
+        titleBarStyle: TitleBarStyle.normal,
+        title: 'MyMoney by vTeam',
+      );
+      windowManager.waitUntilReadyToShow(windowOptions, () async {
+        await windowManager.show();
+        await windowManager.focus();
+      });
+    });
   }
 
   bool setFontScaleTo(final double newScale) {
@@ -133,9 +130,7 @@ class ThemeController extends GetxController {
     updateTheme();
   }
 
-  ThemeData get themeData {
-    return isDarkTheme.value ? themeDataDark : themeDataLight;
-  }
+  ThemeData get themeData => isDarkTheme.value ? themeDataDark : themeDataLight;
 
   ThemeData get themeDataDark {
     // Validate color range

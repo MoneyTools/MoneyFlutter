@@ -3,11 +3,7 @@ import 'package:money/data/models/constants.dart';
 
 // ignore: must_be_immutable
 class TokenText extends StatelessWidget {
-  TokenText(
-    this.text, {
-    super.key,
-    this.style = const TokenTextStyle(),
-  }) {
+  TokenText(this.text, {super.key, this.style = const TokenTextStyle()}) {
     tokens = text.split(style.separator);
   }
 
@@ -47,16 +43,15 @@ class TokenText extends StatelessWidget {
           ),
         );
       } else {
-        widgets.add(Opacity(opacity: 0.8, child: Text(token, style: ancestors)));
+        widgets.add(
+          Opacity(opacity: 0.8, child: Text(token, style: ancestors)),
+        );
         widgets.add(Opacity(opacity: 0.6, child: separator));
       }
     }
 
     return IntrinsicWidth(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: widgets,
-      ),
+      child: Row(mainAxisAlignment: MainAxisAlignment.start, children: widgets),
     );
   }
 }

@@ -33,34 +33,30 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
       final MoneyObject? moneyObject = getFirstSelectedItem();
       if (moneyObject != null) {
         list.add(
-          buildMergeButton(
-            () {
-              // let the user pick another Payee and merge change the transaction of the current selected payee to the destination
-              final Payee payee = (moneyObject as Payee);
-              showMergePayee(context, payee);
-            },
-          ),
+          buildMergeButton(() {
+            // let the user pick another Payee and merge change the transaction of the current selected payee to the destination
+            final Payee payee = moneyObject as Payee;
+            showMergePayee(context, payee);
+          }),
         );
       }
 
       // this can go last
       if (getFirstSelectedItem() != null) {
         list.add(
-          buildJumpToButton(
-            <MenuEntry>[
-              MenuEntry(
-                icon: ViewId.viewTransactions.getIconData(),
-                title: 'Switch to Transactions',
-                onPressed: () {
-                  final Payee? payee = getFirstSelectedItem() as Payee?;
-                  if (payee != null) {
-                    // Prepare the Transaction view to show only the selected account
-                    switchViewTransactionForPayee(payee.fieldName.value);
-                  }
-                },
-              ),
-            ],
-          ),
+          buildJumpToButton(<MenuEntry>[
+            MenuEntry(
+              icon: ViewId.viewTransactions.getIconData(),
+              title: 'Switch to Transactions',
+              onPressed: () {
+                final Payee? payee = getFirstSelectedItem() as Payee?;
+                if (payee != null) {
+                  // Prepare the Transaction view to show only the selected account
+                  switchViewTransactionForPayee(payee.fieldName.value);
+                }
+              },
+            ),
+          ]),
         );
       }
     }
@@ -89,13 +85,14 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
 
   @override
   List<Payee> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    final List<Payee> list = Data()
-        .payees
-        .iterableList(includeDeleted: includeDeleted)
-        .where(
-          (Payee instance) => (applyFilter == false || isMatchingFilters(instance)),
-        )
-        .toList();
+    final List<Payee> list =
+        Data().payees
+            .iterableList(includeDeleted: includeDeleted)
+            .where(
+              (Payee instance) =>
+                  applyFilter == false || isMatchingFilters(instance),
+            )
+            .toList();
 
     return list;
   }
@@ -114,7 +111,9 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
     final Payee? payee = getFirstSelectedItem() as Payee?;
     if (payee != null && payee.fieldId.value > -1) {
       return getTransactions(
-        filter: (final Transaction transaction) => transaction.fieldPayee.value == payee.fieldId.value,
+        filter:
+            (final Transaction transaction) =>
+                transaction.fieldPayee.value == payee.fieldId.value,
       );
     }
     return <MoneyObject>[];

@@ -50,10 +50,11 @@ class _PasteImageOcrState extends State<PasteImageOcr> {
         final ui.Image inputImage = await fromBytesToImage(bytes);
 
         // extract text from the image
-        widget.textController.text = await (await Textify().init()).getTextFromImage(
-          image: inputImage,
-          supportedCharacters: widget.allowedCharacters,
-        );
+        widget.textController.text = await (await Textify().init())
+            .getTextFromImage(
+              image: inputImage,
+              supportedCharacters: widget.allowedCharacters,
+            );
       } on Exception catch (e) {
         // Handle potential errors
         logger.e('Error recognizing text: $e');

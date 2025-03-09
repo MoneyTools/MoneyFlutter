@@ -27,13 +27,17 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   final DataController dataController = Get.put(DataController());
-  final ListControllerSidePanel listControllerSidePanel = Get.put(ListControllerSidePanel());
+  final ListControllerSidePanel listControllerSidePanel = Get.put(
+    ListControllerSidePanel(),
+  );
 
   // Use in the two major list
   final ListControllerMain listControllerMain = Get.put(ListControllerMain());
 
   // Leave these declared in this order
-  final PreferenceController preferenceController = Get.put(PreferenceController());
+  final PreferenceController preferenceController = Get.put(
+    PreferenceController(),
+  );
 
   // Keyboard support
   final ShortcutController shortcutController = Get.put(ShortcutController());
@@ -50,38 +54,39 @@ class MyApp extends StatelessWidget {
     themeController.isDeviceWidthMedium.value = context.isWidthMedium;
     themeController.isDeviceWidthLarge.value = context.isWidthLarge;
 
-    return Obx(
-      () {
-        final String k = preferenceController.getUniqueState;
+    return Obx(() {
+      final String k = preferenceController.getUniqueState;
 
-        return GetMaterialApp(
-          key: Key(k),
-          debugShowCheckedModeBanner: false,
-          theme: themeController.themeDataLight,
-          darkTheme: themeController.themeDataDark,
-          themeMode: themeController.isDarkTheme.value ? ThemeMode.dark : ThemeMode.light,
-          title: 'MyMoney by VTeam',
-          initialBinding: ApplicationBindings(),
-          initialRoute: '/',
-          getPages: <GetPage<dynamic>>[
-            GetPage<dynamic>(
-              name: '/',
-              page: () {
-                final PreferenceController preferenceController = Get.find();
-                if (preferenceController.isReady.value) {
-                  return const WelcomePage();
-                }
-                return const SplashScreen();
-              },
-            ),
-            ...HomeRoutes.routes,
-            ...WelcomeRoutes.routes,
-            ...SettingsRoutes.routes,
-            ...PlatformsRoutes.routes,
-            ...PolicyRoutes.routes,
-          ],
-        );
-      },
-    );
+      return GetMaterialApp(
+        key: Key(k),
+        debugShowCheckedModeBanner: false,
+        theme: themeController.themeDataLight,
+        darkTheme: themeController.themeDataDark,
+        themeMode:
+            themeController.isDarkTheme.value
+                ? ThemeMode.dark
+                : ThemeMode.light,
+        title: 'MyMoney by VTeam',
+        initialBinding: ApplicationBindings(),
+        initialRoute: '/',
+        getPages: <GetPage<dynamic>>[
+          GetPage<dynamic>(
+            name: '/',
+            page: () {
+              final PreferenceController preferenceController = Get.find();
+              if (preferenceController.isReady.value) {
+                return const WelcomePage();
+              }
+              return const SplashScreen();
+            },
+          ),
+          ...HomeRoutes.routes,
+          ...WelcomeRoutes.routes,
+          ...SettingsRoutes.routes,
+          ...PlatformsRoutes.routes,
+          ...PolicyRoutes.routes,
+        ],
+      );
+    });
   }
 }

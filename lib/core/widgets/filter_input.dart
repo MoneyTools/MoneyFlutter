@@ -16,7 +16,9 @@ class FilterInput extends StatelessWidget {
   final String initialValue;
   final void Function(String) onChanged;
 
-  late final Debouncer _debouncerForFilterText = Debouncer(Duration(seconds: autoSubmitAfterSeconds));
+  late final Debouncer _debouncerForFilterText = Debouncer(
+    Duration(seconds: autoSubmitAfterSeconds),
+  );
 
   @override
   Widget build(final BuildContext context) {

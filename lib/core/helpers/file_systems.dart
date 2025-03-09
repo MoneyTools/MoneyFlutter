@@ -74,9 +74,7 @@ class MyFileSystems {
 
   static String get pathSeparator => p.separator;
 
-  static Future<String> readFile(
-    final String pathToFile,
-  ) async {
+  static Future<String> readFile(final String pathToFile) async {
     if (await MyFileSystems.doesFileExist(pathToFile)) {
       final File file = File(pathToFile);
       return await file.readAsString();

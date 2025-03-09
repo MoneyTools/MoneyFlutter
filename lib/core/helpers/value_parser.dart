@@ -24,13 +24,11 @@ class ValueQuality {
   final String valueAsString;
 
   @override
-  String toString() {
-    return asString();
-  }
+  String toString() => asString();
 
-  double asAmount() {
-    return (parseAmount(valueAsString, currency) ?? 0.00) * (reverseAmountValue ? -1 : 1);
-  }
+  double asAmount() =>
+      (parseAmount(valueAsString, currency) ?? 0.00) *
+      (reverseAmountValue ? -1 : 1);
 
   DateTime? asDate() {
     if (valueAsString.isEmpty) {
@@ -39,9 +37,7 @@ class ValueQuality {
     return DateFormat(dateFormat).tryParse(valueAsString);
   }
 
-  String asString() {
-    return valueAsString;
-  }
+  String asString() => valueAsString;
 
   Widget valueAsAmountWidget(final BuildContext? context) {
     if (valueAsString.isEmpty) {
@@ -87,13 +83,11 @@ class ValuesQuality {
     this.reverseAmountValue = false,
   });
 
-  factory ValuesQuality.empty() {
-    return ValuesQuality(
-      date: const ValueQuality(''),
-      description: const ValueQuality(''),
-      amount: const ValueQuality(''),
-    );
-  }
+  factory ValuesQuality.empty() => ValuesQuality(
+    date: const ValueQuality(''),
+    description: const ValueQuality(''),
+    amount: const ValueQuality(''),
+  );
 
   final ValueQuality amount;
   final ValueQuality date;
@@ -103,9 +97,7 @@ class ValuesQuality {
   bool exist = false;
 
   @override
-  String toString() {
-    return '$date; $description; $amount';
-  }
+  String toString() => '$date; $description; $amount';
 
   bool checkIfExistAlready({required final int accountId}) {
     exist = isTransactionAlreadyInTheSystem(
@@ -155,7 +147,11 @@ class ValuesQuality {
 /// relevant values from it. It provides methods for parsing, transforming, and
 /// validating the extracted values.
 class ValuesParser {
-  ValuesParser({required this.dateFormat, required this.currency, this.reverseAmountValue = false});
+  ValuesParser({
+    required this.dateFormat,
+    required this.currency,
+    this.reverseAmountValue = false,
+  });
 
   final String currency; // USD, EUR
   final String dateFormat;
@@ -195,15 +191,17 @@ class ValuesParser {
     return singleText;
   }
 
-  ValuesQuality attemptToExtractTriples(
-    String line,
-  ) {
+  ValuesQuality attemptToExtractTriples(String line) {
     String dateAsText = '';
     String descriptionAsText = '';
     String amountAsText = '';
 
     line.trim();
-    final List<String> threeValues = line.split(RegExp(r'\t|;|\|')).where((String token) => token.trim().isNotEmpty).toList();
+    final List<String> threeValues =
+        line
+            .split(RegExp(r'\t|;|\|'))
+            .where((String token) => token.trim().isNotEmpty)
+            .toList();
 
     // We are looking for these 3 values
     // Date | Description | Amount
@@ -225,21 +223,18 @@ class ValuesParser {
       case 3:
       default: // 4 or more
         dateAsText = threeValues.first;
-        descriptionAsText = threeValues.sublist(1, threeValues.length - 1).join(' ');
+        descriptionAsText = threeValues
+            .sublist(1, threeValues.length - 1)
+            .join(' ');
         amountAsText = cleanString(threeValues.last, '-+0123456789(),.');
     }
 
     return ValuesQuality(
       // date
-      date: ValueQuality(
-        dateAsText.trim(),
-        dateFormat: dateFormat,
-      ),
+      date: ValueQuality(dateAsText.trim(), dateFormat: dateFormat),
 
       // description
-      description: ValueQuality(
-        descriptionAsText.trim(),
-      ),
+      description: ValueQuality(descriptionAsText.trim()),
 
       // amount
       amount: ValueQuality(
@@ -291,7 +286,10 @@ class ValuesParser {
 
     inputString = inputString.trim();
 
-    final List<String> lines = getLinesOfText(inputString, includeEmptyLines: false);
+    final List<String> lines = getLinesOfText(
+      inputString,
+      includeEmptyLines: false,
+    );
 
     if (lines.isEmpty) {
       return; // nothing here
@@ -302,7 +300,10 @@ class ValuesParser {
       //
       // Date ; Description ; Amount
       //
-      final List<String> lines = getLinesOfText(inputString, includeEmptyLines: false);
+      final List<String> lines = getLinesOfText(
+        inputString,
+        includeEmptyLines: false,
+      );
       if (lines.isNotEmpty) {
         for (final String line in lines) {
           add(attemptToExtractTriples(line));
@@ -312,7 +313,10 @@ class ValuesParser {
       //
       // CSV like text but use space as separator ' ', instead of ',' this is necessary because some currency use comma in the Amount value
       //
-      final List<List<String>> lines = getLinesFromRawTextWithSeparator(inputString, ' ');
+      final List<List<String>> lines = getLinesFromRawTextWithSeparator(
+        inputString,
+        ' ',
+      );
       if (lines.isNotEmpty) {
         for (final List<String> line in lines) {
           if (line.isNotEmpty) {
@@ -356,13 +360,9 @@ class ValuesParser {
     return list;
   }
 
-  bool get isEmpty {
-    return onlyNewTransactions.isEmpty;
-  }
+  bool get isEmpty => onlyNewTransactions.isEmpty;
 
-  bool get isNotEmpty {
-    return !isEmpty;
-  }
+  bool get isNotEmpty => !isEmpty;
 
   // ignore: unnecessary_getters_setters
   List<ValuesQuality> get lines {
@@ -375,20 +375,18 @@ class ValuesParser {
     _values = value;
   }
 
-  List<ValuesQuality> get onlyNewTransactions {
-    return _values.where((ValuesQuality item) => !item.exist).toList();
-  }
+  List<ValuesQuality> get onlyNewTransactions =>
+      _values.where((ValuesQuality item) => !item.exist).toList();
 }
 
 bool isTransactionAlreadyInTheSystem({
   required final int accountId,
   required final DateTime dateTime,
   required final double amount,
-}) {
-  return null !=
-      Data().transactions.findExistingTransaction(
-            accountId: accountId,
-            dateRange: DateRange(min: dateTime.startOfDay, max: dateTime.endOfDay),
-            amount: amount,
-          );
-}
+}) =>
+    null !=
+    Data().transactions.findExistingTransaction(
+      accountId: accountId,
+      dateRange: DateRange(min: dateTime.startOfDay, max: dateTime.endOfDay),
+      amount: amount,
+    );

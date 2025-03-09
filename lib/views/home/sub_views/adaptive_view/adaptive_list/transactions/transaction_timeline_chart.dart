@@ -9,15 +9,13 @@ import 'package:money/data/models/money_objects/transactions/transactions.dart';
 
 /// Widget to display a timeline chart of transactions.
 class TransactionTimelineChart extends StatefulWidget {
-  const TransactionTimelineChart({
-    super.key,
-    required this.transactions,
-  });
+  const TransactionTimelineChart({super.key, required this.transactions});
 
   final List<Transaction> transactions;
 
   @override
-  State<TransactionTimelineChart> createState() => _TransactionTimelineChartState();
+  State<TransactionTimelineChart> createState() =>
+      _TransactionTimelineChartState();
 }
 
 enum TimelineScale { daily, weekly, monthly, yearly }
@@ -45,12 +43,15 @@ class _TransactionTimelineChartState extends State<TransactionTimelineChart> {
                   _selectedScale = newValue!;
                 });
               },
-              items: TimelineScale.values.map<DropdownMenuItem<TimelineScale>>((TimelineScale value) {
-                return DropdownMenuItem<TimelineScale>(
-                  value: value,
-                  child: Text(value.name),
-                );
-              }).toList(),
+              items:
+                  TimelineScale.values.map<DropdownMenuItem<TimelineScale>>((
+                    TimelineScale value,
+                  ) {
+                    return DropdownMenuItem<TimelineScale>(
+                      value: value,
+                      child: Text(value.name),
+                    );
+                  }).toList(),
             ),
             gapMedium(),
             MyIconButton(
@@ -64,9 +65,7 @@ class _TransactionTimelineChartState extends State<TransactionTimelineChart> {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Chart(
-              list: sumByPeriod,
-            ),
+            child: Chart(list: sumByPeriod),
           ),
         ),
       ],
@@ -79,18 +78,16 @@ class _TransactionTimelineChartState extends State<TransactionTimelineChart> {
       case TimelineScale.daily:
         return Transactions.transactionSumBy(
           widget.transactions,
-          (DateTime date) => dateToString(
-            DateTime(date.year, date.month, date.day),
-          ),
+          (DateTime date) =>
+              dateToString(DateTime(date.year, date.month, date.day)),
         );
 
       // WEEKLY
       case TimelineScale.weekly:
         return Transactions.transactionSumBy(
           widget.transactions,
-          (DateTime date) => dateToString(
-            date.subtract(Duration(days: date.weekday)),
-          ),
+          (DateTime date) =>
+              dateToString(date.subtract(Duration(days: date.weekday))),
         );
 
       // MONTHLY
@@ -110,10 +107,16 @@ class _TransactionTimelineChartState extends State<TransactionTimelineChart> {
   }
 
   void _copyToClipboard(List<PairXYY> data) {
-    final String clipboardData =
-        data.map((PairXYY pair) => '${pair.xText} : ${Currency.getAmountAsStringUsingCurrency(pair.yValue1)}').join('\n');
+    final String clipboardData = data
+        .map(
+          (PairXYY pair) =>
+              '${pair.xText} : ${Currency.getAmountAsStringUsingCurrency(pair.yValue1)}',
+        )
+        .join('\n');
     Clipboard.setData(ClipboardData(text: clipboardData));
     // Optional: Show a snackbar to confirm copy
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Copied to clipboard')));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Copied to clipboard')));
   }
 }

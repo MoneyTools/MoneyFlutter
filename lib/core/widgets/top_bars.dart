@@ -15,24 +15,32 @@ class BarChartWidget extends StatelessWidget {
   });
 
   final bool asIncome;
-  final List<PairIntDouble> listCategoryNameToAmount; // List of data with label and value
+  final List<PairIntDouble>
+  listCategoryNameToAmount; // List of data with label and value
 
   @override
   Widget build(BuildContext context) {
     // Sort the data by value in descending order
-    listCategoryNameToAmount.sort((PairIntDouble a, PairIntDouble b) => b.value.compareTo(a.value));
+    listCategoryNameToAmount.sort(
+      (PairIntDouble a, PairIntDouble b) => b.value.compareTo(a.value),
+    );
 
     // Extract top 3 values and calculate total value of others
     final int topCategoryToShow = min(3, listCategoryNameToAmount.length);
 
     final double otherSumValues = listCategoryNameToAmount
         .skip(topCategoryToShow)
-        .fold(0.0, (double prev, PairIntDouble current) => prev + current.value);
+        .fold(
+          0.0,
+          (double prev, PairIntDouble current) => prev + current.value,
+        );
 
     final List<Widget> bars = <Widget>[];
 
     for (int top = 0; top < topCategoryToShow; top++) {
-      final Category? category = Data().categories.get(listCategoryNameToAmount[top].key);
+      final Category? category = Data().categories.get(
+        listCategoryNameToAmount[top].key,
+      );
       if (category != null) {
         bars.add(
           _buildBar(
@@ -48,10 +56,7 @@ class BarChartWidget extends StatelessWidget {
       bars.add(
         _buildBar(
           'Others',
-          const MyCircle(
-            colorFill: Colors.grey,
-            size: 10,
-          ),
+          const MyCircle(colorFill: Colors.grey, size: 10),
           otherSumValues,
         ),
       );
@@ -80,7 +85,9 @@ class BarChartWidget extends StatelessWidget {
         ),
         colorWidget,
         Expanded(
-          child: MoneyWidget(amountModel: MoneyModel(amount: value * (asIncome ? 1 : -1))),
+          child: MoneyWidget(
+            amountModel: MoneyModel(amount: value * (asIncome ? 1 : -1)),
+          ),
         ),
       ],
     );

@@ -9,9 +9,7 @@ import 'package:money/views/home/sub_views/mru_dropdown.dart';
 import 'package:money/views/pending_changes/badge_pending_changes.dart';
 
 class AppTitle extends StatelessWidget {
-  AppTitle({
-    super.key,
-  }) {
+  AppTitle({super.key}) {
     netWorth = Data().getNetWorth();
   }
 
@@ -47,9 +45,7 @@ class AppTitle extends StatelessWidget {
     );
   }
 
-  Widget _buildNetWorthToggle(
-    final BuildContext context,
-  ) {
+  Widget _buildNetWorthToggle(final BuildContext context) {
     return RevealContent(
       textForClipboard: netWorth.toString(),
       widgets: <Widget>[
@@ -67,7 +63,10 @@ Widget _buildRevealContentOption(
   final bool hidden,
 ) {
   final Color color = getColorTheme(context).onSurface;
-  final TextStyle textStyle = TextStyle(fontSize: SizeForText.normal, color: color);
+  final TextStyle textStyle = TextStyle(
+    fontSize: SizeForText.normal,
+    color: color,
+  );
 
   return Row(
     crossAxisAlignment: CrossAxisAlignment.center,

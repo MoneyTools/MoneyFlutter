@@ -13,10 +13,7 @@ class TransferSenderReceiver extends StatelessWidget {
   ///
   /// The [transfer] parameter is required and must not be null. It represents the transfer
   /// information that will be displayed in the widget.
-  const TransferSenderReceiver({
-    super.key,
-    required this.transfer,
-  });
+  const TransferSenderReceiver({super.key, required this.transfer});
 
   final Transfer transfer;
 

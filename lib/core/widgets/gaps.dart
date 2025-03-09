@@ -1,10 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 Widget gap(final double size) {
-  return SizedBox(
-    width: size,
-    height: size,
-  );
+  return SizedBox(width: size, height: size);
 }
 
 Widget gapSmall() {

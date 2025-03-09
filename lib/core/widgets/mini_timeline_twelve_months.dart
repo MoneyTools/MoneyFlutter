@@ -49,10 +49,7 @@ class MiniTimelineTwelveMonths extends StatelessWidget {
                 children: bars,
               ),
             ),
-            const Divider(
-              height: 2,
-              thickness: 2,
-            ),
+            const Divider(height: 2, thickness: 2),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[

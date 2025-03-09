@@ -6,7 +6,8 @@ extension DataFromSql on Data {
     required final Uint8List fileBytes,
   }) async {
     // Load from SQLite
-    final String? pathToDatabaseFile = await validateDataBasePathIsValidAndExist(filePath, fileBytes);
+    final String? pathToDatabaseFile =
+        await validateDataBasePathIsValidAndExist(filePath, fileBytes);
 
     if (pathToDatabaseFile != null || fileBytes.isNotEmpty) {
       // Open or create the database
@@ -14,16 +15,22 @@ extension DataFromSql on Data {
 
       await db.load(filePath, fileBytes);
       // Load
-      accountAliases.loadFromJson(await db.select('SELECT * FROM AccountAliases'));
+      accountAliases.loadFromJson(
+        await db.select('SELECT * FROM AccountAliases'),
+      );
       accounts.loadFromJson(await db.select('SELECT * FROM Accounts'));
       aliases.loadFromJson(await db.select('SELECT * FROM Aliases'));
       categories.loadFromJson(await db.select('SELECT * FROM Categories'));
       currencies.loadFromJson(await db.select('SELECT * FROM Currencies'));
       investments.loadFromJson(await db.select('SELECT * FROM Investments'));
       loanPayments.loadFromJson(await db.select('SELECT * FROM LoanPayments'));
-      onlineAccounts.loadFromJson(await db.select('SELECT * FROM OnlineAccounts'));
+      onlineAccounts.loadFromJson(
+        await db.select('SELECT * FROM OnlineAccounts'),
+      );
       payees.loadFromJson(await db.select('SELECT * FROM Payees'));
-      rentBuildings.loadFromJson(await db.select('SELECT * FROM RentBuildings'));
+      rentBuildings.loadFromJson(
+        await db.select('SELECT * FROM RentBuildings'),
+      );
       rentUnits.loadFromJson(await db.select('SELECT * FROM RentUnits'));
       securities.loadFromJson(await db.select('SELECT * FROM Securities'));
       stockSplits.loadFromJson(await db.select('SELECT * FROM StockSplits'));
@@ -34,7 +41,9 @@ extension DataFromSql on Data {
       }
 
       transactions.loadFromJson(await db.select('SELECT * FROM Transactions'));
-      transactionExtras.loadFromJson(await db.select('SELECT * FROM TransactionExtras'));
+      transactionExtras.loadFromJson(
+        await db.select('SELECT * FROM TransactionExtras'),
+      );
       // Must come after Transactions are loaded
       splits.loadFromJson(await db.select('SELECT * FROM Splits'));
 
@@ -47,7 +56,8 @@ extension DataFromSql on Data {
 
   Future<bool> saveToSql({
     required final String filePath,
-    required final void Function(bool success, String errorMessage) onSaveCompleted,
+    required final void Function(bool success, String errorMessage)
+    onSaveCompleted,
   }) async {
     try {
       final MyDatabase db = MyDatabase();
@@ -70,8 +80,7 @@ extension DataFromSql on Data {
 
       if (!await db.tableExists('Events')) {
         // Create the Events table if it doesn't exist
-        db.execute(
-          '''
+        db.execute('''
           CREATE TABLE [Events] (
             [Id] int PRIMARY KEY,
             [Name] nvarchar(255) NOT NULL,
@@ -80,8 +89,7 @@ extension DataFromSql on Data {
             [End] datetime NOT NULL,
             [People] nvarchar(255) NOT NULL,
             [Memo] nvarchar(255) NOT NULL
-          );''',
-        );
+          );''');
       }
       events.saveSql(db, 'Events');
 

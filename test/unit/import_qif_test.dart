@@ -45,10 +45,7 @@ void main() {
 
     test('should handle invalid QIF data', () {
       // Arrange
-      final List<String> qifLines = <String>[
-        'Invalid line',
-        '^',
-      ];
+      final List<String> qifLines = <String>['Invalid line', '^'];
 
       // Act
       final ImportData importData = loadQIF(qifLines);

@@ -19,9 +19,7 @@ import 'package:money/views/home/sub_views/view_stocks/stock_chart.dart';
 export 'package:money/views/home/sub_views/view_stocks/stock_chart.dart';
 
 class ViewStocks extends ViewForMoneyObjects {
-  const ViewStocks({
-    super.key,
-  });
+  const ViewStocks({super.key});
 
   @override
   State<ViewForMoneyObjects> createState() => ViewStocksState();
@@ -96,15 +94,19 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
     final List<Widget> list = super.getActionsButtons(forSidePanelTransactions);
     if (forSidePanelTransactions) {
-      final Investment? selectedInvestment = getSidePanelLastSelectedItem<Investment>(Data().investments);
+      final Investment? selectedInvestment =
+          getSidePanelLastSelectedItem<Investment>(Data().investments);
       if (selectedInvestment != null) {
         list.add(
-          buildJumpToButton(
-            <MenuEntry>[
-              MenuEntry.toAccounts(accountId: selectedInvestment.transactionInstance!.fieldAccountId.value),
-              MenuEntry.toTransactions(transactionId: selectedInvestment.uniqueId),
-            ],
-          ),
+          buildJumpToButton(<MenuEntry>[
+            MenuEntry.toAccounts(
+              accountId:
+                  selectedInvestment.transactionInstance!.fieldAccountId.value,
+            ),
+            MenuEntry.toTransactions(
+              transactionId: selectedInvestment.uniqueId,
+            ),
+          ]),
         );
       }
     } else {
@@ -112,12 +114,10 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       // this can go last
       if (selectedSecurity != null) {
         list.add(
-          buildJumpToButton(
-            <MenuEntry>[
-              // Jump to Investment view
-              MenuEntry.toInvestments(symbol: selectedSecurity.fieldSymbol.value),
-            ],
-          ),
+          buildJumpToButton(<MenuEntry>[
+            // Jump to Investment view
+            MenuEntry.toInvestments(symbol: selectedSecurity.fieldSymbol.value),
+          ]),
         );
       }
     }
@@ -149,10 +149,17 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     bool includeDeleted = false,
     bool applyFilter = true,
   }) {
-    List<Security> list = Data().securities.iterableList(includeDeleted: includeDeleted).toList();
+    List<Security> list =
+        Data().securities.iterableList(includeDeleted: includeDeleted).toList();
 
     if (applyFilter) {
-      list = list.where((final Security instance) => isMatchingFilters(instance) && isMatchingPivot(instance)).toList();
+      list =
+          list
+              .where(
+                (final Security instance) =>
+                    isMatchingFilters(instance) && isMatchingPivot(instance),
+              )
+              .toList();
     }
 
     return list;
@@ -202,7 +209,9 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }
 
   List<Investment> getListOfInvestment(Security security) {
-    final List<Investment> list = Investments.getInvestmentsForThisSecurity(security.uniqueId);
+    final List<Investment> list = Investments.getInvestmentsForThisSecurity(
+      security.uniqueId,
+    );
     Investments.applyHoldingSharesAdjustedForSplits(list);
     return list;
   }
@@ -222,8 +231,14 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     return true;
   }
 
-  Widget _buildPanelForDividend(final BuildContext context, final Security security) {
-    final double totalDividend = security.dividends.fold(0.0, (double sum, Dividend dividend) => sum + dividend.amount);
+  Widget _buildPanelForDividend(
+    final BuildContext context,
+    final Security security,
+  ) {
+    final double totalDividend = security.dividends.fold(
+      0.0,
+      (double sum, Dividend dividend) => sum + dividend.amount,
+    );
 
     return buildAdaptiveBox(
       context: context,
@@ -241,15 +256,21 @@ class ViewStocksState extends ViewForMoneyObjectsState {
             ],
           );
         },
-        separatorBuilder: (BuildContext context, int index) => Divider(
-          color: getColorTheme(context).onPrimaryContainer.withAlpha(100),
-        ),
+        separatorBuilder:
+            (BuildContext context, int index) => Divider(
+              color: getColorTheme(context).onPrimaryContainer.withAlpha(100),
+            ),
       ),
-      footer: Box.buildFooter(Currency.getAmountAsStringUsingCurrency(totalDividend)),
+      footer: Box.buildFooter(
+        Currency.getAmountAsStringUsingCurrency(totalDividend),
+      ),
     );
   }
 
-  Widget _buildPanelForSplits(final BuildContext context, final Security security) {
+  Widget _buildPanelForSplits(
+    final BuildContext context,
+    final Security security,
+  ) {
     final List<StockSplit> splits = security.splitsHistory;
 
     return buildAdaptiveBox(
@@ -270,14 +291,17 @@ class ViewStocksState extends ViewForMoneyObjectsState {
             ],
           );
         },
-        separatorBuilder: (BuildContext context, int index) => Divider(
-          color: getColorTheme(context).onPrimaryContainer.withAlpha(100),
-        ),
+        separatorBuilder:
+            (BuildContext context, int index) => Divider(
+              color: getColorTheme(context).onPrimaryContainer.withAlpha(100),
+            ),
       ),
     );
   }
 
-  List<Field<dynamic>> _getFieldsToDisplayForSidePanelTransactions(bool includeSplitColumns) {
+  List<Field<dynamic>> _getFieldsToDisplayForSidePanelTransactions(
+    bool includeSplitColumns,
+  ) {
     final List<String> included = <String>[
       'Date',
       'Account',
@@ -292,11 +316,10 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       'Commission',
       'ActivityAmount',
     ];
-    final List<Field<dynamic>> fieldsToDisplay = Investment.fields.definitions
-        .where(
-          (Field<dynamic> element) => included.contains(element.name),
-        )
-        .toList();
+    final List<Field<dynamic>> fieldsToDisplay =
+        Investment.fields.definitions
+            .where((Field<dynamic> element) => included.contains(element.name))
+            .toList();
     return fieldsToDisplay;
   }
 
@@ -314,11 +337,15 @@ class ViewStocksState extends ViewForMoneyObjectsState {
         if (activity.effectiveUnits != 0) {
           events.add(
             ChartEvent(
-              dates: DateRange(min: activity.transactionInstance!.fieldDateTime.value!),
+              dates: DateRange(
+                min: activity.transactionInstance!.fieldDateTime.value!,
+              ),
               amount: activity.unitPriceAdjusted,
               quantity: activity.effectiveUnitsAdjusted,
               colorBasedOnQuantity: true,
-              description: activity.fieldInvestmentType.getValueForDisplay(activity) as String,
+              description:
+                  activity.fieldInvestmentType.getValueForDisplay(activity)
+                      as String,
             ),
           );
         }
@@ -347,13 +374,23 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       return const CenterMessage(message: 'No security selected.');
     }
 
-    final List<Investment> listOfInvestmentsForThisStock = getListOfInvestment(_lastSecuritySelected!);
+    final List<Investment> listOfInvestmentsForThisStock = getListOfInvestment(
+      _lastSecuritySelected!,
+    );
 
-    int sortByFieldIndex = PreferenceController.to.getInt(getPreferenceKey(settingKeySidePanel + settingKeySortBy), 0);
-    bool sortAscending =
-        PreferenceController.to.getBool(getPreferenceKey(settingKeySidePanel + settingKeySortAscending), false);
+    int sortByFieldIndex = PreferenceController.to.getInt(
+      getPreferenceKey(settingKeySidePanel + settingKeySortBy),
+      0,
+    );
+    bool sortAscending = PreferenceController.to.getBool(
+      getPreferenceKey(settingKeySidePanel + settingKeySortAscending),
+      false,
+    );
 
-    final List<Field<dynamic>> fields = _getFieldsToDisplayForSidePanelTransactions(_lastSecuritySelected!.splitsHistory.isNotEmpty);
+    final List<Field<dynamic>> fields =
+        _getFieldsToDisplayForSidePanelTransactions(
+          _lastSecuritySelected!.splitsHistory.isNotEmpty,
+        );
 
     MoneyObjects.sortList(
       listOfInvestmentsForThisStock,
@@ -365,7 +402,9 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     return AdaptiveListColumnsOrRowsSingleSelection(
       // list related
       list: listOfInvestmentsForThisStock,
-      fieldDefinitions: _getFieldsToDisplayForSidePanelTransactions(_lastSecuritySelected!.splitsHistory.isNotEmpty),
+      fieldDefinitions: _getFieldsToDisplayForSidePanelTransactions(
+        _lastSecuritySelected!.splitsHistory.isNotEmpty,
+      ),
       filters: FieldFilters(),
       sortByFieldIndex: sortByFieldIndex,
       sortAscending: sortAscending,
@@ -379,18 +418,27 @@ class ViewStocksState extends ViewForMoneyObjectsState {
           if (columnHeaderIndex == sortByFieldIndex) {
             // toggle order
             sortAscending = !sortAscending;
-            PreferenceController.to
-                .setBool(getPreferenceKey(settingKeySidePanel + settingKeySortAscending), sortAscending);
+            PreferenceController.to.setBool(
+              getPreferenceKey(settingKeySidePanel + settingKeySortAscending),
+              sortAscending,
+            );
           } else {
             sortByFieldIndex = columnHeaderIndex;
-            PreferenceController.to.setInt(getPreferenceKey(settingKeySidePanel + settingKeySortBy), sortByFieldIndex);
+            PreferenceController.to.setInt(
+              getPreferenceKey(settingKeySidePanel + settingKeySortBy),
+              sortByFieldIndex,
+            );
           }
         });
       },
       onSelectionChanged: (int uniqueId) {
         setState(() {
-          PreferenceController.to
-              .setInt(getPreferenceKey(settingKeySidePanel + settingKeySelectedListItemId), uniqueId);
+          PreferenceController.to.setInt(
+            getPreferenceKey(
+              settingKeySidePanel + settingKeySelectedListItemId,
+            ),
+            uniqueId,
+          );
         });
       },
       onItemLongPress: (BuildContext context2, int itemId) {
@@ -422,10 +470,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
           });
         },
         borderRadius: const BorderRadius.all(Radius.circular(8)),
-        constraints: const BoxConstraints(
-          minHeight: 40.0,
-          minWidth: 100.0,
-        ),
+        constraints: const BoxConstraints(minHeight: 40.0, minWidth: 100.0),
         isSelected: _selectedPivot,
         children: _pivots,
       ),

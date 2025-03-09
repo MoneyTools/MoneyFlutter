@@ -66,8 +66,10 @@ class ViewCashFlowState extends ViewWidgetState {
   void initState() {
     super.initState();
     dateRangeTransactions = DateRange.fromStarEndYears(
-      Data().transactions.dateRangeActiveAccount.min?.year ?? DateTime.now().year,
-      Data().transactions.dateRangeActiveAccount.max?.year ?? DateTime.now().year,
+      Data().transactions.dateRangeActiveAccount.min?.year ??
+          DateTime.now().year,
+      Data().transactions.dateRangeActiveAccount.max?.year ??
+          DateTime.now().year,
     );
 
     for (final Event event in Data().events.iterableList()) {
@@ -81,30 +83,28 @@ class ViewCashFlowState extends ViewWidgetState {
 
   @override
   Widget build(final BuildContext context) {
-    return Obx(
-      () {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            // Header
-            ViewHeader.buildViewHeaderContainer(context, _buildHeaderContent()),
-            // View
-            Expanded(
-              child: Container(
-                key: Key(
-                  PreferenceController.to.cashflowViewAs.value.toString() +
-                      selectedYearStart.toString() +
-                      selectedYearEnd.toString(),
-                ),
-                // rebuild if the date changes
-                color: getColorTheme(context).surface,
-                child: _buildView(),
+    return Obx(() {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          // Header
+          ViewHeader.buildViewHeaderContainer(context, _buildHeaderContent()),
+          // View
+          Expanded(
+            child: Container(
+              key: Key(
+                PreferenceController.to.cashflowViewAs.value.toString() +
+                    selectedYearStart.toString() +
+                    selectedYearEnd.toString(),
               ),
+              // rebuild if the date changes
+              color: getColorTheme(context).surface,
+              child: _buildView(),
             ),
-          ],
-        );
-      },
-    );
+          ),
+        ],
+      );
+    });
   }
 
   Widget _buildHeaderContent() {
@@ -130,26 +130,36 @@ class ViewCashFlowState extends ViewWidgetState {
             //
             // Optional settings for NetWorth
             //
-            if (CashflowViewAs.netWorthOverTime == PreferenceController.to.cashflowViewAs.value)
+            if (CashflowViewAs.netWorthOverTime ==
+                PreferenceController.to.cashflowViewAs.value)
               NumberPicker(
                 title: 'Event Tolerances',
                 minValue: 0,
                 maxValue: 12,
-                selectedNumber: PreferenceController.to.netWorthEventThreshold.value,
+                selectedNumber:
+                    PreferenceController.to.netWorthEventThreshold.value,
                 onChanged: (int value) {
                   PreferenceController.to.netWorthEventThreshold.value = value;
                 },
               ),
-            if (CashflowViewAs.trend == PreferenceController.to.cashflowViewAs.value)
+            if (CashflowViewAs.trend ==
+                PreferenceController.to.cashflowViewAs.value)
               IntrinsicWidth(
                 child: Row(
                   children: <Widget>[
                     Obx(
                       () => Checkbox.adaptive(
-                        value: PreferenceController.to.trendIncludeAssetAccounts.value,
+                        value:
+                            PreferenceController
+                                .to
+                                .trendIncludeAssetAccounts
+                                .value,
                         onChanged: (bool? newValue) {
                           if (newValue != null) {
-                            PreferenceController.to.trendIncludeAssetAccounts.value = newValue;
+                            PreferenceController
+                                .to
+                                .trendIncludeAssetAccounts
+                                .value = newValue;
                           }
                         },
                       ),
@@ -164,8 +174,14 @@ class ViewCashFlowState extends ViewWidgetState {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: YearRangeSlider(
-              yearRange: NumRange(min: dateRangeTransactions.min!.year, max: dateRangeTransactions.max!.year),
-              initialRange: NumRange(min: dateRangeTransactions.min!.year, max: dateRangeTransactions.max!.year),
+              yearRange: NumRange(
+                min: dateRangeTransactions.min!.year,
+                max: dateRangeTransactions.max!.year,
+              ),
+              initialRange: NumRange(
+                min: dateRangeTransactions.min!.year,
+                max: dateRangeTransactions.max!.year,
+              ),
               onChanged: (final NumRange updateRange) {
                 _debouncer.run(() {
                   if (mounted) {
@@ -204,7 +220,8 @@ class ViewCashFlowState extends ViewWidgetState {
       ],
       selectedId: PreferenceController.to.cashflowViewAs.value.index,
       onSelectionChanged: (final int newSelection) {
-        PreferenceController.to.cashflowViewAs.value = CashflowViewAs.values[newSelection];
+        PreferenceController.to.cashflowViewAs.value =
+            CashflowViewAs.values[newSelection];
       },
     );
   }
@@ -233,7 +250,11 @@ class ViewCashFlowState extends ViewWidgetState {
             Expanded(
               child: PanelBudget(
                 title: 'Incomes',
-                categoryTypes: <CategoryType>[CategoryType.income, CategoryType.investment, CategoryType.saving],
+                categoryTypes: <CategoryType>[
+                  CategoryType.income,
+                  CategoryType.investment,
+                  CategoryType.saving,
+                ],
                 dateRangeSearch: dateRangeTransactions,
                 minYear: this.selectedYearStart,
                 maxYear: this.selectedYearEnd,
@@ -242,7 +263,10 @@ class ViewCashFlowState extends ViewWidgetState {
             Expanded(
               child: PanelBudget(
                 title: 'Expenses',
-                categoryTypes: <CategoryType>[CategoryType.expense, CategoryType.recurringExpense],
+                categoryTypes: <CategoryType>[
+                  CategoryType.expense,
+                  CategoryType.recurringExpense,
+                ],
                 dateRangeSearch: dateRangeTransactions,
                 minYear: this.selectedYearStart,
                 maxYear: this.selectedYearEnd,
@@ -257,7 +281,8 @@ class ViewCashFlowState extends ViewWidgetState {
             minYear: this.selectedYearStart,
             maxYear: this.selectedYearEnd,
             viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
-            includeAssetAccounts: PreferenceController.to.trendIncludeAssetAccounts.value,
+            includeAssetAccounts:
+                PreferenceController.to.trendIncludeAssetAccounts.value,
           );
         });
     }

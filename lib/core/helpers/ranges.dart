@@ -4,19 +4,19 @@ import 'package:money/core/helpers/string_helper.dart';
 class DateRange {
   DateRange({this.min, this.max});
 
-  factory DateRange.fromStarEndYears(final int yearStart, final int yearEnd) {
-    return DateRange(
-      min: DateTime(yearStart, 1, 1),
-      max: DateTime(yearEnd + 1).subtract(const Duration(microseconds: 1)),
-    );
-  }
+  factory DateRange.fromStarEndYears(final int yearStart, final int yearEnd) =>
+      DateRange(
+        min: DateTime(yearStart, 1, 1),
+        max: DateTime(yearEnd + 1).subtract(const Duration(microseconds: 1)),
+      );
 
-  factory DateRange.fromText(final String minDateAsText, final String maxDateAsText) {
-    return DateRange(
-      min: DateTime.parse(minDateAsText),
-      max: DateTime.parse(maxDateAsText),
-    );
-  }
+  factory DateRange.fromText(
+    final String minDateAsText,
+    final String maxDateAsText,
+  ) => DateRange(
+    min: DateTime.parse(minDateAsText),
+    max: DateTime.parse(maxDateAsText),
+  );
 
   DateTime? max;
   DateTime? min;
@@ -39,7 +39,9 @@ class DateRange {
 
     if (this.max == null && other.max == null) {
       // Just Min
-      return min!.year <= otherMin.year && min!.month <= otherMin.month && min!.day <= otherMin.day;
+      return min!.year <= otherMin.year &&
+          min!.month <= otherMin.month &&
+          min!.day <= otherMin.day;
     }
 
     // Min and Max
@@ -62,9 +64,7 @@ class DateRange {
   }
 
   @override
-  String toString() {
-    return '${dateToString(min)} : ${dateToString(max)}';
-  }
+  String toString() => '${dateToString(min)} : ${dateToString(max)}';
 
   void clear() {
     min = null;
@@ -88,14 +88,12 @@ class DateRange {
     return difference.inDays;
   }
 
-  String get durationInDaysText {
-    return getSingularPluralText(
-      getIntAsText(durationInDays),
-      durationInDays,
-      'day',
-      'days',
-    );
-  }
+  String get durationInDaysText => getSingularPluralText(
+    getIntAsText(durationInDays),
+    durationInDays,
+    'day',
+    'days',
+  );
 
   int get durationInMonths {
     return durationInDays ~/ 30; // Close enough
@@ -109,14 +107,12 @@ class DateRange {
     return (_valueOrZeroIfNull(max!.year) - _valueOrZeroIfNull(min!.year)) + 1;
   }
 
-  String get durationInYearsText {
-    return getSingularPluralText(
-      getIntAsText(durationInYears),
-      durationInYears,
-      'year',
-      'years',
-    );
-  }
+  String get durationInYearsText => getSingularPluralText(
+    getIntAsText(durationInYears),
+    durationInYears,
+    'year',
+    'years',
+  );
 
   void ensureNoNullDates() {
     min ??= max;
@@ -127,9 +123,7 @@ class DateRange {
     }
   }
 
-  bool get hasNullDates {
-    return min == null || max == null;
-  }
+  bool get hasNullDates => min == null || max == null;
 
   void inflate(final DateTime? dateTime) {
     if (dateTime != null) {
@@ -146,9 +140,8 @@ class DateRange {
     }
   }
 
-  bool isBetween(final DateTime date) {
-    return min!.isBefore(date) && max!.isAfter(date);
-  }
+  bool isBetween(final DateTime date) =>
+      min!.isBefore(date) && max!.isAfter(date);
 
   bool isBetweenEqual(final DateTime? date) {
     if (date == null) {
@@ -160,9 +153,8 @@ class DateRange {
     return isBetween(date);
   }
 
-  String toStringDays() {
-    return '${dateToString(min)} ($durationInDaysText) ${dateToString(max)}';
-  }
+  String toStringDays() =>
+      '${dateToString(min)} ($durationInDaysText) ${dateToString(max)}';
 
   String toStringDuration() {
     if (durationInDays >= 365) {
@@ -171,9 +163,8 @@ class DateRange {
     return durationInDaysText;
   }
 
-  String toStringYears() {
-    return '${dateToYearString(min)} ($durationInYearsText) ${dateToYearString(max)}';
-  }
+  String toStringYears() =>
+      '${dateToYearString(min)} ($durationInYearsText) ${dateToYearString(max)}';
 
   int _valueOrZeroIfNull(final int? value) {
     if (value == null) {
@@ -191,9 +182,7 @@ class NumRange {
   num min;
 
   @override
-  String toString() {
-    return descriptionAsInt;
-  }
+  String toString() => descriptionAsInt;
 
   /// Decrements the range by one, if possible.
   void decrement(int minLimit) {
@@ -203,9 +192,11 @@ class NumRange {
     }
   }
 
-  String get descriptionAsInt => _getDescription(validIntToCurrency(min), validIntToCurrency(max));
+  String get descriptionAsInt =>
+      _getDescription(validIntToCurrency(min), validIntToCurrency(max));
 
-  String get descriptionAsMoney => _getDescription(validDoubleToCurrency(min), validDoubleToCurrency(max));
+  String get descriptionAsMoney =>
+      _getDescription(validDoubleToCurrency(min), validDoubleToCurrency(max));
 
   /// Increments the range by one, if possible.
   void increment(int maxLimit) {
@@ -236,7 +227,6 @@ class NumRange {
     max = newMax;
   }
 
-  String _getDescription(final String min, final String max) {
-    return '$min min, $max max';
-  }
+  String _getDescription(final String min, final String max) =>
+      '$min min, $max max';
 }

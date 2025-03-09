@@ -41,12 +41,23 @@ Widget getFooterForAmount(final double amount, {final String prefix = ''}) {
   );
 
   if (isSmallValue(amount)) {
-    return scaleDown(Text(prefix + Currency.getAmountAsStringUsingCurrency(amount), style: style));
+    return scaleDown(
+      Text(
+        prefix + Currency.getAmountAsStringUsingCurrency(amount),
+        style: style,
+      ),
+    );
   }
-  return scaleDown(Text('$prefix\$${getAmountAsShorthandText(amount)}', style: style));
+  return scaleDown(
+    Text('$prefix\$${getAmountAsShorthandText(amount)}', style: style),
+  );
 }
 
-Widget getFooterForInt(final num value, {final bool applyColorBasedOnValue = true, final String prefix = ''}) {
+Widget getFooterForInt(
+  final num value, {
+  final bool applyColorBasedOnValue = true,
+  final String prefix = '',
+}) {
   final TextStyle style = TextStyle(
     color: applyColorBasedOnValue ? colorBasedOnValue(value) : null,
     fontFamily: 'RobotoMono',

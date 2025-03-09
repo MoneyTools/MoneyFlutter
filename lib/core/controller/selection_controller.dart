@@ -33,14 +33,20 @@ class SelectionController extends GetxController {
 
   void load() {
     if (preferenceKeyForPersistingSelections.isNotEmpty) {
-      final int lastSelectionId = PreferenceController.to.getInt(preferenceKeyForPersistingSelections, -1);
+      final int lastSelectionId = PreferenceController.to.getInt(
+        preferenceKeyForPersistingSelections,
+        -1,
+      );
       select(lastSelectionId);
     }
   }
 
   void save() {
     if (preferenceKeyForPersistingSelections.isNotEmpty) {
-      PreferenceController.to.setInt(preferenceKeyForPersistingSelections, firstSelectedId);
+      PreferenceController.to.setInt(
+        preferenceKeyForPersistingSelections,
+        firstSelectedId,
+      );
     }
   }
 

@@ -10,7 +10,10 @@ import 'package:money/data/models/money_model.dart';
 /// bool isActive = valueOrDefaultBool(null, defaultValueIfNull: true); // isActive = true
 /// bool isEnabled = valueOrDefaultBool(false); // isEnabled = false
 /// ```
-bool valueOrDefaultBool(final bool? value, {final bool defaultValueIfNull = false}) {
+bool valueOrDefaultBool(
+  final bool? value, {
+  final bool defaultValueIfNull = false,
+}) {
   return value ?? defaultValueIfNull;
 }
 
@@ -25,7 +28,10 @@ bool valueOrDefaultBool(final bool? value, {final bool defaultValueIfNull = fals
 /// DateTime dueDate = valueOrDefaultDate(null, defaultValueIfNull: DateTime(2023, 6, 1));
 /// DateTime currentDate = valueOrDefaultDate(null); // currentDate = DateTime.now()
 /// ```
-DateTime valueOrDefaultDate(final DateTime? value, {final DateTime? defaultValueIfNull}) {
+DateTime valueOrDefaultDate(
+  final DateTime? value, {
+  final DateTime? defaultValueIfNull,
+}) {
   return value ?? defaultValueIfNull ?? DateTime.now();
 }
 
@@ -39,7 +45,10 @@ DateTime valueOrDefaultDate(final DateTime? value, {final DateTime? defaultValue
 /// double price = valueOrDefaultDouble(null, defaultValueIfNull: 9.99); // price = 9.99
 /// double amount = valueOrDefaultDouble(10.5); // amount = 10.5
 /// ```
-double valueOrDefaultDouble(final double? value, {final double defaultValueIfNull = 0}) {
+double valueOrDefaultDouble(
+  final double? value, {
+  final double defaultValueIfNull = 0,
+}) {
   return value ?? defaultValueIfNull;
 }
 
@@ -81,24 +90,25 @@ num numValueOrDefault(final num? value, {final num defaultValueIfNull = 0}) {
 /// String name = valueOrDefaultString(null, defaultValueIfNull: 'Unknown'); // name = 'Unknown'
 /// String description = valueOrDefaultString('This is a description'); // description = 'This is a description'
 /// ```
-String valueOrDefaultString(final String? value, {final String defaultValueIfNull = ''}) {
+String valueOrDefaultString(
+  final String? value, {
+  final String defaultValueIfNull = '',
+}) {
   return value ?? defaultValueIfNull;
 }
 
-
-double smartToDouble(final dynamic value){
-
-  if(value is double){
+double smartToDouble(final dynamic value) {
+  if (value is double) {
     return value;
   }
 
-  if(value is int){
+  if (value is int) {
     return value.toDouble();
   }
 
-  if(value is MoneyModel){
-    return  value.asDouble();
+  if (value is MoneyModel) {
+    return value.asDouble();
   }
-  
+
   return value as double;
 }

@@ -15,7 +15,10 @@ void main() {
     });
 
     test('asDate returns correct date', () {
-      const ValueQuality valueQuality = ValueQuality('2023-05-01', dateFormat: 'yyyy-MM-dd');
+      const ValueQuality valueQuality = ValueQuality(
+        '2023-05-01',
+        dateFormat: 'yyyy-MM-dd',
+      );
       expect(valueQuality.asDate(), DateTime(2023, 5, 1));
     });
 
@@ -29,10 +32,7 @@ void main() {
         currency: 'USD',
         reverseAmountValue: false,
       );
-      parser.convertInputTextToTransactionList(
-        null,
-        '2010-12-25;Hello;12.99',
-      );
+      parser.convertInputTextToTransactionList(null, '2010-12-25;Hello;12.99');
 
       expect(parser.isNotEmpty, true);
       expect(parser.lines[0].date.asDate(), DateTime(2010, 12, 25));

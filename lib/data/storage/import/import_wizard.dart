@@ -63,10 +63,10 @@ void showImportTransactionsWizard() {
   );
 }
 
-void onImportFromFile(
-  final BuildContext context,
-) async {
-  final FilePickerResult? pickerResult = await FilePicker.platform.pickFiles(type: FileType.any);
+void onImportFromFile(final BuildContext context) async {
+  final FilePickerResult? pickerResult = await FilePicker.platform.pickFiles(
+    type: FileType.any,
+  );
   if (pickerResult != null) {
     if (context.mounted) {
       switch (pickerResult.files.single.extension?.toLowerCase()) {

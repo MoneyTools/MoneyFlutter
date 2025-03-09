@@ -9,9 +9,7 @@ import 'package:money/views/home/sub_views/mru_dropdown.dart';
 /// It provides the user with options to create a new file, open an existing file, or use demo data.
 class WelcomeScreen extends StatelessWidget {
   /// Constructs a new instance of the `WelcomeScreen` widget.
-  const WelcomeScreen({
-    super.key,
-  });
+  const WelcomeScreen({super.key});
 
   @override
   Widget build(final BuildContext context) {

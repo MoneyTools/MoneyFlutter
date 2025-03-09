@@ -3,11 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class MyBanner extends StatelessWidget {
-  const MyBanner({
-    required this.child,
-    required this.on,
-    super.key,
-  });
+  const MyBanner({required this.child, required this.on, super.key});
 
   final Widget child;
   final bool on;

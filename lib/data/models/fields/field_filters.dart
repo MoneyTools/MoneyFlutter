@@ -17,7 +17,10 @@ class FieldFilters {
   /// instance and populates its `list` with `FieldFilter` instances constructed from the
   /// JSON objects.
   factory FieldFilters.fromJson(final Map<String, dynamic> json) {
-    final List<FieldFilter> filters = (json['filters'] as List<MyJson>).map((MyJson filterJson) => FieldFilter.fromJson(filterJson)).toList();
+    final List<FieldFilter> filters =
+        (json['filters'] as List<MyJson>)
+            .map((MyJson filterJson) => FieldFilter.fromJson(filterJson))
+            .toList();
     return FieldFilters(filters);
   }
 
@@ -29,7 +32,8 @@ class FieldFilters {
     if (jsonString.isEmpty) {
       return FieldFilters();
     }
-    final Map<String, dynamic> json = jsonDecode(jsonString) as Map<String, dynamic>;
+    final Map<String, dynamic> json =
+        jsonDecode(jsonString) as Map<String, dynamic>;
     return FieldFilters.fromJson(json);
   }
 
@@ -50,10 +54,7 @@ class FieldFilters {
       final List<String> tokens = pair.split('=');
       if (tokens.length == 2) {
         list.add(
-          FieldFilter(
-            fieldName: tokens[0],
-            strings: tokens[1].split('|'),
-          ),
+          FieldFilter(fieldName: tokens[0], strings: tokens[1].split('|')),
         );
       }
     }

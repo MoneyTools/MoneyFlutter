@@ -20,7 +20,8 @@ void main() {
   });
 
   test('OfxBankInfo.fromOfx parses account information correctly', () {
-    const String ofxContent = '''<BANKACCTFROM><BANKID>123456<ACCTID>00001 99-55555<ACCTTYPE>SAVINGS</BANKACCTFROM>''';
+    const String ofxContent =
+        '''<BANKACCTFROM><BANKID>123456<ACCTID>00001 99-55555<ACCTTYPE>SAVINGS</BANKACCTFROM>''';
 
     final OfxBankInfo bankInfo = OfxBankInfo.fromOfx(ofxContent);
 

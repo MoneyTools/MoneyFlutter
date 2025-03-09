@@ -16,14 +16,12 @@ class MyCircle extends StatelessWidget {
   final double size;
 
   @override
-  Widget build(final BuildContext context) {
-    return MyRectangle(
-      key: key,
-      shape: BoxShape.circle,
-      colorFill: colorFill,
-      colorBorder: colorBorder,
-      size: size,
-      showBorder: showBorder,
-    );
-  }
+  Widget build(final BuildContext context) => MyRectangle(
+    key: key,
+    shape: BoxShape.circle,
+    colorFill: colorFill,
+    colorBorder: colorBorder,
+    size: size,
+    showBorder: showBorder,
+  );
 }

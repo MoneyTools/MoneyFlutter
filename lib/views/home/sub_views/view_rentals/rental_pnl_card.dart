@@ -7,11 +7,7 @@ import 'package:money/data/models/money_model.dart';
 import 'package:money/views/home/sub_views/view_rentals/rental_pnl.dart';
 
 class RentalPnLCard extends StatelessWidget {
-  const RentalPnLCard({
-    required this.pnl,
-    super.key,
-    this.customTitle,
-  });
+  const RentalPnLCard({required this.pnl, super.key, this.customTitle});
 
   final String? customTitle;
   final RentalPnL pnl;
@@ -93,9 +89,7 @@ class RentalPnLCard extends StatelessWidget {
     );
   }
 
-  Widget distribution({
-    required final BuildContext context,
-  }) {
+  Widget distribution({required final BuildContext context}) {
     final List<Widget> widgets = <Widget>[];
 
     pnl.distributions.forEach((String name, double percentage) {
@@ -111,8 +105,6 @@ class RentalPnLCard extends StatelessWidget {
       }
     });
 
-    return Column(
-      children: widgets,
-    );
+    return Column(children: widgets);
   }
 }

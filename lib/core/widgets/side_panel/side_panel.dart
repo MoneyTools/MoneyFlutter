@@ -13,19 +13,33 @@ class SidePanelSupport {
     this.onCopyToClipboard,
   });
 
-  late final List<SidePanelSubViewEnum> supportedSubViews = <SidePanelSubViewEnum>[
-    if (onDetails != null) SidePanelSubViewEnum.details,
-    if (onChart != null) SidePanelSubViewEnum.chart,
-    if (onTransactions != null) SidePanelSubViewEnum.transactions,
-    if (onPnL != null) SidePanelSubViewEnum.pnl,
-  ];
+  late final List<SidePanelSubViewEnum> supportedSubViews =
+      <SidePanelSubViewEnum>[
+        if (onDetails != null) SidePanelSubViewEnum.details,
+        if (onChart != null) SidePanelSubViewEnum.chart,
+        if (onTransactions != null) SidePanelSubViewEnum.transactions,
+        if (onPnL != null) SidePanelSubViewEnum.pnl,
+      ];
 
   int selectedCurrency = 0;
 
-  Widget Function({required List<int> selectedIds, required bool showAsNativeCurrency})? onTransactions;  
-  Widget Function({required List<int> selectedIds, required bool isReadOnly})? onDetails;
-  Widget Function({required List<int> selectedIds, required bool showAsNativeCurrency})? onChart;
-  Widget Function({required List<int> selectedIds, required bool showAsNativeCurrency})? onPnL;
+  Widget Function({
+    required List<int> selectedIds,
+    required bool showAsNativeCurrency,
+  })?
+  onTransactions;
+  Widget Function({required List<int> selectedIds, required bool isReadOnly})?
+  onDetails;
+  Widget Function({
+    required List<int> selectedIds,
+    required bool showAsNativeCurrency,
+  })?
+  onChart;
+  Widget Function({
+    required List<int> selectedIds,
+    required bool showAsNativeCurrency,
+  })?
+  onPnL;
   Function? onCopyToClipboard;
 
   Widget getSidePanelContent(
@@ -35,10 +49,7 @@ class SidePanelSupport {
     switch (subViewId) {
       /// Details
       case SidePanelSubViewEnum.details:
-        return onDetails!(
-          selectedIds: selectedIds,
-          isReadOnly: false,
-        );
+        return onDetails!(selectedIds: selectedIds, isReadOnly: false);
 
       /// Chart
       case SidePanelSubViewEnum.chart:
@@ -91,7 +102,8 @@ class SidePanel extends StatelessWidget {
   });
 
   final void Function(int) currencySelectionChanged;
-  final List<String> Function(SidePanelSubViewEnum, List<int>) getCurrencyChoices;
+  final List<String> Function(SidePanelSubViewEnum, List<int>)
+  getCurrencyChoices;
   final bool isExpanded;
   final void Function(bool) onExpanded;
   final ValueNotifier<List<int>> selectedItems;

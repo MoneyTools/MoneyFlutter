@@ -35,10 +35,10 @@ class PickerEditBoxState extends State<PickerEditBox> {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: const BoxDecoration(
-          // color: getColorTheme(context).tertiaryContainer.withValues(alpha:0.3),
-          // border: Border(bottom: BorderSide(color: getColorTheme(context).outline)),
-          // borderRadius: const BorderRadius.all(Radius.circular(8)),
-          ),
+        // color: getColorTheme(context).tertiaryContainer.withValues(alpha:0.3),
+        // border: Border(bottom: BorderSide(color: getColorTheme(context).outline)),
+        // borderRadius: const BorderRadius.all(Radius.circular(8)),
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
@@ -62,7 +62,9 @@ class PickerEditBoxState extends State<PickerEditBox> {
 
   Widget _buildAddNew() {
     // Only show the Add New button if there's text not in the existing list of items
-    if (widget.onAddNew == null || _textController.text.trim().isEmpty || widget.items.contains(_textController.text)) {
+    if (widget.onAddNew == null ||
+        _textController.text.trim().isEmpty ||
+        widget.items.contains(_textController.text)) {
       return const SizedBox();
     }
 
