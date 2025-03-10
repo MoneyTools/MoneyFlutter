@@ -543,7 +543,7 @@ class Transaction extends MoneyObject {
           onSelected: (
             TransactionFlavor choice,
             Payee? selectedPayee,
-            Account? account,
+            Account? transferAccount,
           ) {
             bool wasModified = false;
 
@@ -556,41 +556,22 @@ class Transaction extends MoneyObject {
                   wasModified = true;
                 }
               case TransactionFlavor.transfer:
-                if (account != null) {
-                  if (instance.instanceOfTransfer != null) {
-                    // this was already a transfer, lets see if the destination account has changed
-                    if (instance
-                            .instanceOfTransfer
-                            ?.receiverAccount
-                            ?.uniqueId ==
-                        account.uniqueId) {
-                      // same account do noting
-                    } else {
-                      // use the new account destination
-                      final Transaction relatedTransaction =
-                          instance.instanceOfTransfer!.relatedTransaction!;
-                      instance
-                          .instanceOfTransfer!
-                          .relatedTransaction!
-                          .instanceOfAccount = Data().accounts.get(
-                        account.uniqueId,
-                      );
-                      relatedTransaction.mutateField(
-                        'Account',
-                        account.uniqueId,
-                        false,
-                      );
-                      wasModified = true;
-                    }
-                  } else {
-                    instance.fieldPayee.value =
-                        Data().categories.transfer.uniqueId;
-                    Data().makeTransferLinkage(
-                      transactionSource: instance,
-                      destinationAccount: account,
-                    );
-                  }
+                // this is used to let the dialog Apply code what account should be
+                // used when for transfer with.
+                instance.editingTransferAccount = transferAccount;
+                instance.fieldTransfer.value =
+                    -1; // this will cause a reevaluation of the transfer
+
+                if (transferAccount == null) {
+                  // No account has been selected yet by the users
+                  // do nothing since this is just the user taping between Payee | Transfer
+                  instance.fieldPayee.value = -1;
+                } else {
+                  // mark as Transfer
+                  instance.fieldPayee.value =
+                      Data().categories.transfer.uniqueId;
                 }
+                wasModified = true;
             }
             onEdited(wasModified); // notify container
           },
@@ -598,6 +579,8 @@ class Transaction extends MoneyObject {
       );
     },
   );
+
+  Account? editingTransferAccount;
 
   /// Reconciled Date
   /// 9|ReconciledDate|datetime|0||0

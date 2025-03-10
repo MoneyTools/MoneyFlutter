@@ -323,6 +323,9 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
       }
 
       if (transaction.isTransfer) {
+        if (transaction.instanceOfTransfer == null) {
+          return const Text('Missing Transfer');
+        }
         return TransferSenderReceiver(
           transfer: transaction.instanceOfTransfer!,
         );

@@ -277,7 +277,7 @@ class Data {
 
     Transaction? relatedTransaction;
     try {
-      relatedTransaction = Data().transactions.findExistingTransaction(
+      relatedTransaction = this.transactions.findExistingTransaction(
         accountId: destinationAccount.uniqueId,
         dateRange: DateRange(
           min: transactionSource.fieldDateTime.value!.startOfDay,
@@ -372,6 +372,40 @@ class Data {
 
     // Notify that loading is completed
     return true;
+  }
+
+  void verifyApplyTransfer({
+    required final Transaction transaction,
+    required final Account? relatedAccount,
+  }) {
+    if (relatedAccount == null) {
+      return; // notthing to check
+    }
+    if (transaction.instanceOfTransfer != null) {
+      // this was already a transfer, lets see if the destination account has changed
+      if (transaction.instanceOfTransfer?.receiverAccount?.uniqueId ==
+          relatedAccount.uniqueId) {
+        // same account do noting
+      } else {
+        // use the new account destination
+        final Transaction relatedTransaction =
+            transaction.instanceOfTransfer!.relatedTransaction!;
+        transaction
+            .instanceOfTransfer!
+            .relatedTransaction!
+            .instanceOfAccount = Data().accounts.get(relatedAccount.uniqueId);
+        relatedTransaction.mutateField(
+          'Account',
+          relatedAccount.uniqueId,
+          false,
+        );
+      }
+    } else {
+      makeTransferLinkage(
+        transactionSource: transaction,
+        destinationAccount: relatedAccount,
+      );
+    }
   }
 
   Transaction makeTransferLinkage({

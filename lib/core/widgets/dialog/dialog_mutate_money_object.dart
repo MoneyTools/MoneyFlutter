@@ -4,6 +4,7 @@ import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/core/widgets/dialog/dialog.dart';
 import 'package:money/core/widgets/dialog/dialog_button.dart';
 import 'package:money/core/widgets/message_box.dart';
+import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
 
 void myShowDialogAndActionsForMoneyObject({
@@ -57,6 +58,17 @@ void myShowDialogAndActionsForMoneyObjects({
         if (diff.keys.isNotEmpty) {
           for (final MoneyObject m in moneyObjects) {
             diff.forEach((String key, dynamic value) {
+              // Very Special Edge case for Transaction that are edting the Payeer to Transfer
+              if (m is Transaction) {
+                if (key == 'Payee' || key == 'Transfer') {
+                  // Clean or Apply Transfers to all related instances
+                  Data().verifyApplyTransfer(
+                    transaction: m,
+                    relatedAccount:
+                        (rollup as Transaction).editingTransferAccount,
+                  );
+                }
+              }
               m.mutateField(key, value['after'], false);
             });
           }
