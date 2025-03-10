@@ -280,9 +280,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       final String filtersAsJSonString = preferenceController.getString(
         getPreferenceKey(settingKeyFiltersColumns),
       );
-      if (filtersAsJSonString.isEmpty) {
-        _filterByFieldsValue = FieldFilters.fromJsonString(filtersAsJSonString);
-      }
+      _filterByFieldsValue = FieldFilters.fromJsonString(filtersAsJSonString);
     } catch (error) {
       if (kDebugMode) {
         print(error.toString());
@@ -842,9 +840,9 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       getPreferenceKey(settingKeyFilterText),
       _filterByText,
     );
-    PreferenceController.to.setStringList(
+    PreferenceController.to.setString(
       getPreferenceKey(settingKeyFiltersColumns),
-      _filterByFieldsValue.toStringList(),
+      _filterByFieldsValue.toJsonString(),
     );
   }
 

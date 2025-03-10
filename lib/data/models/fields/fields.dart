@@ -126,7 +126,8 @@ class Fields<T> {
           fieldDefinition,
         );
 
-        if (!filter.asDateRange.isBetweenEqual(date)) {
+        if (filter.asDateRange != null &&
+            filter.asDateRange!.isBetweenEqual(date) == false) {
           return false;
         }
       } else {

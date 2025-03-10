@@ -1,88 +1,80 @@
 // ignore_for_file: unnecessary_this
 
-import 'package:money/core/controller/selection_controller.dart';
+import 'dart:convert';
+
 import 'package:money/core/helpers/ranges.dart';
 import 'package:money/core/helpers/string_helper.dart';
-import 'package:money/data/storage/data/data.dart';
 
-/// List of string values in lower case associated to a fieldName
-/// e.g.  'Color', ['blue', 'red']
+/// Represents a filter associated with a specific field name.
+/// It contains a list of string values and an optional date range filter.
 class FieldFilter {
   /// Constructs a new instance of the `FieldFilter` class.
   ///
-  /// The `fieldName` parameter specifies the name of the field.
-  /// The `strings` parameter is a list of dynamic values representing the string values associated with the field.
-  /// The `byDateRange` parameter is a boolean indicating whether the filter is based on a date range. It defaults to `false`.
+  /// The [fieldName] is required and represents the name of the field.
+  /// The [strings] list contains the values that the field must match when filtering.
+  /// The optional [byDateRange] indicates whether the filter is based on a date range.
   FieldFilter({
     required this.fieldName,
-    required this.strings,
+    required List<String> strings,
     this.byDateRange = false,
-  });
+  }) : strings = List<String>.from(strings); // Ensures type safety
 
-  /// Creates a new `FieldFilter` instance from a JSON map.
-  ///
-  /// The JSON map is expected to have the following keys:
-  /// - `fieldName`: a `String` representing the name of the field.
-  /// - `strings`: a list of `dynamic` values representing the string values associated with the field.
-  /// - `byDateRange`: a `bool` indicating whether the filter is based on a date range.
-  ///
-  /// The `byDateRange` value is set to `false` if it is not present in the JSON map.
-  factory FieldFilter.fromJson(MyJson json) {
+  /// Creates a `FieldFilter` instance from a JSON map.
+  factory FieldFilter.fromJson(Map<String, dynamic> json) {
     return FieldFilter(
-      fieldName: json['fieldName'] as String,
-      strings: List<String>.from(json['strings'] as List<String>),
+      fieldName: json['fieldName'] as String? ?? '',
+      strings:
+          (json['strings'] as List<dynamic>?)
+              ?.map<String>((dynamic e) => e.toString())
+              .toList() ??
+          <String>[],
       byDateRange: json['byDateRange'] as bool? ?? false,
     );
   }
 
-  // Optionally, instead of absolute dates, you can use date range
-  // the list of string will be expected to contain only two text representation of dates 'YYYY-MM-DD'
-  // the first one is the Min Date and the second Max Date
-  final bool byDateRange;
-
-  /// name of the field
-  final String fieldName;
-
-  /// the list of string that the field must match when filtering
-  final List<String> strings;
-
-  /// Returns a string representation of the `FieldFilter` instance in the format:
-  /// `'$fieldName=${strings.join("|")}byDateRange:$byDateRange'`.
-  ///
-  /// This method is used for debugging and logging purposes.
-  @override
-  String toString() {
-    return toJsonString();
-  }
-
-  DateRange get asDateRange => DateRange.fromText(strings.first, strings.last);
-
-  /// Checks if the given [value] is contained in the [strings] list, ignoring case.
-  ///
-  /// Returns `true` if a string in the [strings] list matches the [value] ignoring case, `false` otherwise.
-  bool contains(final dynamic value) {
-    final String? found = this.strings.firstWhereOrNull((final String text) {
-      return stringCompareIgnoreCasing2(text, value as String) == 0;
-    });
-    return found != null;
-  }
-
   /// Converts the `FieldFilter` instance to a JSON map.
-  ///
-  /// The resulting map contains the following keys:
-  /// - `fieldName`: a `String` representing the name of the field.
-  /// - `strings`: a list of `dynamic` values representing the string values associated with the field.
-  /// - `byDateRange`: a `bool` indicating whether the filter is based on a date range.
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'fieldName': fieldName,
-      'strings': strings,
+      'strings': strings, // Ensures it's a `List<String>`
       'byDateRange': byDateRange,
     };
   }
 
-  /// Converts the `FieldFilter` instance to a JSON string.
-  String toJsonString() {
-    return '{"fieldName":"$fieldName","strings":${strings.toString()},"byDateRange":$byDateRange}';
+  /// Indicates whether the filter is based on a date range.
+  final bool byDateRange;
+
+  /// The name of the field being filtered.
+  final String fieldName;
+
+  /// The list of string values associated with the field.
+  final List<String> strings;
+
+  /// Returns a string representation of the `FieldFilter` instance in JSON format.
+  @override
+  String toString() {
+    return jsonEncode(toJson());
+  }
+
+  /// Returns a `DateRange` representation if the filter is based on a date range.
+  ///
+  /// Ensures that there are at least two string values before calling `DateRange.fromText`.
+  DateRange? get asDateRange {
+    if (byDateRange && strings.length >= 2) {
+      return DateRange.fromText(strings.first, strings.last);
+    }
+    return null;
+  }
+
+  /// Checks if the given [value] is contained in the [strings] list, ignoring case.
+  ///
+  /// Returns `true` if a string in the [strings] list matches the [value], ignoring case.
+  bool contains(final dynamic value) {
+    if (value is! String) {
+      return false;
+    }
+    return strings.any(
+      (String text) => stringCompareIgnoreCasing2(text, value) == 0,
+    );
   }
 }

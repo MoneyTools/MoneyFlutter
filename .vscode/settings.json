@@ -23,7 +23,7 @@
     "editor.fontSize": 13,
     "editor.fontFamily": "'Courier New'",
     "editor.tabSize": 2,
-    "editor.cursorStyle": "block",
+    "editor.cursorStyle": "line",
     "editor.autoClosingBrackets": "never",
     "dart.previewFlutterUiGuides": true,
     "dart.analyzeAngularTemplates": false,

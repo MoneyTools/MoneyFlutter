@@ -164,9 +164,10 @@ class PreferenceController extends GetxController {
       textFilter,
     );
     if (columnFilters != null) {
+      final String jsonString = columnFilters.toJsonString();
       await setString(
         viewId.getViewPreferenceId(settingKeyFiltersColumns),
-        columnFilters.toJsonString(),
+        jsonString,
       );
     }
 
@@ -286,7 +287,7 @@ class PreferenceController extends GetxController {
 
 /// Navigation helpers
 
-void switchViewTransactionForPayee(final String payeeName) {
+void switchViewTransactionForPayee(final String payeeName) async {
   final FieldFilters fieldFilters = FieldFilters();
   fieldFilters.add(
     FieldFilter(
@@ -295,9 +296,9 @@ void switchViewTransactionForPayee(final String payeeName) {
     ),
   );
 
-  PreferenceController.to.setStringList(
+  await PreferenceController.to.setString(
     ViewId.viewTransactions.getViewPreferenceId(settingKeyFiltersColumns),
-    fieldFilters.toStringList(),
+    fieldFilters.toJsonString(),
   );
 
   // Switch view
