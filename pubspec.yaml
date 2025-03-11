@@ -57,7 +57,7 @@ dependencies:
   sqlite3: ^2.7.5
   sqlite3_flutter_libs: ^0.5.31
   textify:
-    # path: "../../textify"
+    # path: "../textify"
   universal_io: ^2.2.2
   url_launcher: ^6.3.1
   uuid: ^4.5.1

@@ -134,6 +134,7 @@ class _InputByColumnsOrFreeStyleState extends State<InputByColumnsOrFreeStyle> {
         title: 'Date; Description; Amount',
         controller: _controllerSingleColumn,
         allowedCharacters: '0123456789/-.\\',
+        expectAmountAsInputValues: false,
       ),
     );
   }
@@ -150,6 +151,7 @@ class _InputByColumnsOrFreeStyleState extends State<InputByColumnsOrFreeStyle> {
             title: 'Date',
             controller: _controllerColumn1,
             allowedCharacters: '0123456789/-.\\',
+            expectAmountAsInputValues: false,
           ),
         ),
         Expanded(
@@ -158,6 +160,7 @@ class _InputByColumnsOrFreeStyleState extends State<InputByColumnsOrFreeStyle> {
             title: 'Description',
             controller: _controllerColumn2,
             allowedCharacters: '',
+            expectAmountAsInputValues: false,
           ),
         ),
         Expanded(
@@ -167,6 +170,7 @@ class _InputByColumnsOrFreeStyleState extends State<InputByColumnsOrFreeStyle> {
             controller: _controllerColumn3,
             allowedCharacters:
                 '0123456789,.()-+', // amounts like 12.34 12,34 1,234.56 1.234,56 +1.234,56 -1,234.56 (1,234.56)
+            expectAmountAsInputValues: true,
           ),
         ),
       ],

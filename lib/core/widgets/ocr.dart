@@ -12,9 +12,11 @@ class PasteImageOcr extends StatefulWidget {
     super.key,
     required this.textController,
     required this.allowedCharacters,
+    this.expectAmountAsInputValues = false,
   });
 
   final String allowedCharacters;
+  final bool expectAmountAsInputValues;
   final TextEditingController textController;
 
   @override
@@ -56,10 +58,28 @@ class _PasteImageOcrState extends State<PasteImageOcr> {
         );
         text.trim();
         if (text.isNotEmpty) {
-          if (widget.textController.text.isNotEmpty) {
-            widget.textController.text += '\n';
+          if (widget.expectAmountAsInputValues) {
+            final List<String> allAmounts = text.split('\n');
+
+            for (final String amount in allAmounts) {
+              final String cleanedAmount =
+                  amount
+                      .replaceAll(RegExp(r'\((?!\))'), ',')
+                      .replaceAll(RegExp(r'\(\)'), '')
+                      .replaceAll(',,', ',')
+                      .trim();
+              if (cleanedAmount.isNotEmpty &&
+                  cleanedAmount != ',' &&
+                  cleanedAmount != '1') {
+                widget.textController.text += '$cleanedAmount\n';
+              }
+            }
+          } else {
+            if (widget.textController.text.isNotEmpty) {
+              widget.textController.text += '\n';
+            }
+            widget.textController.text += text;
           }
-          widget.textController.text += text;
         }
       } on Exception catch (e) {
         // Handle potential errors

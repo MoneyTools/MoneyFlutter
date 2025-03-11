@@ -12,11 +12,13 @@ class InputValues extends StatelessWidget {
     required this.controller,
     required this.title,
     required this.allowedCharacters,
+    required this.expectAmountAsInputValues,
   });
 
   final String allowedCharacters;
   final TextEditingController controller;
   final String title;
+  final bool expectAmountAsInputValues;
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +57,7 @@ class InputValues extends StatelessWidget {
           child: PasteImageOcr(
             textController: controller,
             allowedCharacters: allowedCharacters,
+            expectAmountAsInputValues: expectAmountAsInputValues,
           ),
         ),
       ],
