@@ -1,12 +1,9 @@
 // Imports
-// ignore_for_file: unnecessary_this
-
 import 'package:money/core/controller/data_controller.dart';
 import 'package:money/core/controller/selection_controller.dart';
 import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/widgets/icon_button.dart';
-import 'package:money/core/widgets/money_widget.dart';
 import 'package:money/core/widgets/picker_edit_box_date.dart';
 import 'package:money/core/widgets/picker_panel.dart';
 import 'package:money/core/widgets/snack_bar.dart';

@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:money/core/controller/keyboard_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/widgets/form_field_widget.dart';
 import 'package:money/core/widgets/gaps.dart';
-import 'package:money/core/widgets/money_widget.dart';
 import 'package:money/core/widgets/my_text_input.dart';
 import 'package:money/core/widgets/picker_edit_box_date.dart';
 import 'package:money/data/models/money_objects/accounts/account.dart';

@@ -1,7 +1,10 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/core/widgets/gaps.dart';
+import 'package:money/core/widgets/widgets.dart';
+
+// Exports
+export 'package:money/core/widgets/widgets.dart';
 
 class ColumnFilterPanel extends StatefulWidget {
   const ColumnFilterPanel({

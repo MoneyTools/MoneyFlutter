@@ -2,7 +2,6 @@
 import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/widgets/picker_panel.dart';
 import 'package:money/core/widgets/suggestion_approval.dart';
-import 'package:money/core/widgets/widgets.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/view_categories/picker_category.dart';

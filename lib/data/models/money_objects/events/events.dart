@@ -1,7 +1,7 @@
 import 'package:money/data/models/money_objects/events/event.dart';
 import 'package:money/data/storage/data/data.dart';
 
-// Export
+// Exports
 export 'package:money/data/models/money_objects/loan_payments/loan_payment.dart';
 
 class Events extends MoneyObjects<Event> {

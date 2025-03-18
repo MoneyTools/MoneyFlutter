@@ -1,13 +1,13 @@
 import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/controller/selection_controller.dart';
 import 'package:money/core/helpers/list_helper.dart';
+import 'package:money/core/widgets/dialog/dialog_button.dart';
 import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/data/models/money_objects/payees/payee.dart';
 import 'package:money/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transactions/transaction_timeline_chart.dart';
-import 'package:money/views/home/sub_views/adaptive_view/view_money_objects.dart';
 import 'package:money/views/home/sub_views/view_payees/merge_payees.dart';
 
 part 'view_payees_side_panel.dart';

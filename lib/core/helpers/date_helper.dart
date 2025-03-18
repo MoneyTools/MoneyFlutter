@@ -1,5 +1,8 @@
 import 'package:intl/intl.dart';
 
+// Exports
+export 'package:intl/intl.dart';
+
 List<String> generateAllDateFormats() {
   final List<String> separators = <String>['-', '/'];
   final List<String> yearFormats = <String>['yyyy', 'yy'];

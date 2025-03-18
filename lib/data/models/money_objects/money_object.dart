@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/widgets/form_field_switch.dart';
 import 'package:money/core/widgets/form_field_widget.dart';
 import 'package:money/data/storage/data/data.dart';
 
 // Exports
+export 'package:money/core/helpers/color_helper.dart';
 export 'package:money/core/helpers/misc_helpers.dart';
 export 'package:money/data/models/fields/field.dart';
 export 'package:money/data/models/fields/fields.dart';

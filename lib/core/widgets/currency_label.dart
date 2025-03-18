@@ -1,6 +1,9 @@
 import 'package:money/core/widgets/gaps.dart';
 import 'package:money/core/widgets/widgets.dart';
 
+// Exports
+export 'package:money/core/widgets/widgets.dart';
+
 class CurrencyLabel extends StatelessWidget {
   const CurrencyLabel({
     required this.threeLetterCurrencySymbol,

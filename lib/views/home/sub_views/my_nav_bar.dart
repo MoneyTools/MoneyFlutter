@@ -3,6 +3,9 @@ import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/widgets/widgets.dart';
 import 'package:money/data/models/constants.dart';
 
+// Exports
+export 'package:money/core/widgets/widgets.dart';
+
 class MyNavigationItem {
   MyNavigationItem({
     required this.label,

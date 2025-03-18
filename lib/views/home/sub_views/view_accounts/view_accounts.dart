@@ -1,14 +1,11 @@
 import 'package:money/core/controller/data_controller.dart';
-import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/controller/selection_controller.dart';
 import 'package:money/core/helpers/accumulator.dart';
-import 'package:money/core/helpers/date_helper.dart';
-import 'package:money/core/helpers/ranges.dart';
 import 'package:money/core/widgets/box.dart';
+import 'package:money/core/widgets/dialog/dialog_button.dart';
 import 'package:money/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/core/widgets/gaps.dart';
 import 'package:money/core/widgets/label_and_amount.dart';
-import 'package:money/core/widgets/money_widget.dart';
 import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/core/widgets/side_panel/side_panel_views_enum.dart';
 import 'package:money/core/widgets/snack_bar.dart';
@@ -30,7 +27,6 @@ import 'package:money/data/storage/import/import_investment_panel.dart';
 import 'package:money/data/storage/import/import_wizard.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
-import 'package:money/views/home/sub_views/adaptive_view/view_money_objects.dart';
 import 'package:money/views/home/sub_views/money_object_card.dart';
 
 part 'view_accounts_side_panel.dart';

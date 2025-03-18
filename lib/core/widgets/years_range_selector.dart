@@ -1,9 +1,7 @@
 // ignore_for_file: unnecessary_this
 import 'dart:math';
-import 'package:flutter/material.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/ranges.dart';
-import 'package:money/core/helpers/string_helper.dart';
 
 /// A widget that allows users to select a range of years using a slider.
 class YearRangeSlider extends StatefulWidget {

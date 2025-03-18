@@ -1,5 +1,4 @@
 import 'package:money/core/widgets/icon_button.dart';
-import 'package:money/core/widgets/widgets.dart';
 import 'package:money/core/widgets/working.dart';
 
 class SuggestionApproval extends StatefulWidget {

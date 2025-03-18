@@ -1,13 +1,8 @@
 // Imports
-// ignore_for_file: unnecessary_this
-
-import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/helpers/string_helper.dart';
-import 'package:money/core/widgets/circle.dart';
 import 'package:money/core/widgets/color_picker.dart';
 import 'package:money/core/widgets/gaps.dart';
-import 'package:money/core/widgets/money_widget.dart';
 import 'package:money/core/widgets/my_text_input.dart';
 import 'package:money/core/widgets/rectangle.dart';
 import 'package:money/core/widgets/token_text.dart';
@@ -17,6 +12,7 @@ import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 
 // Exports
+export 'package:money/core/widgets/money_widget.dart';
 export 'package:money/data/models/money_objects/categories/category_types.dart';
 
 class Category extends MoneyObject {

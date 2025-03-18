@@ -1,9 +1,7 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/widgets/circle.dart';
-import 'package:money/core/widgets/money_widget.dart';
 import 'package:money/data/models/money_objects/categories/category.dart';
 import 'package:money/data/storage/data/data.dart';
 

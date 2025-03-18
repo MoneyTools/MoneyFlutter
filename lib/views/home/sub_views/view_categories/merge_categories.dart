@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:money/core/widgets/box.dart';
 import 'package:money/core/widgets/gaps.dart';
 import 'package:money/core/widgets/info_banner.dart';

@@ -1,6 +1,10 @@
 import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/string_helper.dart';
 
+// Exports
+export 'package:money/core/helpers/date_helper.dart';
+export 'package:money/core/helpers/string_helper.dart';
+
 class DateRange {
   DateRange({this.min, this.max});
 

@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money/core/helpers/color_helper.dart';
+
+// Exports
+export 'package:money/core/widgets/widgets.dart';
 
 /// A Row for a Table view
 class MyListItem extends StatefulWidget {

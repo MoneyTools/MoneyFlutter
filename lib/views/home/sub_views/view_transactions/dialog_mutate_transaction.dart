@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:money/core/widgets/confirmation_dialog.dart';
 import 'package:money/core/widgets/dialog/dialog_button.dart';
 import 'package:money/core/widgets/dialog/dialog_full_screen.dart';

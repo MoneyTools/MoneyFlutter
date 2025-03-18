@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:money/core/helpers/value_parser.dart';
 import 'package:money/core/widgets/dialog/dialog.dart';
 import 'package:money/core/widgets/dialog/dialog_button.dart';

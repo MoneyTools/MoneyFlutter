@@ -7,7 +7,7 @@ import 'package:money/data/models/money_objects/payees/payee.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 
-// Export
+// Exports
 export 'package:money/data/models/money_objects/aliases/alias_types.dart';
 
 class Alias extends MoneyObject {

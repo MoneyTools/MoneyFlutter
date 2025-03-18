@@ -6,6 +6,9 @@ import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_selection.dart';
 import 'package:money/views/home/sub_views/view_transactions/dialog_mutate_transaction.dart';
 
+// Exports
+export 'package:money/views/home/sub_views/adaptive_view/view_money_objects.dart';
+
 class ListViewTransactions extends StatefulWidget {
   const ListViewTransactions({
     super.key,

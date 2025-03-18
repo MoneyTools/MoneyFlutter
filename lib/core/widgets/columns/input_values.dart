@@ -1,10 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/core/widgets/box.dart';
 import 'package:money/core/widgets/columns/columns_input.dart';
 import 'package:money/core/widgets/ocr.dart';
+import 'package:money/core/widgets/widgets.dart';
 import 'package:money/data/models/constants.dart';
+
+// Exports
+export 'package:money/core/widgets/widgets.dart';
 
 class InputValues extends StatelessWidget {
   const InputValues({

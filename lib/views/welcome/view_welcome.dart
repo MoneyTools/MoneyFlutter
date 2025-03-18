@@ -5,6 +5,9 @@ import 'package:money/core/widgets/gaps.dart';
 import 'package:money/data/models/constants.dart';
 import 'package:money/views/home/sub_views/mru_dropdown.dart';
 
+// Exports
+export 'package:flutter/material.dart';
+
 /// The `WelcomeScreen` is a `StatelessWidget` that represents the welcome screen of the application.
 /// It provides the user with options to create a new file, open an existing file, or use demo data.
 class WelcomeScreen extends StatelessWidget {

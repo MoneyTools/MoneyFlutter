@@ -2,7 +2,6 @@ import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/default_values.dart';
 import 'package:money/core/widgets/icon_button.dart';
 import 'package:money/core/widgets/my_text_input.dart';
-import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/list_view.dart';
 
 class PickerEditBoxDate extends StatefulWidget {
   const PickerEditBoxDate({

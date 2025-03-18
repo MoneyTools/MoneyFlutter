@@ -10,7 +10,6 @@ import 'package:money/data/models/money_objects/accounts/account_types_enum.dart
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/data/storage/import/import_transactions_from_text.dart';
-import 'package:money/views/home/sub_views/view_stocks/picker_security_type.dart';
 
 class ImportData {
   List<ImportEntry> entries = <ImportEntry>[];

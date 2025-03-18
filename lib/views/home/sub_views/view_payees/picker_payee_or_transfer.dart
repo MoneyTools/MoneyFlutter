@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:money/core/widgets/gaps.dart';
 import 'package:money/core/widgets/my_segment.dart';
 import 'package:money/data/models/money_objects/accounts/account.dart';

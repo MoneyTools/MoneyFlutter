@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/misc_helpers.dart';

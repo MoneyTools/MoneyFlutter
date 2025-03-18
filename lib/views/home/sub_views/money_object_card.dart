@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/core/widgets/box.dart';
 import 'package:money/core/widgets/center_message.dart';
 import 'package:money/core/widgets/gaps.dart';
 import 'package:money/data/models/money_objects/money_object.dart';
 import 'package:money/data/models/money_objects/transactions/transactions.dart';
+
+export 'package:money/data/models/money_objects/money_object.dart';
 
 class MoneyObjectCard extends StatelessWidget {
   const MoneyObjectCard({

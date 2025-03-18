@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/data/models/constants.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/multiple_selection_context.dart';
+
+/// Exports
+export 'package:money/views/home/sub_views/adaptive_view/adaptive_list/multiple_selection_context.dart';
 
 class MultipleSelectionToggle extends StatelessWidget {
   const MultipleSelectionToggle({required this.multipleSelection, super.key});

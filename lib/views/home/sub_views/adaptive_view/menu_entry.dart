@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/core/widgets/snack_bar.dart';

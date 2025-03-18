@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/widgets/gaps.dart';
-import 'package:money/core/widgets/money_widget.dart';
 import 'package:money/data/models/money_model.dart';
 import 'package:money/data/models/money_objects/categories/category.dart';
 

@@ -8,10 +8,11 @@ import 'package:money/core/widgets/side_panel/side_panel_header.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/data/storage/import/import_qfx.dart';
 import 'package:money/main.dart' as app;
-import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/list_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'test_helpers.dart';
+
+export 'package:money/core/widgets/widgets.dart';
 
 void main() {
   group('App Test', () {

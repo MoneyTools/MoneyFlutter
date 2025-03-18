@@ -3,7 +3,9 @@
 import 'dart:convert';
 
 import 'package:money/core/helpers/ranges.dart';
-import 'package:money/core/helpers/string_helper.dart';
+
+// Exports
+export 'package:money/core/helpers/ranges.dart';
 
 /// Represents a filter associated with a specific field name.
 /// It contains a list of string values and an optional date range filter.

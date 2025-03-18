@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/widgets/charts/my_line_chart.dart';

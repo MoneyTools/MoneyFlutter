@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/widgets/side_panel/side_panel_header.dart';
 import 'package:money/core/widgets/side_panel/side_panel_views_enum.dart';

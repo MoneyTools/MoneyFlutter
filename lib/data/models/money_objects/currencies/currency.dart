@@ -1,8 +1,9 @@
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/core/widgets/currency_label.dart';
 import 'package:money/data/storage/data/data.dart';
+
+export 'package:intl/intl.dart';
 
 /*
   cid  name         type          notnull  default  pk

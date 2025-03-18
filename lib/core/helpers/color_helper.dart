@@ -3,6 +3,9 @@ import 'package:money/core/controller/theme_controller.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/helpers/misc_helpers.dart';
 
+// Exports
+export 'package:flutter/material.dart';
+
 /// Collection of color utility functions for:
 /// - Color manipulation (tinting, brightness, opacity)
 /// - Format conversion (hex, HSL, RGB)

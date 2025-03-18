@@ -1,6 +1,4 @@
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:money/core/helpers/chart_helper.dart';
 import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/string_helper.dart';

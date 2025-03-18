@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:money/data/models/money_objects/transfers/transfer.dart';
 import 'package:money/views/home/sub_views/money_object_card.dart';
 

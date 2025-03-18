@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/core/widgets/text_title.dart';
 import 'package:money/views/home/sub_views/app_scaffold.dart';

@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/helpers/accumulator.dart';
-import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/ranges.dart';
 
 import 'package:money/data/models/money_objects/transactions/transactions.dart';

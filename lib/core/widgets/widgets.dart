@@ -1,5 +1,4 @@
 import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/material.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/string_helper.dart';
@@ -16,6 +15,7 @@ export 'package:money/core/widgets/circle.dart';
 export 'package:money/core/widgets/confirmation_dialog.dart';
 export 'package:money/core/widgets/dialog/dialog.dart';
 export 'package:money/core/widgets/filter_input.dart';
+export 'package:money/core/widgets/money_widget.dart';
 export 'package:money/core/widgets/three_part_label.dart';
 
 /// If the space for rendering the widget is too small this will scale the widget to fit

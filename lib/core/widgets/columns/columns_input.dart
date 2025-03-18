@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money/core/helpers/misc_helpers.dart';
 import 'package:money/core/helpers/string_helper.dart';

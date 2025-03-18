@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/widgets/picker_edit_box.dart';
 import 'package:money/data/models/money_objects/payees/payee.dart';

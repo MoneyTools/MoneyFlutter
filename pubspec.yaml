@@ -49,6 +49,7 @@ dependencies:
   intl:
   js: ^0.7.2
   logger: ^2.5.0
+  multi_split_view: ^3.6.0
   pasteboard: ^0.3.0
   path:
   path_provider: ^2.1.5
@@ -57,7 +58,7 @@ dependencies:
   sqlite3: ^2.7.5
   sqlite3_flutter_libs: ^0.5.31
   textify:
-    # path: "../textify"
+    path: "../textify"
   universal_io: ^2.2.2
   url_launcher: ^6.3.1
   uuid: ^4.5.1

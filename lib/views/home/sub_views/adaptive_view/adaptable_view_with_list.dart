@@ -1,13 +1,14 @@
-import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/widgets/widgets.dart';
 import 'package:money/data/models/fields/field_filters.dart';
 import 'package:money/data/models/money_objects/money_objects.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';
 
 export 'package:flutter/material.dart';
+export 'package:money/data/models/money_objects/money_objects.dart';
 
 class AdaptiveViewWithList extends StatelessWidget {
   const AdaptiveViewWithList({
+    super.key,
     required this.list,
     required this.fieldDefinitions,
     required this.filters,
@@ -15,7 +16,6 @@ class AdaptiveViewWithList extends StatelessWidget {
     required this.onSelectionChanged,
     required this.isMultiSelectionOn,
     required this.listController,
-    super.key,
     this.top,
     this.bottom,
     this.flexBottom = 1,

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/list_helper.dart';
@@ -16,7 +15,7 @@ void main() {
 
     test('test_invert_color_edge_cases', () {
       const Color black = Color.fromRGBO(0, 0, 0, 1.0);
-      const Color white = Color.fromRGBO(255, 255, 255, 1.0);
+      const Color white = Color.from(alpha: 1, red: 1, green: 1, blue: 1);
       final Color invertedBlack = invertColor(black);
       final Color invertedWhite = invertColor(white);
 

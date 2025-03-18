@@ -3,13 +3,13 @@ import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/controller/selection_controller.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/widgets/charts/my_line_chart.dart';
+import 'package:money/core/widgets/dialog/dialog_button.dart';
 import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/data/models/money_objects/investments/investments.dart';
 import 'package:money/data/models/money_objects/securities/security.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
-import 'package:money/views/home/sub_views/adaptive_view/view_money_objects.dart';
 
 part 'view_investments_side_panel.dart';
 

@@ -5,7 +5,7 @@ import 'package:money/data/models/money_objects/loan_payments/loan_payment.dart'
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
 
-// Export
+// Exports
 export 'package:money/data/models/money_objects/loan_payments/loan_payment.dart';
 
 class LoanPayments extends MoneyObjects<LoanPayment> {

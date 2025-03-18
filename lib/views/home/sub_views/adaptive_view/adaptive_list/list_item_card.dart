@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:money/core/helpers/color_helper.dart';
 
-export 'package:flutter/material.dart';
+export 'package:money/core/widgets/widgets.dart';
 
 class MyListItemAsCard extends StatelessWidget {
   /// Constructor

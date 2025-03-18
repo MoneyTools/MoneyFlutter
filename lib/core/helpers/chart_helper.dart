@@ -1,6 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+export 'package:flutter/material.dart';
+
 /// Helper functions for creating line charts.
 /// Features:
 /// - Data point sorting

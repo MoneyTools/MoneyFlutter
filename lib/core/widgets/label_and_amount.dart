@@ -2,8 +2,6 @@ import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/widgets/money_widget.dart';
 import 'package:money/core/widgets/quantity_widget.dart';
 import 'package:money/data/models/money_model.dart';
-import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_selection.dart';
-import 'package:money/views/home/sub_views/view_stocks/picker_security_type.dart';
 
 class LabelAndAmount extends StatelessWidget {
   const LabelAndAmount({

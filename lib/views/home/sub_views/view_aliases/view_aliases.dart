@@ -6,7 +6,6 @@ import 'package:money/data/models/money_objects/aliases/alias.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
-import 'package:money/views/home/sub_views/adaptive_view/view_money_objects.dart';
 
 class ViewAliases extends ViewForMoneyObjects {
   const ViewAliases({super.key});

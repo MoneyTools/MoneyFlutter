@@ -1,9 +1,7 @@
 import 'package:get/get.dart';
 import 'package:money/core/controller/data_controller.dart';
-import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/widgets/drop_zone.dart';
-import 'package:money/core/widgets/widgets.dart';
 import 'package:money/core/widgets/working.dart';
 import 'package:money/data/models/constants.dart';
 import 'package:money/data/storage/import/import_qfx.dart';
@@ -22,7 +20,6 @@ import 'package:money/views/home/sub_views/view_stocks/view_stocks.dart';
 import 'package:money/views/home/sub_views/view_transactions/view_transactions.dart';
 import 'package:money/views/home/sub_views/view_transfers/view_transfers.dart';
 import 'package:money/views/policies/view_policy.dart';
-
 import 'home_controller.dart';
 
 RxInt subViewInt = 0.obs;

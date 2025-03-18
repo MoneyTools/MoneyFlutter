@@ -1,10 +1,10 @@
 import 'package:money/core/helpers/color_helper.dart';
-import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/misc_helpers.dart';
 import 'package:money/core/helpers/ranges.dart';
-import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/core/widgets/widgets.dart';
 import 'package:money/data/models/money_objects/currencies/currency.dart';
+
+export 'package:money/core/widgets/widgets.dart';
 
 Widget getFooterForDateRange(final DateRange dateRange) {
   return LayoutBuilder(

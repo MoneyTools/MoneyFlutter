@@ -1,4 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:money/core/widgets/widgets.dart';
+
+// Exports
+export 'package:money/core/widgets/widgets.dart';
 
 Widget buildColumnFooterButton({
   required final BuildContext context,

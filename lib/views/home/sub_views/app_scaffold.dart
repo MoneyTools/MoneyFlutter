@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 
+// Exports
+export 'package:flutter/material.dart';
+export 'package:money/core/controller/preferences_controller.dart';
+
 Widget myScaffold(
   final BuildContext context,
   final PreferredSizeWidget? appBar,

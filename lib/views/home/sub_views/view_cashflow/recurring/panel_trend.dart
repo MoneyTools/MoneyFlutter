@@ -1,13 +1,8 @@
 import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
 import 'package:money/core/controller/preferences_controller.dart';
-import 'package:money/core/helpers/color_helper.dart';
-import 'package:money/core/helpers/date_helper.dart';
-import 'package:money/core/helpers/ranges.dart';
 import 'package:money/core/widgets/chart.dart';
-import 'package:money/core/widgets/money_widget.dart';
 import 'package:money/data/models/fields/field_filters.dart';
 import 'package:money/data/models/money_objects/categories/category.dart';
 import 'package:money/data/storage/data/data.dart';

@@ -1,7 +1,6 @@
 // Imports
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/widgets/diff.dart';
 import 'package:money/core/widgets/gaps.dart';

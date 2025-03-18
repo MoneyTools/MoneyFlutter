@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/widgets/columns/column_content_center.dart';
+
+// Exports
+export 'package:flutter/material.dart';
 
 Widget buildColumnHeaderButton({
   required BuildContext context,

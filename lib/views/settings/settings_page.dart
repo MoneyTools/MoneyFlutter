@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money/core/controller/preferences_controller.dart';
-import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/widgets/box.dart';
 import 'package:money/core/widgets/my_text_input.dart';
 import 'package:money/core/widgets/text_title.dart';
