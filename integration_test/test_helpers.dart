@@ -185,7 +185,7 @@ Future<void> showInstruction(
 }
 
 // Select first element of the Side-Panel-Transaction-List
-Future<void> selectFirstItemOfSidePanelTransactionLIst(
+Future<void> selectFirstItemOfSidePanelTransactionList(
   WidgetTester tester,
 ) async {
   final Finder element = await getFirstItemOfList(tester, SidePanel);

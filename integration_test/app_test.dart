@@ -464,7 +464,7 @@ Future<void> testAccounts(WidgetTester tester) async {
   await tapOnKey(tester, Constants.keyCopyListToClipboardHeaderMain);
 
   // Select first element of the Side-Panel-Transaction-List
-  await selectFirstItemOfSidePanelTransactionLIst(tester);
+  await selectFirstItemOfSidePanelTransactionList(tester);
 
   // Bring upt the Mutate Transaction Dialog
   await longPressFirstItemOfSidePanelTransactionLIst(tester);
