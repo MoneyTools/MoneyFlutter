@@ -22,23 +22,31 @@ class SidePanelSupport {
 
   int selectedCurrency = 0;
 
-  Widget Function({
-    required List<int> selectedIds,
-    required bool showAsNativeCurrency,
-  })?
-  onTransactions;
+  /// Details
   Widget Function({required List<int> selectedIds, required bool isReadOnly})?
   onDetails;
+
+  /// Chart
   Widget Function({
     required List<int> selectedIds,
     required bool showAsNativeCurrency,
   })?
   onChart;
+
+  /// Transactions
+  Widget Function({
+    required List<int> selectedIds,
+    required bool showAsNativeCurrency,
+  })?
+  onTransactions;
+
+  /// PnL
   Widget Function({
     required List<int> selectedIds,
     required bool showAsNativeCurrency,
   })?
   onPnL;
+
   Function? onCopyToClipboard;
 
   Widget getSidePanelContent(
@@ -83,7 +91,7 @@ class SidePanelSupport {
   }
 }
 
-class SidePanel extends StatelessWidget {
+class SidePanel extends StatefulWidget {
   /// Constructor
   const SidePanel({
     required this.isExpanded,
@@ -119,6 +127,11 @@ class SidePanel extends StatelessWidget {
   final SidePanelSubViewEnum subPanelSelected;
 
   @override
+  State<SidePanel> createState() => _SidePanelState();
+}
+
+class _SidePanelState extends State<SidePanel> {
+  @override
   Widget build(final BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: SizeForPadding.medium),
@@ -135,7 +148,7 @@ class SidePanel extends StatelessWidget {
         ),
       ),
       child: ValueListenableBuilder<List<int>>(
-        valueListenable: selectedItems,
+        valueListenable: widget.selectedItems,
         builder: (
           final BuildContext context,
           final List<int> listOfSelectedItemIndex,
@@ -145,29 +158,29 @@ class SidePanel extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               SidePanelHeader(
-                isExpanded: isExpanded,
-                onExpanded: onExpanded,
+                isExpanded: widget.isExpanded,
+                onExpanded: widget.onExpanded,
 
                 // SubPanel
-                sidePanelSupport: sidePanelSupport,
-                subViewSelected: subPanelSelected,
-                subViewSelectionChanged: subPanelSelectionChanged,
+                sidePanelSupport: widget.sidePanelSupport,
+                subViewSelected: widget.subPanelSelected,
+                subViewSelectionChanged: widget.subPanelSelectionChanged,
 
                 // Currency
-                currencyChoices: getCurrencyChoices(
-                  subPanelSelected,
+                currencyChoices: widget.getCurrencyChoices(
+                  widget.subPanelSelected,
                   listOfSelectedItemIndex,
                 ),
-                currencySelected: currencySelected,
-                currentSelectionChanged: currencySelectionChanged,
+                currencySelected: widget.currencySelected,
+                currentSelectionChanged: widget.currencySelectionChanged,
 
                 // Actions
-                actionButtons: getActionButtons,
+                actionButtons: widget.getActionButtons,
               ),
-              if (isExpanded)
+              if (widget.isExpanded)
                 Expanded(
-                  child: sidePanelSupport.getSidePanelContent(
-                    subPanelSelected,
+                  child: widget.sidePanelSupport.getSidePanelContent(
+                    widget.subPanelSelected,
                     listOfSelectedItemIndex,
                   ),
                 ),
