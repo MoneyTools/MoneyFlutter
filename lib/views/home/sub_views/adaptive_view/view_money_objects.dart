@@ -74,7 +74,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   bool _isMultiSelectionOn = false;
   int _lastSelectedItemId = -1;
-  SidePanelSubViewEnum _selectedBottomTabId = SidePanelSubViewEnum.details;
+  SidePanelSubViewEnum _selectedSidePanelTabId = SidePanelSubViewEnum.details;
   bool _sortAscending = true;
   int _sortByFieldIndex = 0;
 
@@ -124,23 +124,23 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
             saveLastUserChoicesOfView();
           },
           onItemTap: _onItemTap,
-          flexBottom: preferenceController.isDetailsPanelExpanded ? 1 : 0,
+          flexBottom: preferenceController.isSidePanelExpanded ? 1 : 0,
           bottom: SidePanel(
             key: Key(
               settingKeySidePanel +
                   sidePanelOptions.selectedCurrency.toString(),
             ),
-            isExpanded: preferenceController.isDetailsPanelExpanded,
+            isExpanded: preferenceController.isSidePanelExpanded,
             onExpanded: (final bool isExpanded) {
               setState(() {
-                preferenceController.isDetailsPanelExpanded = isExpanded;
+                preferenceController.isSidePanelExpanded = isExpanded;
               });
             },
             selectedItems: _selectedItemsByUniqueId,
 
             // SubView
             sidePanelSupport: sidePanelOptions,
-            subPanelSelected: _selectedBottomTabId,
+            subPanelSelected: _selectedSidePanelTabId,
             subPanelSelectionChanged: _updateBottomContent,
 
             // Currency
@@ -255,11 +255,11 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     );
 
     final int subViewIndex = PreferenceController.to.getInt(
-      getPreferenceKey(settingKeySelectedDetailsPanelTab),
+      getPreferenceKey(settingKeySelectedSidePanelTab),
       SidePanelSubViewEnum.details.index,
     );
 
-    _selectedBottomTabId = SidePanelSubViewEnum.values[subViewIndex];
+    _selectedSidePanelTabId = SidePanelSubViewEnum.values[subViewIndex];
 
     // Filters
 
@@ -380,7 +380,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
     /// Info panel header
     if (forSidePanelTransactions) {
-      if (_selectedBottomTabId == SidePanelSubViewEnum.transactions) {
+      if (_selectedSidePanelTabId == SidePanelSubViewEnum.transactions) {
         /// Add Transactions
         if (onAddTransaction != null) {
           widgets.add(buildAddTransactionsButton(onAddTransaction!));
@@ -822,19 +822,19 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       getPreferenceKey(settingKeySortAscending),
       _sortAscending,
     );
-    PreferenceController.to.setInt(
+    preferenceController.setInt(
       getPreferenceKey(settingKeySelectedListItemId),
       getUniqueIdOfFirstSelectedItem() ?? -1,
     );
     preferenceController.setInt(
-      getPreferenceKey(settingKeySelectedDetailsPanelTab),
-      _selectedBottomTabId.index,
+      getPreferenceKey(settingKeySelectedSidePanelTab),
+      _selectedSidePanelTabId.index,
     );
     preferenceController.setString(
       getPreferenceKey(settingKeyFilterText),
       _filterByText,
     );
-    PreferenceController.to.setString(
+    preferenceController.setString(
       getPreferenceKey(settingKeyFiltersColumns),
       _filterByFieldsValue.toJsonString(),
     );
@@ -1062,7 +1062,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   void _updateBottomContent(final SidePanelSubViewEnum tab) {
     setState(() {
-      _selectedBottomTabId = tab;
+      _selectedSidePanelTabId = tab;
       saveLastUserChoicesOfView();
     });
   }

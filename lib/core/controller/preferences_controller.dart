@@ -41,7 +41,7 @@ class PreferenceController extends GetxController {
 
   ///---------------------------------
   /// Hide/Show Info panel
-  final RxBool _isDetailsPanelExpanded = false.obs;
+  final RxBool _isSidePanelExpanded = false.obs;
 
   //////////////////////////////////////////////////////
   // Persistable user preference
@@ -143,13 +143,13 @@ class PreferenceController extends GetxController {
     isReady.value = true;
   }
 
-  bool get isDetailsPanelExpanded => _isDetailsPanelExpanded.value;
+  bool get isSidePanelExpanded => _isSidePanelExpanded.value;
 
-  set isDetailsPanelExpanded(final bool value) {
-    _isDetailsPanelExpanded.value = value;
+  set isSidePanelExpanded(final bool value) {
+    _isSidePanelExpanded.value = value;
 
     // persist
-    setBool(settingKeyDetailsPanelExpanded, value);
+    setBool(settingKeySidePanelExpanded, value);
   }
 
   void jumpToView({
@@ -185,10 +185,7 @@ class PreferenceController extends GetxController {
 
   Future<void> loadDefaults() async {
     mru.value = _preferences!.getStringList(settingKeyMRU) ?? <String>[];
-    _isDetailsPanelExpanded.value = getBool(
-      settingKeyDetailsPanelExpanded,
-      false,
-    );
+    _isSidePanelExpanded.value = getBool(settingKeySidePanelExpanded, false);
     _includeClosedAccounts.value = getBool(
       settingKeyIncludeClosedAccounts,
       false,

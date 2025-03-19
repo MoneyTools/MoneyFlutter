@@ -26,7 +26,7 @@ const String settingKeyBudgetViewAsIncomes = 'keyBudgetViewAsIncomes';
 const String settingKeyBudgetViewAsExpenses = 'keyBudgetViewAsExpenses';
 const String settingKeyDarkMode = 'themeDarkMode';
 const String settingKeyTheme = 'themeColor';
-const String settingKeyDetailsPanelExpanded = 'isDetailsPanelExpanded';
+const String settingKeySidePanelExpanded = 'isSidePanelExpanded';
 const String settingKeyDomainAccountsInfoTransactions =
     'accountDetailsTransactions';
 const String settingKeyFilterText = 'filterText';
@@ -34,7 +34,7 @@ const String settingKeyFiltersColumns = 'filtersColumns';
 const String settingKeyIncludeClosedAccounts = 'includeClosedAccounts';
 const String settingKeyMRU = 'mru';
 const String settingKeyRentalsSupport = 'rentals';
-const String settingKeySelectedDetailsPanelTab = 'selectedDetailsPanelTab';
+const String settingKeySelectedSidePanelTab = 'selectedSidePanelTab';
 const String settingKeySelectedListItemId = 'selectedItemId';
 const String settingKeySortAscending = 'sortAscending';
 const String settingKeySortBy = 'sortBy';
