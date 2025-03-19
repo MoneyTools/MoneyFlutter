@@ -5,6 +5,10 @@
 ### Add
 
 - Splitter Resizer for the bottom Panel
+
+## Update
+
+- use the latest TEXTify
   
 ## [version 1.11.07] 2025-01-21
 
