@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:money/core/controller/data_controller.dart';
 import 'package:money/core/helpers/json_helper.dart';
+import 'package:money/core/widgets/side_panel/side_panel_views_enum.dart';
 import 'package:money/data/models/constants.dart';
 import 'package:money/data/models/fields/field_filters.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,8 +41,54 @@ class PreferenceController extends GetxController {
   final RxBool _includeRentalManagement = false.obs;
 
   ///---------------------------------
-  /// Hide/Show Info panel
+  /// SidePanel
+  ///
+  /// Expand/Collapse
   final RxBool _isSidePanelExpanded = false.obs;
+
+  /// GET
+  bool get isSidePanelExpanded => _isSidePanelExpanded.value;
+
+  /// SET
+  set isSidePanelExpanded(final bool value) {
+    _isSidePanelExpanded.value = value;
+
+    // persist
+    setBool(settingKeySidePanelExpanded, value);
+  }
+
+  ///---------------------------------
+  /// SidePanel Height
+  ///
+  /// Expand/Collapse
+  final RxInt _sidePanelHeight = 380.obs;
+
+  /// GET
+  int get sidePanelHeight => _sidePanelHeight.value;
+
+  /// SET
+  set sidePanelHeight(final int value) {
+    _sidePanelHeight.value = value;
+
+    // persist
+    setInt(settingKeySidePanelHeight, value);
+  }
+
+  ///---------------------------------
+  /// Selected SidePanel Tab
+  final Rx<SidePanelSubViewEnum> _selectedSidePanelTabId =
+      SidePanelSubViewEnum.details.obs;
+
+  /// GET
+  SidePanelSubViewEnum get selectedSidePanelTabId =>
+      _selectedSidePanelTabId.value;
+
+  /// SET
+  set selectedSidePanelTabId(SidePanelSubViewEnum value) {
+    _selectedSidePanelTabId.value = value;
+    // persist
+    setInt(settingKeySelectedSidePanelTab, value.index);
+  }
 
   //////////////////////////////////////////////////////
   // Persistable user preference
@@ -143,15 +190,6 @@ class PreferenceController extends GetxController {
     isReady.value = true;
   }
 
-  bool get isSidePanelExpanded => _isSidePanelExpanded.value;
-
-  set isSidePanelExpanded(final bool value) {
-    _isSidePanelExpanded.value = value;
-
-    // persist
-    setBool(settingKeySidePanelExpanded, value);
-  }
-
   void jumpToView({
     required final ViewId viewId,
     required final int selectedId,
@@ -185,7 +223,18 @@ class PreferenceController extends GetxController {
 
   Future<void> loadDefaults() async {
     mru.value = _preferences!.getStringList(settingKeyMRU) ?? <String>[];
+
+    // Side Panel Expaned/Collapsed
     _isSidePanelExpanded.value = getBool(settingKeySidePanelExpanded, false);
+
+    // Side Panel Height
+    _sidePanelHeight.value = getInt(
+      settingKeySidePanelHeight,
+      isSidePanelExpanded
+          ? Constants.sidePanelHeightWhenExpanded
+          : Constants.sidePanelHeightWhenCollapsed,
+    );
+
     _includeClosedAccounts.value = getBool(
       settingKeyIncludeClosedAccounts,
       false,

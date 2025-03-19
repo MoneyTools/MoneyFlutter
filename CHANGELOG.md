@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.12.00] 2025-03-19
+
+### Add
+
+- Splitter Resizer for the bottom Panel
+  
 ## [version 1.11.07] 2025-01-21
 
 ### Update

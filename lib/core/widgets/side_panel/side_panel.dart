@@ -2,6 +2,7 @@ import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/widgets/side_panel/side_panel_header.dart';
 import 'package:money/core/widgets/side_panel/side_panel_views_enum.dart';
 import 'package:money/data/models/constants.dart';
+import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 
 class SidePanelSupport {
   SidePanelSupport({
@@ -99,8 +100,6 @@ class SidePanel extends StatefulWidget {
     required this.selectedItems,
     // sub-views
     required this.sidePanelSupport,
-    required this.subPanelSelected,
-    required this.subPanelSelectionChanged,
     required this.getCurrencyChoices,
     required this.currencySelected,
     required this.currencySelectionChanged, // Actions
@@ -115,16 +114,12 @@ class SidePanel extends StatefulWidget {
   final void Function(bool) onExpanded;
   final ValueNotifier<List<int>> selectedItems;
   final SidePanelSupport sidePanelSupport;
-  final void Function(SidePanelSubViewEnum) subPanelSelectionChanged;
 
   // Currency selection
   final int currencySelected;
 
   // Actions
   final List<Widget> Function(bool) getActionButtons;
-
-  // SubViews [Details] [Chart] [Transactions]
-  final SidePanelSubViewEnum subPanelSelected;
 
   @override
   State<SidePanel> createState() => _SidePanelState();
@@ -133,6 +128,13 @@ class SidePanel extends StatefulWidget {
 class _SidePanelState extends State<SidePanel> {
   @override
   Widget build(final BuildContext context) {
+    if (!widget.sidePanelSupport.supportedSubViews.contains(
+      PreferenceController.to.selectedSidePanelTabId,
+    )) {
+      PreferenceController.to.selectedSidePanelTabId =
+          SidePanelSubViewEnum.details;
+    }
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: SizeForPadding.medium),
       decoration: BoxDecoration(
@@ -154,38 +156,45 @@ class _SidePanelState extends State<SidePanel> {
           final List<int> listOfSelectedItemIndex,
           final _,
         ) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              SidePanelHeader(
-                isExpanded: widget.isExpanded,
-                onExpanded: widget.onExpanded,
+          return Obx(() {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                SidePanelHeader(
+                  isExpanded: widget.isExpanded,
+                  onExpanded: widget.onExpanded,
 
-                // SubPanel
-                sidePanelSupport: widget.sidePanelSupport,
-                subViewSelected: widget.subPanelSelected,
-                subViewSelectionChanged: widget.subPanelSelectionChanged,
+                  // SubPanel
+                  sidePanelSupport: widget.sidePanelSupport,
+                  subViewSelected:
+                      PreferenceController.to.selectedSidePanelTabId,
+                  subViewSelectionChanged: (
+                    final SidePanelSubViewEnum selected,
+                  ) {
+                    PreferenceController.to.selectedSidePanelTabId = selected;
+                  },
 
-                // Currency
-                currencyChoices: widget.getCurrencyChoices(
-                  widget.subPanelSelected,
-                  listOfSelectedItemIndex,
-                ),
-                currencySelected: widget.currencySelected,
-                currentSelectionChanged: widget.currencySelectionChanged,
-
-                // Actions
-                actionButtons: widget.getActionButtons,
-              ),
-              if (widget.isExpanded)
-                Expanded(
-                  child: widget.sidePanelSupport.getSidePanelContent(
-                    widget.subPanelSelected,
+                  // Currency
+                  currencyChoices: widget.getCurrencyChoices(
+                    PreferenceController.to.selectedSidePanelTabId,
                     listOfSelectedItemIndex,
                   ),
+                  currencySelected: widget.currencySelected,
+                  currentSelectionChanged: widget.currencySelectionChanged,
+
+                  // Actions
+                  actionButtons: widget.getActionButtons,
                 ),
-            ],
-          );
+                if (widget.isExpanded)
+                  Expanded(
+                    child: widget.sidePanelSupport.getSidePanelContent(
+                      PreferenceController.to.selectedSidePanelTabId,
+                      listOfSelectedItemIndex,
+                    ),
+                  ),
+              ],
+            );
+          });
         },
       ),
     );

@@ -74,7 +74,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   bool _isMultiSelectionOn = false;
   int _lastSelectedItemId = -1;
-  SidePanelSubViewEnum _selectedSidePanelTabId = SidePanelSubViewEnum.details;
   bool _sortAscending = true;
   int _sortByFieldIndex = 0;
 
@@ -127,8 +126,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           flexBottom: preferenceController.isSidePanelExpanded ? 1 : 0,
           bottom: SidePanel(
             key: Key(
-              settingKeySidePanel +
-                  sidePanelOptions.selectedCurrency.toString(),
+              '${settingKeySidePanel}currency|${sidePanelOptions.selectedCurrency}',
             ),
             isExpanded: preferenceController.isSidePanelExpanded,
             onExpanded: (final bool isExpanded) {
@@ -140,8 +138,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
             // SubView
             sidePanelSupport: sidePanelOptions,
-            subPanelSelected: _selectedSidePanelTabId,
-            subPanelSelectionChanged: _updateBottomContent,
 
             // Currency
             getCurrencyChoices: getCurrencyChoices,
@@ -254,15 +250,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       -1,
     );
 
-    final int subViewIndex = PreferenceController.to.getInt(
-      getPreferenceKey(settingKeySelectedSidePanelTab),
-      SidePanelSubViewEnum.details.index,
-    );
-
-    _selectedSidePanelTabId = SidePanelSubViewEnum.values[subViewIndex];
-
     // Filters
-
     // load text filter
     _filterByText = preferenceController.getString(
       getPreferenceKey(settingKeyFilterText),
@@ -380,7 +368,8 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
     /// Info panel header
     if (forSidePanelTransactions) {
-      if (_selectedSidePanelTabId == SidePanelSubViewEnum.transactions) {
+      if (PreferenceController.to.selectedSidePanelTabId ==
+          SidePanelSubViewEnum.transactions) {
         /// Add Transactions
         if (onAddTransaction != null) {
           widgets.add(buildAddTransactionsButton(onAddTransaction!));
@@ -826,10 +815,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       getPreferenceKey(settingKeySelectedListItemId),
       getUniqueIdOfFirstSelectedItem() ?? -1,
     );
-    preferenceController.setInt(
-      getPreferenceKey(settingKeySelectedSidePanelTab),
-      _selectedSidePanelTabId.index,
-    );
     preferenceController.setString(
       getPreferenceKey(settingKeyFilterText),
       _filterByText,
@@ -1058,12 +1043,5 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
     saveLastUserChoicesOfView();
     list = getList();
-  }
-
-  void _updateBottomContent(final SidePanelSubViewEnum tab) {
-    setState(() {
-      _selectedSidePanelTabId = tab;
-      saveLastUserChoicesOfView();
-    });
   }
 }

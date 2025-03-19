@@ -428,7 +428,6 @@ Future<void> testAccounts(WidgetTester tester) async {
     'key_toggle_show_all',
   ]);
 
-  await tapOnKey(tester, Constants.keySidePanelExpando);
   await sidePanelTabs(tester);
 
   // Select one of the row
@@ -649,7 +648,7 @@ Future<void> testEvents(WidgetTester tester) async {
       // Tap on the widget.
       await tester.tap(groceryFinder);
       await tester.pumpAndSettle(
-        const Duration(milliseconds: 500),
+        const Duration(milliseconds: 900),
       ); // fix soem odd timing issues
     }
 
@@ -838,16 +837,11 @@ Future<void> testTransactions(WidgetTester tester) async {
     await tapOnText(tester, 'Apply');
   }
 
-  // By selecting the first Transaction in the list that is a s 'split' we end up showing on the info-panel the sub-transactions of that Split
-  final Finder firstRow = await tapOnFirstRowOfListView(tester);
-
   // Do some CRUD with Splits
   {
-    final Finder categorySplitButton = find.descendant(
-      of: firstRow,
-      matching: find.text('Split'),
-    );
-    await tester.tap(categorySplitButton, warnIfMissed: false);
+    final Finder splitCategory = find.text('Split');
+    expect(splitCategory, findsAtLeast(1));
+    await tester.tap(splitCategory.first);
     await tester.myPump();
 
     await tapOnText(tester, 'Add');
@@ -916,6 +910,22 @@ Future<void> sidePanelTabs(
   bool expectTransactions = true,
   bool expectPnl = false,
 }) async {
+  // Expand the side panel if not already expanded
+  if (PreferenceController.to.isSidePanelExpanded == false) {
+    await tapOnKey(tester, Constants.keySidePanelExpando);
+
+    final Finder splitterHandle = findByKeyString('SidePanelSplitter');
+    expect(splitterHandle, findsWidgets); // Ensure at least one splitter exists
+
+    // final Offset initialPosition = tester.getCenter(splitterHandle.first);
+    // Drag the handle to the 380 from the bottom
+    await tester.drag(
+      splitterHandle,
+      const Offset(0, -340), // place at about  380 from the bottom
+    );
+    await tester.pumpAndSettle();
+  }
+
   if (expectDetails) {
     await tapOnTextFromParentType(tester, SidePanelHeader, 'Details');
   }

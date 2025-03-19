@@ -27,6 +27,7 @@ const String settingKeyBudgetViewAsExpenses = 'keyBudgetViewAsExpenses';
 const String settingKeyDarkMode = 'themeDarkMode';
 const String settingKeyTheme = 'themeColor';
 const String settingKeySidePanelExpanded = 'isSidePanelExpanded';
+const String settingKeySidePanelHeight = 'sidePanelHeight';
 const String settingKeyDomainAccountsInfoTransactions =
     'accountDetailsTransactions';
 const String settingKeyFilterText = 'filterText';
@@ -58,6 +59,10 @@ class Constants {
   static const int commandIncludeClosedAccount = 1200;
   static const int commandInstallPlatforms = 1300;
   static const int commandTextZoom = 1000;
+
+  static int sidePanelHeightWhenCollapsed = 44;
+  static int sidePanelHeightWhenExpanded = 380;
+
   static const String defaultCurrency = 'USD';
   static String fakeStockApiKey = 'fakeStockApiKey';
   static const double gapBetweenChannels = 14.0;
