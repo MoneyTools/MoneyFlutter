@@ -1,3 +1,4 @@
+import 'package:money/core/controller/theme_controller.dart';
 import 'package:money/core/widgets/widgets.dart';
 import 'package:money/data/models/fields/field_filters.dart';
 import 'package:money/data/models/money_objects/money_objects.dart';
@@ -134,9 +135,12 @@ class _AdaptiveViewWithListState extends State<AdaptiveViewWithList> {
                 bool highlighted,
                 MultiSplitViewThemeData themeData,
               ) {
-                return Center(
+                return ColoredBox(
                   key: const Key('SidePanelSplitter'),
-                  child: Container(color: Colors.grey, width: 40, height: 4),
+                  color:
+                      highlighted
+                          ? ThemeController.to.primaryColor
+                          : Colors.transparent,
                 );
               },
               builder: (BuildContext context, Area area) {

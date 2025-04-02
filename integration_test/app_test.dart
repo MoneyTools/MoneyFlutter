@@ -918,11 +918,8 @@ Future<void> sidePanelTabs(
     expect(splitterHandle, findsWidgets); // Ensure at least one splitter exists
 
     // final Offset initialPosition = tester.getCenter(splitterHandle.first);
-    // Drag the handle to the 380 from the bottom
-    await tester.drag(
-      splitterHandle,
-      const Offset(0, -340), // place at about  380 from the bottom
-    );
+    // Drag the handle to the 340 from the bottom
+    await tester.drag(splitterHandle, const Offset(0, -340));
     await tester.pumpAndSettle();
   }
 
