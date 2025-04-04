@@ -12,8 +12,8 @@ flutter test
 git@github.com:jpdup/glad.git --view layers --lines curve --align left -o layers.svg
 
 # call graph
-tools/graph.sh
+tool/graph.sh
 
 # layer diagram
-tools/layers.sh
+tool/layers.sh
 
