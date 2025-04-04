@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:money/core/controller/theme_controller.dart';
 import 'package:money/core/widgets/widgets.dart';
 import 'package:money/data/models/fields/field_filters.dart';
@@ -57,6 +59,7 @@ class AdaptiveViewWithList extends StatefulWidget {
 
 class _AdaptiveViewWithListState extends State<AdaptiveViewWithList> {
   final MultiSplitViewController _splitController = MultiSplitViewController();
+  final FocusNode _keyboardFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -76,8 +79,9 @@ class _AdaptiveViewWithListState extends State<AdaptiveViewWithList> {
 
   @override
   void dispose() {
-    super.dispose();
+    _keyboardFocusNode.dispose();
     _splitController.removeListener(_rebuild);
+    super.dispose();
   }
 
   void _rebuild() async {
@@ -117,40 +121,71 @@ class _AdaptiveViewWithListState extends State<AdaptiveViewWithList> {
         // display as column for Medium & Large devices
         final bool displayAsColumns = context.isWidthSmall == false;
 
-        return ValueListenableBuilder<List<int>>(
-          valueListenable: widget.selectedItemsByUniqueId,
-          builder: (
-            final BuildContext context,
-            final List<int> listOfSelectedItemIndex,
-            final _,
-          ) {
-            return MultiSplitView(
-              controller: _splitController,
-              axis: Axis.vertical,
-              dividerBuilder: (
-                Axis axis,
-                int index,
-                bool resizable,
-                bool dragging,
-                bool highlighted,
-                MultiSplitViewThemeData themeData,
-              ) {
-                return ColoredBox(
-                  key: const Key('SidePanelSplitter'),
-                  color:
-                      highlighted
-                          ? ThemeController.to.primaryColor
-                          : Colors.transparent,
-                );
-              },
-              builder: (BuildContext context, Area area) {
-                if (area.index == 0) {
-                  return topSection(displayAsColumns);
-                }
-                return widget.bottom;
-              },
-            );
+        return Focus(
+          focusNode: _keyboardFocusNode,
+          autofocus: true,
+          onKeyEvent: (FocusNode node, KeyEvent event) {
+            if (event is KeyDownEvent) {
+              // F9 shortcut
+              if (event.logicalKey == LogicalKeyboardKey.f9) {
+                setState(() {
+                  PreferenceController.to.isSidePanelExpanded =
+                      !PreferenceController.to.isSidePanelExpanded;
+                });
+                HapticFeedback.lightImpact();
+                return KeyEventResult.handled;
+              }
+
+              // Command+J for macOS or Ctrl+J for Windows/Linux
+              if (event.logicalKey == LogicalKeyboardKey.keyJ &&
+                  (Platform.isMacOS
+                      ? HardwareKeyboard.instance.isMetaPressed
+                      : HardwareKeyboard.instance.isControlPressed)) {
+                setState(() {
+                  PreferenceController.to.isSidePanelExpanded =
+                      !PreferenceController.to.isSidePanelExpanded;
+                });
+                HapticFeedback.lightImpact();
+                return KeyEventResult.handled;
+              }
+            }
+            return KeyEventResult.ignored;
           },
+          child: ValueListenableBuilder<List<int>>(
+            valueListenable: widget.selectedItemsByUniqueId,
+            builder: (
+              final BuildContext context,
+              final List<int> listOfSelectedItemIndex,
+              final _,
+            ) {
+              return MultiSplitView(
+                controller: _splitController,
+                axis: Axis.vertical,
+                dividerBuilder: (
+                  Axis axis,
+                  int index,
+                  bool resizable,
+                  bool dragging,
+                  bool highlighted,
+                  MultiSplitViewThemeData themeData,
+                ) {
+                  return ColoredBox(
+                    key: const Key('SidePanelSplitter'),
+                    color:
+                        highlighted
+                            ? ThemeController.to.primaryColor
+                            : Colors.transparent,
+                  );
+                },
+                builder: (BuildContext context, Area area) {
+                  if (area.index == 0) {
+                    return topSection(displayAsColumns);
+                  }
+                  return widget.bottom;
+                },
+              );
+            },
+          ),
         );
       },
     );
