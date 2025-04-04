@@ -103,7 +103,73 @@ class _AdaptiveViewWithListState extends State<AdaptiveViewWithList> {
       );
     }
 
-    /// Adjusts the size and minimum height of the side panel based on whether it is expanded or collapsed.
+    // Extract panel configuration to a separate method for clarity
+    _configureSplitPanelAreas();
+
+    return LayoutBuilder(
+      builder: (final BuildContext context, final BoxConstraints constraints) {
+        final bool displayAsColumns = context.isWidthSmall == false;
+
+        return Focus(
+          focusNode: _keyboardFocusNode,
+          autofocus: true,
+          onKeyEvent: _handleKeyboardShortcuts,
+          child: ValueListenableBuilder<List<int>>(
+            valueListenable: widget.selectedItemsByUniqueId,
+            builder: (
+              final BuildContext context,
+              final List<int> selectedItems,
+              final _,
+            ) {
+              return MultiSplitView(
+                controller: _splitController,
+                axis: Axis.vertical,
+                dividerBuilder: _buildSplitDivider,
+                builder: (BuildContext context, Area area) {
+                  return area.index == 0
+                      ? topSection(displayAsColumns)
+                      : widget.bottom;
+                },
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  // Extract keyboard handling to a separate method
+  KeyEventResult _handleKeyboardShortcuts(FocusNode node, KeyEvent event) {
+    if (event is KeyDownEvent) {
+      // F9 shortcut
+      if (event.logicalKey == LogicalKeyboardKey.f9) {
+        _toggleSidePanel();
+        return KeyEventResult.handled;
+      }
+
+      // Command+J for macOS or Ctrl+J for Windows/Linux
+      if (event.logicalKey == LogicalKeyboardKey.keyJ &&
+          (Platform.isMacOS
+              ? HardwareKeyboard.instance.isMetaPressed
+              : HardwareKeyboard.instance.isControlPressed)) {
+        _toggleSidePanel();
+        return KeyEventResult.handled;
+      }
+    }
+    return KeyEventResult.ignored;
+  }
+
+  // Extract panel toggle to a separate method
+  void _toggleSidePanel() {
+    setState(() {
+      PreferenceController.to.isSidePanelExpanded =
+          !PreferenceController.to.isSidePanelExpanded;
+    });
+    HapticFeedback.lightImpact();
+  }
+
+  // Extract split panel configuration to a separate method
+  void _configureSplitPanelAreas() {
     if (PreferenceController.to.isSidePanelExpanded) {
       _splitController.areas[1].min =
           Constants.sidePanelHeightWhenCollapsed + 100.0;
@@ -115,79 +181,20 @@ class _AdaptiveViewWithListState extends State<AdaptiveViewWithList> {
       _splitController.areas[1].size =
           Constants.sidePanelHeightWhenCollapsed.toDouble();
     }
+  }
 
-    return LayoutBuilder(
-      builder: (final BuildContext context, final BoxConstraints constraints) {
-        // display as column for Medium & Large devices
-        final bool displayAsColumns = context.isWidthSmall == false;
-
-        return Focus(
-          focusNode: _keyboardFocusNode,
-          autofocus: true,
-          onKeyEvent: (FocusNode node, KeyEvent event) {
-            if (event is KeyDownEvent) {
-              // F9 shortcut
-              if (event.logicalKey == LogicalKeyboardKey.f9) {
-                setState(() {
-                  PreferenceController.to.isSidePanelExpanded =
-                      !PreferenceController.to.isSidePanelExpanded;
-                });
-                HapticFeedback.lightImpact();
-                return KeyEventResult.handled;
-              }
-
-              // Command+J for macOS or Ctrl+J for Windows/Linux
-              if (event.logicalKey == LogicalKeyboardKey.keyJ &&
-                  (Platform.isMacOS
-                      ? HardwareKeyboard.instance.isMetaPressed
-                      : HardwareKeyboard.instance.isControlPressed)) {
-                setState(() {
-                  PreferenceController.to.isSidePanelExpanded =
-                      !PreferenceController.to.isSidePanelExpanded;
-                });
-                HapticFeedback.lightImpact();
-                return KeyEventResult.handled;
-              }
-            }
-            return KeyEventResult.ignored;
-          },
-          child: ValueListenableBuilder<List<int>>(
-            valueListenable: widget.selectedItemsByUniqueId,
-            builder: (
-              final BuildContext context,
-              final List<int> listOfSelectedItemIndex,
-              final _,
-            ) {
-              return MultiSplitView(
-                controller: _splitController,
-                axis: Axis.vertical,
-                dividerBuilder: (
-                  Axis axis,
-                  int index,
-                  bool resizable,
-                  bool dragging,
-                  bool highlighted,
-                  MultiSplitViewThemeData themeData,
-                ) {
-                  return ColoredBox(
-                    key: const Key('SidePanelSplitter'),
-                    color:
-                        highlighted
-                            ? ThemeController.to.primaryColor
-                            : Colors.transparent,
-                  );
-                },
-                builder: (BuildContext context, Area area) {
-                  if (area.index == 0) {
-                    return topSection(displayAsColumns);
-                  }
-                  return widget.bottom;
-                },
-              );
-            },
-          ),
-        );
-      },
+  // Extract divider builder to a separate method
+  Widget _buildSplitDivider(
+    Axis axis,
+    int index,
+    bool resizable,
+    bool dragging,
+    bool highlighted,
+    MultiSplitViewThemeData themeData,
+  ) {
+    return ColoredBox(
+      key: const Key('SidePanelSplitter'),
+      color: highlighted ? ThemeController.to.primaryColor : Colors.transparent,
     );
   }
 
