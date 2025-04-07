@@ -42,7 +42,7 @@ Widget buildDashboardWidget(final Widget child) {
 
 extension ViewExtension on BuildContext {
   bool get isWidthSmall =>
-      MediaQuery.of(this).size.width <= Constants.screenWithSmall;
+      MediaQuery.of(this).size.width <= Constants.screenWidthSmall;
   bool get isWidthMedium =>
       MediaQuery.of(this).size.width <= Constants.screenWidthMedium;
   bool get isWidthLarge =>

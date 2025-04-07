@@ -30,17 +30,13 @@ class ThemeController extends GetxController {
   //--------------------------------------------------------
   // Font scaling
 
-  void fontScaleDecrease() {
-    fontScaleDelta(-0.10);
+  void adjustFontScale(double delta) {
+    final double newScale = PreferenceController.to.textScale + delta;
+    setFontScaleTo(newScale);
   }
 
-  void fontScaleDelta(final double addOrSubtract) {
-    setFontScaleTo(PreferenceController.to.textScale + addOrSubtract);
-  }
-
-  void fontScaleIncrease() {
-    fontScaleDelta(0.10);
-  }
+  void fontScaleIncrease() => adjustFontScale(0.10);
+  void fontScaleDecrease() => adjustFontScale(-0.10);
 
   void loadThemeFromPreferences() async {
     if (!PreferenceController.to.isReady.value) {
@@ -59,11 +55,11 @@ class ThemeController extends GetxController {
     PreferenceController.to.setInt(settingKeyTheme, colorSelected.value);
   }
 
-  void setAppSizeToLarge() {
+  void setAppWindowSize(final double width, final double height) {
     windowManager.ensureInitialized().then((void _) {
-      final WindowOptions windowOptions = const WindowOptions(
-        size: Size(1800, 900),
-        minimumSize: Size(Constants.screenWithSmall, 800),
+      final WindowOptions windowOptions = WindowOptions(
+        size: Size(width, height),
+        maximumSize: Size(width, height),
         center: true,
         backgroundColor: Colors.transparent,
         skipTaskbar: false,
@@ -77,41 +73,10 @@ class ThemeController extends GetxController {
     });
   }
 
-  void setAppSizeToMedium() {
-    windowManager.ensureInitialized().then((void _) {
-      final WindowOptions windowOptions = const WindowOptions(
-        size: Size(Constants.screenWidthMedium, 900),
-        minimumSize: Size(Constants.screenWidthMedium, 800),
-        center: true,
-        backgroundColor: Colors.transparent,
-        skipTaskbar: false,
-        titleBarStyle: TitleBarStyle.normal,
-        title: 'MyMoney by vTeam',
-      );
-      windowManager.waitUntilReadyToShow(windowOptions, () async {
-        await windowManager.show();
-        await windowManager.focus();
-      });
-    });
-  }
-
-  void setAppSizeToSmall() {
-    windowManager.ensureInitialized().then((void _) {
-      final WindowOptions windowOptions = const WindowOptions(
-        size: Size(Constants.screenWithSmall, 900),
-        maximumSize: Size(Constants.screenWithSmall, 900),
-        center: true,
-        backgroundColor: Colors.transparent,
-        skipTaskbar: false,
-        titleBarStyle: TitleBarStyle.normal,
-        title: 'MyMoney by vTeam',
-      );
-      windowManager.waitUntilReadyToShow(windowOptions, () async {
-        await windowManager.show();
-        await windowManager.focus();
-      });
-    });
-  }
+  void setAppSizeToSmall() => setAppWindowSize(Constants.screenWidthSmall, 900);
+  void setAppSizeToMedium() =>
+      setAppWindowSize(Constants.screenWidthMedium, 900);
+  void setAppSizeToLarge() => setAppWindowSize(Constants.screenWidthLarge, 900);
 
   bool setFontScaleTo(final double newScale) {
     final int cleanValue = (newScale * 100).round();

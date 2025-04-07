@@ -107,8 +107,10 @@ class Constants {
   static String routeInstallPlatformsPage = '/platforms';
   static String routeWelcomePage = '/welcome';
   static const double sanKeyColumnWidth = 200.0;
+  static const double screenWidthLarge = 1800;
   static const double screenWidthMedium = 1200;
-  static const double screenWithSmall = 600;
+  static const double screenWidthSmall = 600;
+
   static const double targetHeight = 200.0;
   static String untitledFileName = 'Untitled';
   static String viewStockFieldNameAccount = 'Account';
