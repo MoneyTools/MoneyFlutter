@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money/core/controller/my_window_manager.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/helpers/misc_helpers.dart';
 import 'package:money/data/models/constants.dart';
-import 'package:window_manager/window_manager.dart';
 
 /// Controller for managing app theme settings including:
 /// - Light/dark mode switching
@@ -55,28 +55,12 @@ class ThemeController extends GetxController {
     PreferenceController.to.setInt(settingKeyTheme, colorSelected.value);
   }
 
-  void setAppWindowSize(final double width, final double height) {
-    windowManager.ensureInitialized().then((void _) {
-      final WindowOptions windowOptions = WindowOptions(
-        size: Size(width, height),
-        maximumSize: Size(width, height),
-        center: true,
-        backgroundColor: Colors.transparent,
-        skipTaskbar: false,
-        titleBarStyle: TitleBarStyle.normal,
-        title: 'MyMoney by vTeam',
-      );
-      windowManager.waitUntilReadyToShow(windowOptions, () async {
-        await windowManager.show();
-        await windowManager.focus();
-      });
-    });
-  }
-
-  void setAppSizeToSmall() => setAppWindowSize(Constants.screenWidthSmall, 900);
+  void setAppSizeToSmall() =>
+      MyWindowManager.setAppWindowSize(Constants.screenWidthSmall, 900);
   void setAppSizeToMedium() =>
-      setAppWindowSize(Constants.screenWidthMedium, 900);
-  void setAppSizeToLarge() => setAppWindowSize(Constants.screenWidthLarge, 900);
+      MyWindowManager.setAppWindowSize(Constants.screenWidthMedium, 900);
+  void setAppSizeToLarge() =>
+      MyWindowManager.setAppWindowSize(Constants.screenWidthLarge, 900);
 
   bool setFontScaleTo(final double newScale) {
     final int cleanValue = (newScale * 100).round();

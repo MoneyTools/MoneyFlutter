@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:money/core/controller/data_controller.dart';
 import 'package:money/core/controller/keyboard_controller.dart';
 import 'package:money/core/controller/list_controller.dart';
+import 'package:money/core/controller/my_window_manager.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/controller/theme_controller.dart';
 import 'package:money/core/widgets/widgets.dart';
@@ -18,6 +19,9 @@ import 'core/bindings/application_bindings.dart';
 /// The main entry point for the MoneyFlutter application.
 /// Sets up the app structure, theming, and initial routes.
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  MyWindowManager.setupMainWindow();
+
   runApp(MyApp());
 }
 
