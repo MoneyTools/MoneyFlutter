@@ -73,18 +73,16 @@ class SankeyPainter extends CustomPainter {
       0.00,
       (final double sum, final SanKeyEntry item) => sum + item.value,
     );
-    final double totalExpense =
-        rightEntries
-            .fold(
-              0.00,
-              (final double sum, final SanKeyEntry item) => sum + item.value,
-            )
-            .abs();
+    final double totalExpense = rightEntries
+        .fold(
+          0.00,
+          (final double sum, final SanKeyEntry item) => sum + item.value,
+        )
+        .abs();
 
     final double bestHeightForIncomeBlock = compactView ? 200 : 300;
 
-    final double ratioIncomeToExpense =
-        bestHeightForIncomeBlock / (totalIncome + totalExpense);
+    final double ratioIncomeToExpense = bestHeightForIncomeBlock / (totalIncome + totalExpense);
 
     // Box for "Revenue"
     double lastHeight = ratioIncomeToExpense * totalIncome;
@@ -147,8 +145,7 @@ class SankeyPainter extends CustomPainter {
       colors.textColor,
     );
 
-    final double heightProfitFromIncomeSection =
-        targetRevenues.rect.height - targetExpenses.rect.height;
+    final double heightProfitFromIncomeSection = targetRevenues.rect.height - targetExpenses.rect.height;
 
     // Render Channel from "Revenue" to "Expenses"
     drawChanel(
@@ -324,8 +321,7 @@ class SankeyPainter extends CustomPainter {
       );
       final double boxTop = top + verticalPosition;
       final ui.Rect rect = Rect.fromLTWH(left, boxTop, columnWidth, height);
-      final String text =
-          compactView ? shortenLongText(element.name) : element.name;
+      final String text = compactView ? shortenLongText(element.name) : element.name;
       final Block source = Block(
         '$text: ${getAmountAsShorthandText(element.value)}',
         rect,

@@ -142,8 +142,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
   }
 
   /// don't make it flush to the top, we do this in order to give some clue that there's other item above,
-  double getListOffsetOfItemIndex(final int index) =>
-      index * _rowHeight; // * -1.5;
+  double getListOffsetOfItemIndex(final int index) => index * _rowHeight; // * -1.5;
 
   MoneyObject getMoneyObjectFromIndex(int index) {
     return widget.list[index] as MoneyObject;
@@ -157,16 +156,12 @@ class MyListViewState<T> extends State<MyListView<T>> {
   NumRange indexOfItemsInView() {
     final int itemCount = widget.list.length;
     final double scrollOffset = widget.scrollController.position.pixels;
-    final double viewportHeight =
-        widget.scrollController.position.viewportDimension;
+    final double viewportHeight = widget.scrollController.position.viewportDimension;
     final double scrollRange =
-        widget.scrollController.position.maxScrollExtent -
-        widget.scrollController.position.minScrollExtent;
+        widget.scrollController.position.maxScrollExtent - widget.scrollController.position.minScrollExtent;
 
-    final int firstVisibleItemIndex =
-        (scrollOffset / (scrollRange + viewportHeight) * itemCount).ceil();
-    final int lastVisibleItemIndex =
-        firstVisibleItemIndex + numberOfItemOnViewPort() - 1;
+    final int firstVisibleItemIndex = (scrollOffset / (scrollRange + viewportHeight) * itemCount).ceil();
+    final int lastVisibleItemIndex = firstVisibleItemIndex + numberOfItemOnViewPort() - 1;
 
     return NumRange(min: firstVisibleItemIndex, max: lastVisibleItemIndex);
   }
@@ -201,8 +196,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
   }
 
   int numberOfItemOnViewPort() {
-    final double viewportHeight =
-        widget.scrollController.position.viewportDimension;
+    final double viewportHeight = widget.scrollController.position.viewportDimension;
     final int numberOfItemDisplayed = (viewportHeight / _rowHeight).floor();
     return numberOfItemDisplayed;
   }
@@ -343,23 +337,17 @@ class MyListViewState<T> extends State<MyListView<T>> {
     return widget.displayAsColumn
         ? itemInstance.buildFieldsAsWidgetForLargeScreen(widget.fields)
         : Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color:
-                isSelected
-                    ? getColorTheme(context).primaryContainer
-                    : getColorTheme(context).surface,
-            border: Border(
-              bottom: BorderSide(
-                width: 1,
-                color:
-                    isLastItemOfTheList
-                        ? Colors.transparent
-                        : Theme.of(context).dividerColor,
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: isSelected ? getColorTheme(context).primaryContainer : getColorTheme(context).surface,
+              border: Border(
+                bottom: BorderSide(
+                  width: 1,
+                  color: isLastItemOfTheList ? Colors.transparent : Theme.of(context).dividerColor,
+                ),
               ),
             ),
-          ),
-          child: itemInstance.buildFieldsAsWidgetForSmallScreen(),
-        );
+            child: itemInstance.buildFieldsAsWidgetForSmallScreen(),
+          );
   }
 }

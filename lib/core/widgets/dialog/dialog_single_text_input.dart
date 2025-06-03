@@ -15,8 +15,7 @@ Future<void> showTextInputDialog({
   return showDialog(
     context: context,
     builder: (BuildContext context) {
-      final TextEditingController textEditingController =
-          TextEditingController();
+      final TextEditingController textEditingController = TextEditingController();
       textEditingController.text = initialValue;
       return AlertDialog(
         title: Text(title),

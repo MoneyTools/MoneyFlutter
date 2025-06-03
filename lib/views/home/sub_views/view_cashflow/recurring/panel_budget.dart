@@ -43,10 +43,9 @@ class PanelBudget extends StatefulWidget {
 
 class _PanelBudgetState extends State<PanelBudget> {
   List<RecurringExpenses> items = <RecurringExpenses>[];
-  late BudgetViewAs panelType =
-      isForIncome
-          ? PreferenceController.to.budgetViewAsForIncomes.value
-          : PreferenceController.to.budgetViewAsForExpenses.value;
+  late BudgetViewAs panelType = isForIncome
+      ? PreferenceController.to.budgetViewAsForIncomes.value
+      : PreferenceController.to.budgetViewAsForExpenses.value;
 
   double sumForAllCategories = 0.00;
   double sumForAllCategoriesBudget = 0.00;
@@ -69,10 +68,7 @@ class _PanelBudgetState extends State<PanelBudget> {
       width: double.infinity,
       height: double.infinity,
       child: Center(
-        child:
-            ThemeController.to.isDeviceWidthSmall.value
-                ? _buildContentForSmallScreen()
-                : _buildContentAsList(),
+        child: ThemeController.to.isDeviceWidthSmall.value ? _buildContentForSmallScreen() : _buildContentAsList(),
       ),
     );
   }
@@ -111,8 +107,7 @@ class _PanelBudgetState extends State<PanelBudget> {
           );
     }
 
-    final List<Transaction> transactions = Data().transactions
-        .getListFlattenSplits(whereClause: whereClause);
+    final List<Transaction> transactions = Data().transactions.getListFlattenSplits(whereClause: whereClause);
 
     final BudgetAnalyzer analyzer = BudgetAnalyzer(transactions);
     _budget = analyzer.calculateMonthlyBudget();
@@ -132,8 +127,7 @@ class _PanelBudgetState extends State<PanelBudget> {
 
     items.forEach((RecurringExpenses item) {
       sumForAllCategories += item.sumOfAllTransactions;
-      sumForAllCategoriesBudget +=
-          item.category.fieldBudget.value.asDouble() * adjustValue;
+      sumForAllCategoriesBudget += item.category.fieldBudget.value.asDouble() * adjustValue;
     });
 
     _sort();
@@ -173,11 +167,9 @@ class _PanelBudgetState extends State<PanelBudget> {
             setState(() {
               panelType = BudgetViewAs.values[newSelection];
               if (isForIncome) {
-                PreferenceController.to.budgetViewAsForIncomes.value =
-                    BudgetViewAs.values[newSelection];
+                PreferenceController.to.budgetViewAsForIncomes.value = BudgetViewAs.values[newSelection];
               } else {
-                PreferenceController.to.budgetViewAsForExpenses.value =
-                    BudgetViewAs.values[newSelection];
+                PreferenceController.to.budgetViewAsForExpenses.value = BudgetViewAs.values[newSelection];
               }
             });
           },
@@ -186,8 +178,7 @@ class _PanelBudgetState extends State<PanelBudget> {
     );
   }
 
-  double get sumForAllCategoriesActual =>
-      (sumForAllCategories / widget.numberOfYears) / 12;
+  double get sumForAllCategoriesActual => (sumForAllCategories / widget.numberOfYears) / 12;
 
   Widget verticalLine(Color color) {
     return SizedBox(height: 38, child: VerticalDivider(color: color));
@@ -196,19 +187,15 @@ class _PanelBudgetState extends State<PanelBudget> {
   Widget _buildContent() {
     switch (panelType) {
       case BudgetViewAs.list:
-        return isListEmpty
-            ? const CenterMessage(message: 'No budget income category found')
-            : _buildList();
+        return isListEmpty ? const CenterMessage(message: 'No budget income category found') : _buildList();
 
       case BudgetViewAs.chart:
         return const CenterMessage(message: 'CHART ');
 
       case BudgetViewAs.recurrences:
         final DateRange dateRangeTransactions = DateRange.fromStarEndYears(
-          Data().transactions.dateRangeActiveAccount.min?.year ??
-              DateTime.now().year,
-          Data().transactions.dateRangeActiveAccount.max?.year ??
-              DateTime.now().year,
+          Data().transactions.dateRangeActiveAccount.min?.year ?? DateTime.now().year,
+          Data().transactions.dateRangeActiveAccount.max?.year ?? DateTime.now().year,
         );
 
         return PanelRecurring(
@@ -379,9 +366,7 @@ class _PanelBudgetState extends State<PanelBudget> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListView.separated(
-              separatorBuilder:
-                  (BuildContext context, int index) =>
-                      Divider(height: 0, color: dividersColor),
+              separatorBuilder: (BuildContext context, int index) => Divider(height: 0, color: dividersColor),
               padding: const EdgeInsets.all(0),
               itemCount: items.length,
               itemBuilder: (final BuildContext context, final int index) {
@@ -408,8 +393,7 @@ class _PanelBudgetState extends State<PanelBudget> {
                           // Budgeted per month
                           Expanded(
                             child: MoneyWidget.fromDouble(
-                              item.category.fieldBudget.value.asDouble() *
-                                  adjustValue,
+                              item.category.fieldBudget.value.asDouble() * adjustValue,
                               MoneyWidgetSize.title,
                             ),
                           ),
@@ -434,9 +418,7 @@ class _PanelBudgetState extends State<PanelBudget> {
                           // Budget per year
                           Expanded(
                             child: MoneyWidget.fromDouble(
-                              item.category.fieldBudget.value.asDouble() *
-                                  12 *
-                                  adjustValue,
+                              item.category.fieldBudget.value.asDouble() * 12 * adjustValue,
                               MoneyWidgetSize.title,
                             ),
                           ),

@@ -35,8 +35,7 @@ class MyNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (orientation == Axis.vertical) {
-      final List<NavigationRailDestination> destinations =
-          geMenuItemsFortNavRail();
+      final List<NavigationRailDestination> destinations = geMenuItemsFortNavRail();
       return Container(
         color: getColorTheme(context).secondaryContainer,
         child: SingleChildScrollView(
@@ -46,10 +45,7 @@ class MyNavigationBar extends StatelessWidget {
               destinations: destinations,
               selectedIndex: selectedIndex,
               useIndicator: true,
-              labelType:
-                  context.isWidthLarge
-                      ? NavigationRailLabelType.all
-                      : NavigationRailLabelType.none,
+              labelType: context.isWidthLarge ? NavigationRailLabelType.all : NavigationRailLabelType.none,
               indicatorColor: getColorTheme(context).onSecondary,
               backgroundColor: getColorTheme(context).secondaryContainer,
               onDestinationSelected: (final int index) {

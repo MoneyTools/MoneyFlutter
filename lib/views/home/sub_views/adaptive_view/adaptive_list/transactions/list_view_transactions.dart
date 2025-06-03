@@ -89,8 +89,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
         });
       },
       onItemLongPress: (final BuildContext context2, final int uniqueId) {
-        final Transaction instance =
-            findObjectById(uniqueId, transactions) as Transaction;
+        final Transaction instance = findObjectById(uniqueId, transactions) as Transaction;
         showTransactionAndActions(
           context: context2,
           transaction: instance,
@@ -117,17 +116,12 @@ List<Transaction> getTransactions({
 
   if (flattenSplits) {
     // Flatten the splits
-    list =
-        Transactions.flatTransactions(Data().transactions.iterableList())
-            .where((final Transaction transaction) => filter!(transaction))
-            .toList();
+    list = Transactions.flatTransactions(
+      Data().transactions.iterableList(),
+    ).where((final Transaction transaction) => filter!(transaction)).toList();
   } else {
     // No flattening of splits
-    list =
-        Data().transactions
-            .iterableList()
-            .where((final Transaction transaction) => filter!(transaction))
-            .toList();
+    list = Data().transactions.iterableList().where((final Transaction transaction) => filter!(transaction)).toList();
   }
 
   list.sort(

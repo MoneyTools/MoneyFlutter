@@ -1,7 +1,8 @@
 include: package:flutter_lints/flutter.yaml
 
-# formatter:
-#   page_width: 120
+formatter:
+  page_width: 120
+  trailing_commas: preserve
 
 analyzer:
   exclude:

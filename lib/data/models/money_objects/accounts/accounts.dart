@@ -51,18 +51,14 @@ class Accounts extends MoneyObjects<Account> {
     }
 
     // Cumulate
-    final List<Transaction> transactionsSortedByDate = Data().transactions
-        .iterableList()
-        .sorted(
-          (Transaction a, Transaction b) =>
-              sortByDate(a.fieldDateTime.value, b.fieldDateTime.value),
-        );
+    final List<Transaction> transactionsSortedByDate = Data().transactions.iterableList().sorted(
+      (Transaction a, Transaction b) => sortByDate(a.fieldDateTime.value, b.fieldDateTime.value),
+    );
 
     for (final Transaction t in transactionsSortedByDate) {
       final Account? account = get(t.fieldAccountId.value);
       if (account != null) {
-        if (account.fieldType.value == AccountType.moneyMarket ||
-            account.fieldType.value == AccountType.investment) {
+        if (account.fieldType.value == AccountType.moneyMarket || account.fieldType.value == AccountType.investment) {
           t.getOrCreateInvestment();
         }
 
@@ -73,8 +69,7 @@ class Accounts extends MoneyObjects<Account> {
 
         // Min Balance of the year
         final double currentMinBalanceValue =
-            account.minBalancePerYears[yearOfTheTransaction] ??
-            IntValues.maxSigned(32).toDouble();
+            account.minBalancePerYears[yearOfTheTransaction] ?? IntValues.maxSigned(32).toDouble();
         account.minBalancePerYears[yearOfTheTransaction] = min(
           currentMinBalanceValue,
           account.balance,
@@ -82,8 +77,7 @@ class Accounts extends MoneyObjects<Account> {
 
         // Max Balance of the year
         final double currentMaxBalanceValue =
-            account.maxBalancePerYears[yearOfTheTransaction] ??
-            IntValues.minSigned(32).toDouble();
+            account.maxBalancePerYears[yearOfTheTransaction] ?? IntValues.minSigned(32).toDouble();
         account.maxBalancePerYears[yearOfTheTransaction] = max(
           currentMaxBalanceValue,
           account.balance,
@@ -92,8 +86,7 @@ class Accounts extends MoneyObjects<Account> {
         // keep track of the most recent record transaction for the account
         if (t.fieldDateTime.value != null) {
           if (account.fieldUpdatedOn.value == null ||
-              account.fieldUpdatedOn.value!.compareTo(t.fieldDateTime.value!) <
-                  0) {
+              account.fieldUpdatedOn.value!.compareTo(t.fieldDateTime.value!) < 0) {
             account.fieldUpdatedOn.value = t.fieldDateTime.value;
           }
         }
@@ -101,19 +94,17 @@ class Accounts extends MoneyObjects<Account> {
     }
 
     // Increase the balance of any investment account with the current Stock value
-    final List<Account> investmentAccounts =
-        Data().accounts
-            .iterableList()
-            .where(
-              (Account account) =>
-                  account.fieldType.value == AccountType.moneyMarket ||
-                  account.fieldType.value == AccountType.investment ||
-                  account.fieldType.value == AccountType.retirement,
-            )
-            .toList();
+    final List<Account> investmentAccounts = Data().accounts
+        .iterableList()
+        .where(
+          (Account account) =>
+              account.fieldType.value == AccountType.moneyMarket ||
+              account.fieldType.value == AccountType.investment ||
+              account.fieldType.value == AccountType.retirement,
+        )
+        .toList();
 
-    final AccumulatorList<String, Investment> groupBySymbol =
-        AccumulatorList<String, Investment>();
+    final AccumulatorList<String, Investment> groupBySymbol = AccumulatorList<String, Investment>();
 
     for (final Account account in investmentAccounts) {
       groupAccountStockSymbols(account, groupBySymbol);
@@ -124,10 +115,9 @@ class Accounts extends MoneyObjects<Account> {
       String keyAccountAndSymbol,
       Set<Investment> valuesInvestments,
     ) {
-      final double totalAdjustedShareForThisStockInThisAccount =
-          Investments.applyHoldingSharesAdjustedForSplits(
-            valuesInvestments.toList(),
-          );
+      final double totalAdjustedShareForThisStockInThisAccount = Investments.applyHoldingSharesAdjustedForSplits(
+        valuesInvestments.toList(),
+      );
       final List<String> tokens = keyAccountAndSymbol.split('|');
       final String accountId = tokens[0];
       final String symbol = tokens[1];
@@ -136,28 +126,24 @@ class Accounts extends MoneyObjects<Account> {
         final Security? security = Data().securities.getBySymbol(symbol);
         if (security != null) {
           account.fieldStockHoldingEstimation.value.setAmount(
-            totalAdjustedShareForThisStockInThisAccount *
-                security.fieldLastPrice.value.asDouble(),
+            totalAdjustedShareForThisStockInThisAccount * security.fieldLastPrice.value.asDouble(),
           );
           if (account.fieldStockHoldingEstimation.value.asDouble() != 0) {
-            account.balance +=
-                account.fieldStockHoldingEstimation.value.asDouble();
+            account.balance += account.fieldStockHoldingEstimation.value.asDouble();
           }
         }
       }
     });
 
     // Loans
-    final List<Account> accountLoans =
-        Data().accounts
-            .iterableList()
-            .where(
-              (Account account) => account.fieldType.value == AccountType.loan,
-            )
-            .toList();
+    final List<Account> accountLoans = Data().accounts
+        .iterableList()
+        .where(
+          (Account account) => account.fieldType.value == AccountType.loan,
+        )
+        .toList();
     for (final Account account in accountLoans) {
-      final LoanPayment? latestPayment =
-          getAccountLoanPayments(account).lastOrNull;
+      final LoanPayment? latestPayment = getAccountLoanPayments(account).lastOrNull;
       if (latestPayment != null) {
         account.fieldUpdatedOn.value = latestPayment.fieldDate.value;
         account.balance = latestPayment.fieldBalance.value.asDouble() * -1;
@@ -261,17 +247,14 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   List<Account> getListSorted() {
-    final List<Account> list =
-        iterableList()
-            .where(
-              (Account account) =>
-                  account.isMatchingUserChoiceIncludingClosedAccount &&
-                  account.fieldType.value != AccountType.categoryFund,
-            )
-            .toList();
+    final List<Account> list = iterableList()
+        .where(
+          (Account account) =>
+              account.isMatchingUserChoiceIncludingClosedAccount && account.fieldType.value != AccountType.categoryFund,
+        )
+        .toList();
     list.sort(
-      (Account a, Account b) =>
-          sortByString(a.fieldName.value, b.fieldName.value, true),
+      (Account a, Account b) => sortByString(a.fieldName.value, b.fieldName.value, true),
     );
     return list;
   }
@@ -300,9 +283,7 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   List<Account> getOpenAccounts() {
-    return iterableList()
-        .where((final Account account) => account.isOpen)
-        .toList();
+    return iterableList().where((final Account account) => account.isOpen).toList();
   }
 
   List<Account> getOpenRealAccounts() {
@@ -318,10 +299,7 @@ class Accounts extends MoneyObjects<Account> {
 
     for (final Account account in iterableList()) {
       if (account.isMatchingUserChoiceIncludingClosedAccount) {
-        sum +=
-            (account.fieldBalanceNormalized.getValueForDisplay(account)
-                    as MoneyModel)
-                .asDouble();
+        sum += (account.fieldBalanceNormalized.getValueForDisplay(account) as MoneyModel).asDouble();
       }
     }
     return sum;
@@ -343,12 +321,9 @@ class Accounts extends MoneyObjects<Account> {
     Account account,
     AccumulatorList<String, Investment> groupBySymbol,
   ) {
-    final Iterable<Investment> investments = Data().investments
-        .iterableList()
-        .where(
-          (Investment i) =>
-              i.transactionInstance!.fieldAccountId.value == account.uniqueId,
-        );
+    final Iterable<Investment> investments = Data().investments.iterableList().where(
+      (Investment i) => i.transactionInstance!.fieldAccountId.value == account.uniqueId,
+    );
 
     for (final Investment investment in investments) {
       final Security? security = Data().securities.get(
@@ -392,13 +367,12 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   void _updateCreditCardPaidOn(final Account account) {
-    final List<Transaction> transactionForAccountSortedByDateAscending =
-        Data().transactions
-            .iterableList()
-            .where(
-              (Transaction t) => t.fieldAccountId.value == account.uniqueId,
-            )
-            .toList();
+    final List<Transaction> transactionForAccountSortedByDateAscending = Data().transactions
+        .iterableList()
+        .where(
+          (Transaction t) => t.fieldAccountId.value == account.uniqueId,
+        )
+        .toList();
     // sort date as string to match the ListView sorting logic
     transactionForAccountSortedByDateAscending.sort(
       (Transaction a, Transaction b) => Transaction.sortByDateTime(a, b, true),
@@ -422,19 +396,17 @@ class Accounts extends MoneyObjects<Account> {
         final DateTime maxDateToLookAt = t.fieldDateTime.value!.subtract(
           const Duration(days: 60),
         );
-        final Transaction? transactionWithMatchingBalance =
-            findBackwardInTimeForTransactionBalanceThatMatchThisAmount(
-              transactionForAccountSortedByDateAscending,
-              i - 1,
-              maxDateToLookAt,
-              -t.fieldAmount.value.asDouble(),
-            );
+        final Transaction? transactionWithMatchingBalance = findBackwardInTimeForTransactionBalanceThatMatchThisAmount(
+          transactionForAccountSortedByDateAscending,
+          i - 1,
+          maxDateToLookAt,
+          -t.fieldAmount.value.asDouble(),
+        );
 
         if (transactionWithMatchingBalance == null) {
           // t.paidOn.value = doubleToCurrency(statementBalance, '');
         } else {
-          transactionWithMatchingBalance.fieldPaidOn.value =
-              '${t.dateTimeAsString} ⤵';
+          transactionWithMatchingBalance.fieldPaidOn.value = '${t.dateTimeAsString} ⤵';
           t.fieldPaidOn.value =
               '${transactionWithMatchingBalance.dateTimeAsString} ⤴${t.fieldPaidOn.value.isNotEmpty ? '⤵' : ''}';
         }

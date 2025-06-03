@@ -67,10 +67,8 @@ class _PanelRecurringState extends State<PanelRecurring> {
     // reset the content
     recurringPayments.clear();
 
-    final AccumulatorList<int, Transaction> groupTransactionsByPayeeId =
-        AccumulatorList<int, Transaction>();
-    final AccumulatorList<int, int> groupMonthsListByPayeeId =
-        AccumulatorList<int, int>();
+    final AccumulatorList<int, Transaction> groupTransactionsByPayeeId = AccumulatorList<int, Transaction>();
+    final AccumulatorList<int, int> groupMonthsListByPayeeId = AccumulatorList<int, int>();
 
     // Step 1: Group transactions by payeeId and record transaction months
     for (final Transaction transaction in transactions.where(
@@ -117,8 +115,7 @@ class _PanelRecurringState extends State<PanelRecurring> {
               (forIncome == false && t.fieldAmount.value.asDouble() < 0));
     }
 
-    final List<Transaction> flatTransactions = Data().transactions
-        .getListFlattenSplits(whereClause: whereClause);
+    final List<Transaction> flatTransactions = Data().transactions.getListFlattenSplits(whereClause: whereClause);
 
     // get all transaction Income | Expenses
     findMonthlyRecurringPayments(flatTransactions, forIncome);
@@ -129,7 +126,6 @@ class _PanelRecurringState extends State<PanelRecurring> {
       return true;
     }
     // we can conclude that if paid more than 'n' months its a recurring monthly event
-    return months.length ==
-        PreferenceController.to.cashflowRecurringOccurrences.value;
+    return months.length == PreferenceController.to.cashflowRecurringOccurrences.value;
   }
 }

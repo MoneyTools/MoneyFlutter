@@ -50,8 +50,7 @@ class BudgetAnalyzer {
   ({DateTime start, DateTime end}) _calculateDateRange(
     List<Transaction> transactions,
   ) {
-    final List<DateTime> dates =
-        transactions.map((Transaction t) => t.fieldDateTime.value!).toList();
+    final List<DateTime> dates = transactions.map((Transaction t) => t.fieldDateTime.value!).toList();
     return (
       start: dates.reduce((DateTime a, DateTime b) => a.isBefore(b) ? a : b),
       end: dates.reduce((DateTime a, DateTime b) => a.isAfter(b) ? a : b),
@@ -65,23 +64,18 @@ class BudgetAnalyzer {
       return (average: 0.0, stdDev: 0.0, trend: 0.0);
     }
 
-    final double average =
-        values.reduce((double a, double b) => a + b) / values.length;
+    final double average = values.reduce((double a, double b) => a + b) / values.length;
 
     final Iterable<double> squaredDiffs = values.map(
       (double value) => (value - average) * (value - average),
     );
-    final double variance =
-        squaredDiffs.reduce((double a, double b) => a + b) / values.length;
+    final double variance = squaredDiffs.reduce((double a, double b) => a + b) / values.length;
     final double stdDev = sqrt(variance);
 
     double trend = 0.0;
     if (values.length > 1) {
-      final double firstAvg =
-          values.take(2).reduce((double a, double b) => a + b) / 2;
-      final double lastAvg =
-          values.skip(values.length - 2).reduce((double a, double b) => a + b) /
-          2;
+      final double firstAvg = values.take(2).reduce((double a, double b) => a + b) / 2;
+      final double lastAvg = values.skip(values.length - 2).reduce((double a, double b) => a + b) / 2;
       trend = firstAvg != 0 ? (lastAvg - firstAvg) / firstAvg : 0;
     }
 
@@ -89,10 +83,8 @@ class BudgetAnalyzer {
   }
 
   BudgetRecommendation calculateMonthlyBudget() {
-    final List<Transaction> incomeTransactions =
-        transactions.where((Transaction t) => t.isIncome).toList();
-    final List<Transaction> expenseTransactions =
-        transactions.where((Transaction t) => t.isExpense).toList();
+    final List<Transaction> incomeTransactions = transactions.where((Transaction t) => t.isIncome).toList();
+    final List<Transaction> expenseTransactions = transactions.where((Transaction t) => t.isExpense).toList();
 
     final Map<DateTime, double> monthlyIncome = _calculateMonthlyTotals(
       incomeTransactions,
@@ -101,15 +93,15 @@ class BudgetAnalyzer {
       expenseTransactions,
     );
 
-    final ({double average, double stdDev, double trend}) incomeStats =
-        _calculateStatistics(monthlyIncome.values.toList());
-    final ({double average, double stdDev, double trend}) expenseStats =
-        _calculateStatistics(monthlyExpenses.values.toList());
+    final ({double average, double stdDev, double trend}) incomeStats = _calculateStatistics(
+      monthlyIncome.values.toList(),
+    );
+    final ({double average, double stdDev, double trend}) expenseStats = _calculateStatistics(
+      monthlyExpenses.values.toList(),
+    );
 
-    final Map<String, BudgetCumulator> categoryBudgetsIncomes =
-        _calculateCategoryBudgets(incomeTransactions);
-    final Map<String, BudgetCumulator> categoryBudgetsExpenses =
-        _calculateCategoryBudgets(expenseTransactions);
+    final Map<String, BudgetCumulator> categoryBudgetsIncomes = _calculateCategoryBudgets(incomeTransactions);
+    final Map<String, BudgetCumulator> categoryBudgetsExpenses = _calculateCategoryBudgets(expenseTransactions);
     final double savingsRate = _calculateSavingsRate(
       monthlyIncome,
       monthlyExpenses,
@@ -141,12 +133,9 @@ class BudgetAnalyzer {
     List<Transaction> expenses,
   ) {
     // Group transactions by category
-    final Map<String, List<Transaction>> categoryTransactions =
-        <String, List<Transaction>>{};
+    final Map<String, List<Transaction>> categoryTransactions = <String, List<Transaction>>{};
     for (final Transaction transaction in expenses) {
-      categoryTransactions
-          .putIfAbsent(transaction.category!.name, () => <Transaction>[])
-          .add(transaction);
+      categoryTransactions.putIfAbsent(transaction.category!.name, () => <Transaction>[]).add(transaction);
     }
 
     // Analyze each category
@@ -231,9 +220,7 @@ class BudgetAnalyzer {
         1,
       );
 
-      monthlyTotals[monthStart] =
-          (monthlyTotals[monthStart] ?? 0.0) +
-          transaction.fieldAmount.value.asDouble();
+      monthlyTotals[monthStart] = (monthlyTotals[monthStart] ?? 0.0) + transaction.fieldAmount.value.asDouble();
     }
 
     return monthlyTotals;
@@ -278,17 +265,15 @@ class BudgetAnalyzer {
 
     // Sort transactions by date
     transactions.sort(
-      (Transaction a, Transaction b) =>
-          a.fieldDateTime.value!.compareTo(b.fieldDateTime.value!),
+      (Transaction a, Transaction b) => a.fieldDateTime.value!.compareTo(b.fieldDateTime.value!),
     );
 
     // Calculate intervals between transactions
     final List<int> intervals = <int>[];
     for (int i = 1; i < transactions.length; i++) {
-      final int difference =
-          transactions[i].fieldDateTime.value!
-              .difference(transactions[i - 1].fieldDateTime.value!)
-              .inDays;
+      final int difference = transactions[i].fieldDateTime.value!
+          .difference(transactions[i - 1].fieldDateTime.value!)
+          .inDays;
       intervals.add(difference);
     }
 
@@ -297,8 +282,7 @@ class BudgetAnalyzer {
     }
 
     // Calculate average interval
-    final double avgInterval =
-        intervals.reduce((int a, int b) => a + b) / intervals.length;
+    final double avgInterval = intervals.reduce((int a, int b) => a + b) / intervals.length;
 
     // Calculate variance to detect regularity
     final double variance =

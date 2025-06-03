@@ -64,19 +64,15 @@ void renderSourcesToTargetAsPercentage(
   double rollingVerticalPositionDrawnOnTheTarget = target.rect.top;
 
   for (Block block in list) {
-    final double ratioSourceBlockHeightToSumHeight =
-        block.rect.height / sumOfHeight;
-    final double targetSectionHeight =
-        target.rect.height * ratioSourceBlockHeightToSumHeight;
+    final double ratioSourceBlockHeightToSumHeight = block.rect.height / sumOfHeight;
+    final double targetSectionHeight = target.rect.height * ratioSourceBlockHeightToSumHeight;
 
-    final double blockSideToStartFrom =
-        target.rect.center.dx > block.rect.center.dx
-            ? block.rect.right - 1
-            : block.rect.left + 1;
-    final double targetSideToStartFrom =
-        target.rect.center.dx > block.rect.center.dx
-            ? target.rect.left + 1
-            : target.rect.right - 1;
+    final double blockSideToStartFrom = target.rect.center.dx > block.rect.center.dx
+        ? block.rect.right - 1
+        : block.rect.left + 1;
+    final double targetSideToStartFrom = target.rect.center.dx > block.rect.center.dx
+        ? target.rect.left + 1
+        : target.rect.right - 1;
 
     drawChanel(
       canvas: canvas,
@@ -104,8 +100,7 @@ double getHeightNeededToRender(final List<SanKeyEntry> list) {
   double verticalPosition = 0.0;
 
   for (SanKeyEntry element in list) {
-    final double height =
-        (element.value.abs() / sum.abs()) * Constants.targetHeight;
+    final double height = (element.value.abs() / sum.abs()) * Constants.targetHeight;
     verticalPosition += height;
     verticalPosition += Constants.gapBetweenChannels;
   }
@@ -219,8 +214,7 @@ void drawChanel({
 double sumHeight(final List<Block> list) {
   final double sumOfHeight = list.fold(
     0.0,
-    (final double previousValue, final Block element) =>
-        previousValue + element.rect.height,
+    (final double previousValue, final Block element) => previousValue + element.rect.height,
   );
   return sumOfHeight;
 }
@@ -228,8 +222,7 @@ double sumHeight(final List<Block> list) {
 double sumValue(final List<SanKeyEntry> list) {
   final double sumOfHeight = list.fold(
     0.0,
-    (final double previousValue, final SanKeyEntry element) =>
-        previousValue + element.value,
+    (final double previousValue, final SanKeyEntry element) => previousValue + element.value,
   );
   return sumOfHeight;
 }

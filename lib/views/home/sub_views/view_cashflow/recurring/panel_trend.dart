@@ -35,8 +35,7 @@ class PanelTrend extends StatefulWidget {
 class _PanelTrendState extends State<PanelTrend> {
   double maxY = 0;
   double minY = 0;
-  Map<int, RecurringExpenses> yearCategoryIncomeExpenseSums =
-      <int, RecurringExpenses>{};
+  Map<int, RecurringExpenses> yearCategoryIncomeExpenseSums = <int, RecurringExpenses>{};
   List<int> years = <int>[];
 
   @override
@@ -70,80 +69,72 @@ class _PanelTrendState extends State<PanelTrend> {
             fitInsideVertically: true,
             maxContentWidth: 300,
             getTooltipColor: (BarChartGroupData group) => Colors.black,
-            getTooltipItem: (
-              BarChartGroupData group,
-              int groupIndex,
-              BarChartRodData rod,
-              int rodIndex,
-            ) {
-              final int year = years[groupIndex];
-              final RecurringExpenses yearData =
-                  yearCategoryIncomeExpenseSums[year]!;
-              final double profit = yearData.sumIncome + yearData.sumExpense;
-              return BarTooltipItem(
-                year.toString(),
-                textAlign: TextAlign.end,
-                const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-                children: <TextSpan>[
-                  TextSpan(
-                    text:
-                        '\nRevenue\t${MoneyModel(amount: yearData.sumIncome).toShortHand()}',
-                    style: const TextStyle(
-                      color: Colors.green,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 16,
+            getTooltipItem:
+                (
+                  BarChartGroupData group,
+                  int groupIndex,
+                  BarChartRodData rod,
+                  int rodIndex,
+                ) {
+                  final int year = years[groupIndex];
+                  final RecurringExpenses yearData = yearCategoryIncomeExpenseSums[year]!;
+                  final double profit = yearData.sumIncome + yearData.sumExpense;
+                  return BarTooltipItem(
+                    year.toString(),
+                    textAlign: TextAlign.end,
+                    const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
-                  ),
-                  TextSpan(
-                    text:
-                        '\nExpense\t${MoneyModel(amount: yearData.sumExpense).toShortHand()}',
-                    style: TextStyle(
-                      color: Colors.red.shade100,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 16,
-                    ),
-                  ),
-                  TextSpan(
-                    text:
-                        '\n${profit > 0 ? 'Profit' : 'Loss'}\t${MoneyModel(amount: profit).toShortHand()}',
-                    style: TextStyle(
-                      color: profit > 0 ? Colors.blue : Colors.orange,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              );
-            },
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: '\nRevenue\t${MoneyModel(amount: yearData.sumIncome).toShortHand()}',
+                        style: const TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16,
+                        ),
+                      ),
+                      TextSpan(
+                        text: '\nExpense\t${MoneyModel(amount: yearData.sumExpense).toShortHand()}',
+                        style: TextStyle(
+                          color: Colors.red.shade100,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16,
+                        ),
+                      ),
+                      TextSpan(
+                        text: '\n${profit > 0 ? 'Profit' : 'Loss'}\t${MoneyModel(amount: profit).toShortHand()}',
+                        style: TextStyle(
+                          color: profit > 0 ? Colors.blue : Colors.orange,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  );
+                },
           ),
           touchCallback: (FlTouchEvent event, BarTouchResponse? response) {
-            if (event is FlTapUpEvent &&
-                response != null &&
-                response.spot != null) {
+            if (event is FlTapUpEvent && response != null && response.spot != null) {
               final int year = years[response.spot!.touchedBarGroupIndex];
 
               final FieldFilter fieldFilterToUseForYear = FieldFilter(
                 fieldName: Constants.viewTransactionFieldNameDate,
-                strings:
-                    Data().transactions
-                        .getAllTransactionDatesForYear(year)
-                        .map((DateTime date) => dateToString(date))
-                        .toList(),
+                strings: Data().transactions
+                    .getAllTransactionDatesForYear(year)
+                    .map((DateTime date) => dateToString(date))
+                    .toList(),
               );
 
               // Filter by Category Expense and Income
               final Set<String> categoryNames = <String>{};
               {
-                for (final Category category
-                    in Data().categories.getAllExpenseCategories()) {
+                for (final Category category in Data().categories.getAllExpenseCategories()) {
                   categoryNames.add(category.name);
                 }
-                for (final Category category
-                    in Data().categories.getAllIncomeCategories()) {
+                for (final Category category in Data().categories.getAllIncomeCategories()) {
                   categoryNames.add(category.name);
                 }
               }
@@ -255,8 +246,7 @@ class _PanelTrendState extends State<PanelTrend> {
           showTitles: true,
           reservedSize: 30,
           getTitlesWidget: (final double value, final TitleMeta meta) {
-            final List<int> years =
-                yearCategoryIncomeExpenseSums.keys.toList()..sort();
+            final List<int> years = yearCategoryIncomeExpenseSums.keys.toList()..sort();
             if (value.toInt() >= years.length) {
               return const Text('');
             }
@@ -274,20 +264,18 @@ class _PanelTrendState extends State<PanelTrend> {
   }
 
   void _generateList() {
-    yearCategoryIncomeExpenseSums =
-        RecurringExpenses.getSumByIncomeExpenseByYears(
-          widget.minYear,
-          widget.maxYear,
-          widget.includeAssetAccounts,
-          1,
-        );
+    yearCategoryIncomeExpenseSums = RecurringExpenses.getSumByIncomeExpenseByYears(
+      widget.minYear,
+      widget.maxYear,
+      widget.includeAssetAccounts,
+      1,
+    );
     years = yearCategoryIncomeExpenseSums.keys.toList()..sort();
 
     maxY = 0;
     minY = 0;
 
-    for (final RecurringExpenses yearData
-        in yearCategoryIncomeExpenseSums.values) {
+    for (final RecurringExpenses yearData in yearCategoryIncomeExpenseSums.values) {
       maxY = max(max(maxY, yearData.sumExpense), yearData.sumIncome);
       minY = min(min(minY, yearData.sumExpense), yearData.sumIncome);
     }

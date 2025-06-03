@@ -2,8 +2,7 @@ import 'package:get/get.dart';
 import 'package:money/core/helpers/color_helper.dart';
 
 class SnackBarService {
-  static final GlobalKey<ScaffoldMessengerState> scaffoldKey =
-      GlobalKey<ScaffoldMessengerState>();
+  static final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
   static void display({
     required String title,
@@ -23,10 +22,7 @@ class SnackBarService {
       snackStyle: SnackStyle.FLOATING,
       backgroundColor: backgroundColor, // Background color of the Snackbar
       colorText: textColor, // Text color of the Snackbar
-      duration:
-          autoDismiss
-              ? Duration(seconds: duration)
-              : null, // Duration for which the Snackbar is displayed
+      duration: autoDismiss ? Duration(seconds: duration) : null, // Duration for which the Snackbar is displayed
       mainButton: TextButton(
         key: const Key('key_snackbar_close_button'),
         onPressed: () {

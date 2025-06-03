@@ -9,8 +9,7 @@ Widget pickerCategory({
   required final Category? itemSelected,
   required final void Function(Category?) onSelected,
 }) {
-  final String selectedName =
-      itemSelected == null ? '' : itemSelected.fieldName.value;
+  final String selectedName = itemSelected == null ? '' : itemSelected.fieldName.value;
 
   return PickerEditBox(
     key: key,

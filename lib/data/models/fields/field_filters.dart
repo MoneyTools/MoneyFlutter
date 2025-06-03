@@ -14,8 +14,7 @@ class FieldFilters {
     if (jsonString.isEmpty) {
       return FieldFilters();
     }
-    final Map<String, dynamic> json =
-        jsonDecode(jsonString) as Map<String, dynamic>;
+    final Map<String, dynamic> json = jsonDecode(jsonString) as Map<String, dynamic>;
     return FieldFilters.fromJson(json);
   }
   FieldFilters([List<FieldFilter>? inputList]) {
@@ -30,13 +29,11 @@ class FieldFilters {
   /// JSON objects.
   factory FieldFilters.fromJson(final Map<String, dynamic> json) {
     final List<dynamic> filters = json['filters'] as List<dynamic>;
-    final List<FieldFilter> fieldFilters =
-        filters
-            .map(
-              (dynamic filter) =>
-                  FieldFilter.fromJson(filter as Map<String, dynamic>),
-            )
-            .toList();
+    final List<FieldFilter> fieldFilters = filters
+        .map(
+          (dynamic filter) => FieldFilter.fromJson(filter as Map<String, dynamic>),
+        )
+        .toList();
     return FieldFilters(fieldFilters);
   }
 

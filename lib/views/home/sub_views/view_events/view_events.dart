@@ -97,8 +97,7 @@ class ViewEventsState extends ViewForMoneyObjectsState {
     return Data().events
         .iterableList(includeDeleted: includeDeleted)
         .where(
-          (Event instance) =>
-              applyFilter == false || isMatchingFilters(instance),
+          (Event instance) => applyFilter == false || isMatchingFilters(instance),
         )
         .toList();
   }
@@ -129,16 +128,14 @@ class ViewEventsState extends ViewForMoneyObjectsState {
     required final bool showAsNativeCurrency,
   }) {
     // get net worth over time
-    final List<Transaction> transactionsWithoutTransfers =
-        Data().transactions
-            .iterableList(includeDeleted: true)
-            .where((Transaction t) => t.isTransfer == false)
-            .toList();
+    final List<Transaction> transactionsWithoutTransfers = Data().transactions
+        .iterableList(includeDeleted: true)
+        .where((Transaction t) => t.isTransfer == false)
+        .toList();
 
-    final List<FlSpot> tmpDataPointsWithNetWorth =
-        Transactions.cumulateTransactionPerYearMonth(
-          transactionsWithoutTransfers,
-        );
+    final List<FlSpot> tmpDataPointsWithNetWorth = Transactions.cumulateTransactionPerYearMonth(
+      transactionsWithoutTransfers,
+    );
 
     const double marginLeft = 80.0;
     const double marginBottom = 50.0;
@@ -160,10 +157,7 @@ class ViewEventsState extends ViewForMoneyObjectsState {
           quantity: 1,
           colorBasedOnQuantity: false, // use Amount
           description: event.fieldName.value,
-          color:
-              category == null
-                  ? Colors.blue
-                  : category.getColorOrAncestorsColor(),
+          color: category == null ? Colors.blue : category.getColorOrAncestorsColor(),
         ),
       );
     }
@@ -223,10 +217,9 @@ class ViewEventsState extends ViewForMoneyObjectsState {
         Transaction.fields.getFieldByName(columnIdMemo),
         Transaction.fields.getFieldByName(columnIdAmount),
       ],
-      getList:
-          () => getTransactions(
-            // filter: (final Transaction transaction) => transaction.fieldDateTime.value == DateTime.now(),
-          ),
+      getList: () => getTransactions(
+        // filter: (final Transaction transaction) => transaction.fieldDateTime.value == DateTime.now(),
+      ),
       selectionController: selectionController,
     );
   }

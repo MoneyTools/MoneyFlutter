@@ -913,7 +913,7 @@ window_manager</title>
   </g>
   <g id='Labels_money'>
     <text class="nodeName" x="150" y="75" font-size="120%">money</text>
-    <text class="nodeName" x="150" y="95" font-size="80%">1.12.00</text>
+    <text class="nodeName" x="150" y="95" font-size="80%">1.12.01</text>
   </g>
   <g id='Labels_clipboard'>
     <text class="nodeName" x="1050" y="375" font-size="120%">clipboard</text>

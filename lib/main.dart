@@ -66,10 +66,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: themeController.themeDataLight,
         darkTheme: themeController.themeDataDark,
-        themeMode:
-            themeController.isDarkTheme.value
-                ? ThemeMode.dark
-                : ThemeMode.light,
+        themeMode: themeController.isDarkTheme.value ? ThemeMode.dark : ThemeMode.light,
         title: 'MyMoney by VTeam',
         initialBinding: ApplicationBindings(),
         initialRoute: '/',

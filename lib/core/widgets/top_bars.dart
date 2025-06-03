@@ -13,8 +13,7 @@ class BarChartWidget extends StatelessWidget {
   });
 
   final bool asIncome;
-  final List<PairIntDouble>
-  listCategoryNameToAmount; // List of data with label and value
+  final List<PairIntDouble> listCategoryNameToAmount; // List of data with label and value
 
   @override
   Widget build(BuildContext context) {

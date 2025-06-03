@@ -60,14 +60,15 @@ class ViewHeader extends StatelessWidget {
   Widget build(final BuildContext context) {
     return ValueListenableBuilder<List<int>>(
       valueListenable: selectedItems,
-      builder: (
-        final BuildContext context,
-        final List<int> listOfSelectedItemIndex,
-        final _,
-        /*widget*/
-      ) {
-        return buildViewHeaderContainer(context, _buildContent(context));
-      },
+      builder:
+          (
+            final BuildContext context,
+            final List<int> listOfSelectedItemIndex,
+            final _,
+            /*widget*/
+          ) {
+            return buildViewHeaderContainer(context, _buildContent(context));
+          },
     );
   }
 
@@ -162,8 +163,7 @@ class ViewHeader extends StatelessWidget {
           child: FilterInput(
             hintText: 'Filter',
             initialValue: textFilter,
-            autoSubmitAfterSeconds:
-                -1, // -1 do not auto submit, user has to press Enter
+            autoSubmitAfterSeconds: -1, // -1 do not auto submit, user has to press Enter
             onChanged: (final String text) {
               onTextFilterChanged!(text);
             },

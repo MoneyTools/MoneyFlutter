@@ -21,16 +21,16 @@ class ThreePartLabel extends StatelessWidget {
     return isVertical
         ? Column(children: <Widget>[renderText1(context), renderText2(context)])
         : Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            // Icon
-            SizedBox(width: icon == null ? null : 40, child: icon),
-            // Text1 <space> Text2
-            renderText1(context),
-            const SizedBox(width: 20),
-            renderText2(context),
-          ],
-        );
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              // Icon
+              SizedBox(width: icon == null ? null : 40, child: icon),
+              // Text1 <space> Text2
+              renderText1(context),
+              const SizedBox(width: 20),
+              renderText2(context),
+            ],
+          );
   }
 
   Widget renderText1(final BuildContext context) {

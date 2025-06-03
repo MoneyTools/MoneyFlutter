@@ -35,8 +35,7 @@ class Investments extends MoneyObjects<Investment> {
         investment.fieldSecurity.value,
       );
       if (security != null) {
-        final List<StockSplit> splits = Data().stockSplits
-            .getStockSplitsForSecurity(security);
+        final List<StockSplit> splits = Data().stockSplits.getStockSplitsForSecurity(security);
         investment.applySplits(splits);
       }
     }
@@ -79,8 +78,7 @@ class Investments extends MoneyObjects<Investment> {
   static StockCumulative getSharesAndProfit(List<Investment> investments) {
     // StockCumulative sort by date, TradeType, Amount
     investments.sort(
-      (Investment a, Investment b) =>
-          Investment.sortByDateAndInvestmentType(a, b, true, true),
+      (Investment a, Investment b) => Investment.sortByDateAndInvestmentType(a, b, true, true),
     );
 
     final StockCumulative cumulative = StockCumulative();

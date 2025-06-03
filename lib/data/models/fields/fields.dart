@@ -124,8 +124,7 @@ class Fields<T> {
           fieldDefinition,
         );
 
-        if (filter.asDateRange != null &&
-            filter.asDateRange!.isBetweenEqual(date) == false) {
+        if (filter.asDateRange != null && filter.asDateRange!.isBetweenEqual(date) == false) {
           return false;
         }
       } else {
@@ -194,10 +193,7 @@ class Fields<T> {
     switch (fieldDefinition.type) {
       case FieldType.widget:
         if (fieldDefinition.getValueForReading == null) {
-          return fieldDefinition
-              .getValueForSerialization(objectInstance)
-              .toString()
-              .toLowerCase();
+          return fieldDefinition.getValueForSerialization(objectInstance).toString().toLowerCase();
         } else {
           return fieldDefinition.getValueForReading!(objectInstance) as String;
         }

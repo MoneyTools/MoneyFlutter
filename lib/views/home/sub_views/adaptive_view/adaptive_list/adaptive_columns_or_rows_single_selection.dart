@@ -49,14 +49,13 @@ class AdaptiveListColumnsOrRowsSingleSelection extends StatefulWidget {
   final int selectedId;
 
   @override
-  State<AdaptiveListColumnsOrRowsSingleSelection> createState() =>
-      _AdaptiveListColumnsOrRowsSingleSelectionState();
+  State<AdaptiveListColumnsOrRowsSingleSelection> createState() => _AdaptiveListColumnsOrRowsSingleSelectionState();
 }
 
-class _AdaptiveListColumnsOrRowsSingleSelectionState
-    extends State<AdaptiveListColumnsOrRowsSingleSelection> {
-  late final ValueNotifier<List<int>> selectionCollectionOfOnlyOneItem =
-      ValueNotifier<List<int>>(<int>[widget.selectedId]);
+class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListColumnsOrRowsSingleSelection> {
+  late final ValueNotifier<List<int>> selectionCollectionOfOnlyOneItem = ValueNotifier<List<int>>(<int>[
+    widget.selectedId,
+  ]);
 
   final FooterAccumulators _footerAccumulators = FooterAccumulators();
 
@@ -74,8 +73,7 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState
       isMultiSelectionOn: false,
       selectedItemsByUniqueId: selectionCollectionOfOnlyOneItem,
       onSelectionChanged: (final int selectedId) {
-        widget.listController.bookmark =
-            widget.listController.scrollController.offset;
+        widget.listController.bookmark = widget.listController.scrollController.offset;
         setState(() {
           selectionCollectionOfOnlyOneItem.value = <int>[selectedId];
           widget.onSelectionChanged?.call(selectedId);

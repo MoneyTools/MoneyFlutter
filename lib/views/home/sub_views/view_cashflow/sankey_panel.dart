@@ -54,12 +54,11 @@ class SankeyPanel extends StatelessWidget {
   }
 
   void transformData() {
-    final Iterable<Transaction> transactions = Data().transactions
-        .transactionInYearRange(
-          minYear: minYear,
-          maxYear: maxYear,
-          incomesOrExpenses: null,
-        );
+    final Iterable<Transaction> transactions = Data().transactions.transactionInYearRange(
+      minYear: minYear,
+      maxYear: maxYear,
+      incomesOrExpenses: null,
+    );
 
     for (Transaction element in transactions) {
       final Category? category = Data().categories.get(
@@ -77,8 +76,7 @@ class SankeyPanel extends StatelessWidget {
             );
             double? mapValue = mapOfIncomes[topCategory];
             mapValue ??= 0;
-            mapOfIncomes[topCategory] =
-                mapValue + element.fieldAmount.value.asDouble();
+            mapOfIncomes[topCategory] = mapValue + element.fieldAmount.value.asDouble();
             break;
           case CategoryType.expense:
           case CategoryType.recurringExpense:
@@ -88,8 +86,7 @@ class SankeyPanel extends StatelessWidget {
             );
             double? mapValue = mapOfExpenses[topCategory];
             mapValue ??= 0;
-            mapOfExpenses[topCategory] =
-                mapValue + element.fieldAmount.value.asDouble();
+            mapOfExpenses[topCategory] = mapValue + element.fieldAmount.value.asDouble();
             break;
           default:
             totalNones += element.fieldAmount.value.asDouble();

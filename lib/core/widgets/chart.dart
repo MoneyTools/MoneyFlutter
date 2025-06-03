@@ -65,10 +65,7 @@ class Chart extends StatelessWidget {
         }
 
         maxY = roundToTheNextNaturalFit(maxY.toInt()).toDouble();
-        minY =
-            minY == 0
-                ? 0
-                : -roundToTheNextNaturalFit(minY.toInt().abs()).toDouble();
+        minY = minY == 0 ? 0 : -roundToTheNextNaturalFit(minY.toInt().abs()).toDouble();
 
         return BarChart(
           BarChartData(
@@ -106,16 +103,13 @@ class Chart extends StatelessWidget {
 
   static BarTouchData getBarTouchedData(
     final BuildContext context,
-    final String Function(BarChartGroupData group, BarChartRodData rod)
-    renderTooltip,
+    final String Function(BarChartGroupData group, BarChartRodData rod) renderTooltip,
   ) => BarTouchData(
     enabled: true,
     touchTooltipData: BarTouchTooltipData(
       fitInsideHorizontally: true,
       fitInsideVertically: true,
-      getTooltipColor:
-          (BarChartGroupData group) =>
-              getColorTheme(context).secondaryContainer,
+      getTooltipColor: (BarChartGroupData group) => getColorTheme(context).secondaryContainer,
       tooltipRoundedRadius: 8,
       getTooltipItem:
           (
@@ -129,25 +123,26 @@ class Chart extends StatelessWidget {
             textAlign: TextAlign.start,
           ),
     ),
-    touchCallback: (
-      final FlTouchEvent event,
-      final BarTouchResponse? barTouchResponse,
-    ) {
-      if (event is FlLongPressStart) {
-        if (barTouchResponse != null) {
-          if (barTouchResponse.spot != null) {
-            HapticFeedback.lightImpact();
-            copyToClipboardAndInformUser(
-              context,
-              renderTooltip(
-                barTouchResponse.spot!.touchedBarGroup,
-                barTouchResponse.spot!.touchedRodData,
-              ),
-            );
+    touchCallback:
+        (
+          final FlTouchEvent event,
+          final BarTouchResponse? barTouchResponse,
+        ) {
+          if (event is FlLongPressStart) {
+            if (barTouchResponse != null) {
+              if (barTouchResponse.spot != null) {
+                HapticFeedback.lightImpact();
+                copyToClipboardAndInformUser(
+                  context,
+                  renderTooltip(
+                    barTouchResponse.spot!.touchedBarGroup,
+                    barTouchResponse.spot!.touchedRodData,
+                  ),
+                );
+              }
+            }
           }
-        }
-      }
-    },
+        },
   );
 
   static double getBarWidth(
@@ -175,27 +170,25 @@ class Chart extends StatelessWidget {
 
   static FlGridData getChartGridData() => FlGridData(
     drawVerticalLine: false,
-    getDrawingHorizontalLine:
-        (final double value) => FlLine(
-          color: getHorizontalLineColorBasedOnValue(value),
-          strokeWidth: 1, // Set the thickness of the grid lines
-        ),
+    getDrawingHorizontalLine: (final double value) => FlLine(
+      color: getHorizontalLineColorBasedOnValue(value),
+      strokeWidth: 1, // Set the thickness of the grid lines
+    ),
   );
 
   String getTooltipText(BarChartGroupData group, BarChartRodData rod) =>
       '${list[group.x].xText}\n${Currency.getAmountAsStringUsingCurrency(rod.toY, iso4217code: currency)}';
 
-  Widget _buildLegendBottom(final double value, final TitleMeta meta) =>
-      Container(
-        padding: const EdgeInsets.only(top: 8),
-        constraints: const BoxConstraints(maxWidth: 60),
-        child: Text(
-          list[value.toInt()].xText,
-          softWrap: true,
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 10),
-        ),
-      );
+  Widget _buildLegendBottom(final double value, final TitleMeta meta) => Container(
+    padding: const EdgeInsets.only(top: 8),
+    constraints: const BoxConstraints(maxWidth: 60),
+    child: Text(
+      list[value.toInt()].xText,
+      softWrap: true,
+      textAlign: TextAlign.center,
+      style: const TextStyle(fontSize: 10),
+    ),
+  );
 }
 
 class PairXYY {
@@ -215,8 +208,7 @@ FlBorderData getBorders(final double min, final double max) => FlBorderData(
   ),
 );
 
-Color getHorizontalLineColorBasedOnValue(final double value) =>
-    colorBasedOnValue(value).withValues(alpha: 0.3);
+Color getHorizontalLineColorBasedOnValue(final double value) => colorBasedOnValue(value).withValues(alpha: 0.3);
 
 Widget getWidgetChartAmount(final double value, final TitleMeta meta) {
   final Widget widget = Text(

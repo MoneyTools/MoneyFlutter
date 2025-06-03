@@ -16,35 +16,32 @@ class MultipleSelectionToggle extends StatelessWidget {
     final bool isSelected = multipleSelection!.isMultiSelectionOn;
     return ValueListenableBuilder<List<int>>(
       valueListenable: multipleSelection!.selectedItems,
-      builder: (
-        final BuildContext context,
-        final List<int> listOfSelectedItemIndex,
-        final _,
-      ) {
-        return Tooltip(
-          message: 'Toggle multi-selection',
-          child: TextButton.icon(
-            key: Constants.keyMultiSelectionToggle,
-            icon: const Icon(Icons.checklist),
-            label: Text(
-              getIntAsText(multipleSelection!.selectedItems.value.length),
-            ),
-            onPressed: () {
-              multipleSelection!.onToggleMode!();
-            },
-            style: TextButton.styleFrom(
-              foregroundColor:
-                  isSelected
+      builder:
+          (
+            final BuildContext context,
+            final List<int> listOfSelectedItemIndex,
+            final _,
+          ) {
+            return Tooltip(
+              message: 'Toggle multi-selection',
+              child: TextButton.icon(
+                key: Constants.keyMultiSelectionToggle,
+                icon: const Icon(Icons.checklist),
+                label: Text(
+                  getIntAsText(multipleSelection!.selectedItems.value.length),
+                ),
+                onPressed: () {
+                  multipleSelection!.onToggleMode!();
+                },
+                style: TextButton.styleFrom(
+                  foregroundColor: isSelected
                       ? getColorTheme(context).onPrimaryContainer
                       : getColorTheme(context).onSecondaryContainer,
-              backgroundColor:
-                  isSelected
-                      ? getColorTheme(context).primaryContainer
-                      : Colors.transparent,
-            ),
-          ),
-        );
-      },
+                  backgroundColor: isSelected ? getColorTheme(context).primaryContainer : Colors.transparent,
+                ),
+              ),
+            );
+          },
     );
   }
 }

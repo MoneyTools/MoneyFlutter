@@ -127,22 +127,18 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
       autofocus: false,
       //widget.hasFocus,
       onKeyEvent: (final FocusNode node, final KeyEvent event) {
-        if (event.logicalKey == LogicalKeyboardKey.altLeft ||
-            event.logicalKey == LogicalKeyboardKey.altLeft) {
+        if (event.logicalKey == LogicalKeyboardKey.altLeft || event.logicalKey == LogicalKeyboardKey.altLeft) {
           isKeyPressedAlt = event is KeyDownEvent;
         }
 
-        if (event.logicalKey == LogicalKeyboardKey.controlLeft ||
-            event.logicalKey == LogicalKeyboardKey.controlRight) {
+        if (event.logicalKey == LogicalKeyboardKey.controlLeft || event.logicalKey == LogicalKeyboardKey.controlRight) {
           isKeyPressedCtrl = event is KeyDownEvent;
         }
 
-        if (event.logicalKey == LogicalKeyboardKey.metaLeft ||
-            event.logicalKey == LogicalKeyboardKey.metaRight) {
+        if (event.logicalKey == LogicalKeyboardKey.metaLeft || event.logicalKey == LogicalKeyboardKey.metaRight) {
           isKeyPressedMeta = event is KeyDownEvent;
         }
-        if (event.logicalKey == LogicalKeyboardKey.shiftLeft ||
-            event.logicalKey == LogicalKeyboardKey.shiftRight) {
+        if (event.logicalKey == LogicalKeyboardKey.shiftLeft || event.logicalKey == LogicalKeyboardKey.shiftRight) {
           isKeyPressedShift = event is KeyDownEvent;
         }
 
@@ -186,8 +182,7 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
     setState(() {
       if (!showingOverlay) {
         showingOverlay = true;
-        _overlayEntry =
-            widget.groupByCategory ? _buildCategoryOverlay() : _buildOverlay();
+        _overlayEntry = widget.groupByCategory ? _buildCategoryOverlay() : _buildOverlay();
         Overlay.of(context).insert(_overlayEntry);
       } else {
         if (showingOverlay) {
@@ -202,8 +197,7 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
     final TextStyle? bodyText = theme.textTheme.bodyMedium?.copyWith(
       fontWeight: FontWeight.bold,
     );
-    final TextStyle categoryTextStyle =
-        bodyText ?? const TextStyle().copyWith(fontWeight: FontWeight.bold);
+    final TextStyle categoryTextStyle = bodyText ?? const TextStyle().copyWith(fontWeight: FontWeight.bold);
 
     final Map<String, List<KeyAction>> map = _getBindingsMap();
     final int length = map.length + widget.bindings.length;
@@ -267,8 +261,7 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
 
   OverlayEntry _buildOverlay() {
     final ThemeData themeData = Theme.of(context);
-    final TextStyle textStyle =
-        widget.textStyle ?? themeData.textTheme.labelSmall ?? defaultTextStyle;
+    final TextStyle textStyle = widget.textStyle ?? themeData.textTheme.labelSmall ?? defaultTextStyle;
     final Color background = widget.backgroundColor ?? themeData.cardColor;
     final Color textColor = textStyle.color ?? defaultTextColor;
 
@@ -306,14 +299,14 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
         dataRow.add(
           modifiers.isNotEmpty
               ? DataCell(
-                _getBubble(
-                  modifiers,
-                  textColor,
-                  background,
-                  textStyle,
-                  invert: true,
-                ),
-              )
+                  _getBubble(
+                    modifiers,
+                    textColor,
+                    background,
+                    textStyle,
+                    invert: true,
+                  ),
+                )
               : DataCell.empty,
         );
         dataRow.add(
@@ -323,11 +316,7 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
     }
     if (widget.bindings.length % widget.columnCount != 0) {
       final List<DataCell> dataRow = tableRows[fullRows];
-      for (
-        int k = fullRows * widget.columnCount;
-        k < widget.bindings.length;
-        k++
-      ) {
+      for (int k = fullRows * widget.columnCount; k < widget.bindings.length; k++) {
         final KeyAction rep = widget.bindings[k];
         final String modifiers = _getModifiers(rep);
         dataRow.add(
@@ -342,8 +331,8 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
         dataRow.add(
           modifiers.isNotEmpty
               ? DataCell(
-                _getBubble(modifiers, textColor, background, textStyle),
-              )
+                  _getBubble(modifiers, textColor, background, textStyle),
+                )
               : DataCell.empty,
         );
         dataRow.add(
@@ -358,11 +347,7 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
           ),
         );
       }
-      for (
-        int k = widget.bindings.length;
-        k < rowCount * widget.columnCount;
-        k++
-      ) {
+      for (int k = widget.bindings.length; k < rowCount * widget.columnCount; k++) {
         dataRow.add(DataCell.empty);
         dataRow.add(DataCell.empty);
         dataRow.add(DataCell.empty);
@@ -373,8 +358,7 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
       rows.add(DataRow(cells: cells));
     }
 
-    final Color dividerColor =
-        widget.showLines ? themeData.dividerColor : Colors.transparent;
+    final Color dividerColor = widget.showLines ? themeData.dividerColor : Colors.transparent;
     final Widget dataTable = Theme(
       data: Theme.of(context).copyWith(dividerColor: dividerColor),
       child: SingleChildScrollView(
@@ -403,29 +387,28 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
           BoxShadow(color: shadow, blurRadius: 30, spreadRadius: 1),
         ],
       ),
-      child:
-          (widget.helpText != null)
-              ? Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Flexible(
-                    child: Markdown(
-                      shrinkWrap: true,
-                      data: widget.helpText!,
-                      styleSheet: MarkdownStyleSheet(
-                        h1: const TextStyle(fontWeight: FontWeight.bold),
-                        h1Align: WrapAlignment.center,
-                      ),
+      child: (widget.helpText != null)
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Flexible(
+                  child: Markdown(
+                    shrinkWrap: true,
+                    data: widget.helpText!,
+                    styleSheet: MarkdownStyleSheet(
+                      h1: const TextStyle(fontWeight: FontWeight.bold),
+                      h1Align: WrapAlignment.center,
                     ),
                   ),
-                  const Divider(height: 0.5, thickness: 0.5),
-                  const SizedBox(height: 18),
-                  dataTable,
-                ],
-              )
-              : dataTable,
+                ),
+                const Divider(height: 0.5, thickness: 0.5),
+                const SizedBox(height: 18),
+                dataTable,
+              ],
+            )
+          : dataTable,
     );
 
     return OverlayEntry(
@@ -535,9 +518,7 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
       ),
     );
     dataRow.add(
-      modifiers.isNotEmpty
-          ? DataCell(_getBubble(modifiers, textColor, background, altTextStyle))
-          : DataCell.empty,
+      modifiers.isNotEmpty ? DataCell(_getBubble(modifiers, textColor, background, altTextStyle)) : DataCell.empty,
     );
     dataRow.add(DataCell(_getAltText(rep.label, altTextStyle)));
     return dataRow;
@@ -585,8 +566,7 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
   Widget _getTableForActions(final List<KeyAction> actions) {
     final int colCount = widget.columnCount;
     final ThemeData theme = Theme.of(context);
-    final TextStyle textStyle =
-        widget.textStyle ?? theme.textTheme.labelSmall ?? defaultTextStyle;
+    final TextStyle textStyle = widget.textStyle ?? theme.textTheme.labelSmall ?? defaultTextStyle;
     final TextStyle altTextStyle = textStyle.copyWith(
       fontWeight: FontWeight.bold,
     );
@@ -636,8 +616,7 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
     }
 
     final ThemeData data = Theme.of(context);
-    final Color dividerColor =
-        widget.showLines ? data.dividerColor : Colors.transparent;
+    final Color dividerColor = widget.showLines ? data.dividerColor : Colors.transparent;
     return Theme(
       data: data.copyWith(dividerColor: dividerColor),
       child: DataTable(

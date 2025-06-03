@@ -54,13 +54,12 @@ class Event extends MoneyObject {
       final Event event = instance as Event;
       if (event.fieldCategoryId.value == -1) {
         return SuggestionApproval(
-          onApproved:
-              event.possibleMatchingCategoryId == -1
-                  ? null
-                  : () {
-                    // record the change
-                    changeCategory(event, event.possibleMatchingCategoryId);
-                  },
+          onApproved: event.possibleMatchingCategoryId == -1
+              ? null
+              : () {
+                  // record the change
+                  changeCategory(event, event.possibleMatchingCategoryId);
+                },
           onChooseCategory: (final BuildContext context) {
             event.possibleMatchingCategoryId = -1;
             showPopupSelection(
@@ -89,40 +88,35 @@ class Event extends MoneyObject {
       }
     },
 
-    sort:
-        (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-            sortByString(
-              (a as Event).categoryName,
-              (b as Event).categoryName,
-              ascending,
-            ),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
+      (a as Event).categoryName,
+      (b as Event).categoryName,
+      ascending,
+    ),
 
-    getValueForReading:
-        (final MoneyObject instance) => (instance as Event).categoryName,
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as Event).fieldCategoryId.value,
-    setValue:
-        (final MoneyObject instance, dynamic newValue) =>
-            (instance as Event).fieldCategoryId.value = newValue as int,
-    getEditWidget: (
-      final MoneyObject instance,
-      void Function(bool wasModified) onEdited,
-    ) {
-      return pickerCategory(
-        key: const Key('key_pick_category'),
-        itemSelected: Data().categories.get(
-          (instance as Event).fieldCategoryId.value,
-        ),
-        onSelected: (Category? newCategory) {
-          if (newCategory != null) {
-            instance.fieldCategoryId.value = newCategory.uniqueId;
-            // notify container
-            onEdited(true);
-          }
+    getValueForReading: (final MoneyObject instance) => (instance as Event).categoryName,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Event).fieldCategoryId.value,
+    setValue: (final MoneyObject instance, dynamic newValue) =>
+        (instance as Event).fieldCategoryId.value = newValue as int,
+    getEditWidget:
+        (
+          final MoneyObject instance,
+          void Function(bool wasModified) onEdited,
+        ) {
+          return pickerCategory(
+            key: const Key('key_pick_category'),
+            itemSelected: Data().categories.get(
+              (instance as Event).fieldCategoryId.value,
+            ),
+            onSelected: (Category? newCategory) {
+              if (newCategory != null) {
+                instance.fieldCategoryId.value = newCategory.uniqueId;
+                // notify container
+                onEdited(true);
+              }
+            },
+          );
         },
-      );
-    },
   );
 
   /// Date Begin
@@ -143,21 +137,17 @@ class Event extends MoneyObject {
     name: 'Duration',
     align: TextAlign.center,
     columnWidth: ColumnWidth.small,
-    getValueForDisplay:
-        (final MoneyObject instance) => (instance as Event).durationAsString,
-    sort:
-        (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-            sortByValue(
-              (a as Event).durationInDays,
-              (b as Event).durationInDays,
-              ascending,
-            ),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Event).durationAsString,
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
+      (a as Event).durationInDays,
+      (b as Event).durationInDays,
+      ascending,
+    ),
   );
 
   /// ID
   FieldId fieldId = FieldId(
-    getValueForSerialization:
-        (final MoneyObject instance) => (instance as Event).uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Event).uniqueId,
   );
 
   /// Memo
@@ -165,10 +155,8 @@ class Event extends MoneyObject {
     name: 'Memo',
     serializeName: 'Memo',
     columnWidth: ColumnWidth.large,
-    getValueForDisplay:
-        (final MoneyObject instance) => (instance as Event).fieldMemo.value,
-    getValueForSerialization:
-        (final MoneyObject instance) => (instance as Event).fieldMemo.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Event).fieldMemo.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Event).fieldMemo.value,
   );
 
   /// Name
@@ -176,31 +164,22 @@ class Event extends MoneyObject {
     name: 'Name',
     serializeName: 'Name',
     type: FieldType.widget,
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            TokenText((instance as Event).eventName),
-    getValueForSerialization:
-        (final MoneyObject instance) => (instance as Event).fieldName.value,
-    setValue:
-        (final MoneyObject instance, dynamic value) =>
-            (instance as Event).fieldName.value = value as String,
-    sort:
-        (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-            sortByString(
-              (a as Event).fieldName.value,
-              (b as Event).fieldName.value,
-              ascending,
-            ),
+    getValueForDisplay: (final MoneyObject instance) => TokenText((instance as Event).eventName),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Event).fieldName.value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Event).fieldName.value = value as String,
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
+      (a as Event).fieldName.value,
+      (b as Event).fieldName.value,
+      ascending,
+    ),
   );
 
   /// People
   FieldString fieldPeople = FieldString(
     name: 'People',
     serializeName: 'People',
-    getValueForDisplay:
-        (final MoneyObject instance) => (instance as Event).fieldPeople.value,
-    getValueForSerialization:
-        (final MoneyObject instance) => (instance as Event).fieldPeople.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Event).fieldPeople.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Event).fieldPeople.value,
   );
 
   int possibleMatchingCategoryId = -1;
@@ -232,8 +211,7 @@ class Event extends MoneyObject {
   static final Fields<Event> _fields = Fields<Event>();
   static final Fields<Event> _fieldsColumView = Fields<Event>();
 
-  String get categoryName =>
-      Data().categories.getNameFromId(this.fieldCategoryId.value);
+  String get categoryName => Data().categories.getNameFromId(this.fieldCategoryId.value);
 
   static void changeCategory(Event item, final int categoryId) {
     // record the change
@@ -260,8 +238,7 @@ class Event extends MoneyObject {
 
   String get durationAsString => durationInDateRange.toStringDuration();
 
-  String get eventName =>
-      fieldName.value.isEmpty ? 'Event $uniqueId' : fieldName.value;
+  String get eventName => fieldName.value.isEmpty ? 'Event $uniqueId' : fieldName.value;
 
   static Fields<Event> get fields {
     if (_fields.isEmpty) {
@@ -305,33 +282,31 @@ class Event extends MoneyObject {
       name: name,
       serializeName: serializeName,
       columnWidth: ColumnWidth.small,
-      getValueForDisplay:
-          (final MoneyObject instance) => getField(instance as Event).value,
-      getEditWidget: (
-        final MoneyObject instance,
-        void Function(bool wasModified) onEdited,
-      ) {
-        return PickerEditBoxDate(
-          key: Constants.keyDatePicker,
-          initialValue: dateToDateTimeString(getField(instance as Event).value),
-          onChanged: (String? newDateSelected) {
-            if (newDateSelected != null) {
-              getField(instance).value = attemptToGetDateFromText(
-                newDateSelected,
-              );
-              onEdited(true);
-            }
+      getValueForDisplay: (final MoneyObject instance) => getField(instance as Event).value,
+      getEditWidget:
+          (
+            final MoneyObject instance,
+            void Function(bool wasModified) onEdited,
+          ) {
+            return PickerEditBoxDate(
+              key: Constants.keyDatePicker,
+              initialValue: dateToDateTimeString(getField(instance as Event).value),
+              onChanged: (String? newDateSelected) {
+                if (newDateSelected != null) {
+                  getField(instance).value = attemptToGetDateFromText(
+                    newDateSelected,
+                  );
+                  onEdited(true);
+                }
+              },
+            );
           },
-        );
-      },
-      setValue:
-          (MoneyObject instance, dynamic newValue) =>
-              getField(instance as Event).value = attemptToGetDateFromText(
-                newValue as String,
-              ),
-      getValueForSerialization:
-          (final MoneyObject instance) =>
-              dateToIso8601OrDefaultString(getField(instance as Event).value),
+      setValue: (MoneyObject instance, dynamic newValue) =>
+          getField(instance as Event).value = attemptToGetDateFromText(
+            newValue as String,
+          ),
+      getValueForSerialization: (final MoneyObject instance) =>
+          dateToIso8601OrDefaultString(getField(instance as Event).value),
     );
   }
 }

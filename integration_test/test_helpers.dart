@@ -22,9 +22,7 @@ Future<void> tapOnText(
 }
 
 Finder findByKeyString(final String keyString) {
-  final Finder firstMatchingElement = find
-      .byKey(Key(keyString))
-      .at(0); // top most element
+  final Finder firstMatchingElement = find.byKey(Key(keyString)).at(0); // top most element
   expect(firstMatchingElement, findsOneWidget);
   return firstMatchingElement;
 }
@@ -46,9 +44,7 @@ Future<void> tapOnKey(final WidgetTester tester, final Key key) async {
 }
 
 Future<void> tapOnWidgetType(final WidgetTester tester, final Type type) async {
-  final Finder firstMatchingElement = find
-      .byElementType(type)
-      .at(0); // top most element
+  final Finder firstMatchingElement = find.byElementType(type).at(0); // top most element
   expect(firstMatchingElement, findsOneWidget);
   await tester.tap(firstMatchingElement, warnIfMissed: false);
   await tester.myPump();
@@ -93,8 +89,7 @@ Future<Finder> tapOnFirstRowOfListViewFirstOrLast(
   );
   expect(firstMatchingElement, findsAny);
 
-  firstMatchingElement =
-      first ? firstMatchingElement.first : firstMatchingElement.last;
+  firstMatchingElement = first ? firstMatchingElement.first : firstMatchingElement.last;
 
   expect(firstMatchingElement, findsOneWidget);
   // for row we tap on the top left side to avoid any active widget in the row like "Split", "Accept suggestion"
@@ -250,9 +245,7 @@ Future<void> inputTextToElementByKey(
   Key keyToElement,
   String textToEnter,
 ) async {
-  final Finder firstMatchingElement = find
-      .byKey(keyToElement)
-      .at(0); // top most element
+  final Finder firstMatchingElement = find.byKey(keyToElement).at(0); // top most element
   await tester.enterText(firstMatchingElement, textToEnter);
   await tester.testTextInput.receiveAction(TextInputAction.done);
   await tester.myPump();
@@ -285,8 +278,7 @@ Future<void> inputTextToTextFieldWithThisLabel(
 
 Finder findTextFieldByLabel(final String labelToFind) {
   final Finder textFieldFinder = find.byWidgetPredicate(
-    (Widget widget) =>
-        widget is TextField && widget.decoration?.labelText == labelToFind,
+    (Widget widget) => widget is TextField && widget.decoration?.labelText == labelToFind,
   );
   return textFieldFinder;
 }

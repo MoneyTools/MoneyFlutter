@@ -48,15 +48,15 @@ class ImportInvestmentPanelState extends State<ImportInvestmentPanel> {
   late final TextEditingController _controllerAmount = TextEditingController(
     text: widget.inputFields.amountPerUnit.toString(),
   );
-  late final TextEditingController _controllerDescription =
-      TextEditingController(text: widget.inputFields.description.toString());
+  late final TextEditingController _controllerDescription = TextEditingController(
+    text: widget.inputFields.description.toString(),
+  );
   late final TextEditingController _controllerSymbol = TextEditingController(
     text: widget.inputFields.symbol.toString(),
   );
-  late final TextEditingController _controllerTransactionAmount =
-      TextEditingController(
-        text: widget.inputFields.transactionAmount.toString(),
-      );
+  late final TextEditingController _controllerTransactionAmount = TextEditingController(
+    text: widget.inputFields.transactionAmount.toString(),
+  );
 
   late final TextEditingController _controllerUnites = TextEditingController(
     text: widget.inputFields.units.toString(),
@@ -127,9 +127,7 @@ class ImportInvestmentPanelState extends State<ImportInvestmentPanel> {
                     initialValue: dateToString(widget.inputFields.date),
                     onChanged: (String? newDateSelected) {
                       if (newDateSelected != null) {
-                        widget.inputFields.date =
-                            attemptToGetDateFromText(newDateSelected) ??
-                            DateTime.now();
+                        widget.inputFields.date = attemptToGetDateFromText(newDateSelected) ?? DateTime.now();
                       }
                     },
                   ),
@@ -201,10 +199,8 @@ class ImportInvestmentPanelState extends State<ImportInvestmentPanel> {
   void _updateInputFields() {
     widget.inputFields.symbol = _controllerSymbol.text;
     widget.inputFields.units = double.tryParse(_controllerUnites.text) ?? 0.0;
-    widget.inputFields.amountPerUnit =
-        double.tryParse(_controllerAmount.text) ?? 0.0;
-    widget.inputFields.transactionAmount =
-        double.tryParse(_controllerTransactionAmount.text) ?? 0.0;
+    widget.inputFields.amountPerUnit = double.tryParse(_controllerAmount.text) ?? 0.0;
+    widget.inputFields.transactionAmount = double.tryParse(_controllerTransactionAmount.text) ?? 0.0;
     widget.inputFields.description = _controllerDescription.text;
   }
 }

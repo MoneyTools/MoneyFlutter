@@ -35,8 +35,7 @@ String doubleToCurrency(
     symbol: symbol,
   );
   // Format the double value as currency text
-  return (showPlusSign ? getPlusSignIfPositive(value) : '') +
-      currencyFormatter.format(value);
+  return (showPlusSign ? getPlusSignIfPositive(value) : '') + currencyFormatter.format(value);
 }
 
 String getPlusSignIfPositive(final num value) {
@@ -50,8 +49,7 @@ String escapeString(String input) => input.replaceAll("'", "''");
 
 String formatDoubleUpToFiveZero(double value, {bool showPlusSign = false}) {
   final NumberFormat formatter = NumberFormat('#,##0.#####', 'en_US');
-  return getPrefixPlusSignIfNeeded(value, showPlusSign: showPlusSign) +
-      formatter.format(value);
+  return getPrefixPlusSignIfNeeded(value, showPlusSign: showPlusSign) + formatter.format(value);
 }
 
 String formatDoubleTrimZeros(double value) {
@@ -65,8 +63,7 @@ String getAmountAsShorthandText(
   final String symbol = '',
 }) => NumberFormat.compactCurrency(
   decimalDigits: decimalDigits,
-  symbol:
-      symbol, // if you want to add currency symbol then pass that in this else leave it empty.
+  symbol: symbol, // if you want to add currency symbol then pass that in this else leave it empty.
 ).format(value);
 
 List<String> getColumnInCsvLine(final String csvLine) {
@@ -93,12 +90,10 @@ Future<String> getDocumentDirectory() async {
   return directory.path;
 }
 
-String getInitials(String fullName) =>
-    fullName.split(' ').map((String word) => word[0].toUpperCase()).join('');
+String getInitials(String fullName) => fullName.split(' ').map((String word) => word[0].toUpperCase()).join('');
 
 String getIntAsText(final int value, {final bool showPlusSign = false}) =>
-    getPrefixPlusSignIfNeeded(value, showPlusSign: showPlusSign) +
-    NumberFormat.decimalPattern().format(value);
+    getPrefixPlusSignIfNeeded(value, showPlusSign: showPlusSign) + NumberFormat.decimalPattern().format(value);
 
 String getPrefixPlusSignIfNeeded(
   final num value, {
@@ -165,15 +160,10 @@ String getNormalizedValue(final String? s) {
     return '';
   }
 
-  return s
-      .replaceAll('\r\n', ' ')
-      .replaceAll('\r', ' ')
-      .replaceAll('\n', ' ')
-      .trim();
+  return s.replaceAll('\r\n', ' ').replaceAll('\r', ' ').replaceAll('\n', ' ').trim();
 }
 
-String getNumberShorthandText(final num value) =>
-    NumberFormat.compact().format(value);
+String getNumberShorthandText(final num value) => NumberFormat.compact().format(value);
 
 String getSingularPluralText(
   final String title,
@@ -381,13 +371,9 @@ double? parseAmount(String amountAsText, final String currency) {
 
 /// Remove any characters not in the allowedChars argument
 String cleanString(String inputStr, String allowedChars) =>
-    inputStr
-        .split('')
-        .where((String char) => allowedChars.contains(char))
-        .join();
+    inputStr.split('').where((String char) => allowedChars.contains(char)).join();
 
-String validIntToCurrency(final num value) =>
-    getIntAsText(isNumber(value) ? value.toInt() : 0, showPlusSign: true);
+String validIntToCurrency(final num value) => getIntAsText(isNumber(value) ? value.toInt() : 0, showPlusSign: true);
 
 String validDoubleToCurrency(final num value) => doubleToCurrency(
   isNumber(value) ? value.toDouble() : 0.0,

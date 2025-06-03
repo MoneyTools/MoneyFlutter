@@ -80,15 +80,10 @@ class MoneySplit extends MoneyObject {
   FieldMoney fieldAmount = FieldMoney(
     name: 'Amount',
     serializeName: 'Amount',
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as MoneySplit).fieldAmount.value,
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as MoneySplit).fieldAmount.value.asDouble(),
-    setValue:
-        (MoneyObject instance, dynamic newValue) =>
-            (instance as MoneySplit).fieldAmount.value.setAmount(newValue),
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldAmount.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldAmount.value.asDouble(),
+    setValue: (MoneyObject instance, dynamic newValue) =>
+        (instance as MoneySplit).fieldAmount.value.setAmount(newValue),
   );
 
   // 8
@@ -96,13 +91,10 @@ class MoneySplit extends MoneyObject {
     name: 'Budgeted Date',
     serializeName: 'BudgetBalanceDate',
     columnWidth: ColumnWidth.hidden,
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as MoneySplit).fieldBudgetBalanceDate.value,
-    getValueForSerialization:
-        (final MoneyObject instance) => dateToIso8601OrDefaultString(
-          (instance as MoneySplit).fieldBudgetBalanceDate.value,
-        ),
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldBudgetBalanceDate.value,
+    getValueForSerialization: (final MoneyObject instance) => dateToIso8601OrDefaultString(
+      (instance as MoneySplit).fieldBudgetBalanceDate.value,
+    ),
   );
 
   // 2
@@ -119,62 +111,56 @@ class MoneySplit extends MoneyObject {
 
       return SuggestionApproval(
         onApproved: null,
-        onChooseCategory:
-            instance.fieldCategoryId.value == -1
-                ? (final BuildContext context) {
-                  showPopupSelection(
-                    title: 'Category',
-                    context: context,
-                    items: Data().categories.getCategoriesAsStrings(),
-                    selectedItem: '',
-                    onSelected: (final String text) {
-                      final Category? selectedCategory = Data().categories
-                          .getByName(text);
-                      if (selectedCategory != null) {
-                        instance.fieldCategoryId.value =
-                            selectedCategory.uniqueId;
-                      }
-                    },
-                  );
-                }
-                : null,
+        onChooseCategory: instance.fieldCategoryId.value == -1
+            ? (final BuildContext context) {
+                showPopupSelection(
+                  title: 'Category',
+                  context: context,
+                  items: Data().categories.getCategoriesAsStrings(),
+                  selectedItem: '',
+                  onSelected: (final String text) {
+                    final Category? selectedCategory = Data().categories.getByName(text);
+                    if (selectedCategory != null) {
+                      instance.fieldCategoryId.value = selectedCategory.uniqueId;
+                    }
+                  },
+                );
+              }
+            : null,
         onShowSplit: null,
         child: Tooltip(message: instance.categoryName, child: categoryWidget),
       );
     },
-    getValueForReading:
-        (final MoneyObject instance) => (instance as MoneySplit).categoryName,
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as MoneySplit).fieldCategoryId.value,
-    setValue:
-        (final MoneyObject instance, dynamic newValue) =>
-            (instance as MoneySplit).fieldCategoryId.value = newValue as int,
-    getEditWidget: (
-      final MoneyObject instance,
-      void Function(bool wasModified) onEdited,
-    ) {
-      (instance as MoneySplit);
-      return Row(
-        children: <Widget>[
-          Expanded(
-            child: pickerCategory(
-              key: const Key('key_pick_category'),
-              itemSelected: Data().categories.get(
-                instance.fieldCategoryId.value,
+    getValueForReading: (final MoneyObject instance) => (instance as MoneySplit).categoryName,
+    getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldCategoryId.value,
+    setValue: (final MoneyObject instance, dynamic newValue) =>
+        (instance as MoneySplit).fieldCategoryId.value = newValue as int,
+    getEditWidget:
+        (
+          final MoneyObject instance,
+          void Function(bool wasModified) onEdited,
+        ) {
+          (instance as MoneySplit);
+          return Row(
+            children: <Widget>[
+              Expanded(
+                child: pickerCategory(
+                  key: const Key('key_pick_category'),
+                  itemSelected: Data().categories.get(
+                    instance.fieldCategoryId.value,
+                  ),
+                  onSelected: (Category? newCategory) {
+                    if (newCategory != null) {
+                      instance.fieldCategoryId.value = newCategory.uniqueId;
+                      // notify container
+                      onEdited(true);
+                    }
+                  },
+                ),
               ),
-              onSelected: (Category? newCategory) {
-                if (newCategory != null) {
-                  instance.fieldCategoryId.value = newCategory.uniqueId;
-                  // notify container
-                  onEdited(true);
-                }
-              },
-            ),
-          ),
-        ],
-      );
-    },
+            ],
+          );
+        },
   );
 
   // 7
@@ -183,30 +169,21 @@ class MoneySplit extends MoneyObject {
     serializeName: 'Flags',
     columnWidth: ColumnWidth.hidden,
     align: TextAlign.center,
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as MoneySplit).fieldFlags.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldFlags.value,
   );
 
   // 1
   FieldId fieldId = FieldId(
-    getValueForSerialization:
-        (final MoneyObject instance) => (instance as MoneySplit).uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).uniqueId,
   );
 
   // 6
   FieldString fieldMemo = FieldString(
     name: 'Memo',
     serializeName: 'Memo',
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as MoneySplit).fieldMemo.value,
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as MoneySplit).fieldMemo.value,
-    setValue:
-        (MoneyObject instance, dynamic newValue) =>
-            (instance as MoneySplit).fieldMemo.value = newValue as String,
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldMemo.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldMemo.value,
+    setValue: (MoneyObject instance, dynamic newValue) => (instance as MoneySplit).fieldMemo.value = newValue as String,
   );
 
   // 3
@@ -215,13 +192,10 @@ class MoneySplit extends MoneyObject {
     serializeName: 'Payee',
     type: FieldType.text,
     align: TextAlign.left,
-    getValueForDisplay:
-        (final MoneyObject instance) => Data().payees.getNameFromId(
-          (instance as MoneySplit).fieldPayeeId.value,
-        ),
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as MoneySplit).fieldPayeeId.value,
+    getValueForDisplay: (final MoneyObject instance) => Data().payees.getNameFromId(
+      (instance as MoneySplit).fieldPayeeId.value,
+    ),
+    getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldPayeeId.value,
   );
 
   // 0
@@ -229,12 +203,8 @@ class MoneySplit extends MoneyObject {
     name: 'Transaction',
     serializeName: 'Transaction',
     columnWidth: ColumnWidth.hidden,
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as MoneySplit).fieldTransactionId.value,
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as MoneySplit).fieldTransactionId.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldTransactionId.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldTransactionId.value,
   );
 
   // 5
@@ -242,12 +212,8 @@ class MoneySplit extends MoneyObject {
     name: 'Transfer',
     serializeName: 'Transfer',
     columnWidth: ColumnWidth.hidden,
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as MoneySplit).fieldTransferId.value,
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as MoneySplit).fieldTransferId.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldTransferId.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldTransferId.value,
   );
 
   // Fields for this instance
@@ -268,8 +234,7 @@ class MoneySplit extends MoneyObject {
 
   static final Fields<MoneySplit> _fields = Fields<MoneySplit>();
 
-  String get categoryName =>
-      Data().categories.getNameFromId(fieldCategoryId.value);
+  String get categoryName => Data().categories.getNameFromId(fieldCategoryId.value);
 
   static Fields<MoneySplit> get fields {
     if (_fields.isEmpty) {

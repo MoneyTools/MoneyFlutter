@@ -21,8 +21,7 @@ class PickPayeeOrTransfer extends StatefulWidget {
   final Account? account;
   final double amount;
   final TransactionFlavor choice;
-  final void Function(TransactionFlavor choice, Payee? payee, Account? account)
-  onSelected;
+  final void Function(TransactionFlavor choice, Payee? payee, Account? account) onSelected;
   final Payee? payee;
 
   @override

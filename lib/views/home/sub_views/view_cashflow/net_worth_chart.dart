@@ -35,14 +35,12 @@ class NetWorthChartState extends State<NetWorthChart> {
   void initState() {
     super.initState();
 
-    _transactions =
-        Data().transactions
-            .iterableList(includeDeleted: true)
-            .where((Transaction t) => t.isTransfer == false)
-            .toList();
+    _transactions = Data().transactions
+        .iterableList(includeDeleted: true)
+        .where((Transaction t) => t.isTransfer == false)
+        .toList();
 
-    final List<FlSpot> tmpDataPointsWithNetWorth =
-        Transactions.cumulateTransactionPerYearMonth(_transactions);
+    final List<FlSpot> tmpDataPointsWithNetWorth = Transactions.cumulateTransactionPerYearMonth(_transactions);
 
     _yearMonthDataPoints.addAll(
       tmpDataPointsWithNetWorth.where(
@@ -60,16 +58,15 @@ class NetWorthChartState extends State<NetWorthChart> {
     const double marginLeft = 80.0;
     const double marginBottom = 50.0;
 
-    final List<Transaction> transactionSubSet =
-        _transactions
-            .where(
-              (Transaction t) => isBetweenOrEqual(
-                t.fieldDateTime.value!.year,
-                widget.minYear,
-                widget.maxYear,
-              ),
-            )
-            .toList();
+    final List<Transaction> transactionSubSet = _transactions
+        .where(
+          (Transaction t) => isBetweenOrEqual(
+            t.fieldDateTime.value!.year,
+            widget.minYear,
+            widget.maxYear,
+          ),
+        )
+        .toList();
 
     _milestoneTransactions = getMilestonesEvents(transactionSubSet);
 
@@ -111,10 +108,7 @@ List<ChartEvent> getMilestonesEvents(final List<Transaction> transactions) {
           quantity: 1,
           colorBasedOnQuantity: false, // use Amount
           description: event.fieldName.value,
-          color:
-              category == null
-                  ? Colors.blue
-                  : category.getColorOrAncestorsColor(),
+          color: category == null ? Colors.blue : category.getColorOrAncestorsColor(),
         ),
       );
     }
@@ -122,29 +116,20 @@ List<ChartEvent> getMilestonesEvents(final List<Transaction> transactions) {
   }
 
   // Calculate Z-scores for outlier detection based on amount
-  final List<double> amounts =
-      transactions
-          .map((Transaction t) => t.fieldAmount.value.asDouble())
-          .toList();
+  final List<double> amounts = transactions.map((Transaction t) => t.fieldAmount.value.asDouble()).toList();
   if (amounts.isEmpty) {
     // nothing to work on;
     return <ChartEvent>[];
   }
 
   // Find outlier events
-  final double mean =
-      amounts.reduce((double a, double b) => a + b) / amounts.length;
+  final double mean = amounts.reduce((double a, double b) => a + b) / amounts.length;
   final double variance =
-      amounts
-          .map((double amount) => (amount - mean) * (amount - mean))
-          .reduce((double a, double b) => a + b) /
+      amounts.map((double amount) => (amount - mean) * (amount - mean)).reduce((double a, double b) => a + b) /
       amounts.length;
   final double stdDev = sqrt(variance);
 
-  final List<double> zScores =
-      amounts
-          .map((double amount) => stdDev == 0 ? 0.0 : (amount - mean) / stdDev)
-          .toList();
+  final List<double> zScores = amounts.map((double amount) => stdDev == 0 ? 0.0 : (amount - mean) / stdDev).toList();
 
   for (int i = 0; i < transactions.length; i++) {
     final double zScore = zScores[i];

@@ -13,8 +13,7 @@ class TransactionTimelineChart extends StatefulWidget {
   final List<Transaction> transactions;
 
   @override
-  State<TransactionTimelineChart> createState() =>
-      _TransactionTimelineChartState();
+  State<TransactionTimelineChart> createState() => _TransactionTimelineChartState();
 }
 
 enum TimelineScale { daily, weekly, monthly, yearly }
@@ -42,15 +41,14 @@ class _TransactionTimelineChartState extends State<TransactionTimelineChart> {
                   _selectedScale = newValue!;
                 });
               },
-              items:
-                  TimelineScale.values.map<DropdownMenuItem<TimelineScale>>((
-                    TimelineScale value,
-                  ) {
-                    return DropdownMenuItem<TimelineScale>(
-                      value: value,
-                      child: Text(value.name),
-                    );
-                  }).toList(),
+              items: TimelineScale.values.map<DropdownMenuItem<TimelineScale>>((
+                TimelineScale value,
+              ) {
+                return DropdownMenuItem<TimelineScale>(
+                  value: value,
+                  child: Text(value.name),
+                );
+              }).toList(),
             ),
             gapMedium(),
             MyIconButton(
@@ -77,16 +75,14 @@ class _TransactionTimelineChartState extends State<TransactionTimelineChart> {
       case TimelineScale.daily:
         return Transactions.transactionSumBy(
           widget.transactions,
-          (DateTime date) =>
-              dateToString(DateTime(date.year, date.month, date.day)),
+          (DateTime date) => dateToString(DateTime(date.year, date.month, date.day)),
         );
 
       // WEEKLY
       case TimelineScale.weekly:
         return Transactions.transactionSumBy(
           widget.transactions,
-          (DateTime date) =>
-              dateToString(date.subtract(Duration(days: date.weekday))),
+          (DateTime date) => dateToString(date.subtract(Duration(days: date.weekday))),
         );
 
       // MONTHLY
@@ -108,8 +104,7 @@ class _TransactionTimelineChartState extends State<TransactionTimelineChart> {
   void _copyToClipboard(List<PairXYY> data) {
     final String clipboardData = data
         .map(
-          (PairXYY pair) =>
-              '${pair.xText} : ${Currency.getAmountAsStringUsingCurrency(pair.yValue1)}',
+          (PairXYY pair) => '${pair.xText} : ${Currency.getAmountAsStringUsingCurrency(pair.yValue1)}',
         )
         .join('\n');
     Clipboard.setData(ClipboardData(text: clipboardData));

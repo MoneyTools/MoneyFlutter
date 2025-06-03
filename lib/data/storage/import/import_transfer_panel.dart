@@ -37,17 +37,16 @@ class ImportFieldsForTransferPanel extends StatefulWidget {
   final ImportFieldsForTransfer inputFields;
 
   @override
-  ImportFieldsForTransferPanelState createState() =>
-      ImportFieldsForTransferPanelState();
+  ImportFieldsForTransferPanelState createState() => ImportFieldsForTransferPanelState();
 }
 
-class ImportFieldsForTransferPanelState
-    extends State<ImportFieldsForTransferPanel> {
+class ImportFieldsForTransferPanelState extends State<ImportFieldsForTransferPanel> {
   late final TextEditingController _controllerAmount = TextEditingController(
     text: widget.inputFields.amount.toString(),
   );
-  late final TextEditingController _controllerDescription =
-      TextEditingController(text: widget.inputFields.memo.toString());
+  late final TextEditingController _controllerDescription = TextEditingController(
+    text: widget.inputFields.memo.toString(),
+  );
   final FocusNode _focusNode = FocusNode();
   final SafeKeyboardHandler _keyboardHandler = SafeKeyboardHandler();
 
@@ -139,9 +138,7 @@ class ImportFieldsForTransferPanelState
                       initialValue: dateToString(widget.inputFields.date),
                       onChanged: (String? newDateSelected) {
                         if (newDateSelected != null) {
-                          widget.inputFields.date =
-                              attemptToGetDateFromText(newDateSelected) ??
-                              DateTime.now();
+                          widget.inputFields.date = attemptToGetDateFromText(newDateSelected) ?? DateTime.now();
                         }
                       },
                     ),

@@ -21,41 +21,32 @@ class Payee extends MoneyObject {
   Set<String> categories = <String>{};
   FieldString fieldCategoriesAsText = FieldString(
     name: 'Categories',
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as Payee).getCategoriesAsString(),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Payee).getCategoriesAsString(),
   );
 
   FieldInt fieldCount = FieldInt(
     name: 'Transactions',
     columnWidth: ColumnWidth.small,
-    getValueForDisplay:
-        (final MoneyObject instance) => (instance as Payee).fieldCount.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Payee).fieldCount.value,
   );
 
   // 0 - ID
   FieldId fieldId = FieldId(
-    getValueForSerialization:
-        (final MoneyObject instance) => (instance as Payee).uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Payee).uniqueId,
   );
 
   // 1
   FieldString fieldName = FieldString(
     name: 'Name',
     serializeName: 'Name',
-    getValueForDisplay:
-        (final MoneyObject instance) => (instance as Payee).fieldName.value,
-    getValueForSerialization:
-        (final MoneyObject instance) => (instance as Payee).fieldName.value,
-    setValue:
-        (final MoneyObject instance, dynamic value) =>
-            (instance as Payee).fieldName.value = value as String,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Payee).fieldName.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Payee).fieldName.value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Payee).fieldName.value = value as String,
   );
 
   FieldMoney fieldSum = FieldMoney(
     name: 'Sum',
-    getValueForDisplay:
-        (final MoneyObject instance) => (instance as Payee).fieldSum.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Payee).fieldSum.value,
   );
 
   @override

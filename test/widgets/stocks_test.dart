@@ -14,9 +14,7 @@ import 'package:money/data/storage/get_stock_from_cache_or_backend.dart';
 import 'package:money/views/home/sub_views/view_stocks/stock_chart.dart';
 
 // Mock the SharedPreference
-class MockPreferenceController extends GetxController
-    with Mock
-    implements PreferenceController {
+class MockPreferenceController extends GetxController with Mock implements PreferenceController {
   @override
   String getString(String key, [String defaultValueIfNotFound = '']) {
     switch (key) {
@@ -44,10 +42,9 @@ class MockPreferenceController extends GetxController
 // @GenerateMocks([http.Client])
 class MockHttpClient extends Mock implements http.Client {
   @override
-  Future<http.Response> get(Uri url, {Map<String, String>? headers}) =>
-      Future<http.Response>.value(
-        http.Response(jsonEncode(<String, String>{'key': 'value'}), 200),
-      );
+  Future<http.Response> get(Uri url, {Map<String, String>? headers}) => Future<http.Response>.value(
+    http.Response(jsonEncode(<String, String>{'key': 'value'}), 200),
+  );
 }
 
 void main() {
@@ -102,19 +99,18 @@ void main() {
     testWidgets('renders chart when data is available', (
       WidgetTester tester,
     ) async {
-      final MoneyObject newFakeSecurity = Data().securities
-          .appendNewMoneyObject(
-            Security.fromJson(<String, dynamic>{
-              'Id': -1,
-              'name': 'Fake Company',
-              'symbol': Constants.mockStockSymbol,
-              'price': 1.23,
-              'lastPrice': 0.0,
-              'cuspid': 'F0001',
-              'securityType': 0,
-              'taxable': 0,
-            }),
-          );
+      final MoneyObject newFakeSecurity = Data().securities.appendNewMoneyObject(
+        Security.fromJson(<String, dynamic>{
+          'Id': -1,
+          'name': 'Fake Company',
+          'symbol': Constants.mockStockSymbol,
+          'price': 1.23,
+          'lastPrice': 0.0,
+          'cuspid': 'F0001',
+          'securityType': 0,
+          'taxable': 0,
+        }),
+      );
 
       final List<StockSplit> stockSplits = <StockSplit>[
         StockSplit(

@@ -31,9 +31,7 @@ class RentUnit extends MoneyObject {
   FieldInt fieldBuilding = FieldInt(
     name: 'Building',
     serializeName: 'Building',
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as RentUnit).fieldBuilding.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).fieldBuilding.value,
   );
 
   /// Id
@@ -47,8 +45,7 @@ class RentUnit extends MoneyObject {
   FieldString fieldName = FieldString(
     name: 'Name',
     serializeName: 'Name',
-    getValueForSerialization:
-        (final MoneyObject instance) => (instance as RentUnit).fieldName.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).fieldName.value,
   );
 
   /// 4
@@ -56,8 +53,7 @@ class RentUnit extends MoneyObject {
   FieldString fieldNote = FieldString(
     name: 'Note',
     serializeName: 'Note',
-    getValueForSerialization:
-        (final MoneyObject instance) => (instance as RentUnit).fieldNote.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).fieldNote.value,
   );
 
   /// 3
@@ -65,9 +61,7 @@ class RentUnit extends MoneyObject {
   FieldString fieldRenter = FieldString(
     name: 'Renter',
     serializeName: 'Renter',
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as RentUnit).fieldRenter.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).fieldRenter.value,
   );
 
   // Fields for this instance

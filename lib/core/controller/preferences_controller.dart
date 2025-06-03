@@ -76,12 +76,10 @@ class PreferenceController extends GetxController {
 
   ///---------------------------------
   /// Selected SidePanel Tab
-  final Rx<SidePanelSubViewEnum> _selectedSidePanelTabId =
-      SidePanelSubViewEnum.details.obs;
+  final Rx<SidePanelSubViewEnum> _selectedSidePanelTabId = SidePanelSubViewEnum.details.obs;
 
   /// GET
-  SidePanelSubViewEnum get selectedSidePanelTabId =>
-      _selectedSidePanelTabId.value;
+  SidePanelSubViewEnum get selectedSidePanelTabId => _selectedSidePanelTabId.value;
 
   /// SET
   set selectedSidePanelTabId(SidePanelSubViewEnum value) {
@@ -151,16 +149,14 @@ class PreferenceController extends GetxController {
       _preferences?.getDouble(key) ?? defaultValueIfNotFound;
 
   // Retrieve an integer value from preferences
-  int getInt(String key, [int defaultValueIfNotFound = 0]) =>
-      _preferences?.getInt(key) ?? defaultValueIfNotFound;
+  int getInt(String key, [int defaultValueIfNotFound = 0]) => _preferences?.getInt(key) ?? defaultValueIfNotFound;
 
   // Retrieve a string value from preferences
   String getString(String key, [String defaultValueIfNotFound = '']) =>
       _preferences?.getString(key) ?? defaultValueIfNotFound;
 
   // Retrieve a list of strings from preferences
-  Future<List<String>> getStringList(String key) async =>
-      _preferences?.getStringList(key) ?? <String>[];
+  Future<List<String>> getStringList(String key) async => _preferences?.getStringList(key) ?? <String>[];
 
   String get getUniqueState =>
       'isReady:${isReady.value} Rental:$includeRentalManagement IncludeClosedAccounts:$includeClosedAccounts TextScale:$textScale';
@@ -230,9 +226,7 @@ class PreferenceController extends GetxController {
     // Side Panel Height
     _sidePanelHeight.value = getInt(
       settingKeySidePanelHeight,
-      isSidePanelExpanded
-          ? Constants.sidePanelHeightWhenExpanded
-          : Constants.sidePanelHeightWhenCollapsed,
+      isSidePanelExpanded ? Constants.sidePanelHeightWhenExpanded : Constants.sidePanelHeightWhenCollapsed,
     );
 
     _includeClosedAccounts.value = getBool(

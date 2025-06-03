@@ -53,12 +53,10 @@ List<Widget> getActionButtons(
           final Transaction newTransactionFromAccount = Transaction(
             date: inputData.date,
           );
-          newTransactionFromAccount.fieldAccountId.value =
-              inputData.accountFrom.uniqueId;
+          newTransactionFromAccount.fieldAccountId.value = inputData.accountFrom.uniqueId;
           newTransactionFromAccount.fieldMemo.value = inputData.memo;
           if (inputData.category != null) {
-            newTransactionFromAccount.fieldCategoryId.value =
-                inputData.category!.uniqueId;
+            newTransactionFromAccount.fieldCategoryId.value = inputData.category!.uniqueId;
           }
           newTransactionFromAccount.fieldAmount.value.setAmount(
             inputData.amount.abs() * -1,

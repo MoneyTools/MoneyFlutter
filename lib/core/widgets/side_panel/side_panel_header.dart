@@ -83,17 +83,11 @@ class SidePanelHeader extends StatelessWidget {
       segments: <ButtonSegment<int>>[
         ButtonSegment<int>(
           value: 0,
-          label:
-              smallDevice
-                  ? Text(currencyChoices[0])
-                  : Currency.buildCurrencyWidget(currencyChoices[0]),
+          label: smallDevice ? Text(currencyChoices[0]) : Currency.buildCurrencyWidget(currencyChoices[0]),
         ),
         ButtonSegment<int>(
           value: 1,
-          label:
-              smallDevice
-                  ? Text(currencyChoices[1])
-                  : Currency.buildCurrencyWidget(currencyChoices[1]),
+          label: smallDevice ? Text(currencyChoices[1]) : Currency.buildCurrencyWidget(currencyChoices[1]),
         ),
       ],
       selectedId: currencySelected,

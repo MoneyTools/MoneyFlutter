@@ -87,8 +87,7 @@ class _AdaptiveViewWithListState extends State<AdaptiveViewWithList> {
   void _rebuild() async {
     if (PreferenceController.to.isSidePanelExpanded) {
       // save the height of the side panel
-      PreferenceController.to.sidePanelHeight =
-          _splitController.areas[1].size!.toInt();
+      PreferenceController.to.sidePanelHeight = _splitController.areas[1].size!.toInt();
     }
   }
 
@@ -116,22 +115,21 @@ class _AdaptiveViewWithListState extends State<AdaptiveViewWithList> {
           onKeyEvent: _handleKeyboardShortcuts,
           child: ValueListenableBuilder<List<int>>(
             valueListenable: widget.selectedItemsByUniqueId,
-            builder: (
-              final BuildContext context,
-              final List<int> selectedItems,
-              final _,
-            ) {
-              return MultiSplitView(
-                controller: _splitController,
-                axis: Axis.vertical,
-                dividerBuilder: _buildSplitDivider,
-                builder: (BuildContext context, Area area) {
-                  return area.index == 0
-                      ? topSection(displayAsColumns)
-                      : widget.bottom;
+            builder:
+                (
+                  final BuildContext context,
+                  final List<int> selectedItems,
+                  final _,
+                ) {
+                  return MultiSplitView(
+                    controller: _splitController,
+                    axis: Axis.vertical,
+                    dividerBuilder: _buildSplitDivider,
+                    builder: (BuildContext context, Area area) {
+                      return area.index == 0 ? topSection(displayAsColumns) : widget.bottom;
+                    },
+                  );
                 },
-              );
-            },
           ),
         );
       },
@@ -149,9 +147,7 @@ class _AdaptiveViewWithListState extends State<AdaptiveViewWithList> {
 
       // Command+J for macOS or Ctrl+J for Windows/Linux
       if (event.logicalKey == LogicalKeyboardKey.keyJ &&
-          (Platform.isMacOS
-              ? HardwareKeyboard.instance.isMetaPressed
-              : HardwareKeyboard.instance.isControlPressed)) {
+          (Platform.isMacOS ? HardwareKeyboard.instance.isMetaPressed : HardwareKeyboard.instance.isControlPressed)) {
         _toggleSidePanel();
         return KeyEventResult.handled;
       }
@@ -162,8 +158,7 @@ class _AdaptiveViewWithListState extends State<AdaptiveViewWithList> {
   // Extract panel toggle to a separate method
   void _toggleSidePanel() {
     setState(() {
-      PreferenceController.to.isSidePanelExpanded =
-          !PreferenceController.to.isSidePanelExpanded;
+      PreferenceController.to.isSidePanelExpanded = !PreferenceController.to.isSidePanelExpanded;
     });
     HapticFeedback.lightImpact();
   }
@@ -171,15 +166,11 @@ class _AdaptiveViewWithListState extends State<AdaptiveViewWithList> {
   // Extract split panel configuration to a separate method
   void _configureSplitPanelAreas() {
     if (PreferenceController.to.isSidePanelExpanded) {
-      _splitController.areas[1].min =
-          Constants.sidePanelHeightWhenCollapsed + 100.0;
-      _splitController.areas[1].size =
-          PreferenceController.to.sidePanelHeight.toDouble();
+      _splitController.areas[1].min = Constants.sidePanelHeightWhenCollapsed + 100.0;
+      _splitController.areas[1].size = PreferenceController.to.sidePanelHeight.toDouble();
     } else {
-      _splitController.areas[1].min =
-          Constants.sidePanelHeightWhenCollapsed + 0.0;
-      _splitController.areas[1].size =
-          Constants.sidePanelHeightWhenCollapsed.toDouble();
+      _splitController.areas[1].min = Constants.sidePanelHeightWhenCollapsed + 0.0;
+      _splitController.areas[1].size = Constants.sidePanelHeightWhenCollapsed.toDouble();
     }
   }
 

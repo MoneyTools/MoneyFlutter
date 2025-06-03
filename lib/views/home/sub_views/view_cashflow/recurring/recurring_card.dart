@@ -128,9 +128,7 @@ class RecurringCard extends StatelessWidget {
               values: sumByDays,
               yearStart: dateRangeSearch.min!.year,
               yearEnd: dateRangeSearch.max!.year,
-              offsetStartingDay:
-                  dateRangeSearch.min!.millisecondsSinceEpoch ~/
-                  Duration.millisecondsPerDay,
+              offsetStartingDay: dateRangeSearch.min!.millisecondsSinceEpoch ~/ Duration.millisecondsPerDay,
               color: getColorTheme(context).primary,
             ),
           ),

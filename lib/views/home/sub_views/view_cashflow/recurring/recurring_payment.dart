@@ -21,10 +21,8 @@ class RecurringPayment {
     categoryIdsAndSums = <Pair<int, double>>[];
     frequency = transactions.length;
 
-    final MapAccumulatorSum<int, int, double> payeeIdMonthAndSums =
-        MapAccumulatorSum<int, int, double>();
-    final Map<int, AccumulatorSum<int, double>> payeeIdCategoryIdsAndSums =
-        <int, AccumulatorSum<int, double>>{};
+    final MapAccumulatorSum<int, int, double> payeeIdMonthAndSums = MapAccumulatorSum<int, int, double>();
+    final Map<int, AccumulatorSum<int, double>> payeeIdCategoryIdsAndSums = <int, AccumulatorSum<int, double>>{};
 
     averagePerMonths = List<Pair<int, double>>.generate(
       12,
@@ -72,8 +70,7 @@ class RecurringPayment {
 
     // sum per month
     sumPerMonths = List<double>.generate(12, (int index) => 0);
-    final AccumulatorSum<int, double> monthSums2 =
-        payeeIdMonthAndSums.getLevel1(payeeId)!;
+    final AccumulatorSum<int, double> monthSums2 = payeeIdMonthAndSums.getLevel1(payeeId)!;
     monthSums2.values.forEach((int month, double sum) {
       sumPerMonths[month - 1] = sum.abs();
     });
@@ -124,13 +121,11 @@ class RecurringPayment {
     // Sort descending
     if (asIncome) {
       list.sort(
-        (Pair<int, double> a, Pair<int, double> b) =>
-            b.second.compareTo(a.second),
+        (Pair<int, double> a, Pair<int, double> b) => b.second.compareTo(a.second),
       );
     } else {
       list.sort(
-        (Pair<int, double> a, Pair<int, double> b) =>
-            a.second.compareTo(b.second),
+        (Pair<int, double> a, Pair<int, double> b) => a.second.compareTo(b.second),
       );
     }
 

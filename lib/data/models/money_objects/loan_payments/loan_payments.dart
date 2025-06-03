@@ -45,19 +45,15 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
   ];
 
   // include the manual entries done in the LoanPayments table
-  final List<LoanPayment> aggregatedList =
-      Data().loanPayments
-          .iterableList(includeDeleted: false)
-          .where((LoanPayment a) => a.fieldAccountId.value == account.uniqueId)
-          .toList();
+  final List<LoanPayment> aggregatedList = Data().loanPayments
+      .iterableList(includeDeleted: false)
+      .where((LoanPayment a) => a.fieldAccountId.value == account.uniqueId)
+      .toList();
 
   // include the bank transactions matching the Account Categories for Principal and Interest
-  final List<Transaction> listOfTransactions = Data().transactions
-      .getListFlattenSplits(
-        whereClause:
-            (Transaction t) =>
-                t.isMatchingAnyOfTheseCategories(categoriesToMatch),
-      );
+  final List<Transaction> listOfTransactions = Data().transactions.getListFlattenSplits(
+    whereClause: (Transaction t) => t.isMatchingAnyOfTheseCategories(categoriesToMatch),
+  );
 
   // Rollup into a single Payment based on Date to match Principal and Interest payment
   final Map<String, PaymentRollup> payments = <String, PaymentRollup>{};
@@ -119,8 +115,7 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
   }
 
   aggregatedList.sort(
-    (LoanPayment a, LoanPayment b) =>
-        sortByDate(a.fieldDate.value, b.fieldDate.value, true),
+    (LoanPayment a, LoanPayment b) => sortByDate(a.fieldDate.value, b.fieldDate.value, true),
   );
 
   double runningBalance = 0.00;

@@ -51,18 +51,15 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
     List<Transfer> listOfTransfers = <Transfer>[];
 
     // Retrieve all transactions related to transfers.
-    final List<Transaction> listOfTransactionsUseForTransfer =
-        Data().transactions
-            .getListFlattenSplits()
-            .where(
-              (final Transaction transaction) =>
-                  transaction.fieldTransfer.value != -1,
-            )
-            .toList();
+    final List<Transaction> listOfTransactionsUseForTransfer = Data().transactions
+        .getListFlattenSplits()
+        .where(
+          (final Transaction transaction) => transaction.fieldTransfer.value != -1,
+        )
+        .toList();
 
     // Process sender transactions.
-    for (final Transaction transactionOfSender
-        in listOfTransactionsUseForTransfer) {
+    for (final Transaction transactionOfSender in listOfTransactionsUseForTransfer) {
       // Identify sender transactions by negative amount.
       if (transactionOfSender.fieldAmount.value.asDouble() <= 0) {
         final Transaction? transactionOfReceiver = Data().transactions.get(
@@ -78,8 +75,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
     }
 
     // Process receiver transactions not already included.
-    for (final Transaction transactionOfReceiver
-        in listOfTransactionsUseForTransfer) {
+    for (final Transaction transactionOfReceiver in listOfTransactionsUseForTransfer) {
       // Identify receiver transactions by positive amount.
       if (transactionOfReceiver.fieldAmount.value.asDouble() > 0) {
         final Transaction? transactionOfSender = Data().transactions.get(
@@ -95,8 +91,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
           ); // Log missing sender.
           _addTransferToList(
             list: listOfTransfers,
-            transactionSender:
-                transactionOfSender!, // Non-nullable, but logged as error above.
+            transactionSender: transactionOfSender!, // Non-nullable, but logged as error above.
             transactionReceiver: transactionOfReceiver,
             isOrphan: true,
           );
@@ -106,10 +101,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
 
     // Apply filters if enabled.
     if (applyFilter) {
-      listOfTransfers =
-          listOfTransfers
-              .where((final Transfer instance) => isMatchingFilters(instance))
-              .toList();
+      listOfTransfers = listOfTransfers.where((final Transfer instance) => isMatchingFilters(instance)).toList();
     }
 
     return listOfTransfers;
@@ -132,9 +124,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
 
     if (accountSender != null && accountReceiver != null) {
       // Exclude closed accounts if the preference is set.
-      if (accountSender.isClosed() &&
-          accountReceiver.isClosed() &&
-          !PreferenceController.to.includeClosedAccounts) {
+      if (accountSender.isClosed() && accountReceiver.isClosed() && !PreferenceController.to.includeClosedAccounts) {
         return;
       }
 
@@ -155,9 +145,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
   }) {
     if (selectedIds.isNotEmpty) {
       final int id = selectedIds.first;
-      final Transfer? transfer =
-          list.firstWhereOrNull((MoneyObject element) => element.uniqueId == id)
-              as Transfer?;
+      final Transfer? transfer = list.firstWhereOrNull((MoneyObject element) => element.uniqueId == id) as Transfer?;
       if (transfer != null) {
         return TransferSenderReceiver(transfer: transfer);
       }

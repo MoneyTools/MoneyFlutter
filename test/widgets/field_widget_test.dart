@@ -10,16 +10,12 @@ import 'package:money/core/widgets/quantity_widget.dart';
 import 'package:money/core/widgets/widgets.dart';
 import 'package:money/data/models/fields/field.dart';
 
-class MockThemeController extends GetxController
-    with Mock
-    implements ThemeController {
+class MockThemeController extends GetxController with Mock implements ThemeController {
   @override
   RxBool get isDarkTheme => false.obs;
 }
 
-class MockPreferenceController extends GetxController
-    with Mock
-    implements PreferenceController {
+class MockPreferenceController extends GetxController with Mock implements PreferenceController {
   @override
   String getString(String key, [String defaultValueIfNotFound = '']) => '';
 
@@ -38,8 +34,7 @@ void main() {
     // Enable test mode
     Get.testMode = true;
 
-    final MockPreferenceController mockPreferenceController =
-        MockPreferenceController();
+    final MockPreferenceController mockPreferenceController = MockPreferenceController();
     final MockThemeController mockThemeController = MockThemeController();
 
     Get.put<ThemeController>(mockThemeController);

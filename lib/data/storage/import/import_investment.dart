@@ -55,11 +55,10 @@ List<Widget> getActionButtons(
         );
 
         // add the Transaction to the Transaction list
-        final Payee payee =
-            Data().aliases.findOrCreateNewPayee(
-              security.fieldSymbol.value,
-              fireNotification: false,
-            )!;
+        final Payee payee = Data().aliases.findOrCreateNewPayee(
+          security.fieldSymbol.value,
+          fireNotification: false,
+        )!;
 
         final Transaction newTransaction = Transaction(date: inputData.date);
         newTransaction.fieldAccountId.value = inputData.account.uniqueId;

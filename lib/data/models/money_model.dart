@@ -59,11 +59,10 @@ class MoneyModel {
   void setAmount(final dynamic newValueToSet) {
     _amount =
         newValueToSet
-                is String // Check if the input is a String
-            ? attemptToGetDoubleFromText(newValueToSet) ??
-                0.0 // If it's a String, attempt to parse it as a double
-            : (newValueToSet as num)
-                .toDouble(); // If it's not a String, call toDouble() to convert it to a double
+            is String // Check if the input is a String
+        ? attemptToGetDoubleFromText(newValueToSet) ??
+              0.0 // If it's a String, attempt to parse it as a double
+        : (newValueToSet as num).toDouble(); // If it's not a String, call toDouble() to convert it to a double
   }
 
   /// the raw value as double

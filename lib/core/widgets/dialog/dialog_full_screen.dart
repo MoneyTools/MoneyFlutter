@@ -59,10 +59,9 @@ class AutoSizeDialog extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(8)),
         side: BorderSide(
           width: 2.0, // Adjust border width as needed
-          color:
-              Theme.of(
-                context,
-              ).dividerColor, // Set your desired border color here
+          color: Theme.of(
+            context,
+          ).dividerColor, // Set your desired border color here
         ),
       );
       insetPadding = const EdgeInsets.symmetric(

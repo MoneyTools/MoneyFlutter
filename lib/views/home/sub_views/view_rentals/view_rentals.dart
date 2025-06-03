@@ -46,10 +46,7 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
     bool includeDeleted = false,
     bool applyFilter = true,
   }) {
-    final List<RentBuilding> list =
-        Data().rentBuildings
-            .iterableList(includeDeleted: includeDeleted)
-            .toList();
+    final List<RentBuilding> list = Data().rentBuildings.iterableList(includeDeleted: includeDeleted).toList();
 
     return list;
   }
@@ -102,13 +99,12 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
   }
 
   Widget buildRenters(final BuildContext context, final RentBuilding building) {
-    final List<RentUnit> rentersInThisBuilding =
-        Data().rentUnits
-            .iterableList()
-            .where(
-              (RentUnit item) => item.fieldBuilding.value == building.uniqueId,
-            )
-            .toList();
+    final List<RentUnit> rentersInThisBuilding = Data().rentUnits
+        .iterableList()
+        .where(
+          (RentUnit item) => item.fieldBuilding.value == building.uniqueId,
+        )
+        .toList();
 
     return buildAdaptiveBox(
       context: context,
@@ -128,10 +124,9 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
             ],
           );
         },
-        separatorBuilder:
-            (BuildContext context, int index) => Divider(
-              color: getColorTheme(context).onPrimaryContainer.withAlpha(100),
-            ),
+        separatorBuilder: (BuildContext context, int index) => Divider(
+          color: getColorTheme(context).onPrimaryContainer.withAlpha(100),
+        ),
       ),
       count: rentersInThisBuilding.length,
     );

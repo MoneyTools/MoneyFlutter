@@ -77,11 +77,10 @@ void showAndConfirmTransactionToImport(
   final ImportData importData,
 ) {
   if (importData.account == null) {
-    final List<String> activeAccountNames =
-        Data().accounts
-            .getListSorted()
-            .map((Account element) => element.fieldName.value)
-            .toList();
+    final List<String> activeAccountNames = Data().accounts
+        .getListSorted()
+        .map((Account element) => element.fieldName.value)
+        .toList();
 
     showPopupSelection(
       title: 'Pick account to import to',

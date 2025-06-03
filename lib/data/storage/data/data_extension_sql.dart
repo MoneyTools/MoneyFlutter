@@ -6,8 +6,7 @@ extension DataFromSql on Data {
     required final Uint8List fileBytes,
   }) async {
     // Load from SQLite
-    final String? pathToDatabaseFile =
-        await validateDataBasePathIsValidAndExist(filePath, fileBytes);
+    final String? pathToDatabaseFile = await validateDataBasePathIsValidAndExist(filePath, fileBytes);
 
     if (pathToDatabaseFile != null || fileBytes.isNotEmpty) {
       // Open or create the database
@@ -56,8 +55,7 @@ extension DataFromSql on Data {
 
   Future<bool> saveToSql({
     required final String filePath,
-    required final void Function(bool success, String errorMessage)
-    onSaveCompleted,
+    required final void Function(bool success, String errorMessage) onSaveCompleted,
   }) async {
     try {
       final MyDatabase db = MyDatabase();

@@ -55,12 +55,9 @@ class ThemeController extends GetxController {
     PreferenceController.to.setInt(settingKeyTheme, colorSelected.value);
   }
 
-  void setAppSizeToSmall() =>
-      MyWindowManager.setAppWindowSize(Constants.screenWidthSmall, 900);
-  void setAppSizeToMedium() =>
-      MyWindowManager.setAppWindowSize(Constants.screenWidthMedium, 900);
-  void setAppSizeToLarge() =>
-      MyWindowManager.setAppWindowSize(Constants.screenWidthLarge, 900);
+  void setAppSizeToSmall() => MyWindowManager.setAppWindowSize(Constants.screenWidthSmall, 900);
+  void setAppSizeToMedium() => MyWindowManager.setAppWindowSize(Constants.screenWidthMedium, 900);
+  void setAppSizeToLarge() => MyWindowManager.setAppWindowSize(Constants.screenWidthLarge, 900);
 
   bool setFontScaleTo(final double newScale) {
     final int cleanValue = (newScale * 100).round();

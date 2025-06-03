@@ -43,8 +43,7 @@ class Transactions extends MoneyObjects<Transaction> {
   void onAllDataLoaded() {
     // Pre computer possible category matching for Transaction that have no associated categories
     // We use this to give a Hint to the user about the best category to pick for a transaction
-    final MapAccumulatorSet<int, String, int> accountsToPayeeNameToCategories =
-        MapAccumulatorSet<int, String, int>();
+    final MapAccumulatorSet<int, String, int> accountsToPayeeNameToCategories = MapAccumulatorSet<int, String, int>();
 
     final List<Transaction> transactionsWithCategories = getListFlattenSplits();
     for (final Transaction t in transactionsWithCategories) {
@@ -68,15 +67,13 @@ class Transactions extends MoneyObjects<Transaction> {
       // Pre computer possible category matching for Transaction that have no associated categories
       if (transactionSource.fieldCategoryId.value == -1) {
         // watchFind.start();
-        final Set<int> setOfPossibleCategoryId = accountsToPayeeNameToCategories
-            .find(
-              transactionSource.fieldAccountId.value,
-              transactionSource.getPayeeOrTransferCaption(),
-            );
-        transactionSource.possibleMatchingCategoryId =
-            setOfPossibleCategoryId.isEmpty
-                ? -1
-                : setOfPossibleCategoryId.first;
+        final Set<int> setOfPossibleCategoryId = accountsToPayeeNameToCategories.find(
+          transactionSource.fieldAccountId.value,
+          transactionSource.getPayeeOrTransferCaption(),
+        );
+        transactionSource.possibleMatchingCategoryId = setOfPossibleCategoryId.isEmpty
+            ? -1
+            : setOfPossibleCategoryId.first;
         // watchFind.stop();
       }
 
@@ -164,8 +161,7 @@ class Transactions extends MoneyObjects<Transaction> {
   static List<FlSpot> cumulateTransactionPerYearMonth(
     final List<Transaction> transactions,
   ) {
-    final AccumulatorSum<String, double> cumulateYearMonthBalance =
-        AccumulatorSum<String, double>();
+    final AccumulatorSum<String, double> cumulateYearMonthBalance = AccumulatorSum<String, double>();
 
     // Add transactions to the accumulator
     for (final Transaction t in transactions) {
@@ -232,16 +228,13 @@ class Transactions extends MoneyObjects<Transaction> {
     final Transaction t,
     List<Transaction> transactionWithCategories,
   ) {
-    final Transaction? transactionMatchingAccountPayeeAndHasCategory =
-        transactionWithCategories.firstWhereOrNull(
-          (Transaction item) =>
-              item.fieldAccountId.value == t.fieldAccountId.value &&
-              item.getPayeeOrTransferCaption() == t.getPayeeOrTransferCaption(),
-        );
+    final Transaction? transactionMatchingAccountPayeeAndHasCategory = transactionWithCategories.firstWhereOrNull(
+      (Transaction item) =>
+          item.fieldAccountId.value == t.fieldAccountId.value &&
+          item.getPayeeOrTransferCaption() == t.getPayeeOrTransferCaption(),
+    );
     if (transactionMatchingAccountPayeeAndHasCategory != null) {
-      return transactionMatchingAccountPayeeAndHasCategory
-          .fieldCategoryId
-          .value;
+      return transactionMatchingAccountPayeeAndHasCategory.fieldCategoryId.value;
     }
     return -1;
   }
@@ -294,8 +287,7 @@ class Transactions extends MoneyObjects<Transaction> {
     );
     final List<DateTime> dates = <DateTime>[];
     for (final Transaction t in transactions) {
-      if (t.fieldDateTime.value?.year == year &&
-          !dates.contains(t.fieldDateTime.value)) {
+      if (t.fieldDateTime.value?.year == year && !dates.contains(t.fieldDateTime.value)) {
         dates.add(t.fieldDateTime.value!);
       }
     }
@@ -316,10 +308,7 @@ class Transactions extends MoneyObjects<Transaction> {
                     status: t.fieldStatus.value,
                   )
                   ..fieldAccountId.value = t.fieldAccountId.value
-                  ..fieldPayee.value =
-                      s.fieldPayeeId.value == -1
-                          ? t.fieldPayee.value
-                          : s.fieldPayeeId.value
+                  ..fieldPayee.value = s.fieldPayeeId.value == -1 ? t.fieldPayee.value : s.fieldPayeeId.value
                   ..fieldCategoryId.value = s.fieldCategoryId.value
                   ..fieldMemo.value = s.fieldMemo.value
                   ..fieldAmount.value = s.fieldAmount.value;
@@ -347,10 +336,8 @@ class Transactions extends MoneyObjects<Transaction> {
             maxYear,
           ) &&
           (incomesOrExpenses == null ||
-              (incomesOrExpenses == true &&
-                  element.fieldAmount.value.asDouble() > 0) ||
-              (incomesOrExpenses == false &&
-                  element.fieldAmount.value.asDouble() < 0)),
+              (incomesOrExpenses == true && element.fieldAmount.value.asDouble() > 0) ||
+              (incomesOrExpenses == false && element.fieldAmount.value.asDouble() < 0)),
     );
   }
 
@@ -386,10 +373,7 @@ class Transactions extends MoneyObjects<Transaction> {
       sums[key] = (sums[key] ?? 0) + t.fieldAmount.value.asDouble();
     }
 
-    final List<PairXYY> result =
-        sums.entries
-            .map((MapEntry<String, double> e) => PairXYY(e.key, e.value))
-            .toList();
+    final List<PairXYY> result = sums.entries.map((MapEntry<String, double> e) => PairXYY(e.key, e.value)).toList();
     result.sort((PairXYY a, PairXYY b) => a.xText.compareTo(b.xText));
     return result;
   }
@@ -411,9 +395,7 @@ class Transactions extends MoneyObjects<Transaction> {
   ) {
     final List<Pair<int, double>> timeAndAmounts = <Pair<int, double>>[];
     for (final Transaction t in transactions) {
-      final int oneDaySlot =
-          t.fieldDateTime.value!.millisecondsSinceEpoch ~/
-          Duration.millisecondsPerDay;
+      final int oneDaySlot = t.fieldDateTime.value!.millisecondsSinceEpoch ~/ Duration.millisecondsPerDay;
       timeAndAmounts.add(
         Pair<int, double>(oneDaySlot, t.fieldAmount.value.asDouble()),
       );

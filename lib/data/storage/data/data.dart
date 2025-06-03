@@ -270,8 +270,7 @@ class Data {
       return null;
     }
 
-    final double destinationAmount =
-        transactionSource.fieldAmount.value.asDouble() * -1;
+    final double destinationAmount = transactionSource.fieldAmount.value.asDouble() * -1;
 
     Transaction? relatedTransaction;
     try {
@@ -295,11 +294,9 @@ class Data {
 
       // flip the sign on the amount
       relatedTransaction.fieldAmount.value.setAmount(destinationAmount);
-      relatedTransaction.fieldCategoryId.value =
-          transactionSource.fieldCategoryId.value;
+      relatedTransaction.fieldCategoryId.value = transactionSource.fieldCategoryId.value;
       relatedTransaction.fieldFitid.value = transactionSource.fieldFitid.value;
-      relatedTransaction.fieldNumber.value =
-          transactionSource.fieldNumber.value;
+      relatedTransaction.fieldNumber.value = transactionSource.fieldNumber.value;
       relatedTransaction.fieldMemo.value = transactionSource.fieldMemo.value;
       //u.Status = t.Status; no !!!
     }
@@ -381,17 +378,14 @@ class Data {
     }
     if (transaction.instanceOfTransfer != null) {
       // this was already a transfer, lets see if the destination account has changed
-      if (transaction.instanceOfTransfer?.receiverAccount?.uniqueId ==
-          relatedAccount.uniqueId) {
+      if (transaction.instanceOfTransfer?.receiverAccount?.uniqueId == relatedAccount.uniqueId) {
         // same account do noting
       } else {
         // use the new account destination
-        final Transaction relatedTransaction =
-            transaction.instanceOfTransfer!.relatedTransaction!;
-        transaction
-            .instanceOfTransfer!
-            .relatedTransaction!
-            .instanceOfAccount = Data().accounts.get(relatedAccount.uniqueId);
+        final Transaction relatedTransaction = transaction.instanceOfTransfer!.relatedTransaction!;
+        transaction.instanceOfTransfer!.relatedTransaction!.instanceOfAccount = Data().accounts.get(
+          relatedAccount.uniqueId,
+        );
         relatedTransaction.mutateField(
           'Account',
           relatedAccount.uniqueId,
@@ -511,8 +505,7 @@ class Data {
   }
 
   bool removeTransaction(Transaction t) {
-    if (t.fieldStatus.value == TransactionStatus.reconciled &&
-        t.fieldAmount.value.asDouble() != 0) {
+    if (t.fieldStatus.value == TransactionStatus.reconciled && t.fieldAmount.value.asDouble() != 0) {
       throw Exception('Cannot removed reconciled transaction');
     }
     // TODO

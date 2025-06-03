@@ -49,14 +49,13 @@ class _DialogMutateSplitState extends State<DialogMutateSplit> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: _split.buildListOfNamesValuesWidgets(
-                  onEdit:
-                      isInEditingMode
-                          ? (bool wasModified) {
-                            setState(() {
-                              dataWasModified = wasModified || isDataModified();
-                            });
-                          }
-                          : null,
+                  onEdit: isInEditingMode
+                      ? (bool wasModified) {
+                          setState(() {
+                            dataWasModified = wasModified || isDataModified();
+                          });
+                        }
+                      : null,
                 ),
               ),
             ),

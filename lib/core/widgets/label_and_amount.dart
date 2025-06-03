@@ -24,10 +24,7 @@ class LabelAndAmount extends StatelessWidget {
         Expanded(
           child: Text(
             caption,
-            style:
-                small
-                    ? getTextTheme(context).bodySmall
-                    : getTextTheme(context).bodyMedium,
+            style: small ? getTextTheme(context).bodySmall : getTextTheme(context).bodyMedium,
           ),
         ),
         MoneyWidget(
@@ -62,10 +59,7 @@ class LabelAndQuantity extends StatelessWidget {
         Expanded(
           child: Text(
             caption,
-            style:
-                small
-                    ? getTextTheme(context).bodySmall
-                    : getTextTheme(context).bodyMedium,
+            style: small ? getTextTheme(context).bodySmall : getTextTheme(context).bodyMedium,
           ),
         ),
         QuantityWidget(quantity: quantity, align: TextAlign.right),

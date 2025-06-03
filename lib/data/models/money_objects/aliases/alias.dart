@@ -41,18 +41,14 @@ class Alias extends MoneyObject {
     serializeName: 'Flags',
     defaultValue: 0,
     footer: FooterType.count,
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            getAliasTypeAsString((instance as Alias).type),
-    getValueForSerialization:
-        (final MoneyObject instance) => (instance as Alias).fieldFlags.value,
+    getValueForDisplay: (final MoneyObject instance) => getAliasTypeAsString((instance as Alias).type),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).fieldFlags.value,
   );
 
   /// ID
   /// 0    Id       INT            0                 1
   FieldId fieldId = FieldId(
-    getValueForSerialization:
-        (final MoneyObject instance) => (instance as Alias).uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).uniqueId,
   );
 
   /// Pattern
@@ -61,13 +57,9 @@ class Alias extends MoneyObject {
     type: FieldType.text,
     name: 'Pattern',
     serializeName: 'Pattern',
-    getValueForDisplay:
-        (final MoneyObject instance) => (instance as Alias).fieldPattern.value,
-    getValueForSerialization:
-        (final MoneyObject instance) => (instance as Alias).fieldPattern.value,
-    setValue:
-        (final MoneyObject instance, dynamic value) =>
-            (instance as Alias).fieldPattern.value = value as String,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Alias).fieldPattern.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).fieldPattern.value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Alias).fieldPattern.value = value as String,
   );
 
   /// Payee
@@ -78,11 +70,8 @@ class Alias extends MoneyObject {
     name: 'Payee',
     serializeName: 'Payee',
     defaultValue: 0,
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            Payee.getName((instance as Alias).payeeInstance),
-    getValueForSerialization:
-        (final MoneyObject instance) => (instance as Alias).fieldPayeeId.value,
+    getValueForDisplay: (final MoneyObject instance) => Payee.getName((instance as Alias).payeeInstance),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).fieldPayeeId.value,
   );
 
   RegExp? regex;

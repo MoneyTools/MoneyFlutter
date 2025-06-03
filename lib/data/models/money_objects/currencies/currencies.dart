@@ -29,8 +29,7 @@ class Currencies extends MoneyObjects<Currency> {
     if (currency == null) {
       return 'US';
     }
-    return currency.fieldCultureCode.getValueForSerialization(currency)
-        as String;
+    return currency.fieldCultureCode.getValueForSerialization(currency) as String;
   }
 
   Currency? getCurrencyFromSymbol(final String symbolToMatch) {

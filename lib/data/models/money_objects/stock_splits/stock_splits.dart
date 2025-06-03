@@ -50,12 +50,11 @@ class StockSplits extends MoneyObjects<StockSplit> {
 
   /// Only add, no removal of existing splits
   void setStockSplits(final int securityId, final List<StockSplit> values) {
-    final List<StockSplit> listOfSplitsFound =
-        iterableList()
-            .where(
-              (StockSplit split) => split.fieldSecurity.value == securityId,
-            )
-            .toList();
+    final List<StockSplit> listOfSplitsFound = iterableList()
+        .where(
+          (StockSplit split) => split.fieldSecurity.value == securityId,
+        )
+        .toList();
     for (final StockSplit ss in values) {
       final StockSplit? foundMatch = listOfSplitsFound.firstWhereOrNull(
         (StockSplit existingSplit) => isSameDateWithoutTime(

@@ -38,8 +38,7 @@ class MergeTransactionsDialog extends StatefulWidget {
   final List<Transaction> transactions;
 
   @override
-  State<MergeTransactionsDialog> createState() =>
-      _MergeTransactionsDialogState();
+  State<MergeTransactionsDialog> createState() => _MergeTransactionsDialogState();
 }
 
 class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
@@ -129,19 +128,16 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
     }
 
     final List<Widget> radioButtonChoices = <Widget>[];
-    final List<MapEntry<int, int>> sortedDescendingListOfCategories =
-        categoryIdsFound.getEntries();
+    final List<MapEntry<int, int>> sortedDescendingListOfCategories = categoryIdsFound.getEntries();
     sortedDescendingListOfCategories.sort(
-      (MapEntry<int, int> a, MapEntry<int, int> b) =>
-          sortByValue(a.value, b.value, false),
+      (MapEntry<int, int> a, MapEntry<int, int> b) => sortByValue(a.value, b.value, false),
     );
 
     for (final MapEntry<int, int> entry in sortedDescendingListOfCategories) {
       final int categoryId = entry.key;
       final int categoryCounts = entry.value;
 
-      final String categoryName =
-          Data().categories.getNameFromId(categoryId).trim();
+      final String categoryName = Data().categories.getNameFromId(categoryId).trim();
       if (categoryName.isNotEmpty) {
         radioButtonChoices.add(
           ListTile(

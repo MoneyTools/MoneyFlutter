@@ -17,8 +17,7 @@ InputDecoration myFormFieldDecoration({
 }) {
   return InputDecoration(
     labelText: fieldName,
-    contentPadding:
-        isReadOnly ? const EdgeInsets.symmetric(horizontal: 12) : null,
+    contentPadding: isReadOnly ? const EdgeInsets.symmetric(horizontal: 12) : null,
     // some padding to match the Editable fields that have a border and padding
     border: const OutlineInputBorder(),
   );

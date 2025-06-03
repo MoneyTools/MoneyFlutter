@@ -25,11 +25,7 @@ class FieldFilter {
   factory FieldFilter.fromJson(Map<String, dynamic> json) {
     return FieldFilter(
       fieldName: json['fieldName'] as String? ?? '',
-      strings:
-          (json['strings'] as List<dynamic>?)
-              ?.map<String>((dynamic e) => e.toString())
-              .toList() ??
-          <String>[],
+      strings: (json['strings'] as List<dynamic>?)?.map<String>((dynamic e) => e.toString()).toList() ?? <String>[],
       byDateRange: json['byDateRange'] as bool? ?? false,
     );
   }

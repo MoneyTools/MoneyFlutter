@@ -10,15 +10,12 @@ extension ViewCategoriesSidePanel on ViewCategoriesState {
       final Map<String, num> map = <String, num>{};
 
       for (final Category item in getList()) {
-        if (item.fieldName.value != 'Split' &&
-            item.fieldName.value != 'Xfer to Deleted Account') {
+        if (item.fieldName.value != 'Split' && item.fieldName.value != 'Xfer to Deleted Account') {
           final Category topCategory = Data().categories.getTopAncestor(item);
           if (map[topCategory.fieldName.value] == null) {
             map[topCategory.fieldName.value] = 0;
           }
-          map[topCategory.fieldName.value] =
-              map[topCategory.fieldName.value]! +
-              item.fieldSum.value.asDouble();
+          map[topCategory.fieldName.value] = map[topCategory.fieldName.value]! + item.fieldSum.value.asDouble();
         }
       }
       final List<PairXYY> list = <PairXYY>[];

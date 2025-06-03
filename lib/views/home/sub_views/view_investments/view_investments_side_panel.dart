@@ -67,25 +67,22 @@ extension ViewInvestmentsSidePanel on ViewInvestmentsState {
     }
 
     // get the related Transaction in order to get the associated Account
-    final List<int> listOfInvestmentIdForThisSecurityAndAccount =
-        Data().investments
-            .iterableList()
-            .where(
-              (Investment i) => _isSameSecurityFromTheSameAccount(
-                i,
-                instance.fieldSecurity.value,
-                _getAccountIdForInvestment(instance.uniqueId),
-              ),
-            )
-            .map((Investment i) => i.uniqueId)
-            .toList();
+    final List<int> listOfInvestmentIdForThisSecurityAndAccount = Data().investments
+        .iterableList()
+        .where(
+          (Investment i) => _isSameSecurityFromTheSameAccount(
+            i,
+            instance.fieldSecurity.value,
+            _getAccountIdForInvestment(instance.uniqueId),
+          ),
+        )
+        .map((Investment i) => i.uniqueId)
+        .toList();
 
     final List<Transaction> listOfTransactions = getTransactions(
-      filter:
-          (final Transaction transaction) =>
-              listOfInvestmentIdForThisSecurityAndAccount.contains(
-                transaction.uniqueId,
-              ),
+      filter: (final Transaction transaction) => listOfInvestmentIdForThisSecurityAndAccount.contains(
+        transaction.uniqueId,
+      ),
     );
     final SelectionController selectionController = Get.put(
       SelectionController(),

@@ -68,17 +68,12 @@ class ViewRentalsSidePanel {
       //
       // SELECTED: Show cumulated profit over time for the selected rental(s)
       //
-      final RentBuilding rental =
-          Data().rentBuildings.get(selectedIds.first) as RentBuilding;
+      final RentBuilding rental = Data().rentBuildings.get(selectedIds.first) as RentBuilding;
 
       final List<PairXYY> dataPoints = <PairXYY>[];
 
       if (!rental.dateRangeOfOperation.hasNullDates) {
-        for (
-          int year = rental.dateRangeOfOperation.min!.year;
-          year <= rental.dateRangeOfOperation.max!.year;
-          year++
-        ) {
+        for (int year = rental.dateRangeOfOperation.min!.year; year <= rental.dateRangeOfOperation.max!.year; year++) {
           RentalPnL? pnl = rental.pnlOverYears[year];
           pnl ??= RentalPnL(date: DateTime(year, 1, 1));
           dataPoints.add(PairXYY(year.toString(), pnl.profit, pnl.income));
@@ -101,18 +96,13 @@ class ViewRentalsSidePanel {
     }
 
     // Single Rental property selected
-    final RentBuilding rental =
-        Data().rentBuildings.get(selectedIds.first) as RentBuilding;
+    final RentBuilding rental = Data().rentBuildings.get(selectedIds.first) as RentBuilding;
 
     // Show PnL for the selected rental property, per year
     final List<Widget> pnlCards = <Widget>[];
 
     if (!rental.dateRangeOfOperation.hasNullDates) {
-      for (
-        int year = rental.dateRangeOfOperation.min!.year;
-        year <= rental.dateRangeOfOperation.max!.year;
-        year++
-      ) {
+      for (int year = rental.dateRangeOfOperation.min!.year; year <= rental.dateRangeOfOperation.max!.year; year++) {
         RentalPnL? pnl = rental.pnlOverYears[year];
         pnl ??= RentalPnL(date: DateTime(year, 1, 1));
         pnlCards.add(RentalPnLCard(pnl: pnl));
@@ -136,8 +126,7 @@ class ViewRentalsSidePanel {
     required final List<int> selectedIds,
     required bool showAsNativeCurrency, // Currently unused
   }) {
-    final RentBuilding rental =
-        Data().rentBuildings.get(selectedIds.first) as RentBuilding;
+    final RentBuilding rental = Data().rentBuildings.get(selectedIds.first) as RentBuilding;
     final SelectionController selectionController = Get.put(
       SelectionController(),
     );
@@ -161,9 +150,7 @@ class ViewRentalsSidePanel {
     RentBuilding rentBuildings,
   ) {
     return getTransactions(
-      filter:
-          (final Transaction transaction) =>
-              filterByRentalCategories(transaction, rentBuildings),
+      filter: (final Transaction transaction) => filterByRentalCategories(transaction, rentBuildings),
     );
   }
 

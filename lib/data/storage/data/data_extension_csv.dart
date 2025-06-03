@@ -26,8 +26,7 @@ extension DataFromCsv on Data {
       if (file.isFile) {
         final String fileContent = getZipSingleFileContent(file);
 
-        final String fileNameInLowercase =
-            MyFileSystems.getFileName(file.name).toLowerCase();
+        final String fileNameInLowercase = MyFileSystems.getFileName(file.name).toLowerCase();
 
         switch (fileNameInLowercase) {
           case 'account_aliases.csv':
@@ -113,8 +112,7 @@ extension DataFromCsv on Data {
   }
 
   Future<String> saveToCsv() async {
-    final String destinationFolder =
-        await DataController.to.generateNextFolderToSaveTo();
+    final String destinationFolder = await DataController.to.generateNextFolderToSaveTo();
     if (destinationFolder.isEmpty) {
       throw Exception('No container folder give for saving');
     }

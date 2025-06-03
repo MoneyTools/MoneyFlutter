@@ -53,42 +53,30 @@ class LoanPayment extends MoneyObject {
     serializeName: 'AccountId',
     defaultValue: -1,
     type: FieldType.text,
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            Account.getName((instance as LoanPayment).accountInstance),
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as LoanPayment).fieldAccountId.value,
+    getValueForDisplay: (final MoneyObject instance) => Account.getName((instance as LoanPayment).accountInstance),
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).fieldAccountId.value,
   );
 
   FieldMoney fieldBalance = FieldMoney(
     name: 'Balance',
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as LoanPayment).fieldBalance.value.asDouble(),
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as LoanPayment).fieldBalance.value.asDouble(),
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).fieldBalance.value.asDouble(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).fieldBalance.value.asDouble(),
   );
 
   /// Date
   /// 2|Date|datetime|1||0
   FieldDate fieldDate = FieldDate(
     serializeName: 'Date',
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as LoanPayment).fieldDate.value,
-    getValueForSerialization:
-        (final MoneyObject instance) => dateToIso8601OrDefaultString(
-          (instance as LoanPayment).fieldDate.value,
-        ),
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).fieldDate.value,
+    getValueForSerialization: (final MoneyObject instance) => dateToIso8601OrDefaultString(
+      (instance as LoanPayment).fieldDate.value,
+    ),
   );
 
   /// ID
   /// 0|Id|INT|1||0
   FieldId fieldId = FieldId(
-    getValueForSerialization:
-        (final MoneyObject instance) => (instance as LoanPayment).uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).uniqueId,
   );
 
   /// Interest
@@ -96,12 +84,8 @@ class LoanPayment extends MoneyObject {
   FieldMoney fieldInterest = FieldMoney(
     name: 'Interest',
     serializeName: 'Interest',
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as LoanPayment).fieldInterest.value,
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as LoanPayment).fieldInterest.value.asDouble(),
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).fieldInterest.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).fieldInterest.value.asDouble(),
   );
 
   // 5
@@ -111,12 +95,8 @@ class LoanPayment extends MoneyObject {
     name: 'Memo',
     serializeName: 'Memo',
     defaultValue: '',
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as LoanPayment).fieldMemo.value,
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as LoanPayment).fieldMemo.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).fieldMemo.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).fieldMemo.value,
   );
 
   /// 3
@@ -124,33 +104,24 @@ class LoanPayment extends MoneyObject {
   FieldMoney fieldPrincipal = FieldMoney(
     name: 'Principal',
     serializeName: 'Principal',
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as LoanPayment).fieldPrincipal.value,
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as LoanPayment).fieldPrincipal.value.asDouble(),
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).fieldPrincipal.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).fieldPrincipal.value.asDouble(),
   );
 
   FieldPercentage fieldRate = FieldPercentage(
     name: 'Rate %',
-    getValueForDisplay:
-        (final MoneyObject instance) => (instance as LoanPayment).getRate(),
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).getRate(),
   );
 
   FieldString fieldReference = FieldString(
     name: 'Reference',
     columnWidth: ColumnWidth.largest,
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as LoanPayment).fieldReference.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).fieldReference.value,
   );
 
   FieldMoney payment = FieldMoney(
     name: 'Payment',
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as LoanPayment)._totalPrincipalAndInterest,
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment)._totalPrincipalAndInterest,
   );
 
   @override
@@ -219,24 +190,19 @@ class LoanPayment extends MoneyObject {
   }
 
   double getRate() {
-    final double previousBalance =
-        this.fieldBalance.value.asDouble() -
-        this.fieldPrincipal.value.asDouble();
+    final double previousBalance = this.fieldBalance.value.asDouble() - this.fieldPrincipal.value.asDouble();
     if (previousBalance == 0) {
       return 0.00;
     }
 
     // Calculate the monthly interest rate
     final double annualInterestRate =
-        (this.fieldInterest.value.asDouble() *
-            12) // Convert to annual interest rate
+        (this.fieldInterest.value.asDouble() * 12) // Convert to annual interest rate
         /
         previousBalance;
 
     return annualInterestRate.abs();
   }
 
-  double get _totalPrincipalAndInterest =>
-      this.fieldPrincipal.value.asDouble() +
-      this.fieldInterest.value.asDouble();
+  double get _totalPrincipalAndInterest => this.fieldPrincipal.value.asDouble() + this.fieldInterest.value.asDouble();
 }

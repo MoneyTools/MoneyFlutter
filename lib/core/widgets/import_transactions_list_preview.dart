@@ -20,18 +20,15 @@ class ImportTransactionsListPreview extends StatefulWidget {
   final List<ValuesQuality> values;
 
   @override
-  State<ImportTransactionsListPreview> createState() =>
-      _ImportTransactionsListPreviewState();
+  State<ImportTransactionsListPreview> createState() => _ImportTransactionsListPreviewState();
 }
 
-class _ImportTransactionsListPreviewState
-    extends State<ImportTransactionsListPreview> {
-  late final List<Triple<String, TextAlign, int>> _columnNames =
-      <Triple<String, TextAlign, int>>[
-        Triple<String, TextAlign, int>('Date', TextAlign.left, 1),
-        Triple<String, TextAlign, int>('Description/Payee', TextAlign.left, 2),
-        Triple<String, TextAlign, int>('Amount', TextAlign.right, 1),
-      ];
+class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPreview> {
+  late final List<Triple<String, TextAlign, int>> _columnNames = <Triple<String, TextAlign, int>>[
+    Triple<String, TextAlign, int>('Date', TextAlign.left, 1),
+    Triple<String, TextAlign, int>('Description/Payee', TextAlign.left, 2),
+    Triple<String, TextAlign, int>('Amount', TextAlign.right, 1),
+  ];
 
   bool _sortAscending = true;
   int _sortColumnIndex = 0; // 0=Date, 1=Memo, 2=Amount
@@ -79,12 +76,9 @@ class _ImportTransactionsListPreviewState
           //
           Expanded(
             child: ListView.separated(
-              separatorBuilder:
-                  (BuildContext context, int index) => const Divider(),
+              separatorBuilder: (BuildContext context, int index) => const Divider(),
               itemCount: widget.values.length,
-              itemBuilder:
-                  (BuildContext context, int index) =>
-                      _buildTransactionRow(widget.values[index]),
+              itemBuilder: (BuildContext context, int index) => _buildTransactionRow(widget.values[index]),
             ),
           ),
 
@@ -124,8 +118,7 @@ class _ImportTransactionsListPreviewState
 
   String buildTallyOfItemsToImportOrSkip() {
     final int totalItems = widget.values.length;
-    final int itemsToImport =
-        widget.values.where((ValuesQuality item) => !item.exist).length;
+    final int itemsToImport = widget.values.where((ValuesQuality item) => !item.exist).length;
     String text = getIntAsText(widget.values.length);
     if (totalItems != itemsToImport) {
       text = '${getIntAsText(itemsToImport)}/${getIntAsText(totalItems)}';

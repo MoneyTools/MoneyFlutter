@@ -19,7 +19,10 @@ class MoneyWidget extends StatelessWidget {
     final double amount, [
     final MoneyWidgetSize size = MoneyWidgetSize.body,
   ]) {
-    return MoneyWidget(amountModel: MoneyModel(amount: amount), size: size);
+    return MoneyWidget(
+      amountModel: MoneyModel(amount: amount),
+      size: size,
+    );
   }
 
   final MoneyWidgetSize size;
@@ -72,14 +75,13 @@ class MoneyWidget extends StatelessWidget {
     );
 
     final int leftSideOfDecimalPoint = value.truncate();
-    final String leftSideOfDecimalPointAsString =
-        leftSideOfDecimalPoint.abs() == 0
-            ? '' // No need to show leading zero
-            : Currency.getAmountAsStringUsingCurrency(
-              leftSideOfDecimalPoint,
-              iso4217code: amountModel.iso4217,
-              decimalDigits: 0,
-            );
+    final String leftSideOfDecimalPointAsString = leftSideOfDecimalPoint.abs() == 0
+        ? '' // No need to show leading zero
+        : Currency.getAmountAsStringUsingCurrency(
+            leftSideOfDecimalPoint,
+            iso4217code: amountModel.iso4217,
+            decimalDigits: 0,
+          );
 
     final String rightOfDecimalPoint = valueAsString.substring(
       leftSideOfDecimalPointAsString.length,

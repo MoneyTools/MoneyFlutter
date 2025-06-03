@@ -63,10 +63,8 @@ class ViewCashFlowState extends ViewWidgetState {
   void initState() {
     super.initState();
     dateRangeTransactions = DateRange.fromStarEndYears(
-      Data().transactions.dateRangeActiveAccount.min?.year ??
-          DateTime.now().year,
-      Data().transactions.dateRangeActiveAccount.max?.year ??
-          DateTime.now().year,
+      Data().transactions.dateRangeActiveAccount.min?.year ?? DateTime.now().year,
+      Data().transactions.dateRangeActiveAccount.max?.year ?? DateTime.now().year,
     );
 
     for (final Event event in Data().events.iterableList()) {
@@ -127,36 +125,26 @@ class ViewCashFlowState extends ViewWidgetState {
             //
             // Optional settings for NetWorth
             //
-            if (CashflowViewAs.netWorthOverTime ==
-                PreferenceController.to.cashflowViewAs.value)
+            if (CashflowViewAs.netWorthOverTime == PreferenceController.to.cashflowViewAs.value)
               NumberPicker(
                 title: 'Event Tolerances',
                 minValue: 0,
                 maxValue: 12,
-                selectedNumber:
-                    PreferenceController.to.netWorthEventThreshold.value,
+                selectedNumber: PreferenceController.to.netWorthEventThreshold.value,
                 onChanged: (int value) {
                   PreferenceController.to.netWorthEventThreshold.value = value;
                 },
               ),
-            if (CashflowViewAs.trend ==
-                PreferenceController.to.cashflowViewAs.value)
+            if (CashflowViewAs.trend == PreferenceController.to.cashflowViewAs.value)
               IntrinsicWidth(
                 child: Row(
                   children: <Widget>[
                     Obx(
                       () => Checkbox.adaptive(
-                        value:
-                            PreferenceController
-                                .to
-                                .trendIncludeAssetAccounts
-                                .value,
+                        value: PreferenceController.to.trendIncludeAssetAccounts.value,
                         onChanged: (bool? newValue) {
                           if (newValue != null) {
-                            PreferenceController
-                                .to
-                                .trendIncludeAssetAccounts
-                                .value = newValue;
+                            PreferenceController.to.trendIncludeAssetAccounts.value = newValue;
                           }
                         },
                       ),
@@ -217,8 +205,7 @@ class ViewCashFlowState extends ViewWidgetState {
       ],
       selectedId: PreferenceController.to.cashflowViewAs.value.index,
       onSelectionChanged: (final int newSelection) {
-        PreferenceController.to.cashflowViewAs.value =
-            CashflowViewAs.values[newSelection];
+        PreferenceController.to.cashflowViewAs.value = CashflowViewAs.values[newSelection];
       },
     );
   }
@@ -278,8 +265,7 @@ class ViewCashFlowState extends ViewWidgetState {
             minYear: this.selectedYearStart,
             maxYear: this.selectedYearEnd,
             viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
-            includeAssetAccounts:
-                PreferenceController.to.trendIncludeAssetAccounts.value,
+            includeAssetAccounts: PreferenceController.to.trendIncludeAssetAccounts.value,
           );
         });
     }

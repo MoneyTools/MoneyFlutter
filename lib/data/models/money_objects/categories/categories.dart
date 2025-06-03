@@ -78,8 +78,7 @@ class Categories extends MoneyObjects<Category> {
     }
 
     // find next available name
-    final String prefixName =
-        parent == null ? name : '${parent.fieldName.value}:$name';
+    final String prefixName = parent == null ? name : '${parent.fieldName.value}:$name';
     String nextAvailableName = prefixName;
     int next = 1;
     while (getByName(nextAvailableName) != null) {
@@ -137,10 +136,7 @@ class Categories extends MoneyObjects<Category> {
     String cumulativeCategoryName = '';
 
     for (final String part in categoryNameParts) {
-      cumulativeCategoryName =
-          cumulativeCategoryName.isEmpty
-              ? part
-              : '$cumulativeCategoryName:$part';
+      cumulativeCategoryName = cumulativeCategoryName.isEmpty ? part : '$cumulativeCategoryName:$part';
 
       CategoryType typeToUse = CategoryType.none;
       if (overrideTypeOfParent == null) {
@@ -163,15 +159,11 @@ class Categories extends MoneyObjects<Category> {
   }
 
   List<Category> getAllExpenseCategories() {
-    return iterableList()
-        .where((Category category) => category.isExpense)
-        .toList();
+    return iterableList().where((Category category) => category.isExpense).toList();
   }
 
   List<Category> getAllIncomeCategories() {
-    return iterableList()
-        .where((Category category) => category.isIncome)
-        .toList();
+    return iterableList().where((Category category) => category.isIncome).toList();
   }
 
   Category? getByName(final String name) {
@@ -181,10 +173,7 @@ class Categories extends MoneyObjects<Category> {
   }
 
   List<String> getCategoriesAsStrings() {
-    return this
-        .getListSorted()
-        .map((Category element) => element.fieldName.value)
-        .toList();
+    return this.getListSorted().map((Category element) => element.fieldName.value).toList();
   }
 
   List<Category> getCategoriesWithThisParent(final int parentId) {
@@ -212,8 +201,7 @@ class Categories extends MoneyObjects<Category> {
   List<Category> getListSorted() {
     final List<Category> list = iterableList().toList();
     list.sort(
-      (Category a, Category b) =>
-          sortByString(a.fieldName.value, b.fieldName.value, true),
+      (Category a, Category b) => sortByString(a.fieldName.value, b.fieldName.value, true),
     );
     return list;
   }
@@ -344,11 +332,9 @@ class Categories extends MoneyObjects<Category> {
     return getOrCreate('Investments:Transfer', CategoryType.none);
   }
 
-  bool isCategoryAnExpense(final int categoryId) =>
-      get(categoryId)?.isExpense ?? false;
+  bool isCategoryAnExpense(final int categoryId) => get(categoryId)?.isExpense ?? false;
 
-  bool isCategoryAnIncome(final int categoryId) =>
-      get(categoryId)?.isIncome ?? false;
+  bool isCategoryAnIncome(final int categoryId) => get(categoryId)?.isIncome ?? false;
 
   void reparentCategory(
     final Category categoryToReparent,

@@ -238,12 +238,8 @@ CREATE TABLE IF NOT EXISTS [Currencies] (
 
   /// SQL Insert
   void itemInsert(final String tableName, final MyJson data) {
-    final String columnNames = data.keys
-        .map((final String key) => '"$key"')
-        .join(', ');
-    final String columnValues = data.values
-        .map((final dynamic value) => encodeValueWrapStringTypes(value))
-        .join(', ');
+    final String columnNames = data.keys.map((final String key) => '"$key"').join(', ');
+    final String columnValues = data.values.map((final dynamic value) => encodeValueWrapStringTypes(value)).join(', ');
     _db.execute('INSERT INTO $tableName ($columnNames) VALUES ($columnValues)');
   }
 
@@ -253,13 +249,11 @@ CREATE TABLE IF NOT EXISTS [Currencies] (
     final MyJson jsonMap,
     final String whereClause,
   ) {
-    final List<String> setStatements =
-        jsonMap.keys
-            .map(
-              (String key) =>
-                  '"$key" = ${encodeValueWrapStringTypes(jsonMap[key])}',
-            )
-            .toList();
+    final List<String> setStatements = jsonMap.keys
+        .map(
+          (String key) => '"$key" = ${encodeValueWrapStringTypes(jsonMap[key])}',
+        )
+        .toList();
 
     final String fieldNamesAndValues = setStatements.join(', ');
     _db.execute(

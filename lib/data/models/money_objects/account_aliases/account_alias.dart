@@ -30,8 +30,7 @@ class AccountAlias extends MoneyObject {
   FieldInt fieldFlags = FieldInt(serializeName: 'Flags', defaultValue: 0);
 
   FieldId fieldId = FieldId(
-    getValueForSerialization:
-        (final MoneyObject instance) => (instance as AccountAlias).uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => (instance as AccountAlias).uniqueId,
   );
 
   FieldString fieldPattern = FieldString(serializeName: 'Pattern');

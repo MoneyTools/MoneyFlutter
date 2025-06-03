@@ -9,8 +9,7 @@ class CenterMessage extends StatelessWidget {
 
   factory CenterMessage.noItems() => const CenterMessage(message: 'No items');
 
-  factory CenterMessage.noTransaction() =>
-      const CenterMessage(message: 'No transactions.');
+  factory CenterMessage.noTransaction() => const CenterMessage(message: 'No transactions.');
 
   final Widget? child;
   final String message;

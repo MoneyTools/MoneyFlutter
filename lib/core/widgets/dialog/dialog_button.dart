@@ -18,18 +18,17 @@ class DialogActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget child =
-        icon == null
-            ? Text(text)
-            : IntrinsicWidth(
-              child: Row(
-                children: <Widget>[
-                  Opacity(opacity: 0.5, child: Icon(icon)),
-                  gapSmall(),
-                  Text(text),
-                ],
-              ),
-            );
+    final Widget child = icon == null
+        ? Text(text)
+        : IntrinsicWidth(
+            child: Row(
+              children: <Widget>[
+                Opacity(opacity: 0.5, child: Icon(icon)),
+                gapSmall(),
+                Text(text),
+              ],
+            ),
+          );
     return OutlinedButton(onPressed: onPressed, child: child);
   }
 }

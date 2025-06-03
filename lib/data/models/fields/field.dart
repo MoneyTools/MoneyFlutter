@@ -122,15 +122,11 @@ class Field<T> {
           getValueForDisplay = (final MoneyObject c) => value as num;
           getValueForSerialization = getValueForDisplay;
         case FieldType.text:
-          getValueForDisplay =
-              (final MoneyObject objectInstance) => value.toString();
+          getValueForDisplay = (final MoneyObject objectInstance) => value.toString();
         case FieldType.amount:
-          getValueForDisplay =
-              (final MoneyObject c) =>
-                  MoneyWidget(amountModel: value as MoneyModel);
+          getValueForDisplay = (final MoneyObject c) => MoneyWidget(amountModel: value as MoneyModel);
         case FieldType.date:
-          getValueForDisplay =
-              (final MoneyObject c) => dateToString(value as DateTime?);
+          getValueForDisplay = (final MoneyObject c) => dateToString(value as DateTime?);
         default:
           //
           debugPrint('No match');
@@ -203,8 +199,7 @@ class Field<T> {
   }
 
   /// Customize/override the edit widget
-  Widget Function(MoneyObject, void Function(bool wasModified) onEdited)?
-  getEditWidget;
+  Widget Function(MoneyObject, void Function(bool wasModified) onEdited)? getEditWidget;
 
   /// override the value edited
   dynamic Function(MoneyObject, dynamic)? setValue;
@@ -447,17 +442,18 @@ class FieldString extends Field<String> {
     super.sort,
   }) : super(defaultValue: '') {
     if (sort == null) {
-      super.sort = (
-        final MoneyObject a,
-        final MoneyObject b,
-        final bool ascending,
-      ) {
-        return sortByString(
-          getValueForDisplay(a),
-          getValueForDisplay(b),
-          ascending,
-        );
-      };
+      super.sort =
+          (
+            final MoneyObject a,
+            final MoneyObject b,
+            final bool ascending,
+          ) {
+            return sortByString(
+              getValueForDisplay(a),
+              getValueForDisplay(b),
+              ascending,
+            );
+          };
     }
   }
 }

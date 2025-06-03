@@ -72,8 +72,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
             icon: ViewId.viewCategories.getIconData(),
             title: 'Switch to Categories',
             onPressed: () {
-              final Transaction? transaction =
-                  getFirstSelectedItem() as Transaction?;
+              final Transaction? transaction = getFirstSelectedItem() as Transaction?;
               if (transaction != null) {
                 // Preselect the Category of this Transaction
                 PreferenceController.to.jumpToView(
@@ -91,8 +90,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
             icon: ViewId.viewPayees.getIconData(),
             title: 'Switch to Payees',
             onPressed: () {
-              final Transaction? transaction =
-                  getFirstSelectedItem() as Transaction?;
+              final Transaction? transaction = getFirstSelectedItem() as Transaction?;
               if (transaction != null) {
                 // Preselect the Payee of this Transaction
                 PreferenceController.to.jumpToView(
@@ -109,8 +107,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
             icon: Icons.person_search_outlined,
             title: 'Search for Payee',
             onPressed: () {
-              final Transaction? transaction =
-                  getFirstSelectedItem() as Transaction?;
+              final Transaction? transaction = getFirstSelectedItem() as Transaction?;
               if (transaction != null) {
                 launchGoogleSearch(transaction.getPayeeOrTransferCaption());
               }
@@ -148,20 +145,17 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
     bool includeDeleted = false,
     bool applyFilter = true,
   }) {
-    final List<Transaction> list =
-        Data().transactions
-            .iterableList(includeDeleted: includeDeleted)
-            .where(
-              (final Transaction transaction) =>
-                  isMatchingIncomeExpense(transaction) &&
-                  (applyFilter == false || isMatchingFilters(transaction)),
-            )
-            .toList();
+    final List<Transaction> list = Data().transactions
+        .iterableList(includeDeleted: includeDeleted)
+        .where(
+          (final Transaction transaction) =>
+              isMatchingIncomeExpense(transaction) && (applyFilter == false || isMatchingFilters(transaction)),
+        )
+        .toList();
 
     if (!balanceDone) {
       list.sort(
-        (final Transaction a, final Transaction b) =>
-            sortByDate(a.fieldDateTime.value, b.fieldDateTime.value),
+        (final Transaction a, final Transaction b) => sortByDate(a.fieldDateTime.value, b.fieldDateTime.value),
       );
 
       double runningNativeBalance = 0.0;
@@ -198,8 +192,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
           Data().transactions
               .iterableList()
               .where(
-                (final Transaction element) =>
-                    element.fieldAmount.value.asDouble() > 0,
+                (final Transaction element) => element.fieldAmount.value.asDouble() > 0,
               )
               .length,
         ),
@@ -214,8 +207,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
           Data().transactions
               .iterableList()
               .where(
-                (final Transaction element) =>
-                    element.fieldAmount.value.asDouble() < 0,
+                (final Transaction element) => element.fieldAmount.value.asDouble() < 0,
               )
               .length,
         ),

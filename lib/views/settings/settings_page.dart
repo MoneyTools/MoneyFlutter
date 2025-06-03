@@ -30,16 +30,13 @@ class SettingsPage extends GetView<GetxController> {
                   ),
                   value: PreferenceController.to.includeRentalManagement,
                   onChanged: (bool value) {
-                    PreferenceController.to.includeRentalManagement =
-                        !PreferenceController.to.includeRentalManagement;
+                    PreferenceController.to.includeRentalManagement = !PreferenceController.to.includeRentalManagement;
                   },
                 ),
                 const Divider(height: 50),
                 MyTextInput(
                   hintText: 'Stock service API key from https://twelvedata.com',
-                  controller:
-                      TextEditingController()
-                        ..text = PreferenceController.to.apiKeyForStocks,
+                  controller: TextEditingController()..text = PreferenceController.to.apiKeyForStocks,
                 ),
                 const Divider(height: 50),
                 _buildCurrenciesPanel(context),

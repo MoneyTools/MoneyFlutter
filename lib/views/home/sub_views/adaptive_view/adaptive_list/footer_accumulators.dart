@@ -4,16 +4,11 @@ import 'package:money/core/widgets/columns/footer_widgets.dart';
 import 'package:money/data/models/fields/field.dart';
 
 class FooterAccumulators {
-  final AccumulatorDateRange<Field<dynamic>> accumulatorDateRange =
-      AccumulatorDateRange<Field<dynamic>>();
-  final AccumulatorAverage<Field<dynamic>> accumulatorForAverage =
-      AccumulatorAverage<Field<dynamic>>();
-  final AccumulatorList<Field<dynamic>, String> accumulatorListOfText =
-      AccumulatorList<Field<dynamic>, String>();
-  final AccumulatorSum<Field<dynamic>, double> accumulatorSumAmount =
-      AccumulatorSum<Field<dynamic>, double>();
-  final AccumulatorSum<Field<dynamic>, double> accumulatorSumNumber =
-      AccumulatorSum<Field<dynamic>, double>();
+  final AccumulatorDateRange<Field<dynamic>> accumulatorDateRange = AccumulatorDateRange<Field<dynamic>>();
+  final AccumulatorAverage<Field<dynamic>> accumulatorForAverage = AccumulatorAverage<Field<dynamic>>();
+  final AccumulatorList<Field<dynamic>, String> accumulatorListOfText = AccumulatorList<Field<dynamic>, String>();
+  final AccumulatorSum<Field<dynamic>, double> accumulatorSumAmount = AccumulatorSum<Field<dynamic>, double>();
+  final AccumulatorSum<Field<dynamic>, double> accumulatorSumNumber = AccumulatorSum<Field<dynamic>, double>();
 
   /// Allowed to be override by derived classes
   /// to be overridden by derived class
@@ -69,15 +64,11 @@ class FooterAccumulators {
         if (accumulatorForAverage.containsKey(field)) {
           final RunningAverage range = accumulatorForAverage.getValue(field)!;
           final double value = range.getAverage();
-          final Widget widget =
-              field.type == FieldType.amount
-                  ? getFooterForAmount(value, prefix: 'Av ')
-                  : getFooterForInt(value, prefix: 'Av ');
+          final Widget widget = field.type == FieldType.amount
+              ? getFooterForAmount(value, prefix: 'Av ')
+              : getFooterForInt(value, prefix: 'Av ');
           return Tooltip(
-            message:
-                field.type == FieldType.amount
-                    ? range.descriptionAsMoney
-                    : range.descriptionAsInt,
+            message: field.type == FieldType.amount ? range.descriptionAsMoney : range.descriptionAsInt,
             child: widget,
           );
         }

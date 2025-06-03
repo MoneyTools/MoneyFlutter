@@ -22,9 +22,7 @@ class ValueQuality {
   @override
   String toString() => asString();
 
-  double asAmount() =>
-      (parseAmount(valueAsString, currency) ?? 0.00) *
-      (reverseAmountValue ? -1 : 1);
+  double asAmount() => (parseAmount(valueAsString, currency) ?? 0.00) * (reverseAmountValue ? -1 : 1);
 
   DateTime? asDate() {
     if (valueAsString.isEmpty) {
@@ -193,11 +191,10 @@ class ValuesParser {
     String amountAsText = '';
 
     line.trim();
-    final List<String> threeValues =
-        line
-            .split(RegExp(r'\t|;|\|'))
-            .where((String token) => token.trim().isNotEmpty)
-            .toList();
+    final List<String> threeValues = line
+        .split(RegExp(r'\t|;|\|'))
+        .where((String token) => token.trim().isNotEmpty)
+        .toList();
 
     // We are looking for these 3 values
     // Date | Description | Amount
@@ -219,9 +216,7 @@ class ValuesParser {
       case 3:
       default: // 4 or more
         dateAsText = threeValues.first;
-        descriptionAsText = threeValues
-            .sublist(1, threeValues.length - 1)
-            .join(' ');
+        descriptionAsText = threeValues.sublist(1, threeValues.length - 1).join(' ');
         amountAsText = cleanString(threeValues.last, '-+0123456789(),.');
     }
 
@@ -371,8 +366,7 @@ class ValuesParser {
     _values = value;
   }
 
-  List<ValuesQuality> get onlyNewTransactions =>
-      _values.where((ValuesQuality item) => !item.exist).toList();
+  List<ValuesQuality> get onlyNewTransactions => _values.where((ValuesQuality item) => !item.exist).toList();
 }
 
 bool isTransactionAlreadyInTheSystem({

@@ -44,8 +44,7 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
     return Data().aliases
         .iterableList(includeDeleted: includeDeleted)
         .where(
-          (Alias instance) =>
-              applyFilter == false || isMatchingFilters(instance),
+          (Alias instance) => applyFilter == false || isMatchingFilters(instance),
         )
         .toList();
   }
@@ -83,13 +82,10 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
           Transaction.fields.getFieldByName(columnIdMemo),
           Transaction.fields.getFieldByName(columnIdAmount),
         ],
-        getList:
-            () => getTransactions(
-              flattenSplits: true,
-              filter:
-                  (final Transaction transaction) =>
-                      transaction.fieldPayee.value == alias.fieldPayeeId.value,
-            ),
+        getList: () => getTransactions(
+          flattenSplits: true,
+          filter: (final Transaction transaction) => transaction.fieldPayee.value == alias.fieldPayeeId.value,
+        ),
         selectionController: selectionController,
       );
     }

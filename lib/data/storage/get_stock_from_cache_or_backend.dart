@@ -171,8 +171,7 @@ Future<StockPriceHistoryCache> _loadFromBackend(String symbol) async {
 
       // Unfortunately for now (sometimes) the API may returns two entries with the same date
       // for this ensure that we only have one date and price, last one wins
-      final Map<String, StockDatePrice> mapByUniqueDate =
-          <String, StockDatePrice>{};
+      final Map<String, StockDatePrice> mapByUniqueDate = <String, StockDatePrice>{};
 
       for (final dynamic value in values) {
         final String dateAsText = value['datetime'] as String;
@@ -215,8 +214,7 @@ void _saveToCache(final String symbol, List<StockDatePrice> prices) async {
   // Also save to the last price to the Security table
   final Security? security = Data().securities.getBySymbol(symbol);
   if (security != null) {
-    if (security.fieldPriceDate.value == null ||
-        prices.first.date.isAfter(security.fieldPriceDate.value!)) {
+    if (security.fieldPriceDate.value == null || prices.first.date.isAfter(security.fieldPriceDate.value!)) {
       // update to the last known stock price
 
       security.stashValueBeforeEditing();

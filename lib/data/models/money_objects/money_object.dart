@@ -24,14 +24,12 @@ class MoneyObject {
 
   @override
   String toString() {
-    final List<String> fieldsAsText =
-        fieldDefinitions
-            .where((Field<dynamic> field) => field.serializeName.isNotEmpty)
-            .map(
-              (Field<dynamic> field) =>
-                  '${field.serializeName}:${field.getValueForSerialization(this)}',
-            )
-            .toList();
+    final List<String> fieldsAsText = fieldDefinitions
+        .where((Field<dynamic> field) => field.serializeName.isNotEmpty)
+        .map(
+          (Field<dynamic> field) => '${field.serializeName}:${field.getValueForSerialization(this)}',
+        )
+        .toList();
 
     return fieldsAsText.join('|');
   }
@@ -39,8 +37,7 @@ class MoneyObject {
   ///
   /// Column 1 | Column 2 | Column 3
   ///
-  Widget buildFieldsAsWidgetForLargeScreen(final FieldDefinitions fields) =>
-      Fields.getRowOfColumns(fields, this);
+  Widget buildFieldsAsWidgetForLargeScreen(final FieldDefinitions fields) => Fields.getRowOfColumns(fields, this);
 
   ///
   /// Title       |
@@ -48,8 +45,7 @@ class MoneyObject {
   /// SubTitle    |
   ///
   /// Expect this to be override by the derived domain classes
-  Widget buildFieldsAsWidgetForSmallScreen() =>
-      const Text('Small screen content goes here');
+  Widget buildFieldsAsWidgetForSmallScreen() => const Text('Small screen content goes here');
 
   ///
   /// Name: Bob
@@ -70,18 +66,14 @@ class MoneyObject {
         final Widget widget = buildWidgetNameValueFromFieldDefinition(
           objectInstance: this,
           fieldDefinition: fieldDefinition,
-          singleLineNameValue:
-              compact, // when passing true, the onEdit is ignored
+          singleLineNameValue: compact, // when passing true, the onEdit is ignored
           onEdited: onEdit,
           isFirstItem: fieldDefinition == definitions.first,
           isLastItem: fieldDefinition == definitions.last,
         );
         widgets.add(
           Padding(
-            padding:
-                compact
-                    ? const EdgeInsets.all(0)
-                    : const EdgeInsets.all(SizeForPadding.normal),
+            padding: compact ? const EdgeInsets.all(0) : const EdgeInsets.all(SizeForPadding.normal),
             child: widget,
           ),
         );
@@ -124,8 +116,7 @@ class MoneyObject {
       // simple [Name  Value] pair
       return _buildNameValuePair(fieldDefinition, fieldValue);
     }
-    final bool isReadOnly =
-        onEdited == null || fieldDefinition.setValue == null;
+    final bool isReadOnly = onEdited == null || fieldDefinition.setValue == null;
 
     final InputDecoration decoration = myFormFieldDecoration(
       fieldName: fieldDefinition.name,
@@ -150,8 +141,7 @@ class MoneyObject {
         if (isReadOnly) {
           return MyFormFieldForWidget(
             title: fieldDefinition.name,
-            valueAsText:
-                fieldDefinition.getValueForDisplay(objectInstance).toString(),
+            valueAsText: fieldDefinition.getValueForDisplay(objectInstance).toString(),
             isReadOnly: true,
             onChanged: (final String value) {},
           );
@@ -163,8 +153,7 @@ class MoneyObject {
           ),
           child: SwitchFormField(
             title: fieldDefinition.name,
-            initialValue:
-                fieldDefinition.getValueForDisplay(objectInstance) as bool,
+            initialValue: fieldDefinition.getValueForDisplay(objectInstance) as bool,
             isReadOnly: isReadOnly,
             validator: (bool? value) {
               /// Todo
@@ -178,8 +167,7 @@ class MoneyObject {
         );
 
       case FieldType.widget:
-        final String valueAsString =
-            fieldDefinition.getValueForSerialization(objectInstance).toString();
+        final String valueAsString = fieldDefinition.getValueForSerialization(objectInstance).toString();
         return Opacity(
           opacity: isReadOnly ? 0.5 : 1.0,
           child: MyFormFieldForWidget(
@@ -231,9 +219,7 @@ class MoneyObject {
   FieldDefinitions get fieldDefinitions => <Field<dynamic>>[];
 
   FieldDefinitions getFieldDefinitionsForPanel() {
-    return fieldDefinitions
-        .where((Field<dynamic> element) => element.useAsDetailPanels(this))
-        .toList();
+    return fieldDefinitions.where((Field<dynamic> element) => element.useAsDetailPanels(this)).toList();
   }
 
   MyJson getMutatedDiff<T>() {

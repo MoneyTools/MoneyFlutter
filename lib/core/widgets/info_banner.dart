@@ -50,7 +50,9 @@ class InfoBanner extends StatelessWidget {
         children: <Widget>[
           Icon(icon, color: color),
           const SizedBox(width: 8.0),
-          Expanded(child: Text(message, style: TextStyle(color: color))),
+          Expanded(
+            child: Text(message, style: TextStyle(color: color)),
+          ),
         ],
       ),
     );

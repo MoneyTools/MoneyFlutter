@@ -62,15 +62,12 @@ class _PasteImageOcrState extends State<PasteImageOcr> {
             final List<String> allAmounts = text.split('\n');
 
             for (final String amount in allAmounts) {
-              final String cleanedAmount =
-                  amount
-                      .replaceAll(RegExp(r'\((?!\))'), ',')
-                      .replaceAll(RegExp(r'\(\)'), '')
-                      .replaceAll(',,', ',')
-                      .trim();
-              if (cleanedAmount.isNotEmpty &&
-                  cleanedAmount != ',' &&
-                  cleanedAmount != '1') {
+              final String cleanedAmount = amount
+                  .replaceAll(RegExp(r'\((?!\))'), ',')
+                  .replaceAll(RegExp(r'\(\)'), '')
+                  .replaceAll(',,', ',')
+                  .trim();
+              if (cleanedAmount.isNotEmpty && cleanedAmount != ',' && cleanedAmount != '1') {
                 widget.textController.text += '$cleanedAmount\n';
               }
             }

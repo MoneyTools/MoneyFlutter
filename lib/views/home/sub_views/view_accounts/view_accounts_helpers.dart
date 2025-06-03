@@ -14,10 +14,7 @@ extension ViewAccountsHelpers on ViewAccountsState {
     Data().accounts
         .activeAccount(types)
         .forEach(
-          (final Account x) =>
-              total +=
-                  (x.fieldBalanceNormalized.getValueForDisplay(x) as MoneyModel)
-                      .asDouble(),
+          (final Account x) => total += (x.fieldBalanceNormalized.getValueForDisplay(x) as MoneyModel).asDouble(),
         );
     return total;
   }

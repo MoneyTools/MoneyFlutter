@@ -6,11 +6,10 @@ Widget pickerAccount({
   required final Account? selected,
   required final void Function(Account?) onSelected,
 }) {
-  final List<String> options =
-      Data().accounts
-          .getListSorted()
-          .map((Account element) => element.fieldName.value)
-          .toList();
+  final List<String> options = Data().accounts
+      .getListSorted()
+      .map((Account element) => element.fieldName.value)
+      .toList();
 
   final String selectedName = selected == null ? '' : selected.fieldName.value;
 

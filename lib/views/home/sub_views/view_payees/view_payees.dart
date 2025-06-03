@@ -85,14 +85,12 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
 
   @override
   List<Payee> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    final List<Payee> list =
-        Data().payees
-            .iterableList(includeDeleted: includeDeleted)
-            .where(
-              (Payee instance) =>
-                  applyFilter == false || isMatchingFilters(instance),
-            )
-            .toList();
+    final List<Payee> list = Data().payees
+        .iterableList(includeDeleted: includeDeleted)
+        .where(
+          (Payee instance) => applyFilter == false || isMatchingFilters(instance),
+        )
+        .toList();
 
     return list;
   }
@@ -111,9 +109,7 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
     final Payee? payee = getFirstSelectedItem() as Payee?;
     if (payee != null && payee.fieldId.value > -1) {
       return getTransactions(
-        filter:
-            (final Transaction transaction) =>
-                transaction.fieldPayee.value == payee.fieldId.value,
+        filter: (final Transaction transaction) => transaction.fieldPayee.value == payee.fieldId.value,
       );
     }
     return <MoneyObject>[];

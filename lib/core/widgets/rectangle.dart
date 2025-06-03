@@ -23,10 +23,7 @@ class MyRectangle extends StatelessWidget {
   Widget build(final BuildContext context) {
     return DottedBorder(
       padding: EdgeInsets.zero,
-      dashPattern:
-          colorFill == Colors.transparent
-              ? const <double>[4.0, 2.0]
-              : const <double>[100.0, 0.0],
+      dashPattern: colorFill == Colors.transparent ? const <double>[4.0, 2.0] : const <double>[100.0, 0.0],
       color: colorBorder,
       strokeWidth: borderSize,
       borderType: BorderType.Circle,

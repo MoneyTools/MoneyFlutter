@@ -25,8 +25,7 @@ class SuggestionApproval extends StatefulWidget {
   SuggestionApprovalState createState() => SuggestionApprovalState();
 }
 
-class SuggestionApprovalState extends State<SuggestionApproval>
-    with SingleTickerProviderStateMixin {
+class SuggestionApprovalState extends State<SuggestionApproval> with SingleTickerProviderStateMixin {
   bool approved = false;
 
   late AnimationController _animationController;

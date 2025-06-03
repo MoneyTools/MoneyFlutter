@@ -40,10 +40,7 @@ void myShowDialogAndActionsForMoneyObjects({
 
   return adaptiveScreenSizeDialog(
     context: context,
-    title:
-        moneyObjects.length == 1
-            ? title
-            : '${getIntAsText(moneyObjects.length)} $title',
+    title: moneyObjects.length == 1 ? title : '${getIntAsText(moneyObjects.length)} $title',
     captionForClose: null, // this will hide the close button
     child: DialogMutateMoneyObject(
       moneyObject: rollup,
@@ -63,8 +60,7 @@ void myShowDialogAndActionsForMoneyObjects({
                   // Clean or Apply Transfers to all related instances
                   Data().verifyApplyTransfer(
                     transaction: m,
-                    relatedAccount:
-                        (rollup as Transaction).editingTransferAccount,
+                    relatedAccount: (rollup as Transaction).editingTransferAccount,
                   );
                 }
               }
@@ -91,8 +87,7 @@ class DialogMutateMoneyObject extends StatefulWidget {
   final void Function(MoneyObject) onApplyChange;
 
   @override
-  State<DialogMutateMoneyObject> createState() =>
-      _DialogMutateMoneyObjectState();
+  State<DialogMutateMoneyObject> createState() => _DialogMutateMoneyObjectState();
 }
 
 class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
@@ -118,8 +113,7 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
               children: _moneyObject.buildListOfNamesValuesWidgets(
                 onEdit: (bool wasModified) {
                   setState(() {
-                    dataWasModified =
-                        wasModified || MoneyObject.isDataModified(_moneyObject);
+                    dataWasModified = wasModified || MoneyObject.isDataModified(_moneyObject);
                   });
                 },
               ),

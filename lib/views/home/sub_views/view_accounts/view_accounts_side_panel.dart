@@ -46,8 +46,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
   }
 
   List<Widget> _buildStockHoldingCards(final Account account) {
-    final AccumulatorList<String, Investment> groupBySymbol =
-        AccumulatorList<String, Investment>();
+    final AccumulatorList<String, Investment> groupBySymbol = AccumulatorList<String, Investment>();
     Accounts.groupAccountStockSymbols(account, groupBySymbol);
 
     if (groupBySymbol.getKeys().isEmpty) {
@@ -60,17 +59,15 @@ extension ViewAccountsSidePanel on ViewAccountsState {
       String key,
       Set<Investment> listOfInvestmentsForAccount,
     ) {
-      final double sharesForThisStock =
-          Investments.applyHoldingSharesAdjustedForSplits(
-            listOfInvestmentsForAccount.toList(),
-          );
+      final double sharesForThisStock = Investments.applyHoldingSharesAdjustedForSplits(
+        listOfInvestmentsForAccount.toList(),
+      );
 
       if (isConsideredZero(sharesForThisStock) == false) {
         //  "123|MSFT" >> "MSFT"
         // tally the cost of the stock
         double totalCost = 0.0;
-        for (final Investment investment
-            in listOfInvestmentsForAccount.toList()) {
+        for (final Investment investment in listOfInvestmentsForAccount.toList()) {
           totalCost += investment.costForShares;
         }
 
@@ -96,93 +93,84 @@ extension ViewAccountsSidePanel on ViewAccountsState {
 
     // sort by descending holding-value
     stockSummaries.sort(
-      (StockSummary a, StockSummary b) =>
-          b.holdingValue.compareTo(a.holdingValue),
+      (StockSummary a, StockSummary b) => b.holdingValue.compareTo(a.holdingValue),
     );
 
-    final List<Widget> stockPanels =
-        stockSummaries
-            .map(
-              (StockSummary summary) => BoxWithScrollingContent(
-                height: 180,
+    final List<Widget> stockPanels = stockSummaries
+        .map(
+          (StockSummary summary) => BoxWithScrollingContent(
+            height: 180,
+            children: <Widget>[
+              Row(
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Expanded(child: TextTitle(summary.symbol)),
-                      buildMenuButton(<MenuEntry>[
-                        MenuEntry.toInvestments(
-                          symbol: summary.symbol,
-                          accountName: account.fieldName.value,
-                        ),
-                        MenuEntry.toStocks(symbol: summary.symbol),
-                        MenuEntry.toWeb(
-                          url:
-                              'https://finance.yahoo.com/quote/${summary.symbol}/',
-                        ),
-                        MenuEntry.customAction(
-                          icon: Icons.refresh,
-                          text: 'Get latest price',
-                          onPressed: () async {
-                            await loadFomBackendAndSaveToCache(summary.symbol);
-                          },
-                        ),
-                        MenuEntry.customAction(
-                          icon: Icons.add,
-                          text: 'Add investment',
-                          onPressed: () async {
-                            showImportInvestment(
-                              inputData: InvestmentImportFields(
-                                account:
-                                    Data().accounts
-                                        .getMostRecentlySelectedAccount(),
-                                date: DateTime.now(),
-                                // inverse the position
-                                investmentType:
-                                    summary.shares > 0
-                                        ? InvestmentType.sell
-                                        : InvestmentType.buy,
-                                category: Data().categories.investmentOther,
-                                symbol: summary.symbol,
-                                units: summary.shares,
-                                amountPerUnit: summary.sharePrice,
-                                transactionAmount:
-                                    summary.shares * summary.sharePrice,
-                                description: 'Close Position',
-                              ),
-                            );
-                          },
-                        ),
-                      ]),
-                    ],
-                  ),
-                  gapMedium(),
-
-                  // number of shares
-                  LabelAndQuantity(caption: 'Shares', quantity: summary.shares),
-
-                  // Average cost price
-                  LabelAndAmount(
-                    caption: 'Average cost',
-                    amount: summary.averageCost,
-                  ),
-
-                  // Price per share
-                  LabelAndAmount(
-                    caption: 'Market price',
-                    amount: summary.sharePrice,
-                  ),
-
-                  // Hold value
-                  gapMedium(),
-                  const Divider(),
-                  LabelAndAmount(
-                    caption: 'Value',
-                    amount: summary.holdingValue,
-                  ),
+                  Expanded(child: TextTitle(summary.symbol)),
+                  buildMenuButton(<MenuEntry>[
+                    MenuEntry.toInvestments(
+                      symbol: summary.symbol,
+                      accountName: account.fieldName.value,
+                    ),
+                    MenuEntry.toStocks(symbol: summary.symbol),
+                    MenuEntry.toWeb(
+                      url: 'https://finance.yahoo.com/quote/${summary.symbol}/',
+                    ),
+                    MenuEntry.customAction(
+                      icon: Icons.refresh,
+                      text: 'Get latest price',
+                      onPressed: () async {
+                        await loadFomBackendAndSaveToCache(summary.symbol);
+                      },
+                    ),
+                    MenuEntry.customAction(
+                      icon: Icons.add,
+                      text: 'Add investment',
+                      onPressed: () async {
+                        showImportInvestment(
+                          inputData: InvestmentImportFields(
+                            account: Data().accounts.getMostRecentlySelectedAccount(),
+                            date: DateTime.now(),
+                            // inverse the position
+                            investmentType: summary.shares > 0 ? InvestmentType.sell : InvestmentType.buy,
+                            category: Data().categories.investmentOther,
+                            symbol: summary.symbol,
+                            units: summary.shares,
+                            amountPerUnit: summary.sharePrice,
+                            transactionAmount: summary.shares * summary.sharePrice,
+                            description: 'Close Position',
+                          ),
+                        );
+                      },
+                    ),
+                  ]),
                 ],
               ),
-            )
-            .toList();
+              gapMedium(),
+
+              // number of shares
+              LabelAndQuantity(caption: 'Shares', quantity: summary.shares),
+
+              // Average cost price
+              LabelAndAmount(
+                caption: 'Average cost',
+                amount: summary.averageCost,
+              ),
+
+              // Price per share
+              LabelAndAmount(
+                caption: 'Market price',
+                amount: summary.sharePrice,
+              ),
+
+              // Hold value
+              gapMedium(),
+              const Divider(),
+              LabelAndAmount(
+                caption: 'Value',
+                amount: summary.holdingValue,
+              ),
+            ],
+          ),
+        )
+        .toList();
 
     // also add Summary Cash and Stock
     double totalInvestment = 0.0;
@@ -244,16 +232,14 @@ extension ViewAccountsSidePanel on ViewAccountsState {
     final List<PairXYY> listOfPairXY = <PairXYY>[];
 
     if (selectedIds.length == 1) {
-      final Account? account =
-          getFirstSelectedItemFromSelectedList(selectedIds) as Account?;
+      final Account? account = getFirstSelectedItemFromSelectedList(selectedIds) as Account?;
       if (account == null) {
         // this should not happen
         return const Text('No account selected');
       }
 
       account.maxBalancePerYears.forEach((int key, double value) {
-        final double valueCurrencyChoice =
-            showAsNativeCurrency ? value : value * account.getCurrencyRatio();
+        final double valueCurrencyChoice = showAsNativeCurrency ? value : value * account.getCurrencyRatio();
 
         listOfPairXY.add(PairXYY(key.toString(), valueCurrencyChoice));
       });
@@ -264,10 +250,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
       return Chart(
         key: Key('$selectedIds $showAsNativeCurrency'),
         list: listOfPairXY.take(100).toList(),
-        currency:
-            showAsNativeCurrency
-                ? account.fieldCurrency.value
-                : Constants.defaultCurrency,
+        currency: showAsNativeCurrency ? account.fieldCurrency.value : Constants.defaultCurrency,
       );
     } else {
       for (final MoneyObject item in getList()) {
@@ -278,16 +261,14 @@ extension ViewAccountsSidePanel on ViewAccountsState {
               account.fieldName.value,
               showAsNativeCurrency
                   ? account.balance
-                  : account.fieldBalanceNormalized.getValueForDisplay(account)
-                      as num,
+                  : account.fieldBalanceNormalized.getValueForDisplay(account) as num,
             ),
           );
         }
       }
 
       listOfPairXY.sort(
-        (final PairXYY a, final PairXYY b) =>
-            (b.yValue1.abs() - a.yValue1.abs()).toInt(),
+        (final PairXYY a, final PairXYY b) => (b.yValue1.abs() - a.yValue1.abs()).toInt(),
       );
 
       return Chart(
@@ -354,8 +335,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
         showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized,
       ),
       // Credit Card account has a PaidOn column to help with balancing Statements
-      if (account.fieldType.value == AccountType.credit)
-        Transaction.fields.getFieldByName(columnIdPaidOn),
+      if (account.fieldType.value == AccountType.credit) Transaction.fields.getFieldByName(columnIdPaidOn),
     ];
 
     return Obx(() {
@@ -369,36 +349,37 @@ extension ViewAccountsSidePanel on ViewAccountsState {
         sortAscending: sortAscending,
         listController: Get.find<ListControllerSidePanel>(),
         selectionController: selectionController,
-        onUserChoiceChanged: (
-          int sortByFieldIndex,
-          bool sortAscending,
-          final int selectedTransactionId,
-        ) {
-          // keep track of user choice
-          sortFieldIndex = sortByFieldIndex;
-          sortAscending = sortAscending;
+        onUserChoiceChanged:
+            (
+              int sortByFieldIndex,
+              bool sortAscending,
+              final int selectedTransactionId,
+            ) {
+              // keep track of user choice
+              sortFieldIndex = sortByFieldIndex;
+              sortAscending = sortAscending;
 
-          // Save user choices
+              // Save user choices
 
-          // Select Column
-          PreferenceController.to.setInt(
-            getPreferenceKey(settingKeySidePanel + settingKeySortBy),
-            sortByFieldIndex,
-          );
-          // Sort
-          PreferenceController.to.setBool(
-            getPreferenceKey(settingKeySidePanel + settingKeySortAscending),
-            sortAscending,
-          );
+              // Select Column
+              PreferenceController.to.setInt(
+                getPreferenceKey(settingKeySidePanel + settingKeySortBy),
+                sortByFieldIndex,
+              );
+              // Sort
+              PreferenceController.to.setBool(
+                getPreferenceKey(settingKeySidePanel + settingKeySortAscending),
+                sortAscending,
+              );
 
-          // last item selected
-          PreferenceController.to.setInt(
-            getPreferenceKey(
-              settingKeySidePanel + settingKeySelectedListItemId,
-            ),
-            selectedTransactionId,
-          );
-        },
+              // last item selected
+              PreferenceController.to.setInt(
+                getPreferenceKey(
+                  settingKeySidePanel + settingKeySelectedListItemId,
+                ),
+                selectedTransactionId,
+              );
+            },
       );
     });
   }
@@ -476,8 +457,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
         });
       },
       onItemLongPress: (BuildContext context2, int itemId) {
-        final LoanPayment instance =
-            findObjectById(itemId, aggregatedList) as LoanPayment;
+        final LoanPayment instance = findObjectById(itemId, aggregatedList) as LoanPayment;
         myShowDialogAndActionsForMoneyObject(
           title: 'Loan Payment',
           moneyObject: instance,

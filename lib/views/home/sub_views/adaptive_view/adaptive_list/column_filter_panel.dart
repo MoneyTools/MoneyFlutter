@@ -31,14 +31,12 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
 
   @override
   Widget build(BuildContext context) {
-    list =
-        widget.listOfUniqueInstances
-            .where(
-              (ValueSelection element) =>
-                  filterText.isEmpty ||
-                  element.name.toLowerCase().contains(filterText.toLowerCase()),
-            )
-            .toList();
+    list = widget.listOfUniqueInstances
+        .where(
+          (ValueSelection element) =>
+              filterText.isEmpty || element.name.toLowerCase().contains(filterText.toLowerCase()),
+        )
+        .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -116,9 +114,7 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
   }
 
   int getSelectedCount() {
-    return widget.listOfUniqueInstances
-        .where((ValueSelection item) => item.isSelected)
-        .length;
+    return widget.listOfUniqueInstances.where((ValueSelection item) => item.isSelected).length;
   }
 }
 

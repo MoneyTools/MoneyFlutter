@@ -64,8 +64,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   VoidCallback? onMultiSelect;
 
   final FooterAccumulators _footerAccumulators = FooterAccumulators();
-  final ValueNotifier<List<int>> _selectedItemsByUniqueId =
-      ValueNotifier<List<int>>(<int>[]);
+  final ValueNotifier<List<int>> _selectedItemsByUniqueId = ValueNotifier<List<int>>(<int>[]);
 
   Fields<MoneyObject> _fieldToDisplay = Fields<MoneyObject>();
   FieldFilters _filterByFieldsValue = FieldFilters();
@@ -118,8 +117,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           getColumnFooterWidget: getColumnFooterWidget,
           onSelectionChanged: (int _) {
             lc.bookmark = lc.scrollController.offset;
-            _selectedItemsByUniqueId.value =
-                _selectedItemsByUniqueId.value.toList();
+            _selectedItemsByUniqueId.value = _selectedItemsByUniqueId.value.toList();
             saveLastUserChoicesOfView();
           },
           onItemTap: _onItemTap,
@@ -193,15 +191,14 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       onDeleteMoneyObject: onDeleteItems,
       textFilter: _filterByText,
       onTextFilterChanged: _onFilterTextChanged,
-      onClearAllFilters:
-          areFiltersOn()
-              ? () {
-                // remove any filters from the view
-                setState(() {
-                  _resetFiltersAndGetList();
-                });
-              }
-              : null,
+      onClearAllFilters: areFiltersOn()
+          ? () {
+              // remove any filters from the view
+              setState(() {
+                _resetFiltersAndGetList();
+              });
+            }
+          : null,
       onScrollToTop: () {
         lc.scrollToTop();
       },
@@ -368,8 +365,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
     /// Info panel header
     if (forSidePanelTransactions) {
-      if (PreferenceController.to.selectedSidePanelTabId ==
-          SidePanelSubViewEnum.transactions) {
+      if (PreferenceController.to.selectedSidePanelTabId == SidePanelSubViewEnum.transactions) {
         /// Add Transactions
         if (onAddTransaction != null) {
           widgets.add(buildAddTransactionsButton(onAddTransaction!));
@@ -392,10 +388,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         widgets.add(
           buildEditButton(() {
             myShowDialogAndActionsForMoneyObjects(
-              title:
-                  _selectedItemsByUniqueId.value.length == 1
-                      ? getClassNameSingular()
-                      : getClassNamePlural(),
+              title: _selectedItemsByUniqueId.value.length == 1 ? getClassNameSingular() : getClassNamePlural(),
               moneyObjects: getSelectedItemsFromSelectedList(
                 _selectedItemsByUniqueId.value,
               ),
@@ -506,8 +499,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     final Set<int> selectedIds = selectedList.toSet();
     return list
         .where(
-          (MoneyObject moneyObject) =>
-              selectedIds.contains(moneyObject.uniqueId),
+          (MoneyObject moneyObject) => selectedIds.contains(moneyObject.uniqueId),
         )
         .toList();
   }
@@ -592,8 +584,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     final Set<String> set = <String>{}; // This is a Set()
     final List<MoneyObject> list = getList(applyFilter: false);
     for (final MoneyObject moneyObject in list) {
-      final String fieldValue =
-          columnToCustomerFilterOn.getValueForDisplay(moneyObject).toString();
+      final String fieldValue = columnToCustomerFilterOn.getValueForDisplay(moneyObject).toString();
       set.add(fieldValue);
     }
     return set.toList();
@@ -640,10 +631,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     final Set<String> set = <String>{}; // This is a Set()
     final List<MoneyObject> list = getList(applyFilter: false);
     for (final MoneyObject moneyObject in list) {
-      final String fieldValue =
-          columnToCustomerFilterOn.getValueForReading?.call(moneyObject)
-              as String? ??
-          '';
+      final String fieldValue = columnToCustomerFilterOn.getValueForReading?.call(moneyObject) as String? ?? '';
       set.add(fieldValue);
     }
     final List<String> uniqueValues = set.toList();
@@ -752,10 +740,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
           content = ColumnFilterPanel(
             listOfUniqueInstances: listOfValueSelected,
-            textAlign:
-                fieldDefinition.type == FieldType.amount
-                    ? TextAlign.right
-                    : TextAlign.left,
+            textAlign: fieldDefinition.type == FieldType.amount ? TextAlign.right : TextAlign.left,
           );
         }
     }
@@ -918,10 +903,9 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       children: <Widget>[
         buildHeader(),
         Expanded(
-          child:
-              areFiltersOn()
-                  ? _buildCenterMessageForEmptyListDueToFilters(key)
-                  : _buildCenterMessageForEmptyList(key),
+          child: areFiltersOn()
+              ? _buildCenterMessageForEmptyListDueToFilters(key)
+              : _buildCenterMessageForEmptyList(key),
         ),
       ],
     );
@@ -1006,24 +990,22 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       namePlural,
     );
 
-    final String question =
-        moneyObjects.length == 1
-            ? 'Are you sure you want to delete this $nameSingular?'
-            : 'Are you sure you want to delete the ${moneyObjects.length} selected $namePlural?';
-    final RenderObjectWidget content =
-        moneyObjects.length == 1
-            ? Column(
-              children: moneyObjects.first.buildListOfNamesValuesWidgets(
-                onEdit: null,
-                compact: true,
-              ),
-            )
-            : Center(
-              child: Text(
-                '${getIntAsText(moneyObjects.length)} $namePlural',
-                style: getTextTheme(context).displaySmall,
-              ),
-            );
+    final String question = moneyObjects.length == 1
+        ? 'Are you sure you want to delete this $nameSingular?'
+        : 'Are you sure you want to delete the ${moneyObjects.length} selected $namePlural?';
+    final RenderObjectWidget content = moneyObjects.length == 1
+        ? Column(
+            children: moneyObjects.first.buildListOfNamesValuesWidgets(
+              onEdit: null,
+              compact: true,
+            ),
+          )
+        : Center(
+            child: Text(
+              '${getIntAsText(moneyObjects.length)} $namePlural',
+              style: getTextTheme(context).displaySmall,
+            ),
+          );
 
     showConfirmationDialog(
       context: context,

@@ -222,9 +222,7 @@ Future<void> testImportBulkManualTextInput(WidgetTester tester) async {
 
   await tapOnKeyString(tester, 'key_import_tab_free_style');
   await tester.pumpAndSettle();
-  final Finder textFieldInput = find
-      .byKey(const Key('key_input_text_field_value'))
-      .at(0); // top most element found
+  final Finder textFieldInput = find.byKey(const Key('key_input_text_field_value')).at(0); // top most element found
   await tester.pumpAndSettle(Durations.extralong4);
   await inputTextToElement(
     tester,
@@ -274,10 +272,7 @@ Future<void> testSettingsFontsAndRental(WidgetTester tester) async {
   {
     // Find the SwitchListTile using the text label provided in the Semantics
     final Finder switchTileFinder = find.byWidgetPredicate(
-      (Widget widget) =>
-          widget is SwitchListTile &&
-          widget.title is Text &&
-          (widget.title as Text).data == 'Rental',
+      (Widget widget) => widget is SwitchListTile && widget.title is Text && (widget.title as Text).data == 'Rental',
     );
 
     // Verify initial state is OFF (false)
@@ -334,10 +329,8 @@ Future<void> testCashFlow(WidgetTester tester) async {
   final int attemptsX = 40; // Number of attempts (scan points)
   // ignore: deprecated_member_use
   final Size appSize = tester.binding.window.physicalSize;
-  final double scanSpacingWidth =
-      appSize.width / attemptsX; // Horizontal scan step
-  final double scanSpacingHeight =
-      appSize.height / attemptsY; // Horizontal scan step
+  final double scanSpacingWidth = appSize.width / attemptsX; // Horizontal scan step
+  final double scanSpacingHeight = appSize.height / attemptsY; // Horizontal scan step
 
   // print(
   //   '******************** Screen size $appSize scanSpacingWidth $scanSpacingWidth   scanSpacingHeight $scanSpacingHeight',
@@ -638,9 +631,7 @@ Future<void> testEvents(WidgetTester tester) async {
       ); // fix soem odd timing issues
 
       // Find the widget that displays the text 'Grocery'.
-      final Finder groceryFinder = find
-          .text('Grocery')
-          .at(0); // top most element found
+      final Finder groceryFinder = find.text('Grocery').at(0); // top most element found
       await tester.pumpAndSettle(
         const Duration(milliseconds: 500),
       ); // fix soem odd timing issues

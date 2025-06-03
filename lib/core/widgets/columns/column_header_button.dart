@@ -157,9 +157,7 @@ SortIndicator getSortIndicator(
   final bool ascending,
 ) {
   if (sortToMatch == currentSort) {
-    return ascending
-        ? SortIndicator.sortAscending
-        : SortIndicator.sortDescending;
+    return ascending ? SortIndicator.sortAscending : SortIndicator.sortDescending;
   }
   return SortIndicator.none;
 }

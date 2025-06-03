@@ -121,14 +121,13 @@ List<PairStringDouble> convertToPercentages(
   );
 
   // Convert each amount to a percentage and retain key association
-  final List<PairStringDouble> percentages =
-      pairStringDouble.map((PairStringDouble entry) {
-        final double percentage = ((entry.value as num) / totalAmount) * 100;
-        return PairStringDouble(
-          key: entry.key,
-          value: percentage.isNaN ? 0.0 : percentage,
-        ); // Handle division by zero
-      }).toList();
+  final List<PairStringDouble> percentages = pairStringDouble.map((PairStringDouble entry) {
+    final double percentage = ((entry.value as num) / totalAmount) * 100;
+    return PairStringDouble(
+      key: entry.key,
+      value: percentage.isNaN ? 0.0 : percentage,
+    ); // Handle division by zero
+  }).toList();
 
   return percentages;
 }

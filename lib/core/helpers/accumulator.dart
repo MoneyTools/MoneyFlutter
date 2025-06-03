@@ -109,8 +109,7 @@ class AccumulatorSum<K, V> {
   dynamic getValue(final K key) => values[key] ?? 0;
 
   // Replace this function with your specific logic for accumulating values of type T
-  dynamic _accumulate(V existingValue, V value) =>
-      (existingValue as num) + (value as num);
+  dynamic _accumulate(V existingValue, V value) => (existingValue as num) + (value as num);
 }
 
 /// Tracks date ranges for values by key.
@@ -155,8 +154,7 @@ class AccumulatorAverage<K> {
   bool containsKey(final K key) => values.containsKey(key);
 
   void cumulate(final K key, final num value) {
-    final RunningAverage average =
-        values.containsKey(key) ? values[key]! : values[key] = RunningAverage();
+    final RunningAverage average = values.containsKey(key) ? values[key]! : values[key] = RunningAverage();
     average.addValue(value);
   }
 
@@ -229,11 +227,9 @@ class RunningAverage {
     }
   }
 
-  String get descriptionAsInt =>
-      'Average\n${range.descriptionAsInt}\n$descriptionCount';
+  String get descriptionAsInt => 'Average\n${range.descriptionAsInt}\n$descriptionCount';
 
-  String get descriptionAsMoney =>
-      'Average\n${range.descriptionAsMoney}\n$descriptionCount';
+  String get descriptionAsMoney => 'Average\n${range.descriptionAsMoney}\n$descriptionCount';
 
   String get descriptionCount {
     if (_countZeros == 0) {

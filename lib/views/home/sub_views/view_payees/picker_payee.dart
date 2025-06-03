@@ -7,15 +7,10 @@ Widget pickerPayee({
   required final Payee? itemSelected,
   required final void Function(Payee?) onSelected,
 }) {
-  final List<String> options =
-      Data().payees
-          .getListSorted()
-          .map((Payee element) => element.fieldName.value)
-          .toList();
+  final List<String> options = Data().payees.getListSorted().map((Payee element) => element.fieldName.value).toList();
   options.sort((String a, String b) => sortByString(a, b, true));
 
-  final String selectedName =
-      itemSelected == null ? '' : itemSelected.fieldName.value;
+  final String selectedName = itemSelected == null ? '' : itemSelected.fieldName.value;
 
   return PickerEditBox(
     title: 'Payee',

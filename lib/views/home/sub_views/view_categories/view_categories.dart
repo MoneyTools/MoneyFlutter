@@ -52,8 +52,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
         0,
         buildAddItemButton(() {
           // add a new Category
-          final Category? currentSelectedCategory =
-              getFirstSelectedItem() as Category?;
+          final Category? currentSelectedCategory = getFirstSelectedItem() as Category?;
           final Category newItem = Data().categories.addNewCategory(
             parentId: currentSelectedCategory?.uniqueId ?? -1,
           );
@@ -137,16 +136,14 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     bool applyFilter = true,
   }) {
     final List<CategoryType> filterType = _getSelectedCategoryType();
-    final List<Category> list =
-        Data().categories
-            .iterableList(includeDeleted: includeDeleted)
-            .where(
-              (final Category instance) =>
-                  (filterType.isEmpty ||
-                      filterType.contains(instance.fieldType.value)) &&
-                  (applyFilter == false || isMatchingFilters(instance)),
-            )
-            .toList();
+    final List<Category> list = Data().categories
+        .iterableList(includeDeleted: includeDeleted)
+        .where(
+          (final Category instance) =>
+              (filterType.isEmpty || filterType.contains(instance.fieldType.value)) &&
+              (applyFilter == false || isMatchingFilters(instance)),
+        )
+        .toList();
     return list;
   }
 
@@ -305,9 +302,8 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
       );
       return getTransactions(
         flattenSplits: true,
-        filter:
-            (final Transaction transaction) => listOfDescendentCategories
-                .contains(transaction.fieldCategoryId.value),
+        filter: (final Transaction transaction) =>
+            listOfDescendentCategories.contains(transaction.fieldCategoryId.value),
       );
     }
     return <Transaction>[];

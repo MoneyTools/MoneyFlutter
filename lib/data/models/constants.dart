@@ -28,8 +28,7 @@ const String settingKeyDarkMode = 'themeDarkMode';
 const String settingKeyTheme = 'themeColor';
 const String settingKeySidePanelExpanded = 'isSidePanelExpanded';
 const String settingKeySidePanelHeight = 'sidePanelHeight';
-const String settingKeyDomainAccountsInfoTransactions =
-    'accountDetailsTransactions';
+const String settingKeyDomainAccountsInfoTransactions = 'accountDetailsTransactions';
 const String settingKeyFilterText = 'filterText';
 const String settingKeyFiltersColumns = 'filtersColumns';
 const String settingKeyIncludeClosedAccounts = 'includeClosedAccounts';

@@ -30,8 +30,7 @@ class MyListItemFooter<T> extends StatelessWidget {
     if (multiSelectionOn) {
       footerWidgets.add(
         Opacity(
-          opacity:
-              0, // We only want to use the same width as the Header Checkbox
+          opacity: 0, // We only want to use the same width as the Header Checkbox
           child: Checkbox(value: false, onChanged: (bool? _) {}),
         ),
       );

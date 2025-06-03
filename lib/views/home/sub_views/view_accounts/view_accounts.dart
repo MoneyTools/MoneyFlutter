@@ -78,31 +78,22 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
             icon: ViewId.viewTransactions.getIconData(),
             title: 'Matching Transaction',
             onPressed: () {
-              final Transaction? selectedInfoTransaction =
-                  getSidePanelLastSelectedTransaction();
+              final Transaction? selectedInfoTransaction = getSidePanelLastSelectedTransaction();
 
               if (selectedInfoTransaction != null) {
                 // Look for transaction matching -1 to +1 date from this transaction
                 final DateRange approximationDates = DateRange(
-                  min:
-                      selectedInfoTransaction.fieldDateTime.value!
-                          .add(const Duration(days: -1))
-                          .startOfDay,
-                  max:
-                      selectedInfoTransaction.fieldDateTime.value!
-                          .add(const Duration(days: 1))
-                          .endOfDay,
+                  min: selectedInfoTransaction.fieldDateTime.value!.add(const Duration(days: -1)).startOfDay,
+                  max: selectedInfoTransaction.fieldDateTime.value!.add(const Duration(days: 1)).endOfDay,
                 );
                 // we are looking for the reverse transaction
-                final double amountToFind =
-                    selectedInfoTransaction.fieldAmount.value.asDouble() * -1;
+                final double amountToFind = selectedInfoTransaction.fieldAmount.value.asDouble() * -1;
 
-                final Transaction? matchingTransaction = Data().transactions
-                    .findExistingTransaction(
-                      accountId: -1,
-                      dateRange: approximationDates,
-                      amount: amountToFind,
-                    );
+                final Transaction? matchingTransaction = Data().transactions.findExistingTransaction(
+                  accountId: -1,
+                  dateRange: approximationDates,
+                  amount: amountToFind,
+                );
                 // Switch view
                 if (matchingTransaction != null) {
                   PreferenceController.to.jumpToView(
@@ -177,8 +168,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     switch (subViewId) {
       case SidePanelSubViewEnum.chart: // Chart
       case SidePanelSubViewEnum.transactions: // Transactions
-        final Account? account =
-            getFirstSelectedItemFromSelectedList(selectedItems) as Account?;
+        final Account? account = getFirstSelectedItemFromSelectedList(selectedItems) as Account?;
         if (account != null) {
           if (account.fieldCurrency.value != Constants.defaultCurrency) {
             // only offer currency toggle if the account is not USD based
@@ -216,10 +206,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     );
 
     if (applyFilter) {
-      list =
-          list
-              .where((final Account instance) => isMatchingFilters(instance))
-              .toList();
+      list = list.where((final Account instance) => isMatchingFilters(instance)).toList();
     } else {
       list = list.toList();
     }

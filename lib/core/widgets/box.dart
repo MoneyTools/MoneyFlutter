@@ -18,9 +18,7 @@ class Box extends StatelessWidget {
     required this.child,
   }) {
     assert(
-      title.isNotEmpty && header == null ||
-          title.isEmpty && header != null ||
-          title.isEmpty && header == null,
+      title.isNotEmpty && header == null || title.isEmpty && header != null || title.isEmpty && header == null,
     );
   }
 
@@ -37,8 +35,7 @@ class Box extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    EdgeInsetsGeometry? adjustedMargin =
-        margin == null ? null : EdgeInsets.all(margin!);
+    EdgeInsetsGeometry? adjustedMargin = margin == null ? null : EdgeInsets.all(margin!);
     // adjust the margin to account for the title bleeding out of the box
     if (title.isNotEmpty || header != null) {
       const EdgeInsets increaseTopMarginBy = EdgeInsets.only(
@@ -75,8 +72,7 @@ class Box extends StatelessWidget {
           child: child,
         ),
         if (title.isNotEmpty || header != null) _buildBoxHeader(context),
-        if (copyToClipboard != null)
-          Positioned(top: -10, right: 0, child: _buildCopyToClipboardButton()),
+        if (copyToClipboard != null) Positioned(top: -10, right: 0, child: _buildCopyToClipboardButton()),
         if (footer != null) Positioned(bottom: -5, right: 10, child: footer!),
       ],
     );
@@ -171,9 +167,6 @@ Widget headerText(
   final bool large = false,
 }) => SelectableText(
   title,
-  style:
-      large
-          ? getTextTheme(context).titleLarge
-          : getTextTheme(context).titleSmall,
+  style: large ? getTextTheme(context).titleLarge : getTextTheme(context).titleSmall,
   textAlign: TextAlign.center,
 );

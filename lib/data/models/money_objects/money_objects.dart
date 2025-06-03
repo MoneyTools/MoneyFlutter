@@ -135,9 +135,7 @@ class MoneyObjects<T> {
   }
 
   List<MoneyObject> getMutatedObjects(MutationType typeOfMutation) {
-    return _list
-        .where((MoneyObject element) => element.mutation == typeOfMutation)
-        .toList();
+    return _list.where((MoneyObject element) => element.mutation == typeOfMutation).toList();
   }
 
   int getNextId() {
@@ -162,8 +160,7 @@ class MoneyObjects<T> {
     final Field<dynamic> field,
     bool forSerialization,
   ) {
-    return (forSerialization == true && field.serializeName.isNotEmpty) ||
-        (forSerialization == false);
+    return (forSerialization == true && field.serializeName.isNotEmpty) || (forSerialization == false);
   }
 
   bool get isNotEmpty => !isEmpty;
@@ -230,10 +227,7 @@ class MoneyObjects<T> {
     final int sortBy,
     final bool sortAscending,
   ) {
-    final Field<dynamic>? fieldDefinition =
-        isIndexInRange(fieldDefinitions, sortBy)
-            ? fieldDefinitions[sortBy]
-            : null;
+    final Field<dynamic>? fieldDefinition = isIndexInRange(fieldDefinitions, sortBy) ? fieldDefinitions[sortBy] : null;
 
     sortListFallbackOnIdForTieBreaker(
       list,
@@ -270,11 +264,9 @@ class MoneyObjects<T> {
   ]) {
     final List<String> listValues = <String>[];
     for (final Field<dynamic> field in fieldDefinitions) {
-      final dynamic value =
-          field.getValueForSerialization == defaultCallbackValue ||
-                  forSerialization == false
-              ? item.toReadableString(field)
-              : field.getValueForSerialization(item);
+      final dynamic value = field.getValueForSerialization == defaultCallbackValue || forSerialization == false
+          ? item.toReadableString(field)
+          : field.getValueForSerialization(item);
 
       final String valueAsString = '"$value"';
       listValues.add(valueAsString);

@@ -36,16 +36,16 @@ class HomePage extends GetView<HomeController> {
       dataController.isLoading.value
           ? const WorkingIndicator()
           : DropZone(
-            onFilesDropped: (List<String> filePaths) {
-              filePaths.forEach(
-                (String filePath) => importQFX(context, filePath),
-              );
-            },
-            child: Container(
-              color: getColorTheme(context).secondaryContainer,
-              child: _buildAdaptiveContent(context),
+              onFilesDropped: (List<String> filePaths) {
+                filePaths.forEach(
+                  (String filePath) => importQFX(context, filePath),
+                );
+              },
+              child: Container(
+                color: getColorTheme(context).secondaryContainer,
+                child: _buildAdaptiveContent(context),
+              ),
             ),
-          ),
     );
   }
 

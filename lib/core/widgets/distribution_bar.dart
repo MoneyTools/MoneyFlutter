@@ -32,8 +32,7 @@ class _DistributionBarState extends State<DistributionBar> {
 
     final double sum = widget.segments.fold(
       0,
-      (double previousValue, Distribution element) =>
-          previousValue + element.amount.abs(),
+      (double previousValue, Distribution element) => previousValue + element.amount.abs(),
     );
     if (sum > 0) {
       for (final Distribution segment in widget.segments) {
@@ -68,7 +67,9 @@ class _DistributionBarState extends State<DistributionBar> {
       children: <Widget>[
         gapSmall(),
         Expanded(flex: 2, child: category.getColorAndNameWidget()),
-        Expanded(child: MoneyWidget(amountModel: MoneyModel(amount: value))),
+        Expanded(
+          child: MoneyWidget(amountModel: MoneyModel(amount: value)),
+        ),
         Opacity(
           opacity: category.isExpense ? 1 : 0,
           child: Checkbox(
@@ -78,9 +79,7 @@ class _DistributionBarState extends State<DistributionBar> {
                 setState(() {
                   category.mutateField(
                     'Type',
-                    value == true
-                        ? CategoryType.recurringExpense.index
-                        : CategoryType.expense.index,
+                    value == true ? CategoryType.recurringExpense.index : CategoryType.expense.index,
                     true,
                   );
                 });
@@ -108,8 +107,7 @@ class _DistributionBarState extends State<DistributionBar> {
 
   void _buildWidgets(final BuildContext context) {
     for (final Distribution segment in widget.segments) {
-      Color backgroundColorOfSegment =
-          segment.category.getColorOrAncestorsColor();
+      Color backgroundColorOfSegment = segment.category.getColorOrAncestorsColor();
       Color foregroundColorOfSegment = contrastColor(backgroundColorOfSegment);
 
       if (backgroundColorOfSegment.a == 0) {

@@ -30,8 +30,7 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
   List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
     final List<Widget> list = super.getActionsButtons(forSidePanelTransactions);
     if (!forSidePanelTransactions) {
-      final Investment? selectedInvestment =
-          getFirstSelectedItem() as Investment?;
+      final Investment? selectedInvestment = getFirstSelectedItem() as Investment?;
 
       // this can go last
       if (selectedInvestment != null) {
@@ -109,14 +108,12 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
     bool includeDeleted = false,
     bool applyFilter = true,
   }) {
-    final List<Investment> list =
-        Data().investments
-            .iterableList(includeDeleted: includeDeleted)
-            .where(
-              (Investment instance) =>
-                  applyFilter == false || isMatchingFilters(instance),
-            )
-            .toList();
+    final List<Investment> list = Data().investments
+        .iterableList(includeDeleted: includeDeleted)
+        .where(
+          (Investment instance) => applyFilter == false || isMatchingFilters(instance),
+        )
+        .toList();
     Investments.applyHoldingSharesAdjustedForSplits(list);
 
     return list;

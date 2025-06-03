@@ -20,16 +20,14 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeController themeController = Get.find<ThemeController>();
-    final PreferenceController preferencesController =
-        Get.find<PreferenceController>();
+    final PreferenceController preferencesController = Get.find<PreferenceController>();
 
     return AppBar(
       backgroundColor: getColorTheme(context).secondaryContainer,
       leading: _buildPopupMenu(),
       title: AppTitle(),
       actions: <Widget>[
-        if (!context.isWidthSmall)
-          _buildToggleClosedAccountsButton(preferencesController),
+        if (!context.isWidthSmall) _buildToggleClosedAccountsButton(preferencesController),
         _buildToggleThemeButton(themeController),
         _buildSettingsMenu(themeController, preferencesController),
       ],
@@ -48,8 +46,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         Get.toNamed<dynamic>(Constants.routeInstallPlatformsPage);
         break;
       case Constants.commandIncludeClosedAccount:
-        PreferenceController.to.includeClosedAccounts =
-            !PreferenceController.to.includeClosedAccounts;
+        PreferenceController.to.includeClosedAccounts = !PreferenceController.to.includeClosedAccounts;
         break;
       default:
         ThemeController.to.setThemeColor(value);
@@ -114,9 +111,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     final List<PopupMenuItem<int>> actionList = <PopupMenuItem<int>>[
       _buildSettingsMenuItem(
         Constants.commandIncludeClosedAccount,
-        preferencesController.includeClosedAccounts
-            ? 'Hide "Closed Accounts"'
-            : 'Show "Closed Account"',
+        preferencesController.includeClosedAccounts ? 'Hide "Closed Accounts"' : 'Show "Closed Account"',
         Icons.inventory,
         opacity: preferencesController.includeClosedAccounts ? 1.0 : 0.5,
       ),
@@ -197,10 +192,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 4),
           decoration: BoxDecoration(
-            color:
-                isSelected
-                    ? getColorTheme(Get.context!).secondaryContainer
-                    : null,
+            color: isSelected ? getColorTheme(Get.context!).secondaryContainer : null,
             borderRadius: const BorderRadius.all(Radius.circular(4)),
           ),
           child: ThreePartLabel(
@@ -225,14 +217,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         opacity: preferencesController.includeClosedAccounts ? 1.0 : 0.5,
         child: const Icon(Icons.inventory, size: 18),
       ),
-      onPressed:
-          () =>
-              preferencesController.includeClosedAccounts =
-                  !preferencesController.includeClosedAccounts,
-      tooltip:
-          preferencesController.includeClosedAccounts
-              ? 'Hide closed accounts'
-              : 'View closed accounts',
+      onPressed: () => preferencesController.includeClosedAccounts = !preferencesController.includeClosedAccounts,
+      tooltip: preferencesController.includeClosedAccounts ? 'Hide closed accounts' : 'View closed accounts',
     );
   }
 

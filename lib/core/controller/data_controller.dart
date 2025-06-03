@@ -49,16 +49,14 @@ class DataController extends GetxController {
 
   Future<String> generateNextFolderToSaveTo() async {
     if (currentLoadedFileName.value.isNotEmpty) {
-      if (p.extension(currentLoadedFileName.value) == 'mmcsv' ||
-          p.extension(currentLoadedFileName.value) == 'mmdb') {
+      if (p.extension(currentLoadedFileName.value) == 'mmcsv' || p.extension(currentLoadedFileName.value) == 'mmdb') {
         return p.dirname(currentLoadedFileName.value);
       }
     }
     return await getDocumentDirectory();
   }
 
-  bool get isUntitled =>
-      currentLoadedFileName.value == Constants.untitledFileName;
+  bool get isUntitled => currentLoadedFileName.value == Constants.untitledFileName;
 
   String get lastUpdateAsString => '${trackMutations.lastDateTimeChanged}';
 
@@ -241,8 +239,7 @@ class DataController extends GetxController {
 /// - In-memory byte data
 /// - File format validation
 class DataSource {
-  DataSource({this.filePath = '', Uint8List? fileBytes})
-    : _fileBytes = fileBytes ?? Uint8List(0);
+  DataSource({this.filePath = '', Uint8List? fileBytes}) : _fileBytes = fileBytes ?? Uint8List(0);
 
   final String filePath;
 

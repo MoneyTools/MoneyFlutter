@@ -22,16 +22,17 @@ class MyWindowManager extends WindowListener {
       if (Platform.isIOS || Platform.isAndroid) {
         // Impeller is enabled by default on iOS, but we can explicitly set it
         // For Android, we need to opt-in
-        PlatformDispatcher.instance.onError = (
-          final Object error,
-          final StackTrace stack,
-        ) {
-          // Log any Impeller-related errors
-          if (kDebugMode) {
-            print('Unhandled error: $error');
-          }
-          return true;
-        };
+        PlatformDispatcher.instance.onError =
+            (
+              final Object error,
+              final StackTrace stack,
+            ) {
+              // Log any Impeller-related errors
+              if (kDebugMode) {
+                print('Unhandled error: $error');
+              }
+              return true;
+            };
         // Only enable system UI mode for iOS/Android.
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       } else {
@@ -69,10 +70,8 @@ class MyWindowManager extends WindowListener {
     if (hasData) {
       final double x = MyWindowManager.getSafeDouble(prefs, 'window_x')!;
       final double y = MyWindowManager.getSafeDouble(prefs, 'window_y')!;
-      final double width =
-          MyWindowManager.getSafeDouble(prefs, 'window_width')!;
-      final double height =
-          MyWindowManager.getSafeDouble(prefs, 'window_height')!;
+      final double width = MyWindowManager.getSafeDouble(prefs, 'window_width')!;
+      final double height = MyWindowManager.getSafeDouble(prefs, 'window_height')!;
 
       await windowManager.setBounds(Rect.fromLTWH(x, y, width, height));
     } else {

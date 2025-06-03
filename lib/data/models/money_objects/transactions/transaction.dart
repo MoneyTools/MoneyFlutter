@@ -119,13 +119,10 @@ class Transaction extends MoneyObject {
     align: TextAlign.left,
     footer: FooterType.count,
     defaultValue: -1,
-    getValueForDisplay:
-        (final MoneyObject instance) => Data().accounts.getNameFromId(
-          (instance as Transaction).fieldAccountId.value,
-        ),
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldAccountId.value,
+    getValueForDisplay: (final MoneyObject instance) => Data().accounts.getNameFromId(
+      (instance as Transaction).fieldAccountId.value,
+    ),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldAccountId.value,
     // setValue: (MoneyObject instance, dynamic newValue) => (instance as Transaction).fieldAccountId.value = newValue,
   );
 
@@ -134,24 +131,18 @@ class Transaction extends MoneyObject {
   FieldMoney fieldAmount = FieldMoney(
     name: columnIdAmount,
     serializeName: 'Amount',
-    getValueForDisplay:
-        (final MoneyObject instance) => MoneyModel(
-          amount: (instance as Transaction).fieldAmount.value.asDouble(),
-          iso4217: instance.currency,
-        ),
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldAmount.value.asDouble(),
-    setValue:
-        (final MoneyObject instance, dynamic newValue) =>
-            (instance as Transaction).fieldAmount.value.setAmount(newValue),
-    sort:
-        (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-            sortByValue(
-              (a as Transaction).fieldAmount.value.asDouble(),
-              (b as Transaction).fieldAmount.value.asDouble(),
-              ascending,
-            ),
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
+      amount: (instance as Transaction).fieldAmount.value.asDouble(),
+      iso4217: instance.currency,
+    ),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldAmount.value.asDouble(),
+    setValue: (final MoneyObject instance, dynamic newValue) =>
+        (instance as Transaction).fieldAmount.value.setAmount(newValue),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
+      (a as Transaction).fieldAmount.value.asDouble(),
+      (b as Transaction).fieldAmount.value.asDouble(),
+      ascending,
+    ),
   );
 
   //------------------------------------------------------------------------
@@ -163,20 +154,17 @@ class Transaction extends MoneyObject {
     name: columnIdAmountNormalized,
     columnWidth: ColumnWidth.small,
     useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForDisplay:
-        (final MoneyObject instance) => MoneyModel(
-          amount: (instance as Transaction).getNormalizedAmount(
-            instance.fieldAmount.value.asDouble(),
-          ),
-          iso4217: Constants.defaultCurrency,
-        ),
-    sort:
-        (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-            sortByValue(
-              (a as Transaction).fieldAmount.value.asDouble(),
-              (b as Transaction).fieldAmount.value.asDouble(),
-              ascending,
-            ),
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
+      amount: (instance as Transaction).getNormalizedAmount(
+        instance.fieldAmount.value.asDouble(),
+      ),
+      iso4217: Constants.defaultCurrency,
+    ),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
+      (a as Transaction).fieldAmount.value.asDouble(),
+      (b as Transaction).fieldAmount.value.asDouble(),
+      ascending,
+    ),
   );
 
   /// Balance native
@@ -185,11 +173,10 @@ class Transaction extends MoneyObject {
     columnWidth: ColumnWidth.small,
     footer: FooterType.none,
     useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForDisplay:
-        (final MoneyObject instance) => MoneyModel(
-          amount: (instance as Transaction).balance,
-          iso4217: instance.currency,
-        ),
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
+      amount: (instance as Transaction).balance,
+      iso4217: instance.currency,
+    ),
   );
 
   /// Balance Normalized to USD
@@ -198,20 +185,17 @@ class Transaction extends MoneyObject {
     columnWidth: ColumnWidth.small,
     footer: FooterType.none,
     useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForDisplay:
-        (final MoneyObject instance) => MoneyModel(
-          amount: (instance as Transaction).getNormalizedAmount(
-            instance.balance,
-          ),
-          iso4217: Constants.defaultCurrency,
-        ),
-    sort:
-        (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-            sortByValue(
-              (a as Transaction).balance,
-              (b as Transaction).balance,
-              ascending,
-            ),
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
+      amount: (instance as Transaction).getNormalizedAmount(
+        instance.balance,
+      ),
+      iso4217: Constants.defaultCurrency,
+    ),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
+      (a as Transaction).balance,
+      (b as Transaction).balance,
+      ascending,
+    ),
   );
 
   /// Budget Balance Date
@@ -219,14 +203,12 @@ class Transaction extends MoneyObject {
   FieldDate fieldBudgetBalanceDate = FieldDate(
     name: 'ReconciledDate',
     serializeName: 'ReconciledDate',
-    getValueForDisplay:
-        (final MoneyObject instance) => dateToIso8601OrDefaultString(
-          (instance as Transaction).fieldBudgetBalanceDate.value,
-        ),
-    getValueForSerialization:
-        (final MoneyObject instance) => dateToIso8601OrDefaultString(
-          (instance as Transaction).fieldBudgetBalanceDate.value,
-        ),
+    getValueForDisplay: (final MoneyObject instance) => dateToIso8601OrDefaultString(
+      (instance as Transaction).fieldBudgetBalanceDate.value,
+    ),
+    getValueForSerialization: (final MoneyObject instance) => dateToIso8601OrDefaultString(
+      (instance as Transaction).fieldBudgetBalanceDate.value,
+    ),
   );
 
   /// Category Id
@@ -242,10 +224,9 @@ class Transaction extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) {
       final Transaction t = instance as Transaction;
 
-      final int effectiveCategoryId =
-          t.possibleMatchingCategoryId == -1
-              ? t.fieldCategoryId.value
-              : t.possibleMatchingCategoryId;
+      final int effectiveCategoryId = t.possibleMatchingCategoryId == -1
+          ? t.fieldCategoryId.value
+          : t.possibleMatchingCategoryId;
       final String categoryName = Data().categories.getNameFromId(
         effectiveCategoryId,
       );
@@ -254,84 +235,75 @@ class Transaction extends MoneyObject {
       );
 
       return SuggestionApproval(
-        onApproved:
-            t.possibleMatchingCategoryId == -1
-                ? null
-                : () {
-                  // record the change
-                  changeCategory(t, t.possibleMatchingCategoryId);
-                },
-        onChooseCategory:
-            t.fieldCategoryId.value == -1
-                ? (final BuildContext context) {
-                  t.possibleMatchingCategoryId = -1;
-                  showPopupSelection(
-                    title: 'Category',
-                    context: context,
-                    items: Data().categories.getCategoriesAsStrings(),
-                    selectedItem: '',
-                    onSelected: (final String text) {
-                      final Category? selectedCategory = Data().categories
-                          .getByName(text);
-                      if (selectedCategory != null) {
-                        changeCategory(t, selectedCategory.uniqueId);
-                      }
-                    },
-                  );
-                }
-                : null,
+        onApproved: t.possibleMatchingCategoryId == -1
+            ? null
+            : () {
+                // record the change
+                changeCategory(t, t.possibleMatchingCategoryId);
+              },
+        onChooseCategory: t.fieldCategoryId.value == -1
+            ? (final BuildContext context) {
+                t.possibleMatchingCategoryId = -1;
+                showPopupSelection(
+                  title: 'Category',
+                  context: context,
+                  items: Data().categories.getCategoriesAsStrings(),
+                  selectedItem: '',
+                  onSelected: (final String text) {
+                    final Category? selectedCategory = Data().categories.getByName(text);
+                    if (selectedCategory != null) {
+                      changeCategory(t, selectedCategory.uniqueId);
+                    }
+                  },
+                );
+              }
+            : null,
         onShowSplit: t.isSplit ? () => showTransactionSplits(t) : null,
         child: Tooltip(message: categoryName, child: categoryWidget),
       );
     },
-    getValueForReading:
-        (final MoneyObject instance) => (instance as Transaction).categoryName,
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldCategoryId.value,
-    sort:
-        (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-            sortByString(
-              (a as Transaction).categoryName,
-              (b as Transaction).categoryName,
-              ascending,
-            ),
-    setValue:
-        (final MoneyObject instance, dynamic newValue) =>
-            (instance as Transaction).fieldCategoryId.value = newValue as int,
-    getEditWidget: (
-      final MoneyObject instance,
-      void Function(bool wasModified) onEdited,
-    ) {
-      (instance as Transaction);
-      return Row(
-        children: <Widget>[
-          Expanded(
-            child: pickerCategory(
-              key: const Key('key_pick_category'),
-              itemSelected: Data().categories.get(
-                instance.fieldCategoryId.value,
+    getValueForReading: (final MoneyObject instance) => (instance as Transaction).categoryName,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldCategoryId.value,
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
+      (a as Transaction).categoryName,
+      (b as Transaction).categoryName,
+      ascending,
+    ),
+    setValue: (final MoneyObject instance, dynamic newValue) =>
+        (instance as Transaction).fieldCategoryId.value = newValue as int,
+    getEditWidget:
+        (
+          final MoneyObject instance,
+          void Function(bool wasModified) onEdited,
+        ) {
+          (instance as Transaction);
+          return Row(
+            children: <Widget>[
+              Expanded(
+                child: pickerCategory(
+                  key: const Key('key_pick_category'),
+                  itemSelected: Data().categories.get(
+                    instance.fieldCategoryId.value,
+                  ),
+                  onSelected: (Category? newCategory) {
+                    if (newCategory != null) {
+                      instance.fieldCategoryId.value = newCategory.uniqueId;
+                      // notify container
+                      onEdited(true);
+                    }
+                  },
+                ),
               ),
-              onSelected: (Category? newCategory) {
-                if (newCategory != null) {
-                  instance.fieldCategoryId.value = newCategory.uniqueId;
-                  // notify container
-                  onEdited(true);
-                }
-              },
-            ),
-          ),
-          if (instance.fieldCategoryId.value ==
-              Data().categories.splitCategoryId())
-            MyIconButton(
-              icon: Icons.arrow_forward_ios,
-              onPressed: () {
-                showTransactionSplits(instance);
-              },
-            ),
-        ],
-      );
-    },
+              if (instance.fieldCategoryId.value == Data().categories.splitCategoryId())
+                MyIconButton(
+                  icon: Icons.arrow_forward_ios,
+                  onPressed: () {
+                    showTransactionSplits(instance);
+                  },
+                ),
+            ],
+          );
+        },
   );
 
   FieldString fieldCurrency = FieldString(
@@ -340,8 +312,7 @@ class Transaction extends MoneyObject {
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
     footer: FooterType.count,
-    getValueForReading:
-        (final MoneyObject instance) => (instance as Transaction).currency,
+    getValueForReading: (final MoneyObject instance) => (instance as Transaction).currency,
     getValueForDisplay: (final MoneyObject instance) {
       return Currency.buildCurrencyWidget((instance as Transaction).currency);
     },
@@ -352,37 +323,31 @@ class Transaction extends MoneyObject {
   FieldDate fieldDateTime = FieldDate(
     name: 'Date',
     serializeName: 'Date',
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldDateTime.value,
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            dateToSqliteFormat((instance as Transaction).fieldDateTime.value),
-    getEditWidget: (
-      final MoneyObject instance,
-      void Function(bool wasModified) onEdited,
-    ) {
-      return PickerEditBoxDate(
-        key: Constants.keyDatePicker,
-        initialValue: (instance as Transaction).dateTimeAsString,
-        onChanged: (String? newDateSelected) {
-          if (newDateSelected != null) {
-            instance.fieldDateTime.value = attemptToGetDateFromText(
-              newDateSelected,
-            );
-            onEdited(true);
-          }
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldDateTime.value,
+    getValueForSerialization: (final MoneyObject instance) =>
+        dateToSqliteFormat((instance as Transaction).fieldDateTime.value),
+    getEditWidget:
+        (
+          final MoneyObject instance,
+          void Function(bool wasModified) onEdited,
+        ) {
+          return PickerEditBoxDate(
+            key: Constants.keyDatePicker,
+            initialValue: (instance as Transaction).dateTimeAsString,
+            onChanged: (String? newDateSelected) {
+              if (newDateSelected != null) {
+                instance.fieldDateTime.value = attemptToGetDateFromText(
+                  newDateSelected,
+                );
+                onEdited(true);
+              }
+            },
+          );
         },
-      );
-    },
-    setValue:
-        (MoneyObject instance, dynamic newValue) =>
-            (instance as Transaction)
-                .fieldDateTime
-                .value = attemptToGetDateFromText(newValue as String),
-    sort:
-        (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-            sortByDateTime(a as Transaction, b as Transaction, ascending),
+    setValue: (MoneyObject instance, dynamic newValue) =>
+        (instance as Transaction).fieldDateTime.value = attemptToGetDateFromText(newValue as String),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
+        sortByDateTime(a as Transaction, b as Transaction, ascending),
   );
 
   /// FITID
@@ -390,12 +355,8 @@ class Transaction extends MoneyObject {
   FieldString fieldFitid = FieldString(
     name: 'FITID',
     serializeName: 'FITID',
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldFitid.value,
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldFitid.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldFitid.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldFitid.value,
   );
 
   /// Flags
@@ -404,19 +365,14 @@ class Transaction extends MoneyObject {
     name: 'Flags',
     serializeName: 'Flags',
     useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldFlags.value,
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldFlags.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldFlags.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldFlags.value,
   );
 
   /// ID
   /// SQLite  0|Id|bigint|0||1
   FieldId fieldId = FieldId(
-    getValueForSerialization:
-        (final MoneyObject instance) => (instance as Transaction).uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).uniqueId,
   );
 
   /// Memo
@@ -424,15 +380,10 @@ class Transaction extends MoneyObject {
   FieldString fieldMemo = FieldString(
     name: 'Memo',
     serializeName: 'Memo',
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldMemo.value,
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldMemo.value,
-    setValue:
-        (MoneyObject instance, dynamic newValue) =>
-            (instance as Transaction).fieldMemo.value = newValue as String,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldMemo.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldMemo.value,
+    setValue: (MoneyObject instance, dynamic newValue) =>
+        (instance as Transaction).fieldMemo.value = newValue as String,
   );
 
   /// MergeDate
@@ -441,10 +392,9 @@ class Transaction extends MoneyObject {
     name: 'Merge Date',
     serializeName: 'MergeDate',
     useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForSerialization:
-        (final MoneyObject instance) => dateToIso8601OrDefaultString(
-          (instance as Transaction).fieldMergeDate.value,
-        ),
+    getValueForSerialization: (final MoneyObject instance) => dateToIso8601OrDefaultString(
+      (instance as Transaction).fieldMergeDate.value,
+    ),
   );
 
   /// Number
@@ -453,12 +403,8 @@ class Transaction extends MoneyObject {
     name: 'Ref',
     serializeName: 'Number',
     columnWidth: ColumnWidth.nano,
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldNumber.value,
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldNumber.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldNumber.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldNumber.value,
   );
 
   /// OriginalPayee
@@ -467,12 +413,8 @@ class Transaction extends MoneyObject {
   FieldString fieldOriginalPayee = FieldString(
     name: 'Original Payee',
     serializeName: 'OriginalPayee',
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldOriginalPayee.value,
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldOriginalPayee.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldOriginalPayee.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldOriginalPayee.value,
   );
 
   FieldString fieldPaidOn = FieldString(
@@ -496,19 +438,15 @@ class Transaction extends MoneyObject {
     footer: FooterType.count,
     align: TextAlign.left,
     columnWidth: ColumnWidth.largest,
-    sort:
-        (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-            sortByString(
-              (a as Transaction).payeeName,
-              (b as Transaction).payeeName,
-              ascending,
-            ),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
+      (a as Transaction).payeeName,
+      (b as Transaction).payeeName,
+      ascending,
+    ),
     getValueForDisplay: (final MoneyObject instance) {
       return (instance as Transaction).getPayeeOrTransferCaption();
     },
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldPayee.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldPayee.value,
     setValue: (MoneyObject instance, dynamic newValue) {
       instance = instance as Transaction;
       instance.stashOriginalPayee();
@@ -522,59 +460,58 @@ class Transaction extends MoneyObject {
         instance.instanceOfTransfer = null;
       }
     },
-    getEditWidget: (
-      MoneyObject instance,
-      void Function(bool wasModified) onEdited,
-    ) {
-      return SizedBox(
-        width: 300,
-        height: 80,
-        child: PickPayeeOrTransfer(
-          choice:
-              (instance as Transaction).fieldTransfer.value == -1
+    getEditWidget:
+        (
+          MoneyObject instance,
+          void Function(bool wasModified) onEdited,
+        ) {
+          return SizedBox(
+            width: 300,
+            height: 80,
+            child: PickPayeeOrTransfer(
+              choice: (instance as Transaction).fieldTransfer.value == -1
                   ? TransactionFlavor.payee
                   : TransactionFlavor.transfer,
-          payee: Data().payees.get(instance.fieldPayee.value),
-          account: instance.instanceOfTransfer?.receiverAccount,
-          amount: instance.fieldAmount.value.asDouble(),
-          onSelected: (
-            TransactionFlavor choice,
-            Payee? selectedPayee,
-            Account? transferAccount,
-          ) {
-            bool wasModified = false;
+              payee: Data().payees.get(instance.fieldPayee.value),
+              account: instance.instanceOfTransfer?.receiverAccount,
+              amount: instance.fieldAmount.value.asDouble(),
+              onSelected:
+                  (
+                    TransactionFlavor choice,
+                    Payee? selectedPayee,
+                    Account? transferAccount,
+                  ) {
+                    bool wasModified = false;
 
-            switch (choice) {
-              case TransactionFlavor.payee:
-                if (selectedPayee != null) {
-                  instance.fieldPayee.value = selectedPayee.uniqueId;
-                  instance.fieldTransfer.value = -1;
-                  instance.instanceOfTransfer = null;
-                  wasModified = true;
-                }
-              case TransactionFlavor.transfer:
-                // this is used to let the dialog Apply code what account should be
-                // used when for transfer with.
-                instance.editingTransferAccount = transferAccount;
-                instance.fieldTransfer.value =
-                    -1; // this will cause a reevaluation of the transfer
+                    switch (choice) {
+                      case TransactionFlavor.payee:
+                        if (selectedPayee != null) {
+                          instance.fieldPayee.value = selectedPayee.uniqueId;
+                          instance.fieldTransfer.value = -1;
+                          instance.instanceOfTransfer = null;
+                          wasModified = true;
+                        }
+                      case TransactionFlavor.transfer:
+                        // this is used to let the dialog Apply code what account should be
+                        // used when for transfer with.
+                        instance.editingTransferAccount = transferAccount;
+                        instance.fieldTransfer.value = -1; // this will cause a reevaluation of the transfer
 
-                if (transferAccount == null) {
-                  // No account has been selected yet by the users
-                  // do nothing since this is just the user taping between Payee | Transfer
-                  instance.fieldPayee.value = -1;
-                } else {
-                  // mark as Transfer
-                  instance.fieldPayee.value =
-                      Data().categories.transfer.uniqueId;
-                }
-                wasModified = true;
-            }
-            onEdited(wasModified); // notify container
-          },
-        ),
-      );
-    },
+                        if (transferAccount == null) {
+                          // No account has been selected yet by the users
+                          // do nothing since this is just the user taping between Payee | Transfer
+                          instance.fieldPayee.value = -1;
+                        } else {
+                          // mark as Transfer
+                          instance.fieldPayee.value = Data().categories.transfer.uniqueId;
+                        }
+                        wasModified = true;
+                    }
+                    onEdited(wasModified); // notify container
+                  },
+            ),
+          );
+        },
   );
 
   Account? editingTransferAccount;
@@ -584,14 +521,12 @@ class Transaction extends MoneyObject {
   FieldDate fieldReconciledDate = FieldDate(
     name: 'ReconciledDate',
     serializeName: 'ReconciledDate',
-    getValueForDisplay:
-        (final MoneyObject instance) => dateToIso8601OrDefaultString(
-          (instance as Transaction).fieldReconciledDate.value,
-        ),
-    getValueForSerialization:
-        (final MoneyObject instance) => dateToIso8601OrDefaultString(
-          (instance as Transaction).fieldReconciledDate.value,
-        ),
+    getValueForDisplay: (final MoneyObject instance) => dateToIso8601OrDefaultString(
+      (instance as Transaction).fieldReconciledDate.value,
+    ),
+    getValueForSerialization: (final MoneyObject instance) => dateToIso8601OrDefaultString(
+      (instance as Transaction).fieldReconciledDate.value,
+    ),
   );
 
   /// Sales Tax
@@ -599,19 +534,13 @@ class Transaction extends MoneyObject {
   FieldMoney fieldSalesTax = FieldMoney(
     name: 'Sales Tax',
     serializeName: 'SalesTax',
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldSalesTax.value,
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldSalesTax.value.asDouble(),
-    sort:
-        (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-            sortByValue(
-              (a as Transaction).fieldSalesTax.value.asDouble(),
-              (b as Transaction).fieldSalesTax.value.asDouble(),
-              ascending,
-            ),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldSalesTax.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldSalesTax.value.asDouble(),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
+      (a as Transaction).fieldSalesTax.value.asDouble(),
+      (b as Transaction).fieldSalesTax.value.asDouble(),
+      ascending,
+    ),
   );
 
   /// Status N | E | C | R
@@ -624,23 +553,15 @@ class Transaction extends MoneyObject {
     useAsDetailPanels: defaultCallbackValueFalse,
     name: columnIdStatus,
     serializeName: 'Status',
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as Transaction)._buildStatusButtonToggle(),
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldStatus.value.index,
-    setValue:
-        (MoneyObject instance, dynamic newValue) =>
-            (instance as Transaction).fieldStatus.value =
-                newValue as TransactionStatus,
-    sort:
-        (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-            sortByString(
-              transactionStatusToLetter((a as Transaction).fieldStatus.value),
-              transactionStatusToLetter((b as Transaction).fieldStatus.value),
-              ascending,
-            ),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction)._buildStatusButtonToggle(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldStatus.value.index,
+    setValue: (MoneyObject instance, dynamic newValue) =>
+        (instance as Transaction).fieldStatus.value = newValue as TransactionStatus,
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
+      transactionStatusToLetter((a as Transaction).fieldStatus.value),
+      transactionStatusToLetter((b as Transaction).fieldStatus.value),
+      ascending,
+    ),
   );
 
   /// Transfer
@@ -650,12 +571,8 @@ class Transaction extends MoneyObject {
     serializeName: 'Transfer',
     defaultValue: -1,
     useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldTransfer.value,
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldTransfer.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldTransfer.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldTransfer.value,
   );
 
   /// Transfer Split
@@ -664,12 +581,8 @@ class Transaction extends MoneyObject {
     name: 'TransferSplit',
     serializeName: 'TransferSplit',
     useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForDisplay:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldTransferSplit.value,
-    getValueForSerialization:
-        (final MoneyObject instance) =>
-            (instance as Transaction).fieldTransferSplit.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldTransferSplit.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldTransferSplit.value,
   );
 
   /// cache instances of related MoneyObjects
@@ -688,14 +601,12 @@ class Transaction extends MoneyObject {
   Widget buildFieldsAsWidgetForSmallScreen() {
     return MyListItemAsCard(
       leftTopAsString: payeeName,
-      leftBottomAsString:
-          '${Data().categories.getNameFromId(fieldCategoryId.value)}\n${fieldMemo.value}',
+      leftBottomAsString: '${Data().categories.getNameFromId(fieldCategoryId.value)}\n${fieldMemo.value}',
       rightTopAsWidget: MoneyWidget(
         amountModel: fieldAmount.value,
         size: MoneyWidgetSize.title,
       ),
-      rightBottomAsString:
-          '$dateTimeAsString\n${Account.getName(instanceOfAccount)}',
+      rightBottomAsString: '$dateTimeAsString\n${Account.getName(instanceOfAccount)}',
     );
   }
 
@@ -741,15 +652,13 @@ class Transaction extends MoneyObject {
 
   static final Fields<Transaction> _fields = Fields<Transaction>();
 
-  String get accountName =>
-      instanceOfAccount?.fieldName.value ?? '<Account???>';
+  String get accountName => instanceOfAccount?.fieldName.value ?? '<Account???>';
 
   String get amountAsString => fieldAmount.value.toString();
 
   Category? get category => Data().categories.get(this.fieldCategoryId.value);
 
-  String get categoryName =>
-      Data().categories.getNameFromId(this.fieldCategoryId.value);
+  String get categoryName => Data().categories.getNameFromId(this.fieldCategoryId.value);
 
   static void changeCategory(Transaction t, final int categoryId) {
     // record the change
@@ -812,8 +721,7 @@ class Transaction extends MoneyObject {
         //         }
         //       }
       } else {
-        if (other.instanceOfTransfer == null ||
-            other.instanceOfTransfer?.relatedTransaction != this) {
+        if (other.instanceOfTransfer == null || other.instanceOfTransfer?.relatedTransaction != this) {
           dangling.add(this);
         } else {
           // one last check, the other side also needs to be correctly setup as a transfer
@@ -828,23 +736,20 @@ class Transaction extends MoneyObject {
   bool containsTransferTo(Account a) {
     if (this.isSplit) {
       for (MoneySplit s in this.splits) {
-        if (s.fieldTransferId.value != -1 &&
-            s.getTransferTransaction()?.fieldAccountId.value == a.uniqueId) {
+        if (s.fieldTransferId.value != -1 && s.getTransferTransaction()?.fieldAccountId.value == a.uniqueId) {
           return true;
         }
       }
     }
     if (this.instanceOfTransfer != null &&
-        this.instanceOfTransfer?.relatedTransaction?.fieldAccountId.value ==
-            a.uniqueId) {
+        this.instanceOfTransfer?.relatedTransaction?.fieldAccountId.value == a.uniqueId) {
       return true;
     }
     return false;
   }
 
   String get currency {
-    if (this.instanceOfAccount == null ||
-        this.instanceOfAccount!.fieldCurrency.value.isEmpty) {
+    if (this.instanceOfAccount == null || this.instanceOfAccount!.fieldCurrency.value.isEmpty) {
       return Constants.defaultCurrency;
     }
 
@@ -912,8 +817,7 @@ class Transaction extends MoneyObject {
 
   double getNormalizedAmount(double nativeValue) {
     // Convert the value to USD
-    if (instanceOfAccount == null ||
-        instanceOfAccount?.getCurrencyRatio() == 0) {
+    if (instanceOfAccount == null || instanceOfAccount?.getCurrencyRatio() == 0) {
       return nativeValue;
     }
     return nativeValue * instanceOfAccount!.getCurrencyRatio();
@@ -995,8 +899,7 @@ class Transaction extends MoneyObject {
 
   bool get isAssetAccount => instanceOfAccount?.isAssetAccount ?? false;
 
-  bool get isCandidateForBudget =>
-      this.fieldCategoryId.value != -1 && (this.isExpense || this.isIncome);
+  bool get isCandidateForBudget => this.fieldCategoryId.value != -1 && (this.isExpense || this.isIncome);
 
   bool get isExpense => category?.isExpense == true;
 
@@ -1121,8 +1024,7 @@ class Transaction extends MoneyObject {
     // }
   }
 
-  Account? get relatedAccount =>
-      instanceOfTransfer?.relatedTransaction?.instanceOfAccount;
+  Account? get relatedAccount => instanceOfTransfer?.relatedTransaction?.instanceOfAccount;
 
   String relatedAccountName(Account? relatedAccount) {
     if (relatedAccount == null) {
@@ -1178,20 +1080,17 @@ class Transaction extends MoneyObject {
           // Attempt to restore/undo
           if (valueBeforeEdit != null) {
             // bring back the previous value
-            final int oldValue =
-                (valueBeforeEdit![this.fieldStatus.name] ?? 0) as int;
+            final int oldValue = (valueBeforeEdit![this.fieldStatus.name] ?? 0) as int;
             this.fieldStatus.value = TransactionStatus.values[oldValue];
 
             // if this was the only change to this instance we can undo the mutation state
-            if (mutation == MutationType.changed &&
-                MoneyObject.isDataModified(this) == false) {
+            if (mutation == MutationType.changed && MoneyObject.isDataModified(this) == false) {
               mutation = MutationType.none;
               DataController.to.trackMutations.increaseNumber(
                 increaseChanged: -1,
               );
             } else {
-              DataController.to.trackMutations
-                  .setLastEditToNow(); // still need to refresh the UI
+              DataController.to.trackMutations.setLastEditToNow(); // still need to refresh the UI
             }
           }
         } else {

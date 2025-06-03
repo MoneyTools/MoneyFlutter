@@ -53,10 +53,8 @@ class YearRangeSliderState extends State<YearRangeSlider> {
 
     return LayoutBuilder(
       builder: (BuildContext context, final BoxConstraints constraints) {
-        final double visualWidthOfSlider =
-            constraints.maxWidth - (sliderEdgePadding * 2);
-        final double eachYearInPixel =
-            visualWidthOfSlider / widget.yearRange.span;
+        final double visualWidthOfSlider = constraints.maxWidth - (sliderEdgePadding * 2);
+        final double eachYearInPixel = visualWidthOfSlider / widget.yearRange.span;
 
         _updateDragBottomWidth(eachYearInPixel);
         _updateLeftMarginOfBottomText(visualWidthOfSlider, eachYearInPixel);
@@ -118,8 +116,7 @@ class YearRangeSliderState extends State<YearRangeSlider> {
       'year',
     );
     final bool canBeDragged =
-        _selectedYearRange.min != widget.yearRange.min ||
-        _selectedYearRange.max != widget.yearRange.max;
+        _selectedYearRange.min != widget.yearRange.min || _selectedYearRange.max != widget.yearRange.max;
     final Color textColor = getColorTheme(context).primary;
 
     return Container(
@@ -153,8 +150,7 @@ class YearRangeSliderState extends State<YearRangeSlider> {
 
   void _handleDragUpdate(DragUpdateDetails details, double maxWidth) {
     _dragGesturePosition += details.primaryDelta!;
-    final double thresholdForMovingToNextPosition =
-        maxWidth / widget.yearRange.span / 4;
+    final double thresholdForMovingToNextPosition = maxWidth / widget.yearRange.span / 4;
 
     if (_dragGesturePosition >= thresholdForMovingToNextPosition) {
       _dragGesturePosition = 0;
@@ -177,8 +173,7 @@ class YearRangeSliderState extends State<YearRangeSlider> {
     double visualWidthOfSlider,
     double eachYearInPixel,
   ) {
-    final double selectedYearPositionInPixel =
-        (_selectedYearRange.min - widget.yearRange.min) * eachYearInPixel;
+    final double selectedYearPositionInPixel = (_selectedYearRange.min - widget.yearRange.min) * eachYearInPixel;
     _leftMarginOfBottomText = min(
       selectedYearPositionInPixel,
       visualWidthOfSlider - _dragBottomWidth,

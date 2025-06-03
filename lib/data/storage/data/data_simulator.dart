@@ -172,8 +172,7 @@ class DataSimulator {
 
   /// Generates a random amount between a minimum and maximum value.
   double getAmount(final int minValue, final int maxValue) {
-    final double amount =
-        minValue + Random().nextDouble() * (maxValue - minValue);
+    final double amount = minValue + Random().nextDouble() * (maxValue - minValue);
     return roundDouble(amount, 2);
   }
 
@@ -185,8 +184,7 @@ class DataSimulator {
   /// Returns the last day of the previous month for a given date.
   DateTime getLastDayOfPreviousMonth(DateTime date) {
     final DateTime previousMonth = DateTime(date.year, date.month - 1);
-    final int daysInPreviousMonth =
-        DateTime(previousMonth.year, previousMonth.month + 1, 0).day;
+    final int daysInPreviousMonth = DateTime(previousMonth.year, previousMonth.month + 1, 0).day;
     return DateTime(
       previousMonth.year,
       previousMonth.month,
@@ -323,13 +321,12 @@ class DataSimulator {
       account: accountAssetHome,
       date: date,
       amount: 250000,
-      categoryId:
-          Data().categories
-              .addNewCategory(
-                name: 'Investment:PropertyValue',
-                type: CategoryType.investment,
-              )
-              .uniqueId,
+      categoryId: Data().categories
+          .addNewCategory(
+            name: 'Investment:PropertyValue',
+            type: CategoryType.investment,
+          )
+          .uniqueId,
       memo: 'Purchase house valued at 250K',
     );
 
@@ -414,14 +411,13 @@ class DataSimulator {
       date: getDateShiftedByYears(-21, 1, 1),
       amount: 100000,
       payeeId: Data().payees.getByName('Lottery Win')!.uniqueId,
-      categoryId:
-          Data().categories
-              .addNewCategory(
-                name: 'Misc Incomes',
-                type: CategoryType.income,
-                color: '#004400',
-              )
-              .uniqueId,
+      categoryId: Data().categories
+          .addNewCategory(
+            name: 'Misc Incomes',
+            type: CategoryType.income,
+            color: '#004400',
+          )
+          .uniqueId,
       memo: 'Initial opening of account',
     );
 
@@ -458,14 +454,12 @@ class DataSimulator {
         color: '#FFAAFFAA',
       ),
     );
-    _accountStartupLoan.fieldCategoryIdForInterest.value =
-        Data().categories
-            .getOrCreate('Lend:Interest:Startup', CategoryType.investment)
-            .uniqueId;
-    _accountStartupLoan.fieldCategoryIdForPrincipal.value =
-        Data().categories
-            .getOrCreate('Lend:Principal:Startup', CategoryType.investment)
-            .uniqueId;
+    _accountStartupLoan.fieldCategoryIdForInterest.value = Data().categories
+        .getOrCreate('Lend:Interest:Startup', CategoryType.investment)
+        .uniqueId;
+    _accountStartupLoan.fieldCategoryIdForPrincipal.value = Data().categories
+        .getOrCreate('Lend:Principal:Startup', CategoryType.investment)
+        .uniqueId;
   }
 
   /// Generates sample aliases.
@@ -755,11 +749,9 @@ class DataSimulator {
   }
 
   void _generateEvents() {
-    final Category categoryIdForProperties =
-        Data().categories.getByName('Properties')!;
+    final Category categoryIdForProperties = Data().categories.getByName('Properties')!;
 
-    final Category categoryIdForTravels =
-        Data().categories.getByName('Travel')!;
+    final Category categoryIdForTravels = Data().categories.getByName('Travel')!;
 
     Data().events.loadFromJson(<MyJson>[
       <String, dynamic>{
@@ -979,26 +971,11 @@ class DataSimulator {
         'Id': 0,
         'Name': 'AirBnB',
         'Address': 'One Washington DC',
-        'CategoryForIncome':
-            Data().categories
-                .getOrCreate('RentalIncome', CategoryType.income)
-                .uniqueId,
-        'CategoryForInterest':
-            Data().categories
-                .getOrCreate('RentalInterest', CategoryType.expense)
-                .uniqueId,
-        'CategoryForTaxes':
-            Data().categories
-                .getOrCreate('RentalTaxes', CategoryType.expense)
-                .uniqueId,
-        'CategoryForMaintenance':
-            Data().categories
-                .getOrCreate('RentalMaintenance', CategoryType.expense)
-                .uniqueId,
-        'CategoryForManagement':
-            Data().categories
-                .getOrCreate('RentalManagement', CategoryType.expense)
-                .uniqueId,
+        'CategoryForIncome': Data().categories.getOrCreate('RentalIncome', CategoryType.income).uniqueId,
+        'CategoryForInterest': Data().categories.getOrCreate('RentalInterest', CategoryType.expense).uniqueId,
+        'CategoryForTaxes': Data().categories.getOrCreate('RentalTaxes', CategoryType.expense).uniqueId,
+        'CategoryForMaintenance': Data().categories.getOrCreate('RentalMaintenance', CategoryType.expense).uniqueId,
+        'CategoryForManagement': Data().categories.getOrCreate('RentalManagement', CategoryType.expense).uniqueId,
       },
     ]);
 
@@ -1165,45 +1142,42 @@ class DataSimulator {
     );
 
     for (final DateTime date in dates) {
-      final List<Object> selectedCategory =
+      final List<Object> selectedCategory = <List<Object>>[
+        <Object>[
+          _categorySubscriptionTransport,
           <List<Object>>[
-            <Object>[
-              _categorySubscriptionTransport,
-              <List<Object>>[
-                <Object>['City Bus', 3],
-                <Object>['Taxi', 20],
-                <Object>['Uber', 30],
-              ],
-            ],
-            <Object>[
-              _categoryFoodGrocery,
-              <List<Object>>[
-                <Object>['TheFoodStore', 50],
-                <Object>['SafeWay', 80],
-                <Object>['WholeFood', 200],
-              ],
-            ],
-            <Object>[
-              _categoryFoodRestaurant,
-              <List<Object>>[
-                <Object>['Starbucks', 10],
-                <Object>['AppleBees', 100],
-                <Object>['PizzaHut', 20],
-              ],
-            ],
-          ].getRandomItem();
+            <Object>['City Bus', 3],
+            <Object>['Taxi', 20],
+            <Object>['Uber', 30],
+          ],
+        ],
+        <Object>[
+          _categoryFoodGrocery,
+          <List<Object>>[
+            <Object>['TheFoodStore', 50],
+            <Object>['SafeWay', 80],
+            <Object>['WholeFood', 200],
+          ],
+        ],
+        <Object>[
+          _categoryFoodRestaurant,
+          <List<Object>>[
+            <Object>['Starbucks', 10],
+            <Object>['AppleBees', 100],
+            <Object>['PizzaHut', 20],
+          ],
+        ],
+      ].getRandomItem();
 
       final Category category = selectedCategory[0] as Category;
 
-      final dynamic payeeAndMaxAmount =
-          (selectedCategory[1] as List<Object>).getRandomItem();
+      final dynamic payeeAndMaxAmount = (selectedCategory[1] as List<Object>).getRandomItem();
       double maxSpendingOnCreditCard = (payeeAndMaxAmount[1] as num).toDouble();
 
       final Transaction source = _addTransactionAccountDatePayeeCategory(
         account: _accountCreditCardUSD,
         date: date,
-        payeeId:
-            Data().payees.getOrCreate(payeeAndMaxAmount[0] as String).uniqueId,
+        payeeId: Data().payees.getOrCreate(payeeAndMaxAmount[0] as String).uniqueId,
         categoryId: category.uniqueId,
       );
       if (date.isAfter(_dateOfFirstBigJob)) {
@@ -1299,8 +1273,7 @@ class DataSimulator {
     final List<Transaction> list = _accountCreditCardUSD.getTransaction();
 
     list.sort(
-      (Transaction a, Transaction b) =>
-          sortByDate(a.fieldDateTime.value, b.fieldDateTime.value, true),
+      (Transaction a, Transaction b) => sortByDate(a.fieldDateTime.value, b.fieldDateTime.value, true),
     );
     int lastMonth = list.first.fieldDateTime.value!.month;
 
@@ -1342,10 +1315,7 @@ class DataSimulator {
           account: _accountBankUSA,
           date: date,
           payeeId: payeeLandLord.uniqueId,
-          categoryId:
-              Data().categories
-                  .getOrCreate('Bills:Rent', CategoryType.expense)
-                  .uniqueId,
+          categoryId: Data().categories.getOrCreate('Bills:Rent', CategoryType.expense).uniqueId,
           amount: _monthlyRent,
           memo: 'Pay Rent #${++numberOfRentPayment}',
         );

@@ -106,10 +106,9 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
                 child: InputByColumnsOrFreeStyle(
                   inputText: _textToParse,
                   dateFormat: userChoiceOfDateFormat,
-                  currency:
-                      _userChoiceNativeVsUSD == 0
-                          ? _account.getAccountCurrencyAsText()
-                          : Constants.defaultCurrency,
+                  currency: _userChoiceNativeVsUSD == 0
+                      ? _account.getAccountCurrencyAsText()
+                      : Constants.defaultCurrency,
                   reverseAmountValue: _userChoiceDebitVsCredit == 1,
                   onChanged: (String newTextInput) {
                     setState(() {
@@ -166,10 +165,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
 
     final ValuesParser parser = ValuesParser(
       dateFormat: userChoiceOfDateFormat,
-      currency:
-          _userChoiceNativeVsUSD == 0
-              ? _account.getAccountCurrencyAsText()
-              : Constants.defaultCurrency,
+      currency: _userChoiceNativeVsUSD == 0 ? _account.getAccountCurrencyAsText() : Constants.defaultCurrency,
       reverseAmountValue: _userChoiceDebitVsCredit == 1,
     );
     parser.convertInputTextToTransactionList(context, inputText);
@@ -252,8 +248,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
       return const SizedBox();
     }
 
-    final List<String> listOfDateAsStrings =
-        _values.map((ValuesQuality entry) => entry.date.asString()).toList();
+    final List<String> listOfDateAsStrings = _values.map((ValuesQuality entry) => entry.date.asString()).toList();
 
     final List<String> choiceOfDateFormat = getPossibleDateFormatsForAllValues(
       listOfDateAsStrings,
@@ -274,20 +269,19 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     return DropdownButton<String>(
       dropdownColor: getColorTheme(context).secondaryContainer,
       value: userChoiceOfDateFormat,
-      items:
-          choiceOfDateFormat
-              .map(
-                (String item) => DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(
-                    item,
-                    style: TextStyle(
-                      color: getColorTheme(context).onSecondaryContainer,
-                    ),
-                  ),
+      items: choiceOfDateFormat
+          .map(
+            (String item) => DropdownMenuItem<String>(
+              value: item,
+              child: Text(
+                item,
+                style: TextStyle(
+                  color: getColorTheme(context).onSecondaryContainer,
                 ),
-              )
-              .toList(),
+              ),
+            ),
+          )
+          .toList(),
       onChanged: (final String? value) {
         setState(() {
           userChoiceOfDateFormat = value!;

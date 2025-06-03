@@ -64,17 +64,15 @@ class MyLineChart extends StatelessWidget {
           touchTooltipData: LineTouchTooltipData(
             fitInsideVertically: true,
             fitInsideHorizontally: true,
-            getTooltipItems:
-                (List<LineBarSpot> touchedSpots) =>
-                    touchedSpots.map((LineBarSpot touchedSpot) {
-                      final DateTime date = DateTime.fromMillisecondsSinceEpoch(
-                        touchedSpot.x.toInt(),
-                      );
-                      return LineTooltipItem(
-                        '${dateToString(date)}\n${doubleToCurrency(touchedSpot.y)}',
-                        const TextStyle(color: Colors.white),
-                      );
-                    }).toList(),
+            getTooltipItems: (List<LineBarSpot> touchedSpots) => touchedSpots.map((LineBarSpot touchedSpot) {
+              final DateTime date = DateTime.fromMillisecondsSinceEpoch(
+                touchedSpot.x.toInt(),
+              );
+              return LineTooltipItem(
+                '${dateToString(date)}\n${doubleToCurrency(touchedSpot.y)}',
+                const TextStyle(color: Colors.white),
+              );
+            }).toList(),
           ),
           // touchCallback: (LineTouchResponse touchResponse) {},
           handleBuiltInTouches: true,

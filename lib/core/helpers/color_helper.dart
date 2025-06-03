@@ -194,15 +194,9 @@ String colorToHexString(
   bool includeAlpha = true,
 }) {
   final String red = (color.r * 255).toInt().toRadixString(16).padLeft(2, '0');
-  final String green = (color.g * 255)
-      .toInt()
-      .toRadixString(16)
-      .padLeft(2, '0');
+  final String green = (color.g * 255).toInt().toRadixString(16).padLeft(2, '0');
   final String blue = (color.b * 255).toInt().toRadixString(16).padLeft(2, '0');
-  final String alpha = (color.a * 255)
-      .toInt()
-      .toRadixString(16)
-      .padLeft(2, '0');
+  final String alpha = (color.a * 255).toInt().toRadixString(16).padLeft(2, '0');
   if (includeAlpha == false) {
     return '#$red$green$blue';
   }
@@ -222,11 +216,7 @@ String colorToHexString(
 ///
 Color contrastColor(Color color) {
   // Calculate the luminance of the color
-  final double luminance =
-      (0.299 * (color.r * 255) +
-          0.587 * (color.g * 255) +
-          0.114 * (color.b * 255)) /
-      255;
+  final double luminance = (0.299 * (color.r * 255) + 0.587 * (color.g * 255) + 0.114 * (color.b * 255)) / 255;
 
   // Determine whether to make the contrast color black or white based on the luminance
   final Color contrastColor = luminance > 0.5 ? Colors.black : Colors.white;

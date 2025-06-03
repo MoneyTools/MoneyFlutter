@@ -51,5 +51,7 @@ Widget _alignChild(BuildContext context, TextAlign align, Widget content) {
       alignment = Alignment.centerLeft;
   }
 
-  return Stack(children: <Widget>[Align(alignment: alignment, child: content)]);
+  return Stack(
+    children: <Widget>[Align(alignment: alignment, child: content)],
+  );
 }

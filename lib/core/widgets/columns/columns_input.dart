@@ -33,19 +33,15 @@ class InputByColumnsOrFreeStyle extends StatefulWidget {
   final bool reverseAmountValue;
 
   @override
-  State<InputByColumnsOrFreeStyle> createState() =>
-      _InputByColumnsOrFreeStyleState();
+  State<InputByColumnsOrFreeStyle> createState() => _InputByColumnsOrFreeStyleState();
 }
 
 class _InputByColumnsOrFreeStyleState extends State<InputByColumnsOrFreeStyle> {
-  final TextEditingController _controllerColumn2 =
-      TextEditingController(); // Description column
-  final TextEditingController _controllerColumn3 =
-      TextEditingController(); // Amount column
+  final TextEditingController _controllerColumn2 = TextEditingController(); // Description column
+  final TextEditingController _controllerColumn3 = TextEditingController(); // Amount column
 
   // Controllers for the three-column format
-  final TextEditingController _controllerColumn1 =
-      TextEditingController(); // Date column
+  final TextEditingController _controllerColumn1 = TextEditingController(); // Date column
 
   // Controller for the single-column freestyle format
   final TextEditingController _controllerSingleColumn = TextEditingController();

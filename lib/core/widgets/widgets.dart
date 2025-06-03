@@ -41,12 +41,9 @@ Widget buildDashboardWidget(final Widget child) {
 }
 
 extension ViewExtension on BuildContext {
-  bool get isWidthSmall =>
-      MediaQuery.of(this).size.width <= Constants.screenWidthSmall;
-  bool get isWidthMedium =>
-      MediaQuery.of(this).size.width <= Constants.screenWidthMedium;
-  bool get isWidthLarge =>
-      MediaQuery.of(this).size.width > Constants.screenWidthMedium;
+  bool get isWidthSmall => MediaQuery.of(this).size.width <= Constants.screenWidthSmall;
+  bool get isWidthMedium => MediaQuery.of(this).size.width <= Constants.screenWidthMedium;
+  bool get isWidthLarge => MediaQuery.of(this).size.width > Constants.screenWidthMedium;
 }
 
 Widget buildFieldWidgetForAmount({
@@ -60,9 +57,9 @@ Widget buildFieldWidgetForAmount({
       shorthand
           ? getAmountAsShorthandText(value as num)
           : Currency.getAmountAsStringUsingCurrency(
-            value,
-            iso4217code: currency,
-          ),
+              value,
+              iso4217code: currency,
+            ),
       textAlign: align,
       style: TextStyle(
         fontFamily: 'RobotoMono',
@@ -94,9 +91,7 @@ Widget buildFieldWidgetForNumber({
   return scaleDown(
     Text(
       shorthand
-          ? (value is double
-              ? getAmountAsShorthandText(value)
-              : getNumberShorthandText(value))
+          ? (value is double ? getAmountAsShorthandText(value) : getNumberShorthandText(value))
           : value.toString(),
       textAlign: align,
       style: const TextStyle(fontFamily: 'RobotoMono'),
@@ -176,10 +171,9 @@ Widget buildWidgetFromTypeAndValue({
       return Row(
         children: <Widget>[
           Expanded(
-            child:
-                (value is num)
-                    ? QuantityWidget(quantity: value.toDouble(), align: align)
-                    : Text(value.toString(), textAlign: align),
+            child: (value is num)
+                ? QuantityWidget(quantity: value.toDouble(), align: align)
+                : Text(value.toString(), textAlign: align),
           ),
         ],
       );
