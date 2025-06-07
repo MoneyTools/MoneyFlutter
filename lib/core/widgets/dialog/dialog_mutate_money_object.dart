@@ -54,7 +54,7 @@ void myShowDialogAndActionsForMoneyObjects({
         if (diff.keys.isNotEmpty) {
           for (final MoneyObject m in moneyObjects) {
             diff.forEach((String key, dynamic value) {
-              // Very Special Edge case for Transaction that are edting the Payeer to Transfer
+              // Very Special Edge case for Transaction that are editing the Payee to Transfer
               if (m is Transaction) {
                 if (key == 'Payee' || key == 'Transfer') {
                   // Clean or Apply Transfers to all related instances

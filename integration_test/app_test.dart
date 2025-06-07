@@ -169,7 +169,7 @@ Future<void> stepImportWizardOptions(WidgetTester tester) async {
   await testImportBulkManualTextInput(tester);
 
   // Record a Transfer
-  await testImportWizadRecordTransfer(tester);
+  await testImportWizardRecordTransfer(tester);
 }
 
 Future<void> bringUpImportWizard(final WidgetTester tester) async {
@@ -476,7 +476,7 @@ Future<void> testAccounts(WidgetTester tester) async {
   }
 }
 
-Future<void> testImportWizadRecordTransfer(WidgetTester tester) async {
+Future<void> testImportWizardRecordTransfer(WidgetTester tester) async {
   // Import Wizard
   await bringUpImportWizard(tester);
   await tapOnText(tester, 'Record a transfer');
@@ -628,19 +628,19 @@ Future<void> testEvents(WidgetTester tester) async {
       );
       await tester.pumpAndSettle(
         const Duration(milliseconds: 500),
-      ); // fix soem odd timing issues
+      ); // fix some odd timing issues
 
       // Find the widget that displays the text 'Grocery'.
       final Finder groceryFinder = find.text('Grocery').at(0); // top most element found
       await tester.pumpAndSettle(
         const Duration(milliseconds: 500),
-      ); // fix soem odd timing issues
+      ); // fix some odd timing issues
 
       // Tap on the widget.
       await tester.tap(groceryFinder);
       await tester.pumpAndSettle(
         const Duration(milliseconds: 900),
-      ); // fix soem odd timing issues
+      ); // fix some odd timing issues
     }
 
     await tapOnText(tester, 'Apply');

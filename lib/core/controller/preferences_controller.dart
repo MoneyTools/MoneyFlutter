@@ -220,7 +220,7 @@ class PreferenceController extends GetxController {
   Future<void> loadDefaults() async {
     mru.value = _preferences!.getStringList(settingKeyMRU) ?? <String>[];
 
-    // Side Panel Expaned/Collapsed
+    // Side Panel Expanded/Collapsed
     _isSidePanelExpanded.value = getBool(settingKeySidePanelExpanded, false);
 
     // Side Panel Height

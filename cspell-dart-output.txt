@@ -1,0 +1,118 @@
+integration_test/app_test.dart:172:19    - Unknown word (Wizad)      -- await testImportWizadRecordTransfer(tester
+	 Suggestions: [Wizard, wilda, Wilda, Wild, Wind]
+integration_test/app_test.dart:479:24    - Unknown word (Wizad)      -- Future<void> testImportWizadRecordTransfer(WidgetTester
+	 Suggestions: [Wizard, wilda, Wilda, Wild, Wind]
+integration_test/app_test.dart:631:17    - Unknown word (soem)       -- ); // fix soem odd timing issues
+	 Suggestions: [some*, seem, stem, sem, som]
+integration_test/app_test.dart:637:17    - Unknown word (soem)       -- ); // fix soem odd timing issues
+	 Suggestions: [some*, seem, stem, sem, som]
+integration_test/app_test.dart:643:17    - Unknown word (soem)       -- ); // fix soem odd timing issues
+	 Suggestions: [some*, seem, stem, sem, som]
+lib/core/controller/my_window_manager.dart:21:42     - Unknown word (jank)       -- reduces shader compilation jank on mobile platforms
+	 Suggestions: [jack, jana, jane, jink, junk]
+lib/core/controller/my_window_manager.dart:52:29     - Unknown word (prefs)      -- final SharedPreferences prefs = await SharedPreferences
+	 Suggestions: [pref, pres, preps, press, preys]
+lib/core/controller/my_window_manager.dart:55:11     - Unknown word (prefs)      -- await prefs.setDouble('window_x
+	 Suggestions: [pref, pres, preps, press, preys]
+lib/core/controller/my_window_manager.dart:56:11     - Unknown word (prefs)      -- await prefs.setDouble('window_y
+	 Suggestions: [pref, pres, preps, press, preys]
+lib/core/controller/my_window_manager.dart:57:11     - Unknown word (prefs)      -- await prefs.setDouble('window_width
+	 Suggestions: [pref, pres, preps, press, preys]
+lib/core/controller/my_window_manager.dart:58:11     - Unknown word (prefs)      -- await prefs.setDouble('window_height
+	 Suggestions: [pref, pres, preps, press, preys]
+lib/core/controller/preferences_controller.dart:223:19    - Unknown word (Expaned)    -- // Side Panel Expaned/Collapsed
+	 Suggestions: [Expand, Expanded, Expend, Expander, Empaled]
+lib/core/widgets/dialog/dialog_mutate_money_object.dart:57:66     - Unknown word (edting)     -- Transaction that are edting the Payeer to Transfer
+	 Suggestions: [eating, edging, editing, deming, dewing]
+lib/core/widgets/dialog/dialog_mutate_money_object.dart:57:77     - Unknown word (Payeer)     -- that are edting the Payeer to Transfer
+	 Suggestions: [Payer, Payee, Payees, Preyer, Pacer]
+lib/data/models/budget.dart:16:27     - Unknown word (Cumulator)  -- final Map<String, BudgetCumulator> categoryBudgetsExpenses
+	 Suggestions: [Cumulate, Cumulated, Cumulates, Cumulation, Curator]
+lib/data/models/budget.dart:17:27     - Unknown word (Cumulator)  -- final Map<String, BudgetCumulator> categoryBudgetsIncomes
+	 Suggestions: [Cumulate, Cumulated, Cumulates, Cumulation, Curator]
+lib/data/models/budget.dart:25:13     - Unknown word (Cumulator)  -- class BudgetCumulator {
+	 Suggestions: [Cumulate, Cumulated, Cumulates, Cumulation, Curator]
+lib/data/models/budget.dart:26:9      - Unknown word (Cumulator)  -- BudgetCumulator({
+	 Suggestions: [Cumulate, Cumulated, Cumulates, Cumulation, Curator]
+lib/data/models/budget.dart:103:29    - Unknown word (Cumulator)  -- final Map<String, BudgetCumulator> categoryBudgetsIncomes
+	 Suggestions: [Cumulate, Cumulated, Cumulates, Cumulation, Curator]
+lib/data/storage/data/data.dart:377:18    - Unknown word (notthing)   -- return; // notthing to check
+	 Suggestions: [nothing, northing, notching, noting, nothings]
+lib/data/storage/import/import_wizard.dart:10:50     - Unknown word (trasnsfer)  -- storage/import/import_trasnsfer.dart';
+	 Suggestions: [transfer, Transfer, transfers, transf, trainer]
+lib/views/home/sub_views/view_cashflow/recurring/panel_budget.dart:516:55    - Unknown word (Cumulator)  -- MapEntry<String, BudgetCumulator>> list) {
+	 Suggestions: [Cumulate, Cumulated, Cumulates, Cumulation, Curator]
+lib/views/home/sub_views/view_cashflow/recurring/panel_budget.dart:521:32    - Unknown word (Cumulator)  -- MapEntry<String, BudgetCumulator> a,
+	 Suggestions: [Cumulate, Cumulated, Cumulates, Cumulation, Curator]
+lib/views/home/sub_views/view_cashflow/recurring/panel_budget.dart:522:32    - Unknown word (Cumulator)  -- MapEntry<String, BudgetCumulator> b,
+	 Suggestions: [Cumulate, Cumulated, Cumulates, Cumulation, Curator]
+lib/views/home/sub_views/view_cashflow/recurring/panel_budget.dart:526:39    - Unknown word (Cumulator)  -- MapEntry<String, BudgetCumulator> categoryBudget in list
+	 Suggestions: [Cumulate, Cumulated, Cumulates, Cumulation, Curator]
+lib/views/platforms/platforms_page.dart:16:15     - Unknown word (paltform)   -- paltformItem(
+	 Suggestions: [platform, altform, platforms, piliform, plaforms]
+lib/views/platforms/platforms_page.dart:22:15     - Unknown word (paltform)   -- paltformItem(
+	 Suggestions: [platform, altform, platforms, piliform, plaforms]
+lib/views/platforms/platforms_page.dart:28:15     - Unknown word (paltform)   -- paltformItem(
+	 Suggestions: [platform, altform, platforms, piliform, plaforms]
+lib/views/platforms/platforms_page.dart:35:15     - Unknown word (paltform)   -- paltformItem(
+	 Suggestions: [platform, altform, platforms, piliform, plaforms]
+lib/views/platforms/platforms_page.dart:41:15     - Unknown word (paltform)   -- paltformItem(
+	 Suggestions: [platform, altform, platforms, piliform, plaforms]
+test/unit/date_test.dart:169:11    - Unknown word (Elsapse)    -- test('Elsapse time', () {
+	 Suggestions: [Elapse, elsa's, Elsa's, Elapsed, Elapses]
+test/unit/qfx_test.dart:33:1      - Unknown word (OFXHEADER)  -- OFXHEADER:100
+	 Suggestions: [OHEADER, OREADER, OFFENDER]
+test/unit/qfx_test.dart:34:6      - Unknown word (OFXSGML)    -- DATA:OFXSGML
+	 Suggestions: []
+test/unit/qfx_test.dart:37:10     - Unknown word (USASCII)    -- ENCODING:USASCII
+	 Suggestions: [URACIL, USANCE, USANCES]
+test/unit/qfx_test.dart:40:1      - Unknown word (OLDFILEUID) -- OLDFILEUID:NONE
+	 Suggestions: [OLDFIELD, Oldfield, OLDFILE]
+test/unit/qfx_test.dart:41:1      - Unknown word (NEWFILEUID) -- NEWFILEUID:NONE
+	 Suggestions: [NEWFILE]
+test/unit/qfx_test.dart:45:2      - Unknown word (SIGNONMSGSRSV) -- <SIGNONMSGSRSV1>
+	 Suggestions: []
+test/unit/qfx_test.dart:46:2      - Unknown word (SONRS)         -- <SONRS>
+	 Suggestions: [SONS, SOARS, SON'S, SONES, SONGS]
+test/unit/qfx_test.dart:51:2      - Unknown word (DTSERVER)      -- <DTSERVER>20231230224748.000[
+	 Suggestions: [DESERVER, STDSERVER, Stdserver, stdServer, StdServer]
+test/unit/qfx_test.dart:53:2      - Unknown word (DTACCTUP)      -- <DTACCTUP>20231230224748.000[
+	 Suggestions: []
+test/unit/qfx_test.dart:60:3      - Unknown word (SONRS)         -- </SONRS>
+	 Suggestions: [SONS, SOARS, SON'S, SONES, SONGS]
+test/unit/qfx_test.dart:61:3      - Unknown word (SIGNONMSGSRSV) -- </SIGNONMSGSRSV1>
+	 Suggestions: []
+test/unit/qfx_test.dart:62:2      - Unknown word (BANKMSGSRSV)   -- <BANKMSGSRSV1>
+	 Suggestions: []
+test/unit/qfx_test.dart:63:2      - Unknown word (STMTTRNRS)     -- <STMTTRNRS>
+	 Suggestions: [stmttrn, STMTTRN, STUTTERS, STUTTERERS]
+test/unit/qfx_test.dart:64:2      - Unknown word (TRNUID)        -- <TRNUID>0
+	 Suggestions: [TRUED, TENUIS, TINEID, TREPID, TRIFID]
+test/unit/qfx_test.dart:71:2      - Unknown word (STMTRS)        -- <STMTRS>
+	 Suggestions: [STARTS, STMT, STARS, STATS, STETS]
+test/unit/qfx_test.dart:72:2      - Unknown word (CURDEF)        -- <CURDEF>USD
+	 Suggestions: [CURDED, CRUDE, CURED, CRUDER, CRUDES]
+test/unit/qfx_test.dart:82:4      - Unknown word (DTSTART)       -- <DTSTART>2000000000000
+	 Suggestions: [DASTARD, DISPART, DISTANT, DISTORT, DUSTCART]
+test/unit/qfx_test.dart:83:4      - Unknown word (DTEND)         -- <DTEND>2333333333333
+	 Suggestions: [DSEND, TEND, DINED, DDED, DEAD]
+test/unit/qfx_test.dart:98:22     - Unknown word (AUTOPAY)       -- <NAME>CreditCard AUTOPAY
+	 Suggestions: [AUTOPSY, AUTOPLAY, AUTOMAT, AUTOSPY, autoSpy]
+test/unit/qfx_test.dart:104:2     - Unknown word (LEDGERBAL)     -- <LEDGERBAL>
+	 Suggestions: [LEDGER, LEDGERS, LEDGER'S]
+test/unit/qfx_test.dart:105:2     - Unknown word (BALAMT)        -- <BALAMT>129484.61
+	 Suggestions: [ABLAUT, BALA, BALM, BALT, BLAT]
+test/unit/qfx_test.dart:106:2     - Unknown word (DTASOF)        -- <DTASOF>20231230224748
+	 Suggestions: [DATO, DATSUN, TAOS, WATSON, Watson]
+test/unit/qfx_test.dart:107:3     - Unknown word (LEDGERBAL)     -- </LEDGERBAL>
+	 Suggestions: [LEDGER, LEDGERS, LEDGER'S]
+test/unit/qfx_test.dart:108:3     - Unknown word (STMTRS)        -- </STMTRS>
+	 Suggestions: [STARTS, STMT, STARS, STATS, STETS]
+test/unit/qfx_test.dart:109:3     - Unknown word (STMTTRNRS)     -- </STMTTRNRS>
+	 Suggestions: [stmttrn, STMTTRN, STUTTERS, STUTTERERS]
+test/unit/qfx_test.dart:110:3     - Unknown word (BANKMSGSRSV)   -- </BANKMSGSRSV1>
+	 Suggestions: []
+test/unit/string_test.dart:95:39     - Unknown word (Duplessis)  -- getInitials('Jean-Pierre Duplessis'), 'JD');
+	 Suggestions: [Dulosis, Diplosis, dulles's, Dulles's, Dupleix]
+test/unit/string_test.dart:106:50    - Unknown word (Duplessis)  -- 'Jean-Pierre Joseph Duplessis'), 'J.J.D');
+	 Suggestions: [Dulosis, Diplosis, dulles's, Dulles's, Dupleix]

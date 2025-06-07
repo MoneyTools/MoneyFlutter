@@ -1,0 +1,4 @@
+CHANGELOG.md:7:12      - Unknown word (Resizer)    -- - Splitter Resizer for the bottom Panel
+	 Suggestions: [Resize, Resider, Resized, Resizes, Seizer]
+CHANGELOG.md:274:55    - Unknown word (Tesseract)  -- tested on macOS using Tesseract-OCR
+	 Suggestions: [Tessera, Tesserae, Tesseral, Textract, Tesselate]

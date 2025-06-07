@@ -7,7 +7,7 @@ import 'package:money/data/storage/import/import_investment.dart';
 import 'package:money/data/storage/import/import_qfx.dart';
 import 'package:money/data/storage/import/import_qif.dart';
 import 'package:money/data/storage/import/import_transactions_from_text.dart';
-import 'package:money/data/storage/import/import_trasnsfer.dart';
+import 'package:money/data/storage/import/import_transfer.dart';
 
 void showImportTransactionsWizard() {
   final BuildContext context = Get.context!;

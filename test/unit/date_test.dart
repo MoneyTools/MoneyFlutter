@@ -166,7 +166,7 @@ void main() {
       expect(dateOld.dropTime.hour, 0);
     });
 
-    test('Elsapse time', () {
+    test('Elapse time', () {
       {
         final String result = getElapsedTime(
           DateTime.now().subtract(const Duration(seconds: 10)),

@@ -13,39 +13,39 @@ class PlatformsPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              paltformItem(
+              platformItem(
                 'macOS',
                 'assets/images/platforms/platformDesktopMacOS.png',
                 'Desktop Intel & Silicon Software.',
                 'https://paint.vteam.com/downloads/flutter-macos-app.zip',
               ),
-              paltformItem(
+              platformItem(
                 'Windows',
                 'assets/images/platforms/platformDesktopWindows.png',
                 'Desktop 64bit Software.',
                 'https://paint.vteam.com/downloads/flutter-windows-app.zip',
               ),
-              paltformItem(
+              platformItem(
                 'Linux',
                 'assets/images/platforms/platformDesktopLinux.png',
                 'Desktop Software.',
                 'https://paint.vteam.com/downloads/flutter-linux-app.zip',
               ),
               const SizedBox(height: 40),
-              paltformItem(
+              platformItem(
                 'iOS',
                 'assets/images/platforms/platformMobileIOS.png',
                 'Mobile app.',
                 'https://apps.apple.com/us/app/cooking-timer-by-vteam/id1188460815',
               ),
-              paltformItem(
+              platformItem(
                 'Android',
                 'assets/images/platforms/platformMobileAndroid.png',
                 'Mobile app.',
                 'https://play.google.com/store/apps/details?id=com.vteam.cookingtimerflutter',
               ),
               const SizedBox(height: 40),
-              paltformItem(
+              platformItem(
                 'Web Browser',
                 'assets/images/platforms/platformWeb.png',
                 'Run on any OS with most browsers.',
@@ -58,7 +58,7 @@ class PlatformsPage extends StatelessWidget {
     ),
   );
 
-  Widget paltformItem(
+  Widget platformItem(
     final String name,
     final String image,
     final String description,
