@@ -74,4 +74,17 @@ class SnackBarService {
       backgroundColor: getColorFromState(ColorState.warning),
     );
   }
+
+  static void displayInfo({
+    required String message,
+    String title = 'Info',
+    bool autoDismiss = true,
+  }) {
+    return display(
+      title: title,
+      message: message,
+      autoDismiss: autoDismiss,
+      backgroundColor: getColorFromState(ColorState.info),
+    );
+  }
 }

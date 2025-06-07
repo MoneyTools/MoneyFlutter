@@ -143,6 +143,7 @@ enum ColorState {
   disabled,
   quantityPositive,
   quantityNegative,
+  info,
 }
 
 Color getColorFromState(final ColorState state) {
@@ -164,6 +165,8 @@ Color getColorFromState(final ColorState state) {
       return isDarkModeOne ? Colors.orange.shade300 : Colors.orange.shade600;
     case ColorState.quantityPositive:
       return isDarkModeOne ? Colors.blue.shade300 : Colors.blue.shade600;
+    case ColorState.info:
+      return isDarkModeOne ? Colors.blue.shade200 : Colors.blue.shade700;
   }
 }
 

@@ -1,4 +1,3 @@
-import 'package:money/core/controller/keyboard_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/widgets/form_field_widget.dart';
@@ -48,7 +47,6 @@ class ImportFieldsForTransferPanelState extends State<ImportFieldsForTransferPan
     text: widget.inputFields.memo.toString(),
   );
   final FocusNode _focusNode = FocusNode();
-  final SafeKeyboardHandler _keyboardHandler = SafeKeyboardHandler();
 
   @override
   void dispose() {
@@ -69,13 +67,8 @@ class ImportFieldsForTransferPanelState extends State<ImportFieldsForTransferPan
     final bool validAccounts = widget.inputFields.validAccounts;
 
     return Focus(
-      onFocusChange: (final bool hasFocus) {
-        if (!hasFocus) {
-          _keyboardHandler.clearKeys();
-        }
-      },
+      onFocusChange: (final bool hasFocus) {},
       child: KeyboardListener(
-        onKeyEvent: _keyboardHandler.onKeyEvent,
         focusNode: _focusNode,
         child: Center(
           child: SingleChildScrollView(

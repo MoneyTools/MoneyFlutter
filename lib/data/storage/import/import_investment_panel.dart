@@ -1,4 +1,3 @@
-import 'package:money/core/controller/keyboard_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/widgets/form_field_widget.dart';
@@ -62,7 +61,6 @@ class ImportInvestmentPanelState extends State<ImportInvestmentPanel> {
     text: widget.inputFields.units.toString(),
   );
   final FocusNode _focusNode = FocusNode();
-  final SafeKeyboardHandler _keyboardHandler = SafeKeyboardHandler();
 
   @override
   void dispose() {
@@ -87,13 +85,7 @@ class ImportInvestmentPanelState extends State<ImportInvestmentPanel> {
   @override
   Widget build(BuildContext context) {
     return Focus(
-      onFocusChange: (final bool hasFocus) {
-        if (!hasFocus) {
-          _keyboardHandler.clearKeys();
-        }
-      },
       child: KeyboardListener(
-        onKeyEvent: _keyboardHandler.onKeyEvent,
         focusNode: _focusNode,
         child: Center(
           child: SingleChildScrollView(

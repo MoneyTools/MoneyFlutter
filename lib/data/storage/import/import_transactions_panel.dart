@@ -1,4 +1,3 @@
-import 'package:money/core/controller/keyboard_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/value_parser.dart';
@@ -34,7 +33,6 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
   late String userChoiceOfDateFormat = _possibleDateFormats.first;
 
   final FocusNode _focusNode = FocusNode();
-  final SafeKeyboardHandler _keyboardHandler = SafeKeyboardHandler();
   final List<String> _possibleDateFormats = <String>[
     // Dash
     'yyyy-MM-dd',
@@ -64,7 +62,6 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
 
   @override
   void dispose() {
-    _keyboardHandler.dispose();
     super.dispose();
   }
 
@@ -84,13 +81,8 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     );
 
     return Focus(
-      onFocusChange: (bool hasFocus) {
-        if (!hasFocus) {
-          _keyboardHandler.clearKeys();
-        }
-      },
+      onFocusChange: (bool hasFocus) {},
       child: KeyboardListener(
-        onKeyEvent: _keyboardHandler.onKeyEvent,
         focusNode: _focusNode,
         child: SizedBox(
           width: 800,
