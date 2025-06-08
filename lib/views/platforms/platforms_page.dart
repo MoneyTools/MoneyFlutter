@@ -14,10 +14,16 @@ class PlatformsPage extends StatelessWidget {
           child: Column(
             children: <Widget>[
               paltformItem(
-                'macOS',
+                'macOS (Intel)',
                 'assets/images/platforms/platformDesktopMacOS.png',
-                'Desktop Intel & Silicon Software.',
-                'https://paint.vteam.com/downloads/mymoney-app-macos.zip',
+                'Desktop Intel CPU.',
+                'https://paint.vteam.com/downloads/mymoney-app-macos-intel.zip',
+              ),
+              paltformItem(
+                'macOS (Apple Silicon)',
+                'assets/images/platforms/platformDesktopMacOS.png',
+                'Desktop Apple Silicon CPU.',
+                'https://paint.vteam.com/downloads/mymoney-app-macos-silicon.zip',
               ),
               paltformItem(
                 'Windows',

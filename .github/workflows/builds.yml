@@ -57,8 +57,8 @@ jobs:
           name: mymoney-app-linux
           path: build/linux/
 
-  build-macos:
-    name: Build macOS
+  build-macos-intel:
+    name: Build macOS Intel
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -71,11 +71,34 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-      - name: Build macOS App
-        run: flutter build macos
+      - name: Build macOS App Intel
+        run: flutter build macos --target-platform macos-x64
 
-      - name: Upload macOS Artifact
+      - name: Upload macOS Intel Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mymoney-app-macos
+          name: mymoney-app-macos-intel
+          path: build/macos/Build/Products/Release/
+
+  build-macos-silicon:
+    name: Build macOS Apple Silicon
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.32.1"
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build macOS App Apple Silicon
+        run: flutter build macos --target-platform macos-arm64
+
+      - name: Upload macOS Apple Silicon Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mymoney-app-macos-silicon
           path: build/macos/Build/Products/Release/
