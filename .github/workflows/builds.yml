@@ -57,8 +57,8 @@ jobs:
           name: mymoney-app-linux
           path: build/linux/
 
-  build-macos-intel:
-    name: Build macOS Intel
+  build-macos:
+    name: Build macOS
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -71,34 +71,60 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-      - name: Build macOS App Intel
-        run: flutter build macos --target-platform macos-x64
+      - name: Build macOS App (Universal)
+        run: flutter build macos
+
+      - name: Create Intel and Apple Silicon Packages
+        run: |
+          APP_NAME="Runner" # Assuming Runner.app, adjust if different
+          UNIVERSAL_APP_PATH="build/macos/Build/Products/Release/${APP_NAME}.app"
+          INTEL_APP_PATH="build/macos/Build/Products/Release-Intel/${APP_NAME}.app"
+          SILICON_APP_PATH="build/macos/Build/Products/Release-Silicon/${APP_NAME}.app"
+
+          echo "Checking universal app path: ${UNIVERSAL_APP_PATH}"
+          if [ ! -d "${UNIVERSAL_APP_PATH}" ]; then
+            echo "Error: Universal app not found at ${UNIVERSAL_APP_PATH}"
+            ls -R build/macos/Build/Products/Release/
+            # Attempt to find the .app directory if APP_NAME was wrong
+            FOUND_APP_PATH=$(find build/macos/Build/Products/Release/ -name "*.app" -type d -maxdepth 1)
+            if [ -n "${FOUND_APP_PATH}" ] && [ -d "${FOUND_APP_PATH}" ]; then
+              echo "Found .app at ${FOUND_APP_PATH}, using it."
+              UNIVERSAL_APP_PATH="${FOUND_APP_PATH}"
+              APP_NAME=$(basename "${FOUND_APP_PATH}" .app)
+              INTEL_APP_PATH="build/macos/Build/Products/Release-Intel/${APP_NAME}.app"
+              SILICON_APP_PATH="build/macos/Build/Products/Release-Silicon/${APP_NAME}.app"
+            else
+              echo "Still cannot find the .app directory. Exiting."
+              exit 1
+            fi
+          fi
+
+          echo "Creating Intel-specific app..."
+          mkdir -p "$(dirname "${INTEL_APP_PATH}")"
+          ditto --arch x86_64 "${UNIVERSAL_APP_PATH}" "${INTEL_APP_PATH}"
+
+          echo "Zipping Intel app..."
+          pushd "$(dirname "${INTEL_APP_PATH}")"
+          zip -r "../../../../../mymoney-app-macos-intel.zip" "${APP_NAME}.app"
+          popd
+
+          echo "Creating Apple Silicon-specific app..."
+          mkdir -p "$(dirname "${SILICON_APP_PATH}")"
+          ditto --arch arm64 "${UNIVERSAL_APP_PATH}" "${SILICON_APP_PATH}"
+
+          echo "Zipping Apple Silicon app..."
+          pushd "$(dirname "${SILICON_APP_PATH}")"
+          zip -r "../../../../../mymoney-app-macos-silicon.zip" "${APP_NAME}.app"
+          popd
 
       - name: Upload macOS Intel Artifact
         uses: actions/upload-artifact@v4
         with:
           name: mymoney-app-macos-intel
-          path: build/macos/Build/Products/Release/
+          path: mymoney-app-macos-intel.zip
 
-  build-macos-silicon:
-    name: Build macOS Apple Silicon
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "3.32.1"
-
-      - name: Install Dependencies
-        run: flutter pub get
-
-      - name: Build macOS App Apple Silicon
-        run: flutter build macos --target-platform macos-arm64
-
-      - name: Upload macOS Apple Silicon Artifact
+      - name: Upload macOS Silicon Artifact
         uses: actions/upload-artifact@v4
         with:
           name: mymoney-app-macos-silicon
-          path: build/macos/Build/Products/Release/
+          path: mymoney-app-macos-silicon.zip
