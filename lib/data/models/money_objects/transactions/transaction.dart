@@ -62,7 +62,7 @@ class Transaction extends MoneyObject {
     return t;
   }
 
-  factory Transaction.fromJSon(final MyJson json, final double runningBalance) {
+  factory Transaction.fromJson(final MyJson json, final double runningBalance) {
     final Transaction t = Transaction(date: json.getDate('Date'));
     // 0 ID
     t.fieldId.value = json.getInt('Id', -1);
@@ -636,7 +636,7 @@ class Transaction extends MoneyObject {
         t.getPersistableJSon(),
       );
     }
-    return Transaction.fromJSon(commonJson, 0);
+    return Transaction.fromJson(commonJson, 0);
   }
 
   @override

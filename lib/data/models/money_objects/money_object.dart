@@ -11,7 +11,7 @@ export 'package:money/data/models/fields/fields.dart';
 class MoneyObject {
   MoneyObject();
 
-  factory MoneyObject.fromJSon(final MyJson json, final double runningBalance) {
+  factory MoneyObject.fromJson(final MyJson json, final double runningBalance) {
     return MoneyObject();
   }
 
@@ -321,7 +321,7 @@ class MoneyObject {
         t.getPersistableJSon(),
       );
     }
-    return MoneyObject.fromJSon(commonJson, 0);
+    return MoneyObject.fromJson(commonJson, 0);
   }
 
   void stashValueBeforeEditing() {

@@ -21,8 +21,8 @@ import 'package:path/path.dart' as p;
 /// - File format conversions
 /// - File location management
 class DataController extends GetxController {
-  Rxn<DateTime> currentLoadedFileDateTime = Rxn<DateTime>();
-  RxString currentLoadedFileName = Constants.untitledFileName.obs;
+  Rxn<DateTime> loadedFileDateTime = Rxn<DateTime>();
+  RxString loadedFileName = Constants.untitledFileName.obs;
   RxList<String> data = <String>[].obs;
   String fileName = '';
   // Observable variables
@@ -39,8 +39,8 @@ class DataController extends GetxController {
   }
 
   void dataFileIsClosed() {
-    currentLoadedFileName.value = Constants.untitledFileName;
-    currentLoadedFileDateTime.value = null;
+    loadedFileName.value = Constants.untitledFileName;
+    loadedFileDateTime.value = null;
   }
 
   Future<String> defaultFolderToSaveTo(final String defaultFileName) async {
@@ -48,15 +48,15 @@ class DataController extends GetxController {
   }
 
   Future<String> generateNextFolderToSaveTo() async {
-    if (currentLoadedFileName.value.isNotEmpty) {
-      if (p.extension(currentLoadedFileName.value) == 'mmcsv' || p.extension(currentLoadedFileName.value) == 'mmdb') {
-        return p.dirname(currentLoadedFileName.value);
+    if (loadedFileName.value.isNotEmpty) {
+      if (p.extension(loadedFileName.value) == 'mmcsv' || p.extension(loadedFileName.value) == 'mmdb') {
+        return p.dirname(loadedFileName.value);
       }
     }
     return await getDocumentDirectory();
   }
 
-  bool get isUntitled => currentLoadedFileName.value == Constants.untitledFileName;
+  bool get isUntitled => loadedFileName.value == Constants.untitledFileName;
 
   String get lastUpdateAsString => '${trackMutations.lastDateTimeChanged}';
 
@@ -73,7 +73,7 @@ class DataController extends GetxController {
 
     if (success) {
       setCurrentFileName(dataSource.filePath);
-      currentLoadedFileDateTime.value = await MyFileSystems.getFileModifiedTime(
+      loadedFileDateTime.value = await MyFileSystems.getFileModifiedTime(
         dataSource.filePath,
       );
       Future<Null>.delayed(Duration.zero, () {
@@ -197,7 +197,7 @@ class DataController extends GetxController {
   }
 
   Future<bool> onSaveToSql() async {
-    String fileNameAndPath = currentLoadedFileName.value;
+    String fileNameAndPath = loadedFileName.value;
 
     if (fileNameAndPath.isEmpty) {
       // this happens if the user started with a new file and click save to SQL
@@ -225,7 +225,7 @@ class DataController extends GetxController {
   }
 
   void setCurrentFileName(final String filenameLoaded) {
-    currentLoadedFileName.value = filenameLoaded;
+    loadedFileName.value = filenameLoaded;
     final PreferenceController preferenceController = Get.find();
     preferenceController.addToMRU(filenameLoaded);
   }

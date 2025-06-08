@@ -14,7 +14,6 @@ analyzer:
 
   errors:
     todo: ignore
-    unnecessary_this: ignore
     avoid_empty_else: error
     avoid_function_literals_in_foreach_calls: ignore
 
@@ -56,3 +55,10 @@ linter:
     use_key_in_widget_constructors: true
     use_super_parameters: true
     unnecessary_parenthesis: true
+    camel_case_types: true
+    camel_case_extensions: true
+    file_names: true
+    package_names: true
+    library_prefixes: true
+    non_constant_identifier_names: true
+    constant_identifier_names: true

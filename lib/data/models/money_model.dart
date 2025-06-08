@@ -9,7 +9,7 @@ class MoneyModel {
   /// Constructor
   MoneyModel({
     required double amount,
-    this.iso4217 = Constants.defaultCurrency,
+    this.iso4217Code = Constants.defaultCurrency,
     this.showCurrency = false,
     this.autoColor = true,
   }) : _amount = amount;
@@ -17,7 +17,7 @@ class MoneyModel {
   bool autoColor;
 
   /// USD | CAD | GBP
-  String iso4217;
+  String iso4217Code;
 
   bool showCurrency;
 
@@ -29,7 +29,7 @@ class MoneyModel {
   String toString() {
     return Currency.getAmountAsStringUsingCurrency(
       _amount,
-      iso4217code: iso4217,
+      iso4217code: iso4217Code,
     );
   }
 
@@ -71,7 +71,7 @@ class MoneyModel {
   String toShortHand() {
     return Currency.getAmountAsShortHandStringUsingCurrency(
       _amount,
-      iso4217code: iso4217,
+      iso4217code: iso4217Code,
     );
   }
 }
