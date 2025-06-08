@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 class CsvColumnMapperDialog extends StatefulWidget {
-  final List<String> headers;
-  final List<List<String>> dataRows; // First few rows for preview
+  // First few rows for preview
 
   const CsvColumnMapperDialog({
     super.key,
     required this.headers,
     required this.dataRows,
   });
+  final List<String> headers;
+  final List<List<String>> dataRows;
 
   @override
   State<CsvColumnMapperDialog> createState() => _CsvColumnMapperDialogState();
@@ -36,7 +37,7 @@ class _CsvColumnMapperDialogState extends State<CsvColumnMapperDialog> {
         content: const Text('CSV headers are missing or empty.'), // Keep inner Text const
         actions: <Widget>[
           TextButton(
-            child: Text('OK'),
+            child: const Text('OK'),
             onPressed: () => Navigator.of(context).pop(),
           ),
         ],
@@ -75,7 +76,7 @@ class _CsvColumnMapperDialogState extends State<CsvColumnMapperDialog> {
               );
               return;
             }
-            final mapping = {
+            final Map<String, String> mapping = <String, String>{
               'date': _selectedDateColumn!,
               'description': _selectedDescriptionColumn!,
               'amount': _selectedAmountColumn!,
@@ -89,18 +90,18 @@ class _CsvColumnMapperDialogState extends State<CsvColumnMapperDialog> {
 
   Widget _buildMappingDropdowns() {
     return Column(
-      children: [
-        _buildDropdown('Date Column:', _selectedDateColumn, (newValue) {
+      children: <Widget>[
+        _buildDropdown('Date Column:', _selectedDateColumn, (String? newValue) {
           setState(() {
             _selectedDateColumn = newValue;
           });
         }),
-        _buildDropdown('Description Column:', _selectedDescriptionColumn, (newValue) {
+        _buildDropdown('Description Column:', _selectedDescriptionColumn, (String? newValue) {
           setState(() {
             _selectedDescriptionColumn = newValue;
           });
         }),
-        _buildDropdown('Amount Column:', _selectedAmountColumn, (newValue) {
+        _buildDropdown('Amount Column:', _selectedAmountColumn, (String? newValue) {
           setState(() {
             _selectedAmountColumn = newValue;
           });
@@ -133,29 +134,30 @@ class _CsvColumnMapperDialogState extends State<CsvColumnMapperDialog> {
 
   Widget _buildPreviewTable() {
     // Displaying only up to the first 5 data rows for preview
-    final previewRowCount = widget.dataRows.length > 5 ? 5 : widget.dataRows.length;
+    final int previewRowCount = widget.dataRows.length > 5 ? 5 : widget.dataRows.length;
     if (previewRowCount == 0) {
       return const Text('No data rows to preview.');
     }
 
-    return SingleChildScrollView( // Added SingleChildScrollView
+    return SingleChildScrollView(
+      // Added SingleChildScrollView
       scrollDirection: Axis.horizontal, // Set to horizontal scroll
       child: DataTable(
-        columns: widget.headers.map((header) => DataColumn(label: Text(header))).toList(),
-        rows: widget.dataRows.sublist(0, previewRowCount).map((row) {
-          final numExpectedColumns = widget.headers.length;
-        List<DataCell> cells = [];
-        for (int i = 0; i < numExpectedColumns; i++) {
-          if (i < row.length) {
-            cells.add(DataCell(Text(row[i]))); // Cell exists
-          } else {
-            cells.add(DataCell(const Text(''))); // Pad with empty cell
+        columns: widget.headers.map((String header) => DataColumn(label: Text(header))).toList(),
+        rows: widget.dataRows.sublist(0, previewRowCount).map((List<String> row) {
+          final int numExpectedColumns = widget.headers.length;
+          final List<DataCell> cells = <DataCell>[];
+          for (int i = 0; i < numExpectedColumns; i++) {
+            if (i < row.length) {
+              cells.add(DataCell(Text(row[i]))); // Cell exists
+            } else {
+              cells.add(const DataCell(Text(''))); // Pad with empty cell
+            }
           }
-        }
-        // If row.length > numExpectedColumns, extra cells in 'row' are implicitly truncated
-        // because we only iterate up to numExpectedColumns.
-        return DataRow(cells: cells);
-      }).toList(),
+          // If row.length > numExpectedColumns, extra cells in 'row' are implicitly truncated
+          // because we only iterate up to numExpectedColumns.
+          return DataRow(cells: cells);
+        }).toList(),
       ), // End DataTable
     ); // End SingleChildScrollView
   }

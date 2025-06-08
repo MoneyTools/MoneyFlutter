@@ -1,17 +1,21 @@
+// ignore_for_file: always_specify_types
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:money/core/widgets/csv_column_mapper_dialog.dart';
 
 void main() {
   // Sample data for testing
-  const List<String> sampleHeaders = ['Date', 'Description', 'Amount', 'Category'];
-  const List<List<String>> sampleDataRows = [ // Make this const
-    ['2023-01-01', 'Groceries', '50.00', 'Food'], // Inner lists also become effectively const
-    ['2023-01-02', 'Gas', '30.00', 'Transport'],
-    ['2023-01-03', 'Rent', '500.00', 'Housing'],
+  const List<String> sampleHeaders = <String>['Date', 'Description', 'Amount', 'Category'];
+  const List<List<String>> sampleDataRows = <List<String>>[
+    // Make this const
+    <String>['2023-01-01', 'Groceries', '50.00', 'Food'], // Inner lists also become effectively const
+    <String>['2023-01-02', 'Gas', '30.00', 'Transport'],
+    <String>['2023-01-03', 'Rent', '500.00', 'Housing'],
   ];
 
-  Future<void> pumpDialog(WidgetTester tester, {
+  Future<void> pumpDialog(
+    WidgetTester tester, {
     List<String> headers = sampleHeaders,
     List<List<String>> dataRows = sampleDataRows,
   }) async {
@@ -63,9 +67,9 @@ void main() {
   testWidgets('Dropdown menus are populated with header names', (WidgetTester tester) async {
     await pumpDialog(tester);
 
-    final dateDropdownFinder = find.byType(DropdownButtonFormField<String>).at(0);
-    final descriptionDropdownFinder = find.byType(DropdownButtonFormField<String>).at(1);
-    final amountDropdownFinder = find.byType(DropdownButtonFormField<String>).at(2);
+    final Finder dateDropdownFinder = find.byType(DropdownButtonFormField<String>).at(0);
+    final Finder descriptionDropdownFinder = find.byType(DropdownButtonFormField<String>).at(1);
+    final Finder amountDropdownFinder = find.byType(DropdownButtonFormField<String>).at(2);
 
     // Helper function to test a single dropdown
     Future<void> testDropdown(Finder dropdownFinder, String initialHeaderToSelect) async {
@@ -73,7 +77,7 @@ void main() {
       await tester.pumpAndSettle(); // Wait for dropdown items to appear
 
       // Check if all headers are present as dropdown items
-      for (final header in sampleHeaders) {
+      for (final String header in sampleHeaders) {
         // .last is important as items might appear in multiple open dropdowns if not careful
         expect(find.widgetWithText(DropdownMenuItem<String>, header).last, findsOneWidget);
       }
@@ -92,9 +96,9 @@ void main() {
   testWidgets('User can select columns for Date, Description, and Amount', (WidgetTester tester) async {
     await pumpDialog(tester);
 
-    final dateDropdownFinder = find.byType(DropdownButtonFormField<String>).at(0);
-    final descriptionDropdownFinder = find.byType(DropdownButtonFormField<String>).at(1);
-    final amountDropdownFinder = find.byType(DropdownButtonFormField<String>).at(2);
+    final Finder dateDropdownFinder = find.byType(DropdownButtonFormField<String>).at(0);
+    final Finder descriptionDropdownFinder = find.byType(DropdownButtonFormField<String>).at(1);
+    final Finder amountDropdownFinder = find.byType(DropdownButtonFormField<String>).at(2);
 
     // Select 'Date' for Date Column
     await tester.tap(dateDropdownFinder);
@@ -121,7 +125,7 @@ void main() {
   testWidgets('Confirm button shows SnackBar if not all fields are mapped', (WidgetTester tester) async {
     await pumpDialog(tester);
 
-    final dateDropdownFinder = find.byType(DropdownButtonFormField<String>).at(0);
+    final Finder dateDropdownFinder = find.byType(DropdownButtonFormField<String>).at(0);
 
     // Tap Confirm button without selecting anything
     await tester.tap(find.widgetWithText(TextButton, 'Confirm'));
@@ -167,9 +171,9 @@ void main() {
     await tester.tap(find.text('Show Dialog'));
     await tester.pumpAndSettle();
 
-    final dateDropdownFinder = find.byType(DropdownButtonFormField<String>).at(0);
-    final descriptionDropdownFinder = find.byType(DropdownButtonFormField<String>).at(1);
-    final amountDropdownFinder = find.byType(DropdownButtonFormField<String>).at(2);
+    final Finder dateDropdownFinder = find.byType(DropdownButtonFormField<String>).at(0);
+    final Finder descriptionDropdownFinder = find.byType(DropdownButtonFormField<String>).at(1);
+    final Finder amountDropdownFinder = find.byType(DropdownButtonFormField<String>).at(2);
 
     // Select 'Date' for Date Column
     await tester.tap(dateDropdownFinder);
@@ -237,22 +241,23 @@ void main() {
 
     // Check for headers in the DataTable
     // Ensure header text is found within the context of the DataTable
-    for (final header in sampleHeaders) {
+    for (final String header in sampleHeaders) {
       expect(find.descendant(of: find.byType(DataTable), matching: find.text(header)), findsOneWidget);
     }
 
     // Check for data cells in the DataTable
     // sampleDataRows has 3 rows, all should be displayed as preview can take up to 5
     for (int i = 0; i < sampleDataRows.length; i++) {
-      for (int j = 0; j < sampleHeaders.length; j++) { // Iterate through headers to ensure all cells in a row are checked
+      for (int j = 0; j < sampleHeaders.length; j++) {
+        // Iterate through headers to ensure all cells in a row are checked
         // Ensure cell text is found within the context of the DataTable
         expect(find.descendant(of: find.byType(DataTable), matching: find.text(sampleDataRows[i][j])), findsOneWidget);
       }
     }
   });
 
-   testWidgets('Dialog shows error message when headers are empty', (WidgetTester tester) async {
-    await pumpDialog(tester, headers: [], dataRows: []);
+  testWidgets('Dialog shows error message when headers are empty', (WidgetTester tester) async {
+    await pumpDialog(tester, headers: <String>[], dataRows: <List<String>>[]);
 
     expect(find.text('Error'), findsOneWidget);
     expect(find.text('CSV headers are missing or empty.'), findsOneWidget);
@@ -266,11 +271,11 @@ void main() {
   });
 
   testWidgets('Preview table handles rows with inconsistent column counts', (WidgetTester tester) async {
-    const List<String> headersForInconsistentTest = ['H1', 'H2', 'H3'];
-    final List<List<String>> dataRowsForInconsistentTest = [
-      ['R1C1', 'R1C2', 'R1C3'], // Correct length
-      ['R2C1', 'R2C2'],         // Shorter
-      ['R3C1', 'R3C2', 'R3C3', 'R3C4'], // Longer
+    const List<String> headersForInconsistentTest = <String>['H1', 'H2', 'H3'];
+    final List<List<String>> dataRowsForInconsistentTest = <List<String>>[
+      <String>['R1C1', 'R1C2', 'R1C3'], // Correct length
+      <String>['R2C1', 'R2C2'], // Shorter
+      <String>['R3C1', 'R3C2', 'R3C3', 'R3C4'], // Longer
     ];
 
     await pumpDialog(
@@ -283,7 +288,7 @@ void main() {
     expect(find.text('Map CSV Columns'), findsOneWidget);
 
     // Verify headers are displayed
-    for (final header in headersForInconsistentTest) {
+    for (final String header in headersForInconsistentTest) {
       expect(find.descendant(of: find.byType(DataTable), matching: find.text(header)), findsOneWidget);
     }
 
@@ -294,19 +299,19 @@ void main() {
 
     // Verify data for all rows by checking all Text widgets in the table.
     // This indirectly verifies padding and truncation.
-    final dataTableFinder = find.byType(DataTable);
+    final Finder dataTableFinder = find.byType(DataTable);
     expect(dataTableFinder, findsOneWidget);
 
-    final allTextInTableFinder = find.descendant(of: dataTableFinder, matching: find.byType(Text));
+    final Finder allTextInTableFinder = find.descendant(of: dataTableFinder, matching: find.byType(Text));
     final List<Text> allTextWidgetsInTable = tester.widgetList<Text>(allTextInTableFinder).toList();
-    final List<String?> allTextDataInTable = allTextWidgetsInTable.map((t) => t.data).toList();
+    final List<String?> allTextDataInTable = allTextWidgetsInTable.map((Text t) => t.data).toList();
 
     // Expected texts: Headers + Cells for each row according to headersForInconsistentTest
     // Headers: H1, H2, H3
     // Row 1 (correct length): R1C1, R1C2, R1C3
     // Row 2 (shorter): R2C1, R2C2, "" (empty string from DataCell(const Text('')))
     // Row 3 (longer): R3C1, R3C2, R3C3 (R3C4 is truncated)
-    final List<String> expectedTextsInOrder = [
+    final List<String> expectedTextsInOrder = <String>[
       // Headers
       headersForInconsistentTest[0], headersForInconsistentTest[1], headersForInconsistentTest[2],
       // Row 1
@@ -317,25 +322,28 @@ void main() {
       dataRowsForInconsistentTest[2][0], dataRowsForInconsistentTest[2][1], dataRowsForInconsistentTest[2][2],
     ];
 
-    expect(allTextDataInTable, equals(expectedTextsInOrder),
-           reason: "The content of all Text widgets in the DataTable (headers and cells) does not match the expected order and content.\n"
-                   "Expected: $expectedTextsInOrder\n"
-                   "Actual:   $allTextDataInTable");
+    expect(
+      allTextDataInTable,
+      equals(expectedTextsInOrder),
+      reason:
+          'The content of all Text widgets in the DataTable (headers and cells) does not match the expected order and content.\n'
+          'Expected: $expectedTextsInOrder\n'
+          'Actual:   $allTextDataInTable',
+    );
 
     // Explicitly check that R3C4 (from the longer row) is NOT present as a Text widget in the table.
     // This is implicitly covered by the list equality check above if the list length is correct,
     // but an explicit check makes the truncation test clearer.
     expect(find.descendant(of: dataTableFinder, matching: find.text('R3C4')), findsNothing);
-
   });
 
   testWidgets('Preview table scrolls horizontally with many columns', (WidgetTester tester) async {
     // 1. Setup data with many columns
     final int manyColumnCount = 20;
-    final List<String> wideHeaders = List.generate(manyColumnCount, (i) => 'Col ${i + 1}');
-    final List<List<String>> wideDataRows = [
-      List.generate(manyColumnCount, (i) => 'R1 Cell ${i + 1}'),
-      List.generate(manyColumnCount, (i) => 'R2 Cell ${i + 1}'),
+    final List<String> wideHeaders = List.generate(manyColumnCount, (int i) => 'Col ${i + 1}');
+    final List<List<String>> wideDataRows = <List<String>>[
+      List.generate(manyColumnCount, (int i) => 'R1 Cell ${i + 1}'),
+      List.generate(manyColumnCount, (int i) => 'R2 Cell ${i + 1}'),
     ];
 
     await pumpDialog(
@@ -346,15 +354,18 @@ void main() {
 
     // 2. Verify dialog and table are present
     expect(find.text('Map CSV Columns'), findsOneWidget);
-    final dataTableFinder = find.byType(DataTable);
+    final Finder dataTableFinder = find.byType(DataTable);
     expect(dataTableFinder, findsOneWidget);
 
     // 3. Find the horizontal SingleChildScrollView
-    final horizontalScrollViewFinder = find.byWidgetPredicate(
-      (widget) => widget is SingleChildScrollView && widget.scrollDirection == Axis.horizontal,
+    final Finder horizontalScrollViewFinder = find.byWidgetPredicate(
+      (Widget widget) => widget is SingleChildScrollView && widget.scrollDirection == Axis.horizontal,
     );
-    expect(horizontalScrollViewFinder, findsOneWidget,
-        reason: "Expected a horizontal SingleChildScrollView wrapping the DataTable.");
+    expect(
+      horizontalScrollViewFinder,
+      findsOneWidget,
+      reason: 'Expected a horizontal SingleChildScrollView wrapping the DataTable.',
+    );
 
     // Ensure the DataTable is a child of this scroll view
     expect(find.descendant(of: horizontalScrollViewFinder, matching: dataTableFinder), findsOneWidget);
@@ -384,8 +395,11 @@ void main() {
     await tester.pumpAndSettle();
 
     // 6. Assert the previously off-screen column is now visible
-    expect(find.text(lastColumnHeader), findsOneWidget,
-        reason: "Last column header '$lastColumnHeader' should be visible after scrolling.");
+    expect(
+      find.text(lastColumnHeader),
+      findsOneWidget,
+      reason: "Last column header '$lastColumnHeader' should be visible after scrolling.",
+    );
 
     // Optionally, check if the first column is now off-screen (or less visible)
     // This depends on the scroll amount and viewport width.

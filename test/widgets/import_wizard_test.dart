@@ -1,14 +1,11 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:money/data/storage/import/import_wizard.dart';
 import 'package:get/get.dart'; // Import GetX
-// Import the actual import_csv.dart to ensure we know what would be called.
-// We cannot easily mock top-level functions with current tools,
-// so we'll rely on the test structure to infer the call.
-import 'package:money/data/storage/import/import_csv.dart' as actual_import_csv;
 import 'package:money/core/widgets/wizard_choice.dart'; // Import WizardChoice
+import 'package:money/data/storage/import/import_wizard.dart';
+// ignore: depend_on_referenced_packages
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 // --- Corrected MockFilePicker ---
 abstract class FilePickerPlatformInterface extends MockPlatformInterfaceMixin implements FilePicker {}
@@ -26,6 +23,7 @@ class TestMockFilePicker extends FilePickerPlatformInterface {
     String? initialDirectory,
     FileType type = FileType.any,
     List<String>? allowedExtensions,
+    // ignore: inference_failure_on_function_return_type
     Function(FilePickerStatus)? onFileLoading,
     bool? allowCompression = true, // Default from actual FilePicker
     bool? allowMultiple = false,
@@ -80,7 +78,8 @@ class TestMockFilePicker extends FilePickerPlatformInterface {
 }
 
 // Helper to allow setting the FilePicker.platform instance
-void setMockFilePicker(FilePicker mock) { // Parameter type is base FilePicker
+void setMockFilePicker(FilePicker mock) {
+  // Parameter type is base FilePicker
   FilePicker.platform = mock;
 }
 
@@ -99,12 +98,19 @@ void main() {
   });
 
   testWidgets('Wizard Dialog displays correctly with title and CSV option', (WidgetTester tester) async {
-    await tester.pumpWidget(GetMaterialApp(home: Builder(builder: (context) { // Use GetMaterialApp
-      return ElevatedButton(
-        onPressed: () => showImportTransactionsWizard(),
-        child: const Text('Show Wizard'),
-      );
-    })));
+    await tester.pumpWidget(
+      GetMaterialApp(
+        home: Builder(
+          builder: (BuildContext context) {
+            // Use GetMaterialApp
+            return ElevatedButton(
+              onPressed: () => showImportTransactionsWizard(),
+              child: const Text('Show Wizard'),
+            );
+          },
+        ),
+      ),
+    );
 
     await tester.tap(find.text('Show Wizard'));
     await tester.pumpAndSettle(); // For dialog animation
@@ -121,21 +127,26 @@ void main() {
     // If that dialog appears, it's a strong indication importCSV was called.
     // This is an indirect way of testing due to limitations on mocking top-level functions easily.
 
-    final mockFile = PlatformFile(name: 'test.csv', size: 100, path: '/dummy/path/to/test.csv');
-    mockFilePicker.setPickerResult(FilePickerResult([mockFile]));
+    final PlatformFile mockFile = PlatformFile(name: 'test.csv', size: 100, path: '/dummy/path/to/test.csv');
+    mockFilePicker.setPickerResult(FilePickerResult(<PlatformFile>[mockFile]));
 
     // The navigator observer will help us see if new routes (dialogs) are pushed.
-    final mockObserver = MockNavigatorObserver();
+    final MockNavigatorObserver mockObserver = MockNavigatorObserver();
 
-    await tester.pumpWidget(GetMaterialApp( // Use GetMaterialApp
-      navigatorObservers: [mockObserver],
-      home: Builder(builder: (context) {
-        return ElevatedButton(
-          onPressed: () => showImportTransactionsWizard(),
-          child: const Text('Show Wizard'),
-        );
-      }),
-    ));
+    await tester.pumpWidget(
+      GetMaterialApp(
+        // Use GetMaterialApp
+        navigatorObservers: <NavigatorObserver>[mockObserver],
+        home: Builder(
+          builder: (BuildContext context) {
+            return ElevatedButton(
+              onPressed: () => showImportTransactionsWizard(),
+              child: const Text('Show Wizard'),
+            );
+          },
+        ),
+      ),
+    );
 
     // Show the main wizard dialog
     await tester.tap(find.text('Show Wizard'));
@@ -174,7 +185,8 @@ void main() {
 }
 
 // MockNavigatorObserver to track navigation events.
-class MockNavigatorObserver implements NavigatorObserver { // Removed 'extends Mock'
+class MockNavigatorObserver implements NavigatorObserver {
+  // Removed 'extends Mock'
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {}
 

@@ -1,14 +1,17 @@
+// ignore_for_file: always_put_control_body_on_new_line
+
 import 'dart:io'; // For File operations
+
 import 'package:flutter/material.dart'; // For BuildContext and other UI elements
-import 'package:money/data/storage/import/import_data.dart';
 import 'package:money/core/widgets/csv_column_mapper_dialog.dart'; // Import the dialog
+import 'package:money/data/storage/import/import_data.dart';
 // TODO: Replace print calls with a proper logging utility.
 
 Future<void> importCSV(BuildContext context, String filePath) async {
   // print('importCSV called with filePath: $filePath'); // Removed
   try {
-    final file = File(filePath);
-    final lines = await file.readAsLines();
+    final File file = File(filePath);
+    final List<String> lines = await file.readAsLines();
 
     if (!context.mounted) return; // Guard after await
 
@@ -20,9 +23,9 @@ Future<void> importCSV(BuildContext context, String filePath) async {
       return;
     }
 
-    final headers = lines.first.split(',');
-    final dataRows = lines.skip(1).map((line) => line.split(',')).toList();
-    final previewRows = dataRows.length > 5 ? dataRows.sublist(0, 5) : dataRows;
+    final List<String> headers = lines.first.split(',');
+    final List<List<String>> dataRows = lines.skip(1).map((String line) => line.split(',')).toList();
+    final List<List<String>> previewRows = dataRows.length > 5 ? dataRows.sublist(0, 5) : dataRows;
 
     if (!context.mounted) {
       // print("Context is not mounted, cannot show dialog."); // Removed
@@ -35,11 +38,13 @@ Future<void> importCSV(BuildContext context, String filePath) async {
       dataRows: previewRows,
     );
 
-    if (!context.mounted) return; // Guard after await
+    if (!context.mounted) {
+      return;
+    } // Guard after await
 
     if (columnMapping != null) {
       // print('Column mapping received: $columnMapping'); // Removed
-      final importData = loadCSV(headers, dataRows, columnMapping);
+      final ImportData importData = loadCSV(headers, dataRows, columnMapping);
 
       if (importData.entries.isNotEmpty) {
         showAndConfirmTransactionToImport(context, importData);
@@ -53,7 +58,8 @@ Future<void> importCSV(BuildContext context, String filePath) async {
       }
     } else {
       // print('CSV import cancelled by user.'); // Removed
-      if (context.mounted) { // Added guard, though SnackBar is after pop, original context should be fine.
+      if (context.mounted) {
+        // Added guard, though SnackBar is after pop, original context should be fine.
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('CSV import cancelled.')),
         );
@@ -74,7 +80,7 @@ ImportData loadCSV(
   List<List<String>> dataRows,
   Map<String, String> columnMapping,
 ) {
-  final importData = ImportData();
+  final ImportData importData = ImportData();
   importData.fileType = 'CSV';
 
   final String dateColumnName = columnMapping['date']!;
@@ -92,9 +98,9 @@ ImportData loadCSV(
   }
 
   for (int i = 0; i < dataRows.length; i++) {
-    final row = dataRows[i];
+    final List<String> row = dataRows[i];
 
-    final maxIndex = [dateIndex, descriptionIndex, amountIndex].reduce((a, b) => a > b ? a : b);
+    final int maxIndex = <int>[dateIndex, descriptionIndex, amountIndex].reduce((int a, int b) => a > b ? a : b);
     if (row.length <= maxIndex) {
       // print('Skipping row ${i + 1}: Not enough columns for mapped fields. Row: "${row.join(",")}"'); // Removed
       // TODO: Log skipped row
@@ -110,7 +116,7 @@ ImportData loadCSV(
       continue;
     }
 
-    final description = row[descriptionIndex].trim();
+    final String description = row[descriptionIndex].trim();
     if (description.isEmpty) {
       // print('Skipping row ${i + 1}: Description is empty. Row: "${row.join(",")}"'); // Removed
       // TODO: Log skipped row
