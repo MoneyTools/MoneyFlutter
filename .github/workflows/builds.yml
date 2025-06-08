@@ -26,7 +26,7 @@ jobs:
       - name: Upload Windows Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: flutter-windows-app
+          name: mymoney-app-windows
           path: build/windows/x64/runner/Release/**
 
   build-linux:
@@ -54,7 +54,7 @@ jobs:
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: flutter-linux-app
+          name: mymoney-app-linux
           path: build/linux/
 
   build-macos:
@@ -77,5 +77,5 @@ jobs:
       - name: Upload macOS Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: flutter-macos-app
+          name: mymoney-app-macos
           path: build/macos/Build/Products/Release/
