@@ -5,6 +5,8 @@ import 'package:money/core/widgets/drop_zone.dart';
 import 'package:money/core/widgets/working.dart';
 import 'package:money/data/models/constants.dart';
 import 'package:money/data/storage/import/import_qfx.dart';
+import 'package:money/data/storage/import/import_csv.dart'; // Added import for CSV
+import 'package:path/path.dart' as path; // Added import for path
 import 'package:money/views/home/sub_views/app_bar.dart';
 import 'package:money/views/home/sub_views/app_scaffold.dart';
 import 'package:money/views/home/sub_views/my_nav_bar.dart';
@@ -37,9 +39,15 @@ class HomePage extends GetView<HomeController> {
           ? const WorkingIndicator()
           : DropZone(
               onFilesDropped: (List<String> filePaths) {
-                filePaths.forEach(
-                  (String filePath) => importQFX(context, filePath),
-                );
+                for (final filePath in filePaths) {
+                  final extension = path.extension(filePath).toLowerCase();
+                  if (extension == '.csv') {
+                    importCSV(context, filePath);
+                  } else {
+                    // Assuming other types default to QFX, or you can add more checks
+                    importQFX(context, filePath);
+                  }
+                }
               },
               child: Container(
                 color: getColorTheme(context).secondaryContainer,
