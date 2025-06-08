@@ -17,19 +17,19 @@ class PlatformsPage extends StatelessWidget {
                 'macOS',
                 'assets/images/platforms/platformDesktopMacOS.png',
                 'Desktop Intel & Silicon Software.',
-                'https://paint.vteam.com/downloads/flutter-macos-app.zip',
+                'https://paint.vteam.com/downloads/money-app--macos.zip',
               ),
               paltformItem(
                 'Windows',
                 'assets/images/platforms/platformDesktopWindows.png',
                 'Desktop 64bit Software.',
-                'https://paint.vteam.com/downloads/flutter-windows-app.zip',
+                'https://paint.vteam.com/downloads/money-app--windows.zip',
               ),
               paltformItem(
                 'Linux',
                 'assets/images/platforms/platformDesktopLinux.png',
                 'Desktop Software.',
-                'https://paint.vteam.com/downloads/flutter-linux-app.zip',
+                'https://paint.vteam.com/downloads/money-app-linux.zip',
               ),
               const SizedBox(height: 40),
               paltformItem(
