@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:money/core/widgets/dialog/dialog.dart';
 import 'package:money/core/widgets/gaps.dart';
 import 'package:money/core/widgets/wizard_choice.dart';
+import 'package:money/data/storage/import/import_csv.dart'; // Added import
 import 'package:money/data/storage/import/import_investment.dart';
 import 'package:money/data/storage/import/import_qfx.dart';
 import 'package:money/data/storage/import/import_qif.dart';
@@ -10,10 +11,10 @@ import 'package:money/data/storage/import/import_transactions_from_text.dart';
 import 'package:money/data/storage/import/import_trasnsfer.dart';
 
 void showImportTransactionsWizard() {
-  final BuildContext context = Get.context!;
+  final BuildContext originalContext = Get.context!; // Store the original context
 
   adaptiveScreenSizeDialog(
-    context: context,
+    context: originalContext, // Use original context for showing the dialog
     captionForClose: 'Cancel',
     title: 'Import transactions',
     child: SingleChildScrollView(
@@ -23,11 +24,11 @@ void showImportTransactionsWizard() {
         children: <Widget>[
           gapMedium(),
           WizardChoice(
-            title: 'From QFX/QIF file',
-            description: 'Use existing or downloaded files from local device.',
+            title: 'From QFX/QIF/CSV file', // Changed title
+            description: 'Import transactions from a QFX, QIF, or CSV bank file.', // Changed description
             onPressed: () {
-              Navigator.of(context).pop(true);
-              onImportFromFile(context);
+              Navigator.of(originalContext).pop(true); // Use originalContext
+              onImportFromFile(originalContext); // Pass original, still-mounted context
             },
           ),
           WizardChoice(
@@ -35,15 +36,15 @@ void showImportTransactionsWizard() {
             description:
                 'Refer to your online statements, then Copy & Paste text or use OCR to extract the [Dates | Memos | Amounts].',
             onPressed: () {
-              Navigator.of(context).pop(true);
-              showImportTransactionsFromTextInput(context);
+              Navigator.of(originalContext).pop(true); // Use originalContext
+              showImportTransactionsFromTextInput(originalContext); // Use originalContext
             },
           ),
           WizardChoice(
             title: 'Record a transfer',
             description: 'add a transaction Between two accounts.',
             onPressed: () {
-              Navigator.of(context).pop(true);
+              Navigator.of(originalContext).pop(true); // Use originalContext
               showImportTransfer();
             },
           ),
@@ -51,7 +52,7 @@ void showImportTransactionsWizard() {
             title: 'Investment Transaction',
             description: 'Buy/Sell/Dividend.',
             onPressed: () {
-              Navigator.of(context).pop(true);
+              Navigator.of(originalContext).pop(true); // Use originalContext
               showImportInvestment();
             },
           ),
@@ -70,8 +71,13 @@ void onImportFromFile(final BuildContext context) async {
       switch (pickerResult.files.single.extension?.toLowerCase()) {
         case 'qif':
           importQIF(context, pickerResult.files.single.path.toString());
+          break; // Added break
         case 'qfx':
           importQFX(context, pickerResult.files.single.path.toString());
+          break; // Added break
+        case 'csv': // Added csv case
+          importCSV(context, pickerResult.files.single.path.toString());
+          break;
       }
     }
   }
