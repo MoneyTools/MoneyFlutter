@@ -17,19 +17,19 @@ class PlatformsPage extends StatelessWidget {
                 'macOS',
                 'assets/images/platforms/platformDesktopMacOS.png',
                 'Desktop Intel & Silicon Software.',
-                'https://paint.vteam.com/downloads/mymoney-app-macos.zip',
+                'https://money.vteam.com/downloads/mymoney-app-macos.zip',
               ),
               paltformItem(
                 'Windows',
                 'assets/images/platforms/platformDesktopWindows.png',
                 'Desktop 64bit Software.',
-                'https://paint.vteam.com/downloads/mymoney-app-windows.zip',
+                'https://money.vteam.com/downloads/mymoney-app-windows.zip',
               ),
               paltformItem(
                 'Linux',
                 'assets/images/platforms/platformDesktopLinux.png',
                 'Desktop Software.',
-                'https://paint.vteam.com/downloads/mymoney-app-linux.zip',
+                'https://money.vteam.com/downloads/mymoney-app-linux.zip',
               ),
               const SizedBox(height: 40),
               paltformItem(
