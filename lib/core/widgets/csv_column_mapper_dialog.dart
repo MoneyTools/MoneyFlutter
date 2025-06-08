@@ -141,9 +141,18 @@ class _CsvColumnMapperDialogState extends State<CsvColumnMapperDialog> {
     return DataTable(
       columns: widget.headers.map((header) => DataColumn(label: Text(header))).toList(),
       rows: widget.dataRows.sublist(0, previewRowCount).map((row) {
-        return DataRow(
-          cells: row.map((cell) => DataCell(Text(cell))).toList(),
-        );
+        final numExpectedColumns = widget.headers.length;
+        List<DataCell> cells = [];
+        for (int i = 0; i < numExpectedColumns; i++) {
+          if (i < row.length) {
+            cells.add(DataCell(Text(row[i]))); // Cell exists
+          } else {
+            cells.add(DataCell(const Text(''))); // Pad with empty cell
+          }
+        }
+        // If row.length > numExpectedColumns, extra cells in 'row' are implicitly truncated
+        // because we only iterate up to numExpectedColumns.
+        return DataRow(cells: cells);
       }).toList(),
     );
   }

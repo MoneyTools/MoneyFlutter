@@ -264,6 +264,70 @@ void main() {
 
     expect(find.text('Error'), findsNothing);
   });
+
+  testWidgets('Preview table handles rows with inconsistent column counts', (WidgetTester tester) async {
+    const List<String> headersForInconsistentTest = ['H1', 'H2', 'H3'];
+    final List<List<String>> dataRowsForInconsistentTest = [
+      ['R1C1', 'R1C2', 'R1C3'], // Correct length
+      ['R2C1', 'R2C2'],         // Shorter
+      ['R3C1', 'R3C2', 'R3C3', 'R3C4'], // Longer
+    ];
+
+    await pumpDialog(
+      tester,
+      headers: headersForInconsistentTest,
+      dataRows: dataRowsForInconsistentTest,
+    );
+
+    // Verify dialog title (to ensure dialog loaded)
+    expect(find.text('Map CSV Columns'), findsOneWidget);
+
+    // Verify headers are displayed
+    for (final header in headersForInconsistentTest) {
+      expect(find.descendant(of: find.byType(DataTable), matching: find.text(header)), findsOneWidget);
+    }
+
+    // Verify data for the row with correct length
+    expect(find.descendant(of: find.byType(DataTable), matching: find.text('R1C1')), findsOneWidget);
+    expect(find.descendant(of: find.byType(DataTable), matching: find.text('R1C2')), findsOneWidget);
+    expect(find.descendant(of: find.byType(DataTable), matching: find.text('R1C3')), findsOneWidget);
+
+    // Verify data for all rows by checking all Text widgets in the table.
+    // This indirectly verifies padding and truncation.
+    final dataTableFinder = find.byType(DataTable);
+    expect(dataTableFinder, findsOneWidget);
+
+    final allTextInTableFinder = find.descendant(of: dataTableFinder, matching: find.byType(Text));
+    final List<Text> allTextWidgetsInTable = tester.widgetList<Text>(allTextInTableFinder).toList();
+    final List<String?> allTextDataInTable = allTextWidgetsInTable.map((t) => t.data).toList();
+
+    // Expected texts: Headers + Cells for each row according to headersForInconsistentTest
+    // Headers: H1, H2, H3
+    // Row 1 (correct length): R1C1, R1C2, R1C3
+    // Row 2 (shorter): R2C1, R2C2, "" (empty string from DataCell(const Text('')))
+    // Row 3 (longer): R3C1, R3C2, R3C3 (R3C4 is truncated)
+    final List<String> expectedTextsInOrder = [
+      // Headers
+      headersForInconsistentTest[0], headersForInconsistentTest[1], headersForInconsistentTest[2],
+      // Row 1
+      dataRowsForInconsistentTest[0][0], dataRowsForInconsistentTest[0][1], dataRowsForInconsistentTest[0][2],
+      // Row 2 (padded)
+      dataRowsForInconsistentTest[1][0], dataRowsForInconsistentTest[1][1], '', // Padded cell
+      // Row 3 (truncated)
+      dataRowsForInconsistentTest[2][0], dataRowsForInconsistentTest[2][1], dataRowsForInconsistentTest[2][2],
+    ];
+
+    expect(allTextDataInTable, equals(expectedTextsInOrder),
+           reason: "The content of all Text widgets in the DataTable (headers and cells) does not match the expected order and content.\n"
+                   "Expected: $expectedTextsInOrder\n"
+                   "Actual:   $allTextDataInTable");
+
+    // Explicitly check that R3C4 (from the longer row) is NOT present as a Text widget in the table.
+    // This is implicitly covered by the list equality check above if the list length is correct,
+    // but an explicit check makes the truncation test clearer.
+    expect(find.descendant(of: dataTableFinder, matching: find.text('R3C4')), findsNothing);
+
+  });
 }
 
 // Note: The test 'Confirm button becomes enabled when all fields are mapped'
