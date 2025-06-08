@@ -138,10 +138,12 @@ class _CsvColumnMapperDialogState extends State<CsvColumnMapperDialog> {
       return const Text('No data rows to preview.');
     }
 
-    return DataTable(
-      columns: widget.headers.map((header) => DataColumn(label: Text(header))).toList(),
-      rows: widget.dataRows.sublist(0, previewRowCount).map((row) {
-        final numExpectedColumns = widget.headers.length;
+    return SingleChildScrollView( // Added SingleChildScrollView
+      scrollDirection: Axis.horizontal, // Set to horizontal scroll
+      child: DataTable(
+        columns: widget.headers.map((header) => DataColumn(label: Text(header))).toList(),
+        rows: widget.dataRows.sublist(0, previewRowCount).map((row) {
+          final numExpectedColumns = widget.headers.length;
         List<DataCell> cells = [];
         for (int i = 0; i < numExpectedColumns; i++) {
           if (i < row.length) {
@@ -154,7 +156,8 @@ class _CsvColumnMapperDialogState extends State<CsvColumnMapperDialog> {
         // because we only iterate up to numExpectedColumns.
         return DataRow(cells: cells);
       }).toList(),
-    );
+      ), // End DataTable
+    ); // End SingleChildScrollView
   }
 }
 

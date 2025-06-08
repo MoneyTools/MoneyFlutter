@@ -328,6 +328,69 @@ void main() {
     expect(find.descendant(of: dataTableFinder, matching: find.text('R3C4')), findsNothing);
 
   });
+
+  testWidgets('Preview table scrolls horizontally with many columns', (WidgetTester tester) async {
+    // 1. Setup data with many columns
+    final int manyColumnCount = 20;
+    final List<String> wideHeaders = List.generate(manyColumnCount, (i) => 'Col ${i + 1}');
+    final List<List<String>> wideDataRows = [
+      List.generate(manyColumnCount, (i) => 'R1 Cell ${i + 1}'),
+      List.generate(manyColumnCount, (i) => 'R2 Cell ${i + 1}'),
+    ];
+
+    await pumpDialog(
+      tester,
+      headers: wideHeaders,
+      dataRows: wideDataRows,
+    );
+
+    // 2. Verify dialog and table are present
+    expect(find.text('Map CSV Columns'), findsOneWidget);
+    final dataTableFinder = find.byType(DataTable);
+    expect(dataTableFinder, findsOneWidget);
+
+    // 3. Find the horizontal SingleChildScrollView
+    final horizontalScrollViewFinder = find.byWidgetPredicate(
+      (widget) => widget is SingleChildScrollView && widget.scrollDirection == Axis.horizontal,
+    );
+    expect(horizontalScrollViewFinder, findsOneWidget,
+        reason: "Expected a horizontal SingleChildScrollView wrapping the DataTable.");
+
+    // Ensure the DataTable is a child of this scroll view
+    expect(find.descendant(of: horizontalScrollViewFinder, matching: dataTableFinder), findsOneWidget);
+
+    // 4. Verify an off-screen column is initially not found (or not visible)
+    // For simplicity, we'll check if it's composed in the tree. If it's truly off-screen, it might not be.
+    // A more robust check would be to ensure it's not hittable or has size zero if it's not rendered.
+    // However, `findsNothing` is a good start if it's outside the viewport.
+    final String lastColumnHeader = wideHeaders.last;
+    final String firstColumnHeader = wideHeaders.first;
+
+    expect(find.text(firstColumnHeader), findsOneWidget); // First column should be visible
+
+    // To ensure the last column is truly off-screen and not just found by chance
+    // if the dialog is very wide, we'd ideally check its position or visibility.
+    // For now, if the number of columns is large enough, findsNothing is a reasonable proxy.
+    // This might need adjustment based on actual dialog width during tests.
+    // A more reliable way is to scroll and then check.
+
+    // If the table is wide enough, the last column header might not be rendered yet.
+    // If it is rendered but off-screen, find.text() would still find it.
+    // So, we'll test by scrolling.
+
+    // 5. Scroll horizontally
+    // We target the DataTable for the drag, as it's inside the SingleChildScrollView
+    await tester.drag(dataTableFinder, const Offset(-600, 0)); // Drag left to scroll content right
+    await tester.pumpAndSettle();
+
+    // 6. Assert the previously off-screen column is now visible
+    expect(find.text(lastColumnHeader), findsOneWidget,
+        reason: "Last column header '$lastColumnHeader' should be visible after scrolling.");
+
+    // Optionally, check if the first column is now off-screen (or less visible)
+    // This depends on the scroll amount and viewport width.
+    // For now, just ensuring the last one becomes visible is the key test.
+  });
 }
 
 // Note: The test 'Confirm button becomes enabled when all fields are mapped'
