@@ -135,6 +135,6 @@ test_output_sqlite.db
 test_output_sqlite.MyMoney.mmdb
 
 # Downloads
-web/downloads/money-app-linux.zip
-web/downloads/money-app--macos.zip
-web/downloads/money-app--windows.zip
+web/downloads/mymoney-app-linux.zip
+web/downloads/mymoney-app-macos.zip
+web/downloads/mymoney-app-windows.zip
