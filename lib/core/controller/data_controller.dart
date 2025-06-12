@@ -1,34 +1,39 @@
 // ignore_for_file: unnecessary_this
-import 'dart:io';
+import 'dart:io'; // Keep for Platform checks if any remain, or if used by Data()
+import 'dart:typed_data'; // Keep for Uint8List if used by Data()
 
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart'; // Keep for kIsWeb if used
 import 'package:get/get.dart';
 import 'package:money/core/controller/preferences_controller.dart';
-import 'package:money/core/helpers/file_systems.dart';
-import 'package:money/core/helpers/string_helper.dart';
+// Remove direct file system helpers if all usage is through FileService
+// import 'package:money/core/helpers/file_systems.dart'; // MyFileSystems may still be used by Data()
+import 'package:money/core/helpers/string_helper.dart'; // For logger, Constants
+import 'package:money/core/services/file_service.dart'; // Import the new FileService
 import 'package:money/core/widgets/snack_bar.dart';
 import 'package:money/data/models/money_objects/accounts/account.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/data/storage/data/data_mutations.dart';
+// Remove path if all path logic is in FileService
 import 'package:path/path.dart' as p;
+
 
 /// Controller for managing data file operations.
 /// Features:
-/// - Load/save files in multiple formats
+/// - Load/save files in multiple formats (delegating to FileService and Data)
 /// - Track file state and modifications
 /// - Manage MRU list
-/// - File format conversions
-/// - File location management
 class DataController extends GetxController {
+  // FileService will be obtained via Get.find() or constructor
+  // Not making it static as it might have its own dependencies or state if it evolves.
+  final FileService _fileService = Get.find<FileService>();
+
   Rxn<DateTime> currentLoadedFileDateTime = Rxn<DateTime>();
   RxString currentLoadedFileName = Constants.untitledFileName.obs;
-  RxList<String> data = <String>[].obs;
-  String fileName = '';
-  // Observable variables
-  RxBool isLoading = true.obs;
+  // data field seems unused, consider removing if confirmed elsewhere.
+  // RxList<String> data = <String>[].obs;
+  // String fileName = ''; // This also seems unused in the provided snippet.
 
-  // Tracking changes
+  RxBool isLoading = true.obs;
   DataMutations trackMutations = DataMutations();
 
   void closeFile([bool rebuild = true]) {
@@ -36,6 +41,7 @@ class DataController extends GetxController {
     dataFileIsClosed();
     trackMutations.reset();
     isLoading.value = false;
+    // 'rebuild' parameter seems to imply UI update, ensure GetX handles this or call relevant update methods.
   }
 
   void dataFileIsClosed() {
@@ -43,17 +49,19 @@ class DataController extends GetxController {
     currentLoadedFileDateTime.value = null;
   }
 
-  Future<String> defaultFolderToSaveTo(final String defaultFileName) async {
-    return MyFileSystems.append(await getDocumentDirectory(), defaultFileName);
+  // This method is now mostly handled by FileService.getDefaultSavePathForFile
+  // or FileService.getSavePath. If DataController still needs a default name construction,
+  // it would use FileService.
+  Future<String> _getDefaultSavePath(String defaultFileName) async {
+    return _fileService.getDefaultSavePathForFile(defaultFileName);
   }
 
-  Future<String> generateNextFolderToSaveTo() async {
-    if (currentLoadedFileName.value.isNotEmpty) {
-      if (p.extension(currentLoadedFileName.value) == 'mmcsv' || p.extension(currentLoadedFileName.value) == 'mmdb') {
-        return p.dirname(currentLoadedFileName.value);
-      }
-    }
-    return await getDocumentDirectory();
+  // This method is now mostly handled by FileService.getParentDirectoryForFileToSave
+  Future<String> _getDirectoryToSaveTo() async {
+    return _fileService.getParentDirectoryForFileToSave(
+      currentLoadedFileName.value == Constants.untitledFileName ? null : currentLoadedFileName.value,
+      'mmdb', // Assuming 'mmdb' is a common default, or make this dynamic
+    );
   }
 
   bool get isUntitled => currentLoadedFileName.value == Constants.untitledFileName;
@@ -62,188 +70,270 @@ class DataController extends GetxController {
 
   Future<void> loadDemoData() async {
     isLoading.value = true;
+    // Assuming Data().loadFromDemoData() doesn't involve direct file picking.
+    // If it loads a bundled asset, that logic is within Data().
     Data().loadFromDemoData();
+    // After loading demo data, the file isn't "saved" in a user-accessible location yet.
+    dataFileIsClosed(); // Reflects that it's not a user-saved file.
+    trackMutations.reset(); // Demo data is a clean slate.
     isLoading.value = false;
   }
 
-  Future<bool> loadFile(final DataSource dataSource) async {
-    this.closeFile(false); // ensure that we closed current file and state
+  // Centralized file loading logic, now using FileService for DataSource
+  Future<bool> _loadFileInternal(DataSource dataSource) async {
+    this.closeFile(false); // Ensure current file and state are closed
 
+    isLoading.value = true;
     final bool success = await Data().loadFromPath(dataSource);
+    isLoading.value = false;
 
     if (success) {
-      setCurrentFileName(dataSource.filePath);
-      currentLoadedFileDateTime.value = await MyFileSystems.getFileModifiedTime(
-        dataSource.filePath,
-      );
+      setCurrentFileName(dataSource.filePath); // filePath might be just a name for web
+      if (dataSource.hasPath && !kIsWeb) { // Only get modified time if it's a real path and not web
+          currentLoadedFileDateTime.value = await _fileService.getFileModifiedTime(dataSource.filePath);
+      } else {
+          currentLoadedFileDateTime.value = null; // No relevant modified time for web-loaded bytes or if no path
+      }
+      // Navigation should be handled by the caller or a dedicated navigation service if complex.
+      // For now, keeping it as it was.
       Future<Null>.delayed(Duration.zero, () {
         Get.offNamed<dynamic>(Constants.routeHomePage);
       });
+    } else {
+      // If loading failed, reset to untitled state
+      dataFileIsClosed();
     }
-    isLoading.value = false;
     return success;
   }
 
-  Future<bool> loadFileFromPath(final DataSource dataSource) async {
-    return await loadFile(dataSource);
+  // Retained for API compatibility if anything external calls this directly.
+  // Otherwise, it could be merged or made private.
+  Future<bool> loadFile(final DataSource dataSource) async {
+    return _loadFileInternal(dataSource);
   }
 
-  // Async method to fetch data
   Future<void> loadLastFileSaved() async {
     try {
       isLoading.value = true;
-
       if (PreferenceController.to.mru.isNotEmpty) {
-        await loadFile(DataSource(filePath: PreferenceController.to.mru.first));
+        final String lastFilePath = PreferenceController.to.mru.first;
+        // We need to construct a DataSource. For desktop, path is enough.
+        // For web, if MRU could store web "files", this would need more info.
+        // Assuming MRU paths are device paths for now.
+        // If lastFilePath could be a web "name", FileService would need a way to "re-open" it,
+        // which is not typical for web file handling (usually re-pick).
+        // This implies MRU for web might be less useful or behave differently.
+        DataSource? dataSource;
+        if (kIsWeb) {
+            // This is tricky for web. MRU usually stores paths, but web files are bytes post-picker.
+            // We can't directly re-load from a "path" (name) on web without user re-picking.
+            // For now, if it's web and MRU has something, it's likely a non-web path, which is an issue.
+            // Or, if it's a name of a file previously loaded via picker, we can't get its bytes again here.
+            // This indicates a potential design consideration for MRU on web.
+            // Let's assume for now MRU paths are non-web, or this won't work as expected on web.
+            logger.w("loadLastFileSaved on web: MRU may not be reliable for direct file re-loading without user interaction.");
+            // To prevent errors, clear loading and navigate to welcome, similar to no MRU.
+             isLoading.value = false;
+             Future<Null>.delayed(Duration.zero, () {
+               Get.offNamed<dynamic>(Constants.routeWelcomePage);
+             });
+            return;
+        } else {
+            dataSource = DataSource(filePath: lastFilePath);
+        }
+        await _loadFileInternal(dataSource);
         return;
       } else {
-        // Once the file is loaded, navigate to the main screen
         isLoading.value = false;
-
         Future<Null>.delayed(Duration.zero, () {
           Get.offNamed<dynamic>(Constants.routeWelcomePage);
         });
       }
     } catch (e) {
-      // Handle error
       logger.e('Error fetching data: $e');
+      isLoading.value = false;
+      dataFileIsClosed(); // Ensure clean state on error
     }
   }
 
   void onFileNew() async {
-    this.closeFile();
+    this.closeFile(); // Closes current data, resets state to untitled
 
-    final Account newAccount = Data().accounts.addNewAccount(
-      'New Bank Account',
-    );
+    // The following logic is application-specific for creating a new "session"
+    // and doesn't directly involve FileService opening/saving a file yet.
+    final Account newAccount = Data().accounts.addNewAccount('New Bank Account');
     PreferenceController.to.jumpToView(
       viewId: ViewId.viewAccounts,
       selectedId: newAccount.uniqueId,
       textFilter: '',
       columnFilters: null,
     );
+    // File is considered "new" and "untitled", not yet saved.
+    // Mutations will start tracking from this point for a future save.
   }
 
   Future<bool> onFileOpen() async {
-    FilePickerResult? pickerResult;
+    final DataSource? dataSource = await _fileService.pickOpenFile();
+    if (dataSource != null) {
+      // Check if the picked source is of a type that implies direct loading (mmdb, mmcsv)
+      // Other types like QFX, OFX, JSON might go through an import flow rather than direct load.
+      // The original code checked for 'mmdb' or 'mmcsv' extension after picking.
+      // FileService.pickOpenFile now has _supportedFileExtensions, which is broader.
+      // We need to decide if all "supported" types imply a full load or if some are imports.
+      // For now, assume any DataSource returned by pickOpenFile is meant for direct loading.
+      // This matches the previous logic more closely.
+      final String? fileExtension = dataSource.hasPath ? p.extension(dataSource.filePath).toLowerCase().replaceFirst('.', '') : null;
 
-    const List<String> supportedFileTypes = <String>[
-      'mmdb',
-      'mmcsv',
-      'sdf',
-      'qfx',
-      'ofx',
-      'json',
-    ];
-
-    try {
-      // WEB
-      if (kIsWeb) {
-        pickerResult = await FilePicker.platform.pickFiles(type: FileType.any);
-      } else
-      // Mobile
-      if (Platform.isAndroid || Platform.isIOS) {
-        // See https://github.com/miguelpruivo/flutter_file_picker/issues/729
-        pickerResult = await FilePicker.platform.pickFiles(type: FileType.any);
-      } else
-      // Desktop
-      {
-        pickerResult = await FilePicker.platform.pickFiles(
-          type: FileType.custom,
-          allowedExtensions: supportedFileTypes,
-        );
-      }
-    } catch (e) {
-      logger.e(e.toString());
-      SnackBarService.displayError(message: e.toString());
-      return false;
-    }
-
-    if (pickerResult != null && pickerResult.files.isNotEmpty) {
-      try {
-        final String? fileExtension = pickerResult.files.single.extension;
-
-        if (fileExtension == 'mmdb' || fileExtension == 'mmcsv') {
-          late DataSource dataSource;
-          if (kIsWeb) {
-            final PlatformFile file = pickerResult.files.first;
-            dataSource = DataSource(
-              filePath: file.name,
-              fileBytes: file.bytes!,
-            );
-          } else {
-            dataSource = DataSource(
-              filePath: pickerResult.files.single.path ?? '',
-            );
-          }
-
-          await loadFile(dataSource);
-          return true;
-        }
-      } catch (e) {
-        logger.e(e.toString());
-        SnackBarService.displayError(message: e.toString());
+      if (dataSource.hasBytes || (fileExtension != null && (fileExtension == 'mmdb' || fileExtension == 'mmcsv'))) {
+         return await _loadFileInternal(dataSource);
+      } else {
+        // Handle other file types (QIF, OFX, JSON) - typically these are IMPORTED, not OPENED.
+        // This part of the logic might need to be moved to an "import" flow.
+        // For now, mimicking the old behavior: if it's not mmdb/mmcsv, it didn't load.
+        // This is a good point for future improvement: distinguish "open project" from "import into current project".
+        logger.i("File picked is not a primary data file (mmdb/mmcsv). Consider an import flow. Path: ${dataSource.filePath}");
+        SnackBarService.displayInfo(message: "Selected file (${dataSource.filePath}) is not a primary data file. Use import options if available.");
+        return false;
       }
     }
     return false;
   }
 
   void onSaveToCsv() async {
-    final String fullPathToFileName = await Data().saveToCsv();
-
-    PreferenceController.to.addToMRU(fullPathToFileName);
-
-    trackMutations.reset();
-  }
-
-  Future<bool> onSaveToSql() async {
-    String fileNameAndPath = currentLoadedFileName.value;
-
-    if (fileNameAndPath.isEmpty) {
-      // this happens if the user started with a new file and click save to SQL
-      fileNameAndPath = await defaultFolderToSaveTo('mymoney.mmdb');
+    if (Data().isEmpty()) {
+      SnackBarService.displayInfo(message: "No data to save.");
+      return;
     }
 
-    final bool result = await Data().saveToSql(
-      filePath: fileNameAndPath,
-      onSaveCompleted: (final bool success, final String message) {
-        if (success) {
-          trackMutations.reset();
-        } else {
-          SnackBarService.displayError(autoDismiss: false, message: message);
-        }
-      },
+    // 1. Get the desired save path from FileService
+    String? actualFileName = currentLoadedFileName.value;
+    if (isUntitled || p.extension(actualFileName).toLowerCase() != '.mmcsv') {
+        actualFileName = 'mymoney.mmcsv'; // Default name
+    }
+
+    final String targetDirectory = await _getDirectoryToSaveTo();
+    final String suggestedPath = p.join(targetDirectory, actualFileName);
+
+    final String? savePath = await _fileService.getSavePath(
+      defaultFileName: suggestedPath, // FileService might just use the filename part
+      allowedExtensions: ['mmcsv'],
     );
 
-    PreferenceController.to.addToMRU(fileNameAndPath);
-    return result;
+    if (savePath != null && savePath.isNotEmpty) {
+      isLoading.value = true;
+      try {
+        // 2. Tell Data() to save to that path
+        // Assuming Data().saveToCsv now takes the full path.
+        // If Data().saveToCsv() returns the path it saved to, use that.
+        final String savedFilePath = await Data().saveToCsv(filePathToSaveTo: savePath);
+
+        // 3. Update state based on successful save
+        setCurrentFileName(savedFilePath); // Update current file to the new CSV path
+        currentLoadedFileDateTime.value = await _fileService.getFileModifiedTime(savedFilePath);
+        PreferenceController.to.addToMRU(savedFilePath);
+        trackMutations.reset(); // Data is now saved
+        SnackBarService.displayInfo(message: 'Saved to $savedFilePath');
+      } catch (e) {
+        logger.e('Error saving to CSV: ${e.toString()}');
+        SnackBarService.displayError(message: 'Error saving to CSV: ${e.toString()}');
+      } finally {
+        isLoading.value = false;
+      }
+    }
+  }
+
+  Future<bool> onSaveToSql({bool saveAs = false}) async {
+    if (Data().isEmpty()) {
+      SnackBarService.displayInfo(message: "No data to save.");
+      return false;
+    }
+
+    String fileNameAndPath = currentLoadedFileName.value;
+
+    // If "Save As" or if the current file is not an mmdb, or it's untitled, get a new path.
+    if (saveAs || isUntitled || p.extension(fileNameAndPath).toLowerCase() != '.mmdb') {
+      final String targetDirectory = await _getDirectoryToSaveTo();
+      final String suggestedPath = p.join(targetDirectory, 'mymoney.mmdb');
+
+      fileNameAndPath = await _fileService.getSavePath(
+        defaultFileName: suggestedPath, // FileService might just use the filename part
+        allowedExtensions: ['mmdb'],
+      ) ?? ''; // Ensure it's not null
+    }
+
+    if (fileNameAndPath.isEmpty) {
+      return false; // User cancelled Save As
+    }
+
+    isLoading.value = true;
+    bool success = false;
+    try {
+      // Data().saveToSql should handle the actual writing to fileNameAndPath
+      success = await Data().saveToSql(
+        filePath: fileNameAndPath,
+        onSaveCompleted: (final bool opSuccess, final String message) {
+          // This callback is a bit redundant if saveToSql awaits and returns status.
+          // Assuming it's for finer-grained status updates during the save.
+          if (opSuccess) {
+            if (message.isNotEmpty) SnackBarService.displayInfo(message: message);
+          } else {
+            SnackBarService.displayError(autoDismiss: false, message: message);
+          }
+        },
+      );
+
+      if (success) {
+        setCurrentFileName(fileNameAndPath);
+        currentLoadedFileDateTime.value = await _fileService.getFileModifiedTime(fileNameAndPath);
+        PreferenceController.to.addToMRU(fileNameAndPath);
+        trackMutations.reset();
+        // SnackBar for success already handled by onSaveCompleted or could be added here
+      }
+    } catch (e) {
+        logger.e('Error saving to SQL: ${e.toString()}');
+        SnackBarService.displayError(message: 'Error saving to SQL: ${e.toString()}');
+        success = false;
+    } finally {
+        isLoading.value = false;
+    }
+    return success;
   }
 
   void onShowFileLocation() async {
-    final String path = await generateNextFolderToSaveTo();
-    showLocalFolder(path);
+    if (!isUntitled && currentLoadedFileName.value.isNotEmpty) {
+      // Use FileService to show the directory of the current file.
+      // p.dirname might be needed if currentLoadedFileName is a full path.
+      // If it's just a name (e.g. for web), this might not make sense.
+      if (!kIsWeb) { // Showing file location is not applicable for web-loaded files
+        final String directoryPath = p.dirname(currentLoadedFileName.value);
+        if (directoryPath.isNotEmpty && directoryPath != '.') {
+             await _fileService.showFileInExplorer(directoryPath);
+        } else {
+            // If it's just a filename without a path, show the default save directory
+            final String defaultSaveDir = await _fileService.getDefaultSaveDirectory();
+            await _fileService.showFileInExplorer(defaultSaveDir);
+        }
+      } else {
+        SnackBarService.displayInfo(message: "File location not applicable for web-loaded data.");
+      }
+    } else {
+      // If no file is loaded, show the default location where files would be saved.
+      final String defaultSaveDir = await _fileService.getDefaultSaveDirectory();
+      await _fileService.showFileInExplorer(defaultSaveDir);
+    }
   }
 
   void setCurrentFileName(final String filenameLoaded) {
+    // Normalize filename for display and storage if needed
     currentLoadedFileName.value = filenameLoaded;
-    final PreferenceController preferenceController = Get.find();
-    preferenceController.addToMRU(filenameLoaded);
+    if (filenameLoaded != Constants.untitledFileName) {
+        PreferenceController.to.addToMRU(filenameLoaded);
+    }
   }
 
   static DataController get to => Get.find();
 }
 
-/// Data source configuration for file loading operations.
-/// Supports:
-/// - Local file paths
-/// - In-memory byte data
-/// - File format validation
-class DataSource {
-  DataSource({this.filePath = '', Uint8List? fileBytes}) : _fileBytes = fileBytes ?? Uint8List(0);
-
-  final String filePath;
-
-  final Uint8List _fileBytes;
-
-  Uint8List get fileBytes => _fileBytes;
-}
+// The DataSource class definition should be REMOVED from here,
+// as it's now part of file_service.dart.
+// class DataSource { ... }
