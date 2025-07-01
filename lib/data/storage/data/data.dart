@@ -134,7 +134,17 @@ class Data {
   Transactions transactions = Transactions();
 
   /// singleton
-  static final Data _instance = Data._internal();
+  static Data _instance = Data._internal();
+  static final Data _productionInstance = _instance; // Store the original for resetting
+
+  // For testing purposes only
+  static void setTestInstance(Data testInstance) {
+    _instance = testInstance;
+  }
+
+  static void resetInstance() { // Call in tearDown or tearDownAll
+    _instance = _productionInstance;
+  }
 
   void checkTransfers() {
     final Set<Transaction> dangling = getDanglingTransfers();
