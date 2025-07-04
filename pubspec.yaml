@@ -18,7 +18,7 @@ publish_to: none # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.13.01
+version: 1.13.02
 
 environment:
   # This is the dart constraint
@@ -33,32 +33,32 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  archive: ^4.0.5
+  archive: ^4.0.7
   clipboard: ^0.1.3
-  collection:
+  collection: ^1.19.1
   csv: ^6.0.0
-  desktop_drop: ^0.5.0
+  desktop_drop: ^0.6.0
   dotted_border: ^2.1.0
-  file_picker: ^10.0.0
+  file_picker: ^10.2.0
   fl_chart: ^0.70.2
   flutter:
     sdk: flutter
-  flutter_markdown: ^0.7.6+2
+  flutter_markdown: ^0.7.7+1
   get: ^4.7.2
-  http: ^1.3.0
-  intl:
+  http: ^1.4.0
+  intl: ^0.20.2
   js: ^0.7.2
-  logger: ^2.5.0
+  logger: ^2.6.0
   multi_split_view: ^3.6.0
-  pasteboard: ^0.3.0
-  path:
+  pasteboard: ^0.4.0
+  path: ^1.9.1
   path_provider: ^2.1.5
-  provider: ^6.1.4
+  provider: ^6.1.5
   shared_preferences: ^2.5.3
   sqlite3: ^2.7.5
   sqlite3_flutter_libs: ^0.5.32
-  textify:
-    # path: "../textify"
+  textify: ^0.4.5
+  # path: "../textify"
   universal_io: ^2.2.2
   url_launcher: ^6.3.1
   uuid: ^4.5.1
@@ -66,12 +66,12 @@ dependencies:
 
 dev_dependencies:
   flutter_launcher_icons:
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
   integration_test:
     sdk: flutter
-  mockito: ^5.4.5
+  mockito: ^5.4.6
 
 # https://pub.dev/packages/flutter_launcher_icons
 # after updating the main icon run this command from the root of the project
